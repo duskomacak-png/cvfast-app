@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v8-root-stable";
+const CACHE_NAME = "cvfast-v9-direct-install-ux";
 
 const ASSETS = [
   "/",

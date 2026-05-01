@@ -117,6 +117,9 @@ const ui = {
     installIos: "Za iPhone: otvori cvfast.app u Safari browseru → tapni Share → Add to Home Screen.",
     installOther: "Ako se install prozor ne pojavi: u Chrome/Edge meniju izaberi Install app ili Add to Home Screen.",
     alreadyInstalled: "App je već instalirana ✅",
+    installingApp: "Aplikacija se preuzima...",
+    installAccepted: "Aplikacija je instalirana na početni ekran ✅",
+    installDismissed: "Instalacija je otkazana",
     linkCopied: "Link je kopiran ✅",
     confirmClear: "Da li sigurno želiš da obrišeš sve podatke iz browsera?",
     pdfError: "PDF greška. Proveri internet/CDN biblioteke."
@@ -210,6 +213,9 @@ const ui = {
     installIos: "For iPhone: open cvfast.app in Safari → tap Share → Add to Home Screen.",
     installOther: "If the install prompt does not appear: use Chrome/Edge menu → Install app or Add to Home Screen.",
     alreadyInstalled: "App is already installed ✅",
+    installingApp: "Installing app...",
+    installAccepted: "App installed on Home Screen ✅",
+    installDismissed: "Installation cancelled",
     linkCopied: "Link copied ✅",
     confirmClear: "Are you sure you want to delete all data from this browser?",
     pdfError: "PDF error. Check internet/CDN libraries."
@@ -303,6 +309,9 @@ const ui = {
     installIos: "Für iPhone: cvfast.app in Safari öffnen → Teilen → Zum Home-Bildschirm hinzufügen.",
     installOther: "Wenn kein Installationsfenster erscheint: Chrome/Edge-Menü → App installieren oder Zum Startbildschirm hinzufügen.",
     alreadyInstalled: "App ist bereits installiert ✅",
+    installingApp: "App wird installiert...",
+    installAccepted: "App wurde zum Startbildschirm hinzugefügt ✅",
+    installDismissed: "Installation abgebrochen",
     linkCopied: "Link kopiert ✅",
     confirmClear: "Möchtest du wirklich alle Daten aus diesem Browser löschen?",
     pdfError: "PDF-Fehler. Prüfe Internet/CDN-Bibliotheken."
@@ -1084,6 +1093,8 @@ function setupPwaInstall() {
 
   $("#installBtn")?.addEventListener("click", async () => {
     const lang = getLang();
+    const installBtn = $("#installBtn");
+    const originalText = installBtn?.textContent || ui[lang].installApp;
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
 
     if (isStandalone) {
@@ -1091,24 +1102,64 @@ function setupPwaInstall() {
       return;
     }
 
+    // iPhone/iPad cannot be installed automatically from a web button.
     if (isIosDevice()) {
       showInstallInstructions("ios");
       return;
     }
 
+    // Direct install flow for Android Chrome / desktop Chrome / Edge.
     if (deferredPrompt) {
       try {
+        if (installBtn) {
+          installBtn.disabled = true;
+          installBtn.textContent = ui[lang].installingApp || "Aplikacija se preuzima...";
+        }
+
+        showToast(ui[lang].installingApp || "Aplikacija se preuzima...");
+
         deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
+        const choice = await deferredPrompt.userChoice;
         deferredPrompt = null;
+
+        if (choice && choice.outcome === "accepted") {
+          showToast(ui[lang].installAccepted || "Aplikacija je instalirana na početni ekran ✅");
+        } else {
+          showToast(ui[lang].installDismissed || "Instalacija je otkazana");
+        }
+
+        if (installBtn) {
+          installBtn.disabled = false;
+          installBtn.textContent = originalText;
+        }
+
         return;
-      } catch {
+      } catch (error) {
+        if (installBtn) {
+          installBtn.disabled = false;
+          installBtn.textContent = originalText;
+        }
         showInstallInstructions("auto");
         return;
       }
     }
 
-    showInstallInstructions("auto");
+    // If the browser did not provide install prompt, show a short fake-start message,
+    // then open instructions. This feels less dead than doing nothing.
+    if (installBtn) {
+      installBtn.disabled = true;
+      installBtn.textContent = ui[lang].installingApp || "Aplikacija se preuzima...";
+    }
+
+    showToast(ui[lang].installingApp || "Aplikacija se preuzima...");
+
+    setTimeout(() => {
+      if (installBtn) {
+        installBtn.disabled = false;
+        installBtn.textContent = originalText;
+      }
+      showInstallInstructions("auto");
+    }, 900);
   });
 }
 
