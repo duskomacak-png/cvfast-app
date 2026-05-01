@@ -2,7 +2,7 @@
   "name": "cvfast.app",
   "short_name": "cvfast",
   "description": "Create your CV fast. No account. No server upload.",
-  "start_url": "./",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2563eb",
@@ -20,8 +20,8 @@
       "purpose": "any maskable"
     }
   ],
-  "id": "cvfast-pwa-id",
-  "scope": "./",
+  "id": "/",
+  "scope": "/",
   "orientation": "portrait",
   "categories": [
     "productivity",
