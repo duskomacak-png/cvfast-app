@@ -1042,7 +1042,10 @@ function openTranslateHelper() {
 
 
 function isIosDevice() {
-  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+  return (
+    /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  );
 }
 
 function isAndroidDevice() {
