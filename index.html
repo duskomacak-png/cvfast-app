@@ -3,242 +3,327 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CV PRO</title>
 
-  <meta name="theme-color" content="#c62828" />
-  <meta name="description" content="Profesionalni CV za par minuta" />
+  <title>cvfast.app</title>
+  <meta name="description" content="Create your CV fast. No account. No server upload." />
+  <meta name="theme-color" content="#0b5cff" />
 
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/png" href="cv-icon.png" />
-  <link rel="apple-touch-icon" href="cv-icon.png" />
-
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="bg-mist"></div>
 
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="logo-box">
-        <div class="logo">CV PRO</div>
-        <div class="logo-sub">Profesionalni CV za par minuta</div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+  <div class="app">
+    <header class="site-header">
+      <a class="logo" href="#home" aria-label="cvfast.app home">
+        <span>cvfast</span><b>.app</b>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="#how" data-i18n="navHow">Kako radi</a>
+        <a href="#features" data-i18n="navFeatures">Prednosti</a>
+        <a href="#builder" data-i18n="navStart">Start CV</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="lang-mini active" data-set-lang="sr" type="button">SR</button>
+        <button class="lang-mini" data-set-lang="en" type="button">EN</button>
+        <button class="lang-mini" data-set-lang="de" type="button">DE</button>
+        <button class="hamburger" id="menuBtn" type="button" aria-label="Open menu">☰</button>
       </div>
-      <div class="top-right-note">Besplatan PDF • Podrži projekat ako ti koristi</div>
     </header>
 
-    <main class="main-grid">
-      <section class="panel form-panel">
-        <div class="section-head section-head-row">
-          <div class="section-head-text">
-            <h1>Napravi svoj CV</h1>
-            <p>Unesi podatke i klikni GENERIŠI. Dole odmah vidiš gotov izgled.</p>
+    <div class="mobile-menu hidden" id="mobileMenu">
+      <a href="#how" data-i18n="navHow">Kako radi</a>
+      <a href="#features" data-i18n="navFeatures">Prednosti</a>
+      <a href="#builder" data-i18n="navStart">Start CV</a>
+    </div>
+
+    <main id="home">
+      <section class="hero">
+        <div class="privacy-badge" data-i18n="privacyBadge">🛡️ Bez naloga • Bez slanja na server</div>
+
+        <h1 data-i18n="heroTitle">Napravi CV brzo</h1>
+        <p class="hero-subtitle" data-i18n="heroSubtitle">
+          Napravi i pregledaj CV besplatno. PDF preuzimanje se otključava jednokratnom podrškom.
+        </p>
+
+        <div class="hero-actions">
+          <a class="primary-btn" href="#builder" data-i18n="startCv">📄 Start CV</a>
+          <button class="secondary-btn" id="installBtn" type="button" data-i18n="installApp">⬇️ Preuzmi app</button>
+          <button class="secondary-btn" id="shareBtn" type="button" data-i18n="shareApp">🔗 Podeli app</button>
+        </div>
+
+        <div class="mini-cv-card" aria-label="CV example">
+          <div class="mini-cv-header">
+            <div class="avatar-demo">MP</div>
+            <div>
+              <h2 data-i18n="demoName">Milan Petrović</h2>
+              <p data-i18n="demoTitle">Rukovalac građevinskih mašina</p>
+              <div class="mini-line"></div>
+              <ul class="mini-contact">
+                <li>📞 +381 64 000 0000</li>
+                <li>✉️ milan.petrovic@example.com</li>
+                <li data-i18n="demoLocation">📍 Beograd, Srbija</li>
+              </ul>
+            </div>
           </div>
 
-          <div class="top-upload-box">
-            <label for="photo" class="upload-btn">Dodaj sliku</label>
-            <span id="fileName" class="top-file-name">Nije odabrano</span>
-            <input id="photo" type="file" accept="image/*" class="file-hidden" />
+          <div class="mini-section">
+            <h3 data-i18n="cvProfile">PROFIL</h3>
+            <p data-i18n="demoProfile">Pouzdan i iskusan radnik sa fokusom na bezbednost, efikasnost i kvalitet rada.</p>
+          </div>
+
+          <div class="mini-section">
+            <h3 data-i18n="cvExperience">RADNO ISKUSTVO</h3>
+            <ul>
+              <li data-i18n="demoExperience1">Rukovalac mašina — primer firme</li>
+              <li data-i18n="demoExperience2">Zemljani radovi i priprema terena</li>
+            </ul>
+          </div>
+
+          <div class="mini-section">
+            <h3 data-i18n="cvSkills">VEŠTINE</h3>
+            <div class="skill-tags">
+              <span data-i18n="demoSkill1">Praktičan rad</span>
+              <span data-i18n="demoSkill2">Bezbednost</span>
+              <span data-i18n="demoSkill3">Preciznost</span>
+            </div>
           </div>
         </div>
 
-        <div class="form-grid">
-          <div class="field">
-            <label for="fullName">Ime i prezime</label>
-            <input id="fullName" type="text" placeholder="Marko Jovanović" />
+        <section class="how-strip" id="how">
+          <h2 data-i18n="howTitle">Kako radi</h2>
+          <div class="steps">
+            <div><b>1</b><span data-i18n="step1">Unesi podatke</span></div>
+            <div><b>2</b><span data-i18n="step2">Pregledaj uživo</span></div>
+            <div><b>3</b><span data-i18n="step3">Preuzmi PDF</span></div>
           </div>
+        </section>
 
-          <div class="field">
-            <label for="jobTitle">Pozicija</label>
-            <input id="jobTitle" type="text" placeholder="Građevinski mašinista" />
-          </div>
-
-          <div class="field">
-            <label for="email">Email adresa</label>
-            <input id="email" type="email" placeholder="marko@email.com" />
-          </div>
-
-          <div class="field">
-            <label for="phone">Broj telefona</label>
-            <input id="phone" type="text" placeholder="+381 60 123 4567" />
-          </div>
-
-          <div class="field">
-            <label for="location">Lokacija</label>
-            <input id="location" type="text" placeholder="Novi Sad, Srbija" />
-          </div>
-
-          <div class="field">
-            <label for="education">Obrazovanje</label>
-            <input id="education" type="text" placeholder="Tehnička škola, smer..." />
-          </div>
-
-          <div class="field field-full">
-            <label for="experience">Profil / radno iskustvo</label>
-            <textarea id="experience" placeholder="Napiši kratko iskustvo, projekte, odgovornosti..."></textarea>
-          </div>
-
-          <div class="field field-full">
-            <label for="skills">Veštine</label>
-            <input id="skills" type="text" placeholder="Bager, iskopi, temelji, rad na terenu..." />
+        <div class="support-strip">
+          <span class="coffee">☕</span>
+          <div>
+            <strong data-i18n="supportTitle">Pregled je besplatan • PDF unlock €5</strong>
+            <p data-i18n="supportText">Jednokratna podrška pomaže da cvfast.app ostane online.</p>
           </div>
         </div>
 
-        <button id="generateBtn" class="btn btn-generate" type="button">GENERIŠI</button>
+        <div class="language-row" aria-label="Language options">
+          <button class="lang-pill active" data-set-lang="sr" type="button">SR</button>
+          <button class="lang-pill" data-set-lang="en" type="button">EN</button>
+          <button class="lang-pill" data-set-lang="de" type="button">DE</button>
+        </div>
+
+        <p class="browser-note" data-i18n="browserNote">🔒 Podaci ostaju u tvom browseru</p>
       </section>
 
-      <section class="panel preview-panel">
-        <div class="preview-head">
-          <h2>Live CV Preview</h2>
-          <span class="preview-badge">FREE PDF</span>
-        </div>
+      <section class="features" id="features">
+        <article>
+          <h3 data-i18n="feature1Title">📱 Mobile first</h3>
+          <p data-i18n="feature1Text">Radi na telefonu, laptopu i desktopu. CV možeš napraviti odmah.</p>
+        </article>
+        <article>
+          <h3 data-i18n="feature2Title">🧾 Live preview</h3>
+          <p data-i18n="feature2Text">Svaka promena se odmah vidi na CV-u. Nema popunjavanja naslepo.</p>
+        </article>
+        <article>
+          <h3 data-i18n="feature3Title">🛡️ Privacy first</h3>
+          <p data-i18n="feature3Text">Nema naloga i nema baze. Podaci se čuvaju samo u browseru korisnika.</p>
+        </article>
+      </section>
 
-        <div class="cv-live-wrapper">
-          <div class="cv-live-paper" id="cvLivePaper">
-            <div id="cvWatermark" class="cv-watermark">CV PRO • FREE</div>
-
-            <div class="cv-top">
-              <div class="cv-live-photo-wrap">
-                <img id="livePreviewPhoto" src="cv-icon.png" alt="Profilna slika" />
-              </div>
-
-              <div class="cv-top-right">
-                <h1 id="livePreviewName">Ime i prezime</h1>
-                <div id="livePreviewJob" class="cv-live-job">Pozicija</div>
-
-                <div class="cv-contact-grid">
-                  <div><strong>Email:</strong> <span id="livePreviewEmail">email@email.com</span></div>
-                  <div><strong>Telefon:</strong> <span id="livePreviewPhone">+381 60 123 4567</span></div>
-                  <div><strong>Lokacija:</strong> <span id="livePreviewLocation">Novi Sad, Srbija</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="cv-divider"></div>
-
-            <div class="cv-section-live">
-              <h3>PROFIL / ISKUSTVO</h3>
-              <p id="livePreviewExperience">Ovde će se prikazati tvoj profil i radno iskustvo.</p>
-            </div>
-
-            <div class="cv-divider"></div>
-
-            <div class="cv-section-live">
-              <h3>VEŠTINE</h3>
-              <p id="livePreviewSkills">Ovde će se prikazati tvoje veštine.</p>
-            </div>
-
-            <div class="cv-divider"></div>
-
-            <div class="cv-section-live">
-              <h3>OBRAZOVANJE</h3>
-              <p id="livePreviewEducation">Ovde će se prikazati tvoje obrazovanje.</p>
-            </div>
+      <section class="builder-section" id="builder">
+        <div class="builder-header">
+          <div>
+            <p class="eyebrow" data-i18n="builderEyebrow">CV BUILDER</p>
+            <h2 data-i18n="builderTitle">Napravi svoj CV</h2>
           </div>
+          <button class="secondary-btn small" id="openFullPreviewBtn" type="button" data-i18n="fullPreview">👁 Vidi ceo CV</button>
         </div>
 
-        <div class="action-row">
-          <button id="shareAppBtn" class="btn btn-dusty" type="button">Podeli app</button>
-          <button id="downloadAppBtn" class="btn btn-dusty" type="button">Preuzmi app</button>
+        <div class="builder-grid">
+          <form class="form-panel" id="cvForm">
+            <div class="form-block">
+              <div class="block-title">
+                <h3 data-i18n="basicTitle">1. Osnovni podaci</h3>
+                <button type="button" class="preview-help" data-help="basic" data-i18n="exampleBtn">👁 Primer</button>
+              </div>
+
+              <div class="two-col">
+                <label><span data-i18n="cvLanguageLabel">Jezik CV-a</span>
+                  <select id="cvLanguage" name="cvLanguage">
+                    <option value="sr">Srpski</option>
+                    <option value="en">English</option>
+                    <option value="de">Deutsch</option>
+                  </select>
+                  <button type="button" class="mini-action" id="translateHelperBtn" data-i18n="translateBtn">🌍 Prevedi preko Google Translate</button>
+                </label>
+
+                <label><span data-i18n="templateLabel">Šablon</span>
+                  <select id="template" name="template">
+                    <option value="classic">Classic Clean</option>
+                    <option value="sidebar">Modern Sidebar</option>
+                  </select>
+                </label>
+
+                <label><span data-i18n="fullNameLabel">Ime i prezime</span>
+                  <input id="fullName" name="fullName" type="text" data-placeholder="fullNamePlaceholder" placeholder="Milan Petrović" />
+                </label>
+
+                <label><span data-i18n="jobTitleLabel">Pozicija</span>
+                  <input id="jobTitle" name="jobTitle" type="text" data-placeholder="jobTitlePlaceholder" placeholder="Rukovalac građevinskih mašina" />
+                </label>
+
+                <label><span data-i18n="phoneLabel">Telefon</span>
+                  <input id="phone" name="phone" type="tel" placeholder="+381 64 000 0000" />
+                </label>
+
+                <label><span data-i18n="emailLabel">Email</span>
+                  <input id="email" name="email" type="email" placeholder="milan.petrovic@example.com" />
+                </label>
+
+                <label><span data-i18n="locationLabel">Lokacija</span>
+                  <input id="location" name="location" type="text" data-placeholder="locationPlaceholder" placeholder="Beograd, Srbija" />
+                </label>
+
+                <label><span data-i18n="photoLabel">Slika</span>
+                  <input id="photo" name="photo" type="file" accept="image/*" />
+                </label>
+              </div>
+            </div>
+
+            <div class="form-block">
+              <div class="block-title">
+                <h3 data-i18n="profileTitle">2. Profil</h3>
+                <button type="button" class="preview-help" data-help="profile" data-i18n="exampleBtn">👁 Primer</button>
+              </div>
+              <textarea id="profile" name="profile" rows="5" data-placeholder="profilePlaceholder" placeholder="Kratak profesionalni opis..."></textarea>
+            </div>
+
+            <div class="form-block">
+              <div class="block-title">
+                <h3 data-i18n="experienceTitle">3. Radno iskustvo</h3>
+                <button type="button" class="preview-help" data-help="experience" data-i18n="exampleBtn">👁 Primer</button>
+              </div>
+              <textarea id="experience" name="experience" rows="7" data-placeholder="experiencePlaceholder" placeholder="Jedna stavka po redu..."></textarea>
+            </div>
+
+            <div class="form-block">
+              <div class="block-title">
+                <h3 data-i18n="machinesSkillsTitle">4. Mašine i veštine</h3>
+                <button type="button" class="preview-help" data-help="skills" data-i18n="exampleBtn">👁 Primer</button>
+              </div>
+
+              <div class="two-col">
+                <label><span data-i18n="machinesLabel">Mašine / alati</span>
+                  <textarea id="machines" name="machines" rows="5" data-placeholder="machinesPlaceholder" placeholder="Bager CAT 330&#10;Buldozer D6R"></textarea>
+                </label>
+
+                <label><span data-i18n="skillsLabel">Veštine</span>
+                  <textarea id="skills" name="skills" rows="5" data-placeholder="skillsPlaceholder" placeholder="Niskogradnja&#10;Bezbedan rad"></textarea>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-block">
+              <div class="block-title">
+                <h3 data-i18n="educationExtraTitle">5. Obrazovanje i dodatno</h3>
+                <button type="button" class="preview-help" data-help="education" data-i18n="exampleBtn">👁 Primer</button>
+              </div>
+
+              <div class="two-col">
+                <label><span data-i18n="educationLabel">Obrazovanje / licence / kurs</span>
+                  <textarea id="education" name="education" rows="4" data-placeholder="educationPlaceholder" placeholder="Kurs / obuka"></textarea>
+                </label>
+
+                <label><span data-i18n="traitsLabel">Lične osobine</span>
+                  <textarea id="traits" name="traits" rows="4" data-placeholder="traitsPlaceholder" placeholder="Odgovoran, pouzdan, precizan..."></textarea>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="secondary-btn" id="fillDemoBtn" data-i18n="fillDemo">Popuni demo</button>
+              <button type="button" class="primary-btn" id="downloadPdfBtn" data-i18n="downloadPdf">Preuzmi PDF</button>
+              <button type="button" class="danger-btn" id="clearDataBtn" data-i18n="clearData">Obriši</button>
+            </div>
+          </form>
+
+          <aside class="live-preview">
+            <div class="preview-top">
+              <strong data-i18n="livePreview">Live CV Preview</strong>
+              <span id="saveStatus" data-i18n="autoSave">Auto-save aktivan</span>
+            </div>
+            <div class="paper-scroll">
+              <article id="cvPreview" class="cv-page classic"></article>
+            </div>
+          </aside>
         </div>
       </section>
+
+      <footer class="legal-footer">
+        <p>© 2026 cvfast.app</p>
+        <div class="legal-links">
+          <button type="button" data-legal="privacy" data-i18n="privacyLink">Privatnost</button>
+          <button type="button" data-legal="terms" data-i18n="termsLink">Uslovi korišćenja</button>
+          <button type="button" data-legal="support" data-i18n="supportLink">Podrška</button>
+        </div>
+        <small data-i18n="footerNote">Bez naloga. Bez slanja CV podataka na server.</small>
+      </footer>
+
     </main>
-
-    <footer class="footer-row">
-      <div class="footer-links">
-        <button type="button" class="btn btn-dusty" data-legal="termsModal">Terms of Use</button>
-        <button type="button" class="btn btn-dusty" data-legal="privacyModal">Privacy Policy</button>
-        <button type="button" class="btn btn-dusty" data-legal="disclaimerModal">Disclaimer</button>
-      </div>
-      <div class="footer-contact">
-        Kontakt: <strong>duskomacak@gmail.com</strong>
-      </div>
-    </footer>
   </div>
 
-  <div id="modalOverlay" class="modal-overlay hidden">
-    <div class="modal-box">
-      <button id="closeModalBtn" class="close-btn" aria-label="Zatvori" type="button">×</button>
-
-      <div class="modal-header">
-        <h2>🔥 Tvoj CV je spreman</h2>
-        <p>Preuzmi ga besplatno ili podrži projekat ako ti je aplikacija pomogla.</p>
+  <div class="modal hidden" id="previewModal" role="dialog" aria-modal="true">
+    <div class="modal-card preview-modal-card">
+      <button class="modal-x" id="closePreviewModal" type="button">×</button>
+      <h2 id="previewModalTitle">Ovako će izgledati CV</h2>
+      <div class="modal-preview-scroll">
+        <article id="modalCvPreview" class="cv-page classic"></article>
       </div>
+    </div>
+  </div>
 
-      <div class="modal-preview-box">
-        <div class="modal-mini-note">
-          FREE verzija sadrži watermark. Dovoljna je za probu, deljenje i osnovnu upotrebu.
-        </div>
-      </div>
-
-      <div class="pay-row">
-        <button id="downloadLockedBtn" class="btn btn-locked" type="button">
-          Preuzmi FREE PDF
-        </button>
-
-        <a
-          id="paypalBtn"
-          class="btn btn-paypal"
-          href="https://www.paypal.com/ncp/payment/HBM36RPPDYXKE"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Podrži projekat – 3€
-        </a>
-      </div>
-
-      <p class="support-note">
-        Ako ti je app pomogla, podrška pomaže da ostane online i besplatna.
+  <div class="modal hidden" id="supportModal" role="dialog" aria-modal="true">
+    <div class="modal-card support-modal-card">
+      <button class="modal-x" id="closeSupportModal" type="button">×</button>
+      <h2 data-i18n="supportModalTitle">CV je spreman ✅</h2>
+      <p data-i18n="supportModalText">
+        Izrada i pregled CV-a su besplatni. PDF preuzimanje se otključava jednokratnom podrškom od 5€.
       </p>
+      <p class="muted" data-i18n="supportModalMuted">
+        Podrška pomaže da cvfast.app ostane online, brz i dostupan bez registracije.
+      </p>
+
+      <a class="primary-btn full" id="paymentLink" href="#" target="_blank" rel="noopener" data-i18n="supportPayBtn">
+        ☕ Podrži 5€ i otključaj PDF
+      </a>
+
+      <button class="secondary-btn full" id="alreadyPaidBtn" type="button" data-i18n="alreadyPaid">
+        Već sam podržao — otključaj PDF
+      </button>
+
+      <small data-i18n="mvpNote">
+        MVP napomena: bez baze nema automatske provere plaćanja. Otključavanje se čuva u ovom browseru.
+      </small>
     </div>
   </div>
 
-  <div id="termsModal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <button class="close-btn legal-close" aria-label="Zatvori" type="button">×</button>
-      <div class="modal-header">
-        <h2>Terms of Use</h2>
-        <p>Korišćenjem sajta prihvataš ove uslove.</p>
-      </div>
-      <div class="modal-preview-box">
-        <div class="modal-mini-note legal-text">
-          CV PRO pruža alat za generisanje CV dokumenta na osnovu podataka koje korisnik unese. Korisnik je odgovoran za tačnost unetih podataka. Ova usluga ne garantuje zaposlenje, intervju ili odgovor poslodavca. Zabranjeno je korišćenje sajta za lažne, obmanjujuće ili nezakonite podatke. Vlasnik sajta može menjati sadržaj, cenu ili funkcije sajta u bilo kom trenutku.
-        </div>
-      </div>
+
+  <div class="modal hidden" id="legalModal" role="dialog" aria-modal="true">
+    <div class="modal-card legal-modal-card">
+      <button class="modal-x" id="closeLegalModal" type="button">×</button>
+      <h2 id="legalModalTitle">Privatnost</h2>
+      <div id="legalModalBody" class="legal-body"></div>
     </div>
   </div>
 
-  <div id="privacyModal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <button class="close-btn legal-close" aria-label="Zatvori" type="button">×</button>
-      <div class="modal-header">
-        <h2>Privacy Policy</h2>
-        <p>Privatnost korisnika je važna.</p>
-      </div>
-      <div class="modal-preview-box">
-        <div class="modal-mini-note legal-text">
-          Podaci koje korisnik unese koriste se isključivo za generisanje CV prikaza i PDF dokumenta u okviru aplikacije. Trenutna verzija sajta ne čuva trajno CV podatke u bazi. PayPal obrada podrške vrši se preko PayPal sistema i podleže njihovim pravilima privatnosti. Ako nas kontaktiraš mejlom, koristićemo taj mejl samo za odgovor na upit.
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="toast hidden" id="toast"></div>
 
-  <div id="disclaimerModal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <button class="close-btn legal-close" aria-label="Zatvori" type="button">×</button>
-      <div class="modal-header">
-        <h2>Disclaimer</h2>
-        <p>Važna napomena o usluzi.</p>
-      </div>
-      <div class="modal-preview-box">
-        <div class="modal-mini-note legal-text">
-          CV PRO je alat za pomoć u izradi CV dokumenta i služi u informativne i praktične svrhe. Vlasnik sajta ne snosi odgovornost za način na koji korisnik koristi generisani CV, niti za eventualne posledice nastale zbog netačnih ili neproverenih informacija koje korisnik sam unese. Korisnik je dužan da proveri konačan dokument pre slanja poslodavcu.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
