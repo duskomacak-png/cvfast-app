@@ -9,10 +9,15 @@
   <meta name="theme-color" content="#0b5cff" />
 
   <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="cvfast" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
   <link rel="stylesheet" href="style.css" />
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
@@ -319,6 +324,16 @@
       <button class="modal-x" id="closeLegalModal" type="button">×</button>
       <h2 id="legalModalTitle">Privatnost</h2>
       <div id="legalModalBody" class="legal-body"></div>
+    </div>
+  </div>
+
+
+  <div class="modal hidden" id="installModal" role="dialog" aria-modal="true">
+    <div class="modal-card support-modal-card">
+      <button class="modal-x" id="closeInstallModal" type="button">×</button>
+      <h2 id="installModalTitle">Preuzmi cvfast.app</h2>
+      <div id="installModalBody" class="legal-body"></div>
+      <button class="primary-btn full" id="installOkBtn" type="button">Razumem</button>
     </div>
   </div>
 

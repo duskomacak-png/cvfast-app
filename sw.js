@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-app-v2";
+const CACHE_NAME = "cvfast-app-v4-install-fix";
 const ASSETS = [
   "./",
   "./index.html",

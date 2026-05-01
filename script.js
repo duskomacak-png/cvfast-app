@@ -464,6 +464,137 @@ const legalTexts = {
 };
 
 
+
+const installTexts = {
+  sr: {
+    title: "Preuzmi cvfast.app",
+    android: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>📱 Android / Chrome</h3>
+          <ol>
+            <li>Otvori cvfast.app u Chrome browseru.</li>
+            <li>Tapni meni <strong>⋮</strong> gore desno.</li>
+            <li>Izaberi <strong>Add to Home screen</strong> ili <strong>Install app</strong>.</li>
+            <li>Potvrdi na <strong>Add</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ios: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>🍎 iPhone / Safari</h3>
+          <ol>
+            <li>Otvori cvfast.app u <strong>Safari</strong> browseru.</li>
+            <li>Tapni <strong>Share</strong> dugme.</li>
+            <li>Izaberi <strong>Add to Home Screen</strong>.</li>
+            <li>Tapni <strong>Add</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    desktop: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>💻 Laptop / Chrome / Edge</h3>
+          <ol>
+            <li>Otvori cvfast.app u Chrome ili Edge browseru.</li>
+            <li>Klikni ikonicu za instalaciju u address baru ako se pojavi.</li>
+            <li>Ako se ne pojavi, otvori meni <strong>⋮</strong> i izaberi <strong>Install app</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ok: "Razumem"
+  },
+  en: {
+    title: "Install cvfast.app",
+    android: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>📱 Android / Chrome</h3>
+          <ol>
+            <li>Open cvfast.app in Chrome.</li>
+            <li>Tap the <strong>⋮</strong> menu.</li>
+            <li>Choose <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li>
+            <li>Confirm with <strong>Add</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ios: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>🍎 iPhone / Safari</h3>
+          <ol>
+            <li>Open cvfast.app in <strong>Safari</strong>.</li>
+            <li>Tap the <strong>Share</strong> button.</li>
+            <li>Choose <strong>Add to Home Screen</strong>.</li>
+            <li>Tap <strong>Add</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    desktop: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>💻 Laptop / Chrome / Edge</h3>
+          <ol>
+            <li>Open cvfast.app in Chrome or Edge.</li>
+            <li>Click the install icon in the address bar if it appears.</li>
+            <li>If it does not appear, open the <strong>⋮</strong> menu and choose <strong>Install app</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ok: "Got it"
+  },
+  de: {
+    title: "cvfast.app installieren",
+    android: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>📱 Android / Chrome</h3>
+          <ol>
+            <li>Öffne cvfast.app in Chrome.</li>
+            <li>Tippe auf das Menü <strong>⋮</strong>.</li>
+            <li>Wähle <strong>Zum Startbildschirm hinzufügen</strong> oder <strong>App installieren</strong>.</li>
+            <li>Bestätige mit <strong>Hinzufügen</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ios: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>🍎 iPhone / Safari</h3>
+          <ol>
+            <li>Öffne cvfast.app in <strong>Safari</strong>.</li>
+            <li>Tippe auf <strong>Teilen</strong>.</li>
+            <li>Wähle <strong>Zum Home-Bildschirm</strong>.</li>
+            <li>Tippe auf <strong>Hinzufügen</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    desktop: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>💻 Laptop / Chrome / Edge</h3>
+          <ol>
+            <li>Öffne cvfast.app in Chrome oder Edge.</li>
+            <li>Klicke auf das Installationssymbol in der Adressleiste, falls es erscheint.</li>
+            <li>Falls nicht, öffne das Menü <strong>⋮</strong> und wähle <strong>App installieren</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ok: "Verstanden"
+  }
+};
+
+
 const demoDataByLang = {
   sr: {
     fullName: "Milan Petrović",
@@ -805,7 +936,44 @@ function handleUnlockFromUrl() {
   }
 }
 
+
+function loadExternalScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      if (existing.dataset.loaded === "true") resolve();
+      existing.addEventListener("load", resolve, { once: true });
+      existing.addEventListener("error", reject, { once: true });
+      return;
+    }
+
+    const s = document.createElement("script");
+    s.src = src;
+    s.async = true;
+    s.onload = () => {
+      s.dataset.loaded = "true";
+      resolve();
+    };
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+async function ensurePdfLibraries() {
+  if (!window.html2canvas) {
+    await loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
+  }
+
+  if (!window.jspdf) {
+    await loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+  }
+}
+
+
 async function downloadPdf() {
+  showToast(getLang() === "de" ? "PDF wird vorbereitet..." : getLang() === "en" ? "Preparing PDF..." : "Pripremam PDF...");
+  await ensurePdfLibraries();
+
   const preview = $("#cvPreview");
   renderCv(preview, getData(), { placeholders: false });
 
@@ -872,6 +1040,37 @@ function openTranslateHelper() {
   window.open(url, "_blank", "noopener");
 }
 
+
+function isIosDevice() {
+  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+
+function isAndroidDevice() {
+  return /android/i.test(navigator.userAgent);
+}
+
+function showInstallInstructions(mode = "auto") {
+  const lang = getLang();
+  const texts = installTexts[lang] || installTexts.sr;
+  let body = texts.desktop;
+
+  if (mode === "ios" || (mode === "auto" && isIosDevice())) {
+    body = texts.ios;
+  } else if (mode === "android" || (mode === "auto" && isAndroidDevice())) {
+    body = texts.android;
+  }
+
+  $("#installModalTitle").textContent = texts.title;
+  $("#installModalBody").innerHTML = body;
+  $("#installOkBtn").textContent = texts.ok;
+  $("#installModal").classList.remove("hidden");
+}
+
+function closeInstallModal() {
+  $("#installModal").classList.add("hidden");
+}
+
+
 let deferredPrompt = null;
 
 function setupPwaInstall() {
@@ -882,7 +1081,6 @@ function setupPwaInstall() {
 
   $("#installBtn")?.addEventListener("click", async () => {
     const lang = getLang();
-    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
 
     if (isStandalone) {
@@ -890,20 +1088,27 @@ function setupPwaInstall() {
       return;
     }
 
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
+    if (isIosDevice()) {
+      showInstallInstructions("ios");
       return;
     }
 
-    if (isIos) {
-      alert(ui[lang].installIos);
-    } else {
-      alert(ui[lang].installOther);
+    if (deferredPrompt) {
+      try {
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        return;
+      } catch {
+        showInstallInstructions("auto");
+        return;
+      }
     }
+
+    showInstallInstructions("auto");
   });
 }
+
 
 function setupShare() {
   $("#shareBtn")?.addEventListener("click", async () => {
@@ -1101,6 +1306,14 @@ function init() {
   $("#closeLegalModal")?.addEventListener("click", closeLegalModal);
   $("#legalModal")?.addEventListener("click", (e) => {
     if (e.target.id === "legalModal") closeLegalModal();
+  });
+
+
+
+  $("#closeInstallModal")?.addEventListener("click", closeInstallModal);
+  $("#installOkBtn")?.addEventListener("click", closeInstallModal);
+  $("#installModal")?.addEventListener("click", (e) => {
+    if (e.target.id === "installModal") closeInstallModal();
   });
 
 

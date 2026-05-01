@@ -1088,6 +1088,36 @@ textarea:focus {
   max-width: 100%;
 }
 
+#installOkBtn {
+  margin-top: 14px;
+}
+
+.install-steps {
+  display: grid;
+  gap: 10px;
+}
+
+.install-steps .step-box {
+  background: #f8fbff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px;
+}
+
+.install-steps h3 {
+  margin: 0 0 8px;
+  color: #0f172a;
+}
+
+.install-steps ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.install-steps li {
+  margin: 6px 0;
+}
+
 @media (max-width: 520px) {
   .mini-cv-card {
     padding: 14px;
