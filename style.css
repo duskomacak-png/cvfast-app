@@ -1066,3 +1066,43 @@ textarea:focus {
 .legal-body li {
   margin-bottom: 7px;
 }
+
+
+/* Mobile overflow fix: prevent long job titles from pushing divider lines outside cards */
+.mini-cv-card {
+  overflow: hidden;
+}
+
+.mini-cv-header > div {
+  min-width: 0;
+}
+
+.mini-cv-header p,
+.mini-contact li,
+.mini-cv-card h2 {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.mini-line {
+  max-width: 100%;
+}
+
+@media (max-width: 520px) {
+  .mini-cv-card {
+    padding: 14px;
+  }
+
+  .mini-cv-header {
+    grid-template-columns: 74px minmax(0, 1fr);
+  }
+
+  .mini-cv-header p {
+    font-size: 20px;
+    line-height: 1.18;
+  }
+
+  .mini-contact {
+    font-size: 14px;
+  }
+}
