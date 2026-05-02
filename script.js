@@ -117,7 +117,7 @@ const ui = {
     installIos: "Za iPhone: otvori cvfast.app u Safari browseru → tapni Share → Add to Home Screen.",
     installOther: "Ako se install prozor ne pojavi: u Chrome/Edge meniju izaberi Install app ili Add to Home Screen.",
     alreadyInstalled: "App je već instalirana ✅",
-    installingApp: "Aplikacija se preuzima...",
+    installingApp: "Pripremam instalaciju...",
     installAccepted: "Aplikacija je instalirana na početni ekran ✅",
     installDismissed: "Instalacija je otkazana",
     linkCopied: "Link je kopiran ✅",
@@ -213,7 +213,7 @@ const ui = {
     installIos: "For iPhone: open cvfast.app in Safari → tap Share → Add to Home Screen.",
     installOther: "If the install prompt does not appear: use Chrome/Edge menu → Install app or Add to Home Screen.",
     alreadyInstalled: "App is already installed ✅",
-    installingApp: "Installing app...",
+    installingApp: "Preparing installation...",
     installAccepted: "App installed on Home Screen ✅",
     installDismissed: "Installation cancelled",
     linkCopied: "Link copied ✅",
@@ -309,7 +309,7 @@ const ui = {
     installIos: "Für iPhone: cvfast.app in Safari öffnen → Teilen → Zum Home-Bildschirm hinzufügen.",
     installOther: "Wenn kein Installationsfenster erscheint: Chrome/Edge-Menü → App installieren oder Zum Startbildschirm hinzufügen.",
     alreadyInstalled: "App ist bereits installiert ✅",
-    installingApp: "App wird installiert...",
+    installingApp: "Installation wird vorbereitet...",
     installAccepted: "App wurde zum Startbildschirm hinzugefügt ✅",
     installDismissed: "Installation abgebrochen",
     linkCopied: "Link kopiert ✅",
@@ -1087,79 +1087,114 @@ let deferredPrompt = null;
 
 function setupPwaInstall() {
   window.addEventListener("beforeinstallprompt", (e) => {
+    console.log("✅ beforeinstallprompt event uhvaćen");
     e.preventDefault();
     deferredPrompt = e;
+
+    const installBtn = $("#installBtn");
+    if (installBtn) {
+      installBtn.classList.add("install-ready");
+    }
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    const lang = getLang();
+    showToast(
+      ui[lang]?.installAccepted ||
+        "Aplikacija je dodata na početni ekran ✅"
+    );
   });
 
   $("#installBtn")?.addEventListener("click", async () => {
     const lang = getLang();
     const installBtn = $("#installBtn");
-    const originalText = installBtn?.textContent || ui[lang].installApp;
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
+
+    const originalText =
+      installBtn?.textContent ||
+      ui[lang]?.installApp ||
+      "⬇️ Preuzmi app";
+
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true;
 
     if (isStandalone) {
-      showToast(ui[lang].alreadyInstalled);
+      showToast(
+        ui[lang]?.alreadyInstalled ||
+          "Aplikacija je već instalirana ✅"
+      );
       return;
     }
 
-    // iPhone/iPad cannot be installed automatically from a web button.
+    // iPhone/iPad: no direct browser install prompt.
     if (isIosDevice()) {
       showInstallInstructions("ios");
       return;
     }
 
-    // Direct install flow for Android Chrome / desktop Chrome / Edge.
+    // Android Chrome / Desktop Chrome / Edge: use real install popup if browser provided it.
     if (deferredPrompt) {
       try {
         if (installBtn) {
           installBtn.disabled = true;
-          installBtn.textContent = ui[lang].installingApp || "Aplikacija se preuzima...";
+          installBtn.textContent =
+            ui[lang]?.installingApp ||
+            "Pripremam instalaciju...";
         }
 
-        showToast(ui[lang].installingApp || "Aplikacija se preuzima...");
+        await deferredPrompt.prompt();
 
-        deferredPrompt.prompt();
         const choice = await deferredPrompt.userChoice;
+        const outcome = choice?.outcome;
+
         deferredPrompt = null;
 
-        if (choice && choice.outcome === "accepted") {
-          showToast(ui[lang].installAccepted || "Aplikacija je instalirana na početni ekran ✅");
+        if (outcome === "accepted") {
+          showToast(
+            ui[lang]?.installAccepted ||
+              "Aplikacija je dodata na početni ekran ✅"
+          );
         } else {
-          showToast(ui[lang].installDismissed || "Instalacija je otkazana");
+          showToast(
+            ui[lang]?.installDismissed ||
+              "Instalacija je otkazana"
+          );
         }
-
-        if (installBtn) {
-          installBtn.disabled = false;
-          installBtn.textContent = originalText;
-        }
-
-        return;
       } catch (error) {
+        console.error("PWA install error:", error);
+        showInstallInstructions("auto");
+      } finally {
         if (installBtn) {
           installBtn.disabled = false;
           installBtn.textContent = originalText;
         }
-        showInstallInstructions("auto");
-        return;
       }
+
+      return;
     }
 
-    // If the browser did not provide install prompt, show a short fake-start message,
-    // then open instructions. This feels less dead than doing nothing.
+    // No browser prompt available.
     if (installBtn) {
       installBtn.disabled = true;
-      installBtn.textContent = ui[lang].installingApp || "Aplikacija se preuzima...";
+      installBtn.textContent =
+        ui[lang]?.installingApp ||
+        "Proveravam instalaciju...";
     }
 
-    showToast(ui[lang].installingApp || "Aplikacija se preuzima...");
+    showToast(
+      ui[lang]?.installingApp ||
+        "Proveravam da li browser dozvoljava instalaciju..."
+    );
 
     setTimeout(() => {
       if (installBtn) {
         installBtn.disabled = false;
         installBtn.textContent = originalText;
       }
+
       showInstallInstructions("auto");
-    }, 900);
+    }, 700);
   });
 }
 
@@ -1376,7 +1411,7 @@ function init() {
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("sw.js").catch(() => {});
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
     });
   }
 

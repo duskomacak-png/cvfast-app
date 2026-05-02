@@ -1,6 +1,6 @@
-const CACHE_NAME = "cvfast-v9-direct-install-ux";
+const CACHE_NAME = "cvfast-v10-final-pwa";
 
-const ASSETS = [
+const APP_SHELL = [
   "/",
   "/index.html",
   "/style.css",
@@ -12,26 +12,24 @@ const ASSETS = [
   "/favicon-32.png"
 ];
 
-// Install: cache assets without blocking the whole Service Worker if one asset fails.
+// Install: cache files one by one so one missing file cannot break the whole PWA install.
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
-      const results = await Promise.allSettled(
-        ASSETS.map((asset) => cache.add(asset))
-      );
-
-      results.forEach((result, index) => {
-        if (result.status === "rejected") {
-          console.error("PWA cache failed:", ASSETS[index], result.reason);
+      for (const file of APP_SHELL) {
+        try {
+          await cache.add(file);
+        } catch (err) {
+          console.warn("Cache failed:", file, err);
         }
-      });
+      }
     })
   );
 
   self.skipWaiting();
 });
 
-// Activate: delete old cache versions and take control immediately.
+// Activate: remove old caches and control pages immediately.
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
@@ -46,15 +44,13 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Fetch: cache-first for static files, network fallback, safe app-shell fallback for navigation.
+// Fetch: cache-first with network fallback. For navigation fallback, return index.html.
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-
-      return fetch(event.request).catch(() => {
+      return cached || fetch(event.request).catch(() => {
         if (event.request.mode === "navigate") {
           return caches.match("/index.html");
         }
