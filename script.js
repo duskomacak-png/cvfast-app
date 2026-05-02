@@ -97,8 +97,8 @@ const ui = {
     supportModalText: "Izrada i pregled CV-a su besplatni. PDF preuzimanje se otključava jednokratnom podrškom od 5€.",
     supportModalMuted: "Podrška pomaže da cvfast.app ostane online, brz i dostupan bez registracije.",
     supportPayBtn: "☕ Podrži 5€ i otključaj PDF",
-    alreadyPaid: "Već sam podržao — otključaj PDF",
-    mvpNote: "MVP napomena: bez baze nema automatske provere plaćanja. Otključavanje se čuva u ovom browseru.",
+    alreadyPaid: "",
+    mvpNote: "Nakon podrške PayPal će te vratiti u app i PDF preuzimanje će biti otključano u ovom browseru.",
     privacyLink: "Privatnost",
     termsLink: "Uslovi korišćenja",
     supportLink: "Podrška",
@@ -199,7 +199,7 @@ const ui = {
     supportModalText: "Creating and previewing the CV is free. PDF download unlocks after one-time support of €5.",
     supportModalMuted: "Your support helps keep cvfast.app online, fast and available without registration.",
     supportPayBtn: "☕ Support €5 and unlock PDF",
-    alreadyPaid: "I already supported — unlock PDF",
+    alreadyPaid: "",
     mvpNote: "MVP note: without a database there is no automatic payment verification. Unlock is stored in this browser.",
     privacyLink: "Privacy Policy",
     termsLink: "Terms of Use",
@@ -301,7 +301,7 @@ const ui = {
     supportModalText: "Erstellen und Vorschau sind kostenlos. PDF-Download wird nach einmaliger Unterstützung von 5€ freigeschaltet.",
     supportModalMuted: "Deine Unterstützung hilft, cvfast.app online, schnell und ohne Registrierung verfügbar zu halten.",
     supportPayBtn: "☕ 5€ unterstützen und PDF freischalten",
-    alreadyPaid: "Ich habe bereits unterstützt — PDF freischalten",
+    alreadyPaid: "",
     mvpNote: "MVP-Hinweis: Ohne Datenbank gibt es keine automatische Zahlungsprüfung. Die Freischaltung wird in diesem Browser gespeichert.",
     privacyLink: "Datenschutz",
     termsLink: "Nutzungsbedingungen",
@@ -1331,14 +1331,7 @@ function init() {
       showToast(ui[lang].pdfError);
     }
   });
-
-  $("#alreadyPaidBtn")?.addEventListener("click", () => {
-    localStorage.setItem(UNLOCK_KEY, "true");
-    closeSupportModal();
-    showToast(ui[getLang()].unlocked);
-  });
-
-  $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
+$("#closeSupportModal")?.addEventListener("click", closeSupportModal);
   $("#supportModal")?.addEventListener("click", (e) => {
     if (e.target.id === "supportModal") closeSupportModal();
   });

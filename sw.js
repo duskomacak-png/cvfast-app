@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v14-clean-language-fix";
+const CACHE_NAME = "cvfast-v15-no-manual-unlock";
 
 const APP_SHELL = [
   "/",
