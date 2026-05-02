@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v13-full-i18n";
+const CACHE_NAME = "cvfast-v14-clean-language-fix";
 
 const APP_SHELL = [
   "/",
@@ -12,6 +12,7 @@ const APP_SHELL = [
   "/favicon-32.png"
 ];
 
+// Install: cache files one by one so one missing file cannot break the whole PWA install.
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
@@ -28,6 +29,7 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
+// Activate: remove old caches and control pages immediately.
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
@@ -42,6 +44,7 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+// Fetch: cache-first with network fallback. For navigation fallback, return index.html.
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 

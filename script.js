@@ -38,6 +38,12 @@ const ui = {
     startCv: "📄 Start CV",
     installApp: "⬇️ Preuzmi app",
     shareApp: "🔗 Podeli app",
+    demoInitials: "MP",
+    demoPhone: "📞 +381 64 000 0000",
+    demoEmail: "✉️ milan.petrovic@example.com",
+    cvProfile: "PROFIL",
+    cvExperience: "RADNO ISKUSTVO",
+    cvSkills: "VEŠTINE",
     demoName: "Milan Petrović",
     demoTitle: "Rukovalac građevinskih mašina",
     demoLocation: "📍 Beograd, Srbija",
@@ -134,6 +140,12 @@ const ui = {
     startCv: "📄 Start CV",
     installApp: "⬇️ Install app",
     shareApp: "🔗 Share app",
+    demoInitials: "JW",
+    demoPhone: "📞 +44 7000 000000",
+    demoEmail: "✉️ john.worker@example.com",
+    cvProfile: "PROFILE",
+    cvExperience: "WORK EXPERIENCE",
+    cvSkills: "SKILLS",
     demoName: "John Worker",
     demoTitle: "Heavy Equipment Operator",
     demoLocation: "📍 City, Country",
@@ -230,6 +242,12 @@ const ui = {
     startCv: "📄 CV starten",
     installApp: "⬇️ App installieren",
     shareApp: "🔗 App teilen",
+    demoInitials: "MA",
+    demoPhone: "📞 +49 170 0000000",
+    demoEmail: "✉️ max.arbeiter@example.com",
+    cvProfile: "PROFIL",
+    cvExperience: "BERUFSERFAHRUNG",
+    cvSkills: "FÄHIGKEITEN",
     demoName: "Max Mustermann",
     demoTitle: "Baumaschinenführer",
     demoLocation: "📍 Stadt, Land",
@@ -317,69 +335,6 @@ const ui = {
     pdfError: "PDF-Fehler. Prüfe Internet/CDN-Bibliotheken."
   }
 };
-
-
-const uiFullPatch = {
-  sr: {
-    demoInitials: "MP",
-    demoName: "Milan Petrović",
-    demoTitle: "Rukovalac građevinskih mašina",
-    demoPhone: "📞 +381 64 000 0000",
-    demoEmail: "✉️ milan.petrovic@example.com",
-    demoLocation: "📍 Beograd, Srbija",
-    cvProfile: "PROFIL",
-    cvExperience: "RADNO ISKUSTVO",
-    cvSkills: "VEŠTINE",
-    cvEducation: "OBRAZOVANJE",
-    demoProfile: "Pouzdan i iskusan radnik sa fokusom na bezbednost, efikasnost i kvalitet rada.",
-    demoExperience1: "Rukovalac mašina — primer firme",
-    demoExperience2: "Zemljani radovi i priprema terena",
-    demoSkill1: "Praktičan rad",
-    demoSkill2: "Bezbednost",
-    demoSkill3: "Preciznost"
-  },
-  en: {
-    demoInitials: "JW",
-    demoName: "John Worker",
-    demoTitle: "Heavy Equipment Operator",
-    demoPhone: "📞 +44 7000 000000",
-    demoEmail: "✉️ john.worker@example.com",
-    demoLocation: "📍 City, Country",
-    cvProfile: "PROFILE",
-    cvExperience: "WORK EXPERIENCE",
-    cvSkills: "SKILLS",
-    cvEducation: "EDUCATION",
-    demoProfile: "Reliable and experienced worker focused on safety, efficiency and quality of work.",
-    demoExperience1: "Machine operator — sample company",
-    demoExperience2: "Earthworks and site preparation",
-    demoSkill1: "Practical work",
-    demoSkill2: "Safety",
-    demoSkill3: "Precision"
-  },
-  de: {
-    demoInitials: "MA",
-    demoName: "Max Arbeiter",
-    demoTitle: "Baumaschinenführer",
-    demoPhone: "📞 +49 170 0000000",
-    demoEmail: "✉️ max.arbeiter@example.com",
-    demoLocation: "📍 Stadt, Land",
-    cvProfile: "PROFIL",
-    cvExperience: "BERUFSERFAHRUNG",
-    cvSkills: "FÄHIGKEITEN",
-    cvEducation: "AUSBILDUNG",
-    demoProfile: "Zuverlässiger und erfahrener Mitarbeiter mit Fokus auf Sicherheit, Effizienz und Arbeitsqualität.",
-    demoExperience1: "Maschinenführer — Beispielfirma",
-    demoExperience2: "Erdarbeiten und Baustellenvorbereitung",
-    demoSkill1: "Praktische Arbeit",
-    demoSkill2: "Sicherheit",
-    demoSkill3: "Präzision"
-  }
-};
-
-Object.keys(uiFullPatch).forEach((lang) => {
-  ui[lang] = { ...(ui[lang] || {}), ...uiFullPatch[lang] };
-});
-
 
 const cvLabels = {
   sr: {
@@ -674,50 +629,38 @@ const demoDataByLang = {
     phone: "+381 64 000 0000",
     email: "milan.petrovic@example.com",
     location: "Beograd, Srbija",
-    profile: "Pouzdan i iskusan radnik sa fokusom na bezbednost, efikasnost i kvalitet rada.",
-    experience: "Rukovalac mašina — primer firme
-Zemljani radovi i priprema terena",
-    machines: "Bager CAT 330
-Buldozer D6R",
-    skills: "Praktičan rad
-Bezbednost
-Preciznost",
+    profile: "Iskusan i pouzdan radnik sa praktičnim iskustvom, fokusiran na bezbednost, tačnost i kvalitet rada.",
+    experience: "Rukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena\nRad u dinamičnim uslovima gradilišta",
+    machines: "Bager CAT 330\nBuldozer D6R",
+    skills: "Niskogradnja\nZemljani radovi\nBezbedan rad\nPreciznost\nTimski rad",
     education: "Kurs / obuka",
-    traits: "Odgovoran, pouzdan i precizan."
+    traits: "Odgovoran, pouzdan, precizan i naviknut na rad u dinamičnim uslovima."
   },
   en: {
     fullName: "John Worker",
     jobTitle: "Heavy Equipment Operator",
-    phone: "+44 7000 000000",
+    phone: "+381 64 000 0000",
     email: "john.worker@example.com",
     location: "City, Country",
-    profile: "Reliable and experienced worker focused on safety, efficiency and quality of work.",
-    experience: "Machine operator — sample company
-Earthworks and site preparation",
-    machines: "CAT 330 excavator
-D6R bulldozer",
-    skills: "Practical work
-Safety
-Precision",
+    profile: "Experienced and reliable worker with practical field experience, focused on safety, precision and quality of work.",
+    experience: "Machine operator — 10 years of experience\nEarthworks and site preparation\nWork in dynamic construction site conditions",
+    machines: "CAT 330 excavator\nD6R bulldozer",
+    skills: "Earthworks\nSite preparation\nSafe work\nPrecision\nTeamwork",
     education: "Training / course",
-    traits: "Responsible, reliable and precise."
+    traits: "Responsible, reliable, precise and used to working in dynamic conditions."
   },
   de: {
-    fullName: "Max Arbeiter",
+    fullName: "Max Mustermann",
     jobTitle: "Baumaschinenführer",
-    phone: "+49 170 0000000",
-    email: "max.arbeiter@example.com",
+    phone: "+381 64 000 0000",
+    email: "max.mustermann@example.com",
     location: "Stadt, Land",
-    profile: "Zuverlässiger und erfahrener Mitarbeiter mit Fokus auf Sicherheit, Effizienz und Arbeitsqualität.",
-    experience: "Maschinenführer — Beispielfirma
-Erdarbeiten und Baustellenvorbereitung",
-    machines: "Bagger CAT 330
-Bulldozer D6R",
-    skills: "Praktische Arbeit
-Sicherheit
-Präzision",
+    profile: "Erfahrener und zuverlässiger Arbeiter mit praktischer Erfahrung, Fokus auf Sicherheit, Genauigkeit und Qualität der Arbeit.",
+    experience: "Maschinenführer — 10 Jahre Erfahrung\nErdarbeiten und Baustellenvorbereitung\nArbeit unter dynamischen Baustellenbedingungen",
+    machines: "Bagger CAT 330\nBulldozer D6R",
+    skills: "Erdarbeiten\nBaustellenvorbereitung\nSicheres Arbeiten\nPräzision\nTeamarbeit",
     education: "Ausbildung / Kurs",
-    traits: "Verantwortungsbewusst, zuverlässig und präzise."
+    traits: "Verantwortungsbewusst, zuverlässig, präzise und an dynamische Arbeitsbedingungen gewöhnt."
   }
 };
 
@@ -758,6 +701,25 @@ function getLang() {
   return stored.appLanguage || stored.cvLanguage || "sr";
 }
 
+
+function updateLanguageSelectLabels(lang) {
+  const cvLanguage = $("#cvLanguage");
+  if (!cvLanguage) return;
+
+  const labels = {
+    sr: { sr: "Srpski", en: "Engleski", de: "Nemački" },
+    en: { sr: "Serbian", en: "English", de: "German" },
+    de: { sr: "Serbisch", en: "Englisch", de: "Deutsch" }
+  };
+
+  [...cvLanguage.options].forEach((option) => {
+    if (labels[lang] && labels[lang][option.value]) {
+      option.textContent = labels[lang][option.value];
+    }
+  });
+}
+
+
 function applyLanguage(lang) {
   if (!ui[lang]) lang = "sr";
 
@@ -769,6 +731,7 @@ function applyLanguage(lang) {
   document.documentElement.lang = lang;
   const cvLang = $("#cvLanguage");
   if (cvLang) cvLang.value = lang;
+  updateLanguageSelectLabels(lang);
 
   $$("[data-i18n]").forEach((el) => {
     const key = el.dataset.i18n;
@@ -1202,6 +1165,7 @@ function setupPwaInstall() {
       return;
     }
 
+    // Ako browser nije poslao realan install prompt, ne prikazuj ništa.
     if (!deferredPrompt) {
       console.log("PWA install prompt nije dostupan na ovom browseru/uređaju.");
       return;
