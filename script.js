@@ -1127,74 +1127,45 @@ function setupPwaInstall() {
       return;
     }
 
-    // iPhone/iPad: no direct browser install prompt.
-    if (isIosDevice()) {
-      showInstallInstructions("ios");
+    // Ako browser nije poslao realan install prompt, ne prikazuj ništa.
+    // Ovo posebno važi za iPhone/iPad, gde automatska PWA instalacija nije dozvoljena.
+    if (!deferredPrompt) {
+      console.log("PWA install prompt nije dostupan na ovom browseru/uređaju.");
       return;
     }
 
-    // Android Chrome / Desktop Chrome / Edge: use real install popup if browser provided it.
-    if (deferredPrompt) {
-      try {
-        if (installBtn) {
-          installBtn.disabled = true;
-          installBtn.textContent =
-            ui[lang]?.installingApp ||
-            "Pripremam instalaciju...";
-        }
-
-        await deferredPrompt.prompt();
-
-        const choice = await deferredPrompt.userChoice;
-        const outcome = choice?.outcome;
-
-        deferredPrompt = null;
-
-        if (outcome === "accepted") {
-          showToast(
-            ui[lang]?.installAccepted ||
-              "Aplikacija je dodata na početni ekran ✅"
-          );
-        } else {
-          showToast(
-            ui[lang]?.installDismissed ||
-              "Instalacija je otkazana"
-          );
-        }
-      } catch (error) {
-        console.error("PWA install error:", error);
-        showInstallInstructions("auto");
-      } finally {
-        if (installBtn) {
-          installBtn.disabled = false;
-          installBtn.textContent = originalText;
-        }
+    try {
+      if (installBtn) {
+        installBtn.disabled = true;
+        installBtn.textContent =
+          ui[lang]?.installingApp ||
+          "Pripremam instalaciju...";
       }
 
-      return;
-    }
+      await deferredPrompt.prompt();
 
-    // No browser prompt available.
-    if (installBtn) {
-      installBtn.disabled = true;
-      installBtn.textContent =
-        ui[lang]?.installingApp ||
-        "Proveravam instalaciju...";
-    }
+      const choice = await deferredPrompt.userChoice;
+      const outcome = choice?.outcome;
 
-    showToast(
-      ui[lang]?.installingApp ||
-        "Proveravam da li browser dozvoljava instalaciju..."
-    );
+      deferredPrompt = null;
 
-    setTimeout(() => {
+      if (outcome === "accepted") {
+        showToast(
+          ui[lang]?.installAccepted ||
+            "Aplikacija je dodata na početni ekran ✅"
+        );
+      } else {
+        // Korisnik je odbio install. Ne prikazuj veliko uputstvo.
+        console.log("PWA instalacija otkazana.");
+      }
+    } catch (error) {
+      console.error("PWA install error:", error);
+    } finally {
       if (installBtn) {
         installBtn.disabled = false;
         installBtn.textContent = originalText;
       }
-
-      showInstallInstructions("auto");
-    }, 700);
+    }
   });
 }
 

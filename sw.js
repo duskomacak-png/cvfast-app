@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v10-final-pwa";
+const CACHE_NAME = "cvfast-v11-silent-install";
 
 const APP_SHELL = [
   "/",
