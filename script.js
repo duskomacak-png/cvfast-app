@@ -11,6 +11,18 @@ const SHOW_CVFAST_FOOTER_IN_PDF = false;
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
+function trackEvent(name, params = {}) {
+  if (typeof gtag === "function") {
+    gtag("event", name, {
+      app_name: "cvfast.app",
+      app_language: getLang ? getLang() : "unknown",
+      ...params
+    });
+  }
+}
+
+
+
 const fields = [
   "cvLanguage",
   "template",
@@ -978,6 +990,7 @@ function handleUnlockFromUrl() {
   const params = new URLSearchParams(window.location.search);
   if (params.get("unlock") === UNLOCK_CODE) {
     localStorage.setItem(UNLOCK_KEY, "true");
+    trackEvent("paypal_return_unlock");
     window.history.replaceState({}, document.title, window.location.pathname);
     showToast(ui[getLang()].pdfUnlockedBrowser);
   }
@@ -1052,6 +1065,7 @@ async function downloadPdf() {
 }
 
 function openSupportModal() {
+  trackEvent("support_modal_open");
   $("#paymentLink").href = PAYMENT_LINK;
   $("#supportModal").classList.remove("hidden");
 }
@@ -1145,6 +1159,7 @@ function setupPwaInstall() {
   });
 
   $("#installBtn")?.addEventListener("click", async () => {
+    trackEvent("install_app_click");
     const lang = getLang();
     const installBtn = $("#installBtn");
 
@@ -1206,6 +1221,7 @@ function setupPwaInstall() {
 
 function setupShare() {
   $("#shareBtn")?.addEventListener("click", async () => {
+    trackEvent("share_app_click");
     const lang = getLang();
     const shareData = {
       title: "cvfast.app",
@@ -1270,6 +1286,11 @@ function init() {
     });
   });
 
+
+  document.querySelector('a[href="#builder"]')?.addEventListener("click", () => {
+    trackEvent("start_cv_click");
+  });
+
   $("#photo")?.addEventListener("change", async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -1287,6 +1308,7 @@ function init() {
   });
 
   $("#fillDemoBtn")?.addEventListener("click", () => {
+    trackEvent("fill_demo_click");
     const current = loadStored();
     const lang = getLang();
     const data = {
@@ -1318,6 +1340,7 @@ function init() {
   });
 
   $("#downloadPdfBtn")?.addEventListener("click", async () => {
+    trackEvent("download_pdf_click", { unlocked: isUnlocked() });
     const lang = getLang();
     if (!isUnlocked()) {
       openSupportModal();
@@ -1331,6 +1354,11 @@ function init() {
       showToast(ui[lang].pdfError);
     }
   });
+
+  $("#paymentLink")?.addEventListener("click", () => {
+    trackEvent("paypal_click", { value: 5, currency: "EUR" });
+  });
+
 $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
   $("#supportModal")?.addEventListener("click", (e) => {
     if (e.target.id === "supportModal") closeSupportModal();

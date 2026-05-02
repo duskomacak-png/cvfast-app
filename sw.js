@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v15-no-manual-unlock";
+const CACHE_NAME = "cvfast-v16-ga4-tracking";
 
 const APP_SHELL = [
   "/",
