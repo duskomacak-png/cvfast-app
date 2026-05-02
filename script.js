@@ -1,3 +1,13 @@
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 const STORAGE_KEY = "cvfast_app_data_v2";
 const UNLOCK_KEY = "cvfast_pdf_unlocked_v1";
 const UNLOCK_CODE = "cvfast_pdf_2026_ok";
@@ -322,38 +332,29 @@ const cvLabels = {
   sr: {
     profile: "PROFIL",
     experience: "RADNO ISKUSTVO",
-    machines: "MAŠINE / ALATI",
     skills: "VEŠTINE",
-    education: "OBRAZOVANJE / LICENCE",
-    traits: "LIČNE OSOBINE",
-    placeholderName: "Ime Prezime",
-    placeholderTitle: "Pozicija / zanimanje",
-    footer: "Napravljeno preko cvfast.app",
-    previewTitle: "Ovako će izgledati CV"
+    education: "OBRAZOVANJE",
+    phone: "Telefon",
+    email: "Email",
+    location: "Lokacija"
   },
   en: {
     profile: "PROFILE",
     experience: "WORK EXPERIENCE",
-    machines: "MACHINES / TOOLS",
     skills: "SKILLS",
-    education: "EDUCATION / LICENCES",
-    traits: "PERSONAL QUALITIES",
-    placeholderName: "Full Name",
-    placeholderTitle: "Job title / position",
-    footer: "Created with cvfast.app",
-    previewTitle: "This is how your CV will look"
+    education: "EDUCATION",
+    phone: "Phone",
+    email: "Email",
+    location: "Location"
   },
   de: {
     profile: "PROFIL",
     experience: "BERUFSERFAHRUNG",
-    machines: "MASCHINEN / WERKZEUGE",
     skills: "FÄHIGKEITEN",
-    education: "AUSBILDUNG / LIZENZEN",
-    traits: "PERSÖNLICHE EIGENSCHAFTEN",
-    placeholderName: "Vorname Nachname",
-    placeholderTitle: "Position / Beruf",
-    footer: "Erstellt mit cvfast.app",
-    previewTitle: "So wird dein Lebenslauf aussehen"
+    education: "AUSBILDUNG",
+    phone: "Telefon",
+    email: "E-Mail",
+    location: "Ort"
   }
 };
 
@@ -606,43 +607,46 @@ const installTexts = {
 
 const demoDataByLang = {
   sr: {
-    fullName: "Milan Petrović",
-    jobTitle: "Rukovalac građevinskih mašina",
+    name: "Milan Petrović",
+    initials: "MP",
+    title: "Rukovalac građevinskih mašina",
     phone: "+381 64 000 0000",
     email: "milan.petrovic@example.com",
     location: "Beograd, Srbija",
-    profile: "Iskusan i pouzdan radnik sa praktičnim iskustvom, fokusiran na bezbednost, tačnost i kvalitet rada.",
-    experience: "Rukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena\nRad u dinamičnim uslovima gradilišta",
-    machines: "Bager CAT 330\nBuldozer D6R",
-    skills: "Niskogradnja\nZemljani radovi\nBezbedan rad\nPreciznost\nTimski rad",
-    education: "Kurs / obuka",
-    traits: "Odgovoran, pouzdan, precizan i naviknut na rad u dinamičnim uslovima."
+    profile: "Pouzdan i iskusan radnik sa fokusom na bezbednost, efikasnost i kvalitet rada.",
+    experience: [
+      "Rukovalac mašina — primer firme",
+      "Zemljani radovi i priprema terena"
+    ],
+    skills: ["Praktičan rad", "Bezbednost", "Preciznost"]
   },
   en: {
-    fullName: "John Worker",
-    jobTitle: "Heavy Equipment Operator",
-    phone: "+381 64 000 0000",
+    name: "John Worker",
+    initials: "JW",
+    title: "Heavy Equipment Operator",
+    phone: "+44 7000 000000",
     email: "john.worker@example.com",
     location: "City, Country",
-    profile: "Experienced and reliable worker with practical field experience, focused on safety, precision and quality of work.",
-    experience: "Machine operator — 10 years of experience\nEarthworks and site preparation\nWork in dynamic construction site conditions",
-    machines: "CAT 330 excavator\nD6R bulldozer",
-    skills: "Earthworks\nSite preparation\nSafe work\nPrecision\nTeamwork",
-    education: "Training / course",
-    traits: "Responsible, reliable, precise and used to working in dynamic conditions."
+    profile: "Reliable and experienced worker focused on safety, efficiency and quality of work.",
+    experience: [
+      "Machine operator — sample company",
+      "Earthworks and site preparation"
+    ],
+    skills: ["Practical work", "Safety", "Precision"]
   },
   de: {
-    fullName: "Max Mustermann",
-    jobTitle: "Baumaschinenführer",
-    phone: "+381 64 000 0000",
-    email: "max.mustermann@example.com",
+    name: "Max Arbeiter",
+    initials: "MA",
+    title: "Baumaschinenführer",
+    phone: "+49 170 0000000",
+    email: "max.arbeiter@example.com",
     location: "Stadt, Land",
-    profile: "Erfahrener und zuverlässiger Arbeiter mit praktischer Erfahrung, Fokus auf Sicherheit, Genauigkeit und Qualität der Arbeit.",
-    experience: "Maschinenführer — 10 Jahre Erfahrung\nErdarbeiten und Baustellenvorbereitung\nArbeit unter dynamischen Baustellenbedingungen",
-    machines: "Bagger CAT 330\nBulldozer D6R",
-    skills: "Erdarbeiten\nBaustellenvorbereitung\nSicheres Arbeiten\nPräzision\nTeamarbeit",
-    education: "Ausbildung / Kurs",
-    traits: "Verantwortungsbewusst, zuverlässig, präzise und an dynamische Arbeitsbedingungen gewöhnt."
+    profile: "Zuverlässiger und erfahrener Mitarbeiter mit Fokus auf Sicherheit, Effizienz und Arbeitsqualität.",
+    experience: [
+      "Maschinenführer — Beispielfirma",
+      "Erdarbeiten und Baustellenvorbereitung"
+    ],
+    skills: ["Praktische Arbeit", "Sicherheit", "Präzision"]
   }
 };
 
@@ -785,6 +789,40 @@ function withPlaceholders(data) {
     traits: data.traits || demo.traits
   };
 }
+
+
+function renderDemoCvCard() {
+  const lang = getLang();
+  const demo = demoDataByLang?.[lang] || demoDataByLang.sr;
+  const labels = cvLabels?.[lang] || cvLabels.sr;
+
+  const setText = (selector, value) => {
+    const el = document.querySelector(selector);
+    if (el) el.textContent = value || "";
+  };
+
+  setText("[data-demo='name']", demo.name);
+  setText("[data-demo='initials']", demo.initials);
+  setText("[data-demo='title']", demo.title);
+  setText("[data-demo='phone']", demo.phone);
+  setText("[data-demo='email']", demo.email);
+  setText("[data-demo='location']", demo.location);
+  setText("[data-demo='profileLabel']", labels.profile);
+  setText("[data-demo='profile']", demo.profile);
+  setText("[data-demo='experienceLabel']", labels.experience);
+  setText("[data-demo='skillsLabel']", labels.skills);
+
+  const expList = document.querySelector("[data-demo='experienceList']");
+  if (expList) {
+    expList.innerHTML = (demo.experience || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  const skillsList = document.querySelector("[data-demo='skillsList']");
+  if (skillsList) {
+    skillsList.innerHTML = (demo.skills || []).map((item) => `<span>${escapeHtml(item)}</span>`).join("");
+  }
+}
+
 
 function renderCv(target, data, options = {}) {
   const usePlaceholders = Boolean(options.placeholders);
