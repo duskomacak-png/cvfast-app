@@ -1,1607 +1,1447 @@
-/* START WORK PRO by AskCreate - MVP v1
-   VAŽNO:
-   1) SUPABASE_URL je već upisan.
-   2) SUPABASE_KEY zameni tvojim Publishable key iz supabase-podaci.txt.
-   3) Nikad ne ubacuj Secret key u ovaj fajl.
-*/
+const STORAGE_KEY = "cvfast_app_data_v2";
+const UNLOCK_KEY = "cvfast_pdf_unlocked_v1";
+const UNLOCK_CODE = "cvfast_pdf_2026_ok";
 
-const SUPABASE_URL = "https://kzwawwrewakjbfhgrbdt.supabase.co";
-const SUPABASE_KEY = "sb_publishable_tounvJXNQqJmmkeEfm84Ow_rncVTr3V";
-const APP_VERSION = "1.11.6";
+// TODO: kad napraviš PayPal link, zameni ovde.
+// PayPal return URL: https://cvfast.app/?unlock=cvfast_pdf_2026_ok
+const PAYMENT_LINK = "https://www.paypal.com/ncp/payment/LU67SFVC967EY";
 
+const SHOW_CVFAST_FOOTER_IN_PDF = false;
 
-let sb = null;
-let currentCompany = null;
-let editingPersonId = null;
-let currentWorker = null;
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => [...document.querySelectorAll(selector)];
 
-const $ = (sel) => document.querySelector(sel);
-const $$ = (sel) => Array.from(document.querySelectorAll(sel));
-
-function initSupabase() {
-  if (!SUPABASE_KEY || SUPABASE_KEY.includes("OVDE_NALEPI")) {
-    toast("Nije ubačen Supabase Publishable key u script.js. Otvori script.js i zameni placeholder.", true);
-    return false;
+function trackEvent(name, params = {}) {
+  if (typeof gtag === "function") {
+    gtag("event", name, {
+      app_name: "cvfast.app",
+      app_language: getLang ? getLang() : "unknown",
+      ...params
+    });
   }
-  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  return true;
-}
-
-function toast(msg, isError = false) {
-  const el = $("#toast");
-  el.textContent = msg;
-  el.style.borderColor = isError ? "rgba(211,47,47,.65)" : "rgba(245,185,66,.35)";
-  el.classList.remove("hidden");
-  setTimeout(() => el.classList.add("hidden"), 4500);
 }
 
 
 
-function ensureDirectorTopLogoutButton() {
-  const dash = $("#viewDirectorDashboard");
-  if (!dash || $("#directorTopLogoutBtn")) return;
-  const head = dash.querySelector(".dashboard-head");
-  if (!head) return;
-  let actions = head.querySelector(".actions") || head.querySelector(".top-actions") || head.querySelector(".head-actions");
-  if (!actions) {
-    actions = document.createElement("div");
-    actions.className = "actions head-actions";
-    head.appendChild(actions);
+const fields = [
+  "cvLanguage",
+  "template",
+  "fullName",
+  "jobTitle",
+  "phone",
+  "email",
+  "location",
+  "profile",
+  "experience",
+  "machines",
+  "skills",
+  "education",
+  "traits"
+];
+
+const ui = {
+  sr: {
+    navHow: "Kako radi",
+    navFeatures: "Prednosti",
+    navStart: "Start CV",
+    privacyBadge: "🛡️ Bez naloga • Bez slanja na server",
+    heroTitle: "Napravi CV brzo",
+    heroSubtitle: "Napravi i pregledaj CV besplatno. PDF preuzimanje se otključava jednokratnom podrškom.",
+    startCv: "📄 Start CV",
+    installApp: "⬇️ Preuzmi app",
+    shareApp: "🔗 Podeli app",
+    demoInitials: "MP",
+    demoPhone: "📞 +381 64 000 0000",
+    demoEmail: "✉️ milan.petrovic@example.com",
+    cvProfile: "PROFIL",
+    cvExperience: "RADNO ISKUSTVO",
+    cvSkills: "VEŠTINE",
+    demoName: "Milan Petrović",
+    demoTitle: "Rukovalac građevinskih mašina",
+    demoLocation: "📍 Beograd, Srbija",
+    demoProfile: "Pouzdan i iskusan radnik sa fokusom na bezbednost, efikasnost i kvalitet rada.",
+    demoExperience1: "Rukovalac mašina — primer firme",
+    demoExperience2: "Zemljani radovi i priprema terena",
+    demoSkill1: "Praktičan rad",
+    demoSkill2: "Bezbednost",
+    demoSkill3: "Preciznost",
+    howTitle: "Kako radi",
+    step1: "Unesi podatke",
+    step2: "Pregledaj uživo",
+    step3: "Preuzmi PDF",
+    supportTitle: "Pregled je besplatan • PDF unlock €5",
+    supportText: "Jednokratna podrška pomaže da cvfast.app ostane online.",
+    browserNote: "🔒 Podaci ostaju u tvom browseru",
+    feature1Title: "📱 Mobile first",
+    feature1Text: "Radi na telefonu, laptopu i desktopu. CV možeš napraviti odmah.",
+    feature2Title: "🧾 Live preview",
+    feature2Text: "Svaka promena se odmah vidi na CV-u. Nema popunjavanja naslepo.",
+    feature3Title: "🛡️ Privacy first",
+    feature3Text: "Nema naloga i nema baze. Podaci se čuvaju samo u browseru korisnika.",
+    builderEyebrow: "CV BUILDER",
+    builderTitle: "Napravi svoj CV",
+    fullPreview: "👁 Vidi ceo CV",
+    basicTitle: "1. Osnovni podaci",
+    exampleBtn: "👁 Primer",
+    cvLanguageLabel: "Jezik CV-a",
+    templateLabel: "Šablon",
+    fullNameLabel: "Ime i prezime",
+    jobTitleLabel: "Pozicija",
+    phoneLabel: "Telefon",
+    emailLabel: "Email",
+    locationLabel: "Lokacija",
+    photoLabel: "Slika",
+    profileTitle: "2. Profil",
+    experienceTitle: "3. Radno iskustvo",
+    machinesSkillsTitle: "4. Mašine i veštine",
+    machinesLabel: "Mašine / alati",
+    skillsLabel: "Veštine",
+    educationExtraTitle: "5. Obrazovanje i dodatno",
+    educationLabel: "Obrazovanje / licence / kurs",
+    traitsLabel: "Lične osobine",
+    fillDemo: "Popuni demo",
+    downloadPdf: "Preuzmi PDF",
+    clearData: "Obriši",
+    livePreview: "Live CV Preview",
+    autoSave: "Auto-save aktivan",
+    translateBtn: "🌍 Prevedi preko Google Translate",
+    supportModalTitle: "CV je spreman ✅",
+    supportModalText: "Izrada i pregled CV-a su besplatni. PDF preuzimanje se otključava jednokratnom podrškom od 5€.",
+    supportModalMuted: "Podrška pomaže da cvfast.app ostane online, brz i dostupan bez registracije.",
+    supportPayBtn: "☕ Podrži 5€ i otključaj PDF",
+    alreadyPaid: "",
+    mvpNote: "Nakon podrške PayPal će te vratiti u app i PDF preuzimanje će biti otključano u ovom browseru.",
+    privacyLink: "Privatnost",
+    termsLink: "Uslovi korišćenja",
+    supportLink: "Podrška",
+    footerNote: "Bez naloga. Bez slanja CV podataka na server.",
+    fullNamePlaceholder: "Milan Petrović",
+    jobTitlePlaceholder: "Rukovalac građevinskih mašina",
+    locationPlaceholder: "Beograd, Srbija",
+    profilePlaceholder: "Kratak profesionalni opis...",
+    experiencePlaceholder: "Jedna stavka po redu. Primer:\nRukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena",
+    machinesPlaceholder: "Bager CAT 330\nBuldozer D6R",
+    skillsPlaceholder: "Niskogradnja\nBezbedan rad\nPreciznost",
+    educationPlaceholder: "Kurs / obuka",
+    traitsPlaceholder: "Odgovoran, pouzdan, precizan...",
+    saved: "Sačuvano",
+    dataCleared: "Podaci su obrisani",
+    demoFilled: "Demo podaci ubačeni ✅",
+    photoAdded: "Slika je dodata ✅",
+    chooseTarget: "Izaberi EN ili DE kao jezik CV-a",
+    enterTextFirst: "Prvo unesi tekst koji želiš da prevedeš",
+    unlocked: "PDF otključan ✅",
+    pdfUnlockedBrowser: "PDF je otključan u ovom browseru ✅",
+    installIos: "Za iPhone: otvori cvfast.app u Safari browseru → tapni Share → Add to Home Screen.",
+    installOther: "Ako se install prozor ne pojavi: u Chrome/Edge meniju izaberi Install app ili Add to Home Screen.",
+    alreadyInstalled: "App je već instalirana ✅",
+    installingApp: "Pripremam instalaciju...",
+    installAccepted: "Aplikacija je instalirana na početni ekran ✅",
+    installDismissed: "Instalacija je otkazana",
+    linkCopied: "Link je kopiran ✅",
+    confirmClear: "Da li sigurno želiš da obrišeš sve podatke iz browsera?",
+    pdfError: "PDF greška. Proveri internet/CDN biblioteke."
+  },
+  en: {
+    navHow: "How it works",
+    navFeatures: "Features",
+    navStart: "Start CV",
+    privacyBadge: "🛡️ No account • No server upload",
+    heroTitle: "Create your CV fast",
+    heroSubtitle: "Build and preview your CV for free. PDF download unlocks after one-time support.",
+    startCv: "📄 Start CV",
+    installApp: "⬇️ Install app",
+    shareApp: "🔗 Share app",
+    demoInitials: "JW",
+    demoPhone: "📞 +44 7000 000000",
+    demoEmail: "✉️ john.worker@example.com",
+    cvProfile: "PROFILE",
+    cvExperience: "WORK EXPERIENCE",
+    cvSkills: "SKILLS",
+    demoName: "John Worker",
+    demoTitle: "Heavy Equipment Operator",
+    demoLocation: "📍 City, Country",
+    demoProfile: "Reliable and experienced worker focused on safety, efficiency and quality of work.",
+    demoExperience1: "Machine operator — sample company",
+    demoExperience2: "Earthworks and site preparation",
+    demoSkill1: "Practical work",
+    demoSkill2: "Safety",
+    demoSkill3: "Precision",
+    howTitle: "How it works",
+    step1: "Fill in your data",
+    step2: "Preview live",
+    step3: "Download PDF",
+    supportTitle: "Preview is free • PDF unlock €5",
+    supportText: "One-time support helps keep cvfast.app online.",
+    browserNote: "🔒 Your data stays in your browser",
+    feature1Title: "📱 Mobile first",
+    feature1Text: "Works on phone, laptop and desktop. You can create your CV immediately.",
+    feature2Title: "🧾 Live preview",
+    feature2Text: "Every change appears instantly on your CV. No blind form filling.",
+    feature3Title: "🛡️ Privacy first",
+    feature3Text: "No account and no database. Data is stored only in the user’s browser.",
+    builderEyebrow: "CV BUILDER",
+    builderTitle: "Create your CV",
+    fullPreview: "👁 View full CV",
+    basicTitle: "1. Basic information",
+    exampleBtn: "👁 Example",
+    cvLanguageLabel: "CV language",
+    templateLabel: "Template",
+    fullNameLabel: "Full name",
+    jobTitleLabel: "Position",
+    phoneLabel: "Phone",
+    emailLabel: "Email",
+    locationLabel: "Location",
+    photoLabel: "Photo",
+    profileTitle: "2. Profile",
+    experienceTitle: "3. Work experience",
+    machinesSkillsTitle: "4. Machines and skills",
+    machinesLabel: "Machines / tools",
+    skillsLabel: "Skills",
+    educationExtraTitle: "5. Education and extra",
+    educationLabel: "Education / licences / course",
+    traitsLabel: "Personal qualities",
+    fillDemo: "Fill demo",
+    downloadPdf: "Download PDF",
+    clearData: "Clear",
+    livePreview: "Live CV Preview",
+    autoSave: "Auto-save active",
+    translateBtn: "🌍 Translate with Google Translate",
+    supportModalTitle: "Your CV is ready ✅",
+    supportModalText: "Creating and previewing the CV is free. PDF download unlocks after one-time support of €5.",
+    supportModalMuted: "Your support helps keep cvfast.app online, fast and available without registration.",
+    supportPayBtn: "☕ Support €5 and unlock PDF",
+    alreadyPaid: "",
+    mvpNote: "MVP note: without a database there is no automatic payment verification. Unlock is stored in this browser.",
+    privacyLink: "Privacy Policy",
+    termsLink: "Terms of Use",
+    supportLink: "Support",
+    footerNote: "No account. No CV data upload to our server.",
+    fullNamePlaceholder: "John Worker",
+    jobTitlePlaceholder: "Heavy Equipment Operator",
+    locationPlaceholder: "City, Country",
+    profilePlaceholder: "Short professional profile...",
+    experiencePlaceholder: "One item per line. Example:\nMachine operator — 10 years of experience\nEarthworks and site preparation",
+    machinesPlaceholder: "CAT 330 excavator\nD6R bulldozer",
+    skillsPlaceholder: "Earthworks\nSafe work\nPrecision",
+    educationPlaceholder: "Training / course",
+    traitsPlaceholder: "Responsible, reliable, precise...",
+    saved: "Saved",
+    dataCleared: "Data cleared",
+    demoFilled: "Demo data inserted ✅",
+    photoAdded: "Photo added ✅",
+    chooseTarget: "Choose EN or DE as CV language",
+    enterTextFirst: "First enter the text you want to translate",
+    unlocked: "PDF unlocked ✅",
+    pdfUnlockedBrowser: "PDF is unlocked in this browser ✅",
+    installIos: "For iPhone: open cvfast.app in Safari → tap Share → Add to Home Screen.",
+    installOther: "If the install prompt does not appear: use Chrome/Edge menu → Install app or Add to Home Screen.",
+    alreadyInstalled: "App is already installed ✅",
+    installingApp: "Preparing installation...",
+    installAccepted: "App installed on Home Screen ✅",
+    installDismissed: "Installation cancelled",
+    linkCopied: "Link copied ✅",
+    confirmClear: "Are you sure you want to delete all data from this browser?",
+    pdfError: "PDF error. Check internet/CDN libraries."
+  },
+  de: {
+    navHow: "So funktioniert es",
+    navFeatures: "Vorteile",
+    navStart: "CV starten",
+    privacyBadge: "🛡️ Kein Konto • Kein Server-Upload",
+    heroTitle: "Lebenslauf schnell erstellen",
+    heroSubtitle: "Lebenslauf kostenlos erstellen und ansehen. PDF-Download nach einmaliger Unterstützung.",
+    startCv: "📄 CV starten",
+    installApp: "⬇️ App installieren",
+    shareApp: "🔗 App teilen",
+    demoInitials: "MA",
+    demoPhone: "📞 +49 170 0000000",
+    demoEmail: "✉️ max.arbeiter@example.com",
+    cvProfile: "PROFIL",
+    cvExperience: "BERUFSERFAHRUNG",
+    cvSkills: "FÄHIGKEITEN",
+    demoName: "Max Mustermann",
+    demoTitle: "Baumaschinenführer",
+    demoLocation: "📍 Stadt, Land",
+    demoProfile: "Zuverlässiger und erfahrener Arbeiter mit Fokus auf Sicherheit, Effizienz und Arbeitsqualität.",
+    demoExperience1: "Maschinenführer — Beispielfirma",
+    demoExperience2: "Erdarbeiten und Baustellenvorbereitung",
+    demoSkill1: "Praktische Arbeit",
+    demoSkill2: "Sicherheit",
+    demoSkill3: "Präzision",
+    howTitle: "So funktioniert es",
+    step1: "Daten eingeben",
+    step2: "Live ansehen",
+    step3: "PDF herunterladen",
+    supportTitle: "Vorschau kostenlos • PDF unlock €5",
+    supportText: "Einmalige Unterstützung hilft, cvfast.app online zu halten.",
+    browserNote: "🔒 Deine Daten bleiben in deinem Browser",
+    feature1Title: "📱 Mobile first",
+    feature1Text: "Funktioniert auf Handy, Laptop und Desktop. Du kannst deinen Lebenslauf sofort erstellen.",
+    feature2Title: "🧾 Live-Vorschau",
+    feature2Text: "Jede Änderung erscheint sofort im Lebenslauf. Kein blindes Ausfüllen.",
+    feature3Title: "🛡️ Datenschutz zuerst",
+    feature3Text: "Kein Konto und keine Datenbank. Daten werden nur im Browser gespeichert.",
+    builderEyebrow: "CV BUILDER",
+    builderTitle: "Lebenslauf erstellen",
+    fullPreview: "👁 Ganzen CV ansehen",
+    basicTitle: "1. Grunddaten",
+    exampleBtn: "👁 Beispiel",
+    cvLanguageLabel: "CV-Sprache",
+    templateLabel: "Vorlage",
+    fullNameLabel: "Vor- und Nachname",
+    jobTitleLabel: "Position",
+    phoneLabel: "Telefon",
+    emailLabel: "E-Mail",
+    locationLabel: "Ort",
+    photoLabel: "Foto",
+    profileTitle: "2. Profil",
+    experienceTitle: "3. Berufserfahrung",
+    machinesSkillsTitle: "4. Maschinen und Fähigkeiten",
+    machinesLabel: "Maschinen / Werkzeuge",
+    skillsLabel: "Fähigkeiten",
+    educationExtraTitle: "5. Ausbildung und Zusatz",
+    educationLabel: "Ausbildung / Lizenzen / Kurs",
+    traitsLabel: "Persönliche Eigenschaften",
+    fillDemo: "Demo ausfüllen",
+    downloadPdf: "PDF herunterladen",
+    clearData: "Löschen",
+    livePreview: "Live CV Vorschau",
+    autoSave: "Auto-save aktiv",
+    translateBtn: "🌍 Mit Google Translate übersetzen",
+    supportModalTitle: "Dein CV ist bereit ✅",
+    supportModalText: "Erstellen und Vorschau sind kostenlos. PDF-Download wird nach einmaliger Unterstützung von 5€ freigeschaltet.",
+    supportModalMuted: "Deine Unterstützung hilft, cvfast.app online, schnell und ohne Registrierung verfügbar zu halten.",
+    supportPayBtn: "☕ 5€ unterstützen und PDF freischalten",
+    alreadyPaid: "",
+    mvpNote: "MVP-Hinweis: Ohne Datenbank gibt es keine automatische Zahlungsprüfung. Die Freischaltung wird in diesem Browser gespeichert.",
+    privacyLink: "Datenschutz",
+    termsLink: "Nutzungsbedingungen",
+    supportLink: "Support",
+    footerNote: "Kein Konto. Kein Upload von CV-Daten auf unseren Server.",
+    fullNamePlaceholder: "Max Mustermann",
+    jobTitlePlaceholder: "Baumaschinenführer",
+    locationPlaceholder: "Stadt, Land",
+    profilePlaceholder: "Kurzes berufliches Profil...",
+    experiencePlaceholder: "Eine Position pro Zeile. Beispiel:\nMaschinenführer — 10 Jahre Erfahrung\nErdarbeiten und Baustellenvorbereitung",
+    machinesPlaceholder: "Bagger CAT 330\nBulldozer D6R",
+    skillsPlaceholder: "Erdarbeiten\nSicheres Arbeiten\nPräzision",
+    educationPlaceholder: "Ausbildung / Kurs",
+    traitsPlaceholder: "Verantwortungsbewusst, zuverlässig, präzise...",
+    saved: "Gespeichert",
+    dataCleared: "Daten gelöscht",
+    demoFilled: "Demo-Daten eingefügt ✅",
+    photoAdded: "Foto hinzugefügt ✅",
+    chooseTarget: "Wähle EN oder DE als CV-Sprache",
+    enterTextFirst: "Gib zuerst den Text ein, den du übersetzen möchtest",
+    unlocked: "PDF freigeschaltet ✅",
+    pdfUnlockedBrowser: "PDF ist in diesem Browser freigeschaltet ✅",
+    installIos: "Für iPhone: cvfast.app in Safari öffnen → Teilen → Zum Home-Bildschirm hinzufügen.",
+    installOther: "Wenn kein Installationsfenster erscheint: Chrome/Edge-Menü → App installieren oder Zum Startbildschirm hinzufügen.",
+    alreadyInstalled: "App ist bereits installiert ✅",
+    installingApp: "Installation wird vorbereitet...",
+    installAccepted: "App wurde zum Startbildschirm hinzugefügt ✅",
+    installDismissed: "Installation abgebrochen",
+    linkCopied: "Link kopiert ✅",
+    confirmClear: "Möchtest du wirklich alle Daten aus diesem Browser löschen?",
+    pdfError: "PDF-Fehler. Prüfe Internet/CDN-Bibliotheken."
   }
-  const btn = document.createElement("button");
-  btn.id = "directorTopLogoutBtn";
-  btn.className = "secondary";
-  btn.type = "button";
-  btn.textContent = "Odjavi se";
-  btn.addEventListener("click", signOut);
-  actions.appendChild(btn);
-}
-
-
-
-function showCurrentCompanyLoginInfo() {
-  const box = $("#directorWorkerCodeHelpBox");
-  if (!box || !currentCompany) return;
-  const companyCode = currentCompany.code || currentCompany.company_code || "";
-  box.innerHTML = `
-    <b>Prijava radnika:</b>
-    <span>Šifra firme je <strong>${escapeHtml(companyCode)}</strong>. Ovde upisuješ samo ličnu šifru radnika.</span>
-  `;
-}
-
-function normalizeLoginCode(code) {
-  return String(code || "").trim().toLowerCase();
-}
-
-function setInternalHeader(title = "", subtitle = "", showHeader = true) {
-  const header = $("#internalHeader");
-  if (!header) return;
-  const titleEl = $("#internalTitle");
-  const subtitleEl = $("#internalSubtitle");
-  if (titleEl) titleEl.textContent = title || "Radni prostor";
-  if (subtitleEl) subtitleEl.textContent = subtitle || "";
-  header.classList.toggle("hidden", !showHeader);
-  document.body.classList.toggle("in-app", !!showHeader);
-}
-
-function show(view) {
-  const publicViews = ["Home", "AdminLogin", "DirectorLogin", "WorkerLogin"];
-  if (publicViews.includes(view)) {
-    setInternalHeader("", "", false);
-  }
-
-  $$(".view").forEach(v => v.classList.remove("active"));
-  const el = $("#view" + view);
-  if (el) el.classList.add("active");
-  $("#logoutBtn").classList.toggle("hidden", !["AdminDashboard", "DirectorDashboard"].includes(view));
-}
-
-function today() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function normalizeCode(s) {
-  return String(s || "").trim().toLowerCase();
-}
-
-async function signUp(email, password) {
-  if (!initSupabase()) return null;
-  const { data, error } = await sb.auth.signUp({ email, password });
-  if (error) throw error;
-  return data;
-}
-
-async function signIn(email, password) {
-  if (!initSupabase()) return null;
-  const { data, error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) throw error;
-  return data;
-}
-
-async function signOut() {
-  if (sb) await sb.auth.signOut();
-  currentCompany = null;
-  localStorage.removeItem("swp_worker");
-  setInternalHeader("", "", false);
-  show("Home");
-}
-
-async function ensureAdmin() {
-  const { data, error } = await sb.from("app_admins").select("*").eq("email", "duskomacak@gmail.com").maybeSingle();
-  if (error || !data || !data.active) throw new Error("Ovaj nalog nema Super Admin dozvolu.");
-  return true;
-}
-
-async function loadAdmin() {
-  await ensureAdmin();
-  setInternalHeader("Admin soba", "Odobravanje firmi", true);
-  show("AdminDashboard");
-  await Promise.all([loadApprovedCompanies(), loadCompanies()]);
-}
-
-async function loadApprovedCompanies() {
-  const { data, error } = await sb.from("approved_companies").select("*").order("created_at", { ascending:false });
-  if (error) return toast(error.message, true);
-  $("#approvedCompaniesList").innerHTML = (data || []).map(c => `
-    <div class="item">
-      <strong>${escapeHtml(c.company_name)}</strong>
-      <small>${escapeHtml(c.approved_email)} · šifra: ${escapeHtml(c.company_code)} · pozivni: ${escapeHtml(c.invite_code)}</small><br/>
-      <span class="pill">${escapeHtml(c.status)}</span>
-      <span class="pill">registrovana: ${c.registered ? "DA" : "NE"}</span>
-      <div class="actions">
-        <button class="secondary" onclick="adminSetApprovedStatus('${c.id}','active')">Aktiviraj</button>
-        <button class="secondary" onclick="adminSetApprovedStatus('${c.id}','blocked')">Blokiraj</button>
-      </div>
-    </div>`).join("") || `<p class="muted">Nema odobrenih firmi.</p>`;
-}
-
-async function loadCompanies() {
-  const { data, error } = await sb.from("companies").select("*").order("created_at", { ascending:false });
-  if (error) return toast(error.message, true);
-  $("#companiesList").innerHTML = (data || []).map(c => `
-    <div class="item">
-      <strong>${escapeHtml(c.name)}</strong>
-      <small>${escapeHtml(c.owner_email)} · šifra: ${escapeHtml(c.company_code)}</small><br/>
-      <span class="pill">${escapeHtml(c.status)}</span>
-      <span class="pill">${escapeHtml(c.plan)}</span>
-      <div class="actions">
-        <button class="secondary" onclick="adminSetCompanyStatus('${c.id}','active')">Active</button>
-        <button class="secondary" onclick="adminSetCompanyStatus('${c.id}','expired')">Expired</button>
-        <button class="secondary" onclick="adminSetCompanyStatus('${c.id}','blocked')">Blocked</button>
-      </div>
-    </div>`).join("") || `<p class="muted">Još nema registrovanih firmi.</p>`;
-}
-
-window.adminSetApprovedStatus = async (id, status) => {
-  const { error } = await sb.from("approved_companies").update({ status }).eq("id", id);
-  if (error) return toast(error.message, true);
-  toast("Status promenjen.");
-  loadApprovedCompanies();
 };
 
-window.adminSetCompanyStatus = async (id, status) => {
-  const { error } = await sb.from("companies").update({ status }).eq("id", id);
-  if (error) return toast(error.message, true);
-  toast("Status firme promenjen.");
-  loadCompanies();
-};
-
-async function loadDirectorCompany() {
-  const { data: userData } = await sb.auth.getUser();
-  const email = userData?.user?.email;
-  if (!email) throw new Error("Nema aktivnog Direkcija login-a.");
-
-  const { data, error } = await sb.from("companies").select("*").eq("owner_email", email).maybeSingle();
-  if (error) throw error;
-  if (!data) {
-    show("DirectorLogin");
-    toast("Email je prijavljen, ali firma još nije aktivirana. Unesi šifru firme i pozivni kod.");
-    return null;
-  }
-  currentCompany = data;
-  $("#directorCompanyLabel").textContent = `${data.name} · ${data.company_code} · ${data.status}`;
-  setInternalHeader("Direkcija", (currentCompany?.name || activeCompany?.name || "Firma"), true);
-  show("DirectorDashboard");
-  ensureDirectorTopLogoutButton();
-  showCurrentCompanyLoginInfo();
-  await Promise.all([loadPeople(), loadSites(), loadAssets(), loadMaterials(), loadReports()]);
-  return data;
-}
-
-
-
-
-
-
-
-
-
-
-
-function setPersonFormMode(mode = "add") {
-  const editing = mode === "edit";
-  const title = $("#personFormTitle");
-  const btn = $("#addPersonBtn");
-  const cancel = $("#cancelEditPersonBtn");
-  if (title) title.textContent = editing ? "✏️ Uredi profil radnika" : "+ Dodaj osobu";
-  if (btn) btn.textContent = editing ? "Sačuvaj izmene" : "Sačuvaj osobu";
-  if (cancel) cancel.classList.toggle("hidden", !editing);
-}
-
-function clearPersonForm() {
-  ["personFirst", "personLast", "personFunction", "personCode"].forEach(id => {
-    const el = $("#" + id);
-    if (el) el.value = "";
-  });
-  $$(".perm").forEach(ch => { ch.checked = ch.value === "daily_work"; });
-  editingPersonId = null;
-  setPersonFormMode("add");
-}
-
-window.editPerson = async (id) => {
-  try {
-    if (!currentCompany) throw new Error("Nema aktivne firme.");
-    const { data: person, error } = await sb
-      .from("company_users")
-      .select("*")
-      .eq("id", id)
-      .eq("company_id", currentCompany.id)
-      .maybeSingle();
-    if (error) throw error;
-    if (!person) throw new Error("Radnik nije pronađen.");
-
-    editingPersonId = person.id;
-    $("#personFirst").value = person.first_name || "";
-    $("#personLast").value = person.last_name || "";
-    $("#personFunction").value = person.function_title || "";
-    $("#personCode").value = person.access_code || "";
-
-    const permissions = person.permissions || {};
-    $$(".perm").forEach(ch => { ch.checked = !!permissions[ch.value]; });
-
-    setPersonFormMode("edit");
-    toast("Profil radnika je otvoren za izmenu.");
-    const title = $("#personFormTitle");
-    if (title) title.scrollIntoView({ behavior: "smooth", block: "center" });
-  } catch (e) {
-    toast(e.message, true);
+const cvLabels = {
+  sr: {
+    profile: "PROFIL",
+    experience: "RADNO ISKUSTVO",
+    machines: "MAŠINE / ALATI",
+    skills: "VEŠTINE",
+    education: "OBRAZOVANJE / LICENCE",
+    traits: "LIČNE OSOBINE",
+    placeholderName: "Ime Prezime",
+    placeholderTitle: "Pozicija / zanimanje",
+    footer: "Napravljeno preko cvfast.app",
+    previewTitle: "Ovako će izgledati CV"
+  },
+  en: {
+    profile: "PROFILE",
+    experience: "WORK EXPERIENCE",
+    machines: "MACHINES / TOOLS",
+    skills: "SKILLS",
+    education: "EDUCATION / LICENCES",
+    traits: "PERSONAL QUALITIES",
+    placeholderName: "Full Name",
+    placeholderTitle: "Job title / position",
+    footer: "Created with cvfast.app",
+    previewTitle: "This is how your CV will look"
+  },
+  de: {
+    profile: "PROFIL",
+    experience: "BERUFSERFAHRUNG",
+    machines: "MASCHINEN / WERKZEUGE",
+    skills: "FÄHIGKEITEN",
+    education: "AUSBILDUNG / LIZENZEN",
+    traits: "PERSÖNLICHE EIGENSCHAFTEN",
+    placeholderName: "Vorname Nachname",
+    placeholderTitle: "Position / Beruf",
+    footer: "Erstellt mit cvfast.app",
+    previewTitle: "So wird dein Lebenslauf aussehen"
   }
 };
 
-async function savePersonForm() {
-  try {
-    if (!currentCompany) throw new Error("Nema aktivne firme.");
 
-    const firstName = $("#personFirst").value.trim();
-    const lastName = $("#personLast").value.trim();
-    const functionTitle = $("#personFunction").value.trim();
-    const code = normalizeLoginCode($("#personCode").value);
-
-    if (!firstName) throw new Error("Upiši ime radnika.");
-    if (!lastName) throw new Error("Upiši prezime radnika.");
-    if (!functionTitle) throw new Error("Upiši funkciju radnika.");
-    if (code.length < 4) throw new Error("Šifra radnika mora imati najmanje 4 karaktera.");
-
-    let duplicateQuery = sb
-      .from("company_users")
-      .select("id")
-      .eq("company_id", currentCompany.id)
-      .eq("access_code", code)
-      .eq("active", true);
-    if (editingPersonId) duplicateQuery = duplicateQuery.neq("id", editingPersonId);
-
-    const { data: existingCode, error: existingCodeError } = await duplicateQuery.maybeSingle();
-    if (existingCodeError) throw existingCodeError;
-    if (existingCode) throw new Error("U ovoj firmi već postoji aktivan radnik sa tom šifrom. Izaberi drugu šifru radnika.");
-
-    const payload = {
-      company_id: currentCompany.id,
-      first_name: firstName,
-      last_name: lastName,
-      function_title: functionTitle,
-      access_code: code,
-      permissions: collectPermissions(),
-      active: true
-    };
-
-    if (editingPersonId) {
-      const { error } = await sb
-        .from("company_users")
-        .update(payload)
-        .eq("id", editingPersonId)
-        .eq("company_id", currentCompany.id);
-      if (error) throw error;
-      toast("Profil radnika je sačuvan.");
-    } else {
-      const { error } = await sb.from("company_users").insert(payload);
-      if (error) throw error;
-      toast("Radnik je dodat.");
+const legalTexts = {
+  sr: {
+    privacy: {
+      title: "Politika privatnosti",
+      body: `
+        <p><strong>cvfast.app</strong> je alat za izradu CV-a koji radi u browseru. Aplikacija ne zahteva registraciju i ne šalje tvoje CV podatke na naš server.</p>
+        <h3>Koji podaci se koriste?</h3>
+        <p>Podaci koje uneseš, uključujući ime, kontakt, radno iskustvo, veštine i sliku, čuvaju se lokalno u tvom browseru preko LocalStorage memorije.</p>
+        <h3>LocalStorage</h3>
+        <p>Ako obrišeš podatke browsera, koristiš drugi uređaj ili drugi browser, sačuvani CV podaci i PDF otključavanje mogu biti izgubljeni.</p>
+        <h3>PDF i plaćanje/podrška</h3>
+        <p>PDF se generiše u tvom browseru. Obradu podrške/plaćanja vrši PayPal. Mi ne čuvamo podatke tvoje platne kartice.</p>
+        <h3>Google Translate</h3>
+        <p>Ako koristiš Google Translate pomoć, tekst koji želiš da prevedeš može biti otvoren u Google Translate servisu i obrađen prema Google pravilima privatnosti.</p>
+      `
+    },
+    terms: {
+      title: "Uslovi korišćenja",
+      body: `
+        <p><strong>cvfast.app</strong> pruža jednostavan alat za kreiranje i pregled CV dokumenata.</p>
+        <ul>
+          <li>Ne garantujemo zaposlenje, razgovor za posao, ponudu za posao ili prihvatanje CV-a od strane poslodavca.</li>
+          <li>Korisnik je odgovoran za tačnost podataka koje unosi u CV.</li>
+          <li>Kreiranje i pregled CV-a su besplatni. PDF preuzimanje može zahtevati jednokratnu podršku.</li>
+          <li>Pošto aplikacija radi bez naloga i bez baze podataka, otključavanje PDF-a čuva se samo u browseru/uređaju na kojem je otključano.</li>
+          <li>Aplikacija se pruža “takva kakva jeste”. Funkcije mogu biti izmenjene, ažurirane ili uklonjene.</li>
+        </ul>
+      `
+    },
+    support: {
+      title: "Podrška",
+      body: `
+        <p>Ako imaš problem sa PDF preuzimanjem, prikazom CV-a ili otključavanjem nakon podrške, kontaktiraj podršku.</p>
+        <p><strong>Email:</strong> support@cvfast.app</p>
+        <p>Ako ovaj email još nije aktiviran, privremeno koristi kontakt koji bude naveden na zvaničnoj stranici projekta.</p>
+      `
     }
-
-    clearPersonForm();
-    loadPeople();
-  } catch (e) {
-    toast(e.message, true);
-  }
-}
-
-window.deleteReportPermanently = async (id) => {
-  try {
-    if (!currentCompany) throw new Error("Nema aktivne firme.");
-    if (!confirm("TRAJNO obrisati ovaj izveštaj iz baze?\n\nOvo se ne može vratiti.")) return;
-
-    const { error } = await sb
-      .from("reports")
-      .delete()
-      .eq("id", id)
-      .eq("company_id", currentCompany.id);
-    if (error) throw error;
-
-    toast("Izveštaj je trajno obrisan iz baze.");
-    loadReports();
-    if (typeof runDirectorGlobalSearch === "function") runDirectorGlobalSearch(false);
-  } catch (e) {
-    toast(e.message, true);
-  }
-};
-
-function renderPersonItem(p) {
-  const permissionCount = Object.keys(p.permissions || {}).filter(k => p.permissions[k]).length;
-  return `
-    <div class="item person-card-v1116" data-person-id="${escapeHtml(p.id)}">
-      <div class="item-main">
-        <strong>${escapeHtml(p.first_name)} ${escapeHtml(p.last_name)}</strong>
-        <small>${escapeHtml(p.function_title)} · šifra radnika: ${escapeHtml(p.access_code)}</small><br/>
-        <span class="pill">Aktivan</span>
-        <span class="pill">${permissionCount} rubrika</span>
-      </div>
-      <div class="person-actions-v1116">
-        <button class="edit-btn" type="button" onclick="editPerson('${p.id}')">✏️ Uredi profil</button>
-        <button class="delete-btn" type="button" onclick="deletePerson('${p.id}')">❌ Obriši iz spiska</button>
-      </div>
-    </div>
-  `;
-}
-
-async function loadPeople() {
-  if (!currentCompany) return;
-
-  const { data, error } = await sb
-    .from("company_users")
-    .select("*")
-    .eq("company_id", currentCompany.id)
-    .eq("active", true)
-    .order("created_at", { ascending:false });
-
-  if (error) return toast(error.message, true);
-
-  const list = $("#peopleList");
-  if (!list) return;
-  list.innerHTML = (data || []).map(renderPersonItem).join("") || `<p class="muted">Nema dodatih osoba.</p>`;
-}
-
-async function loadSites() {
-  if (!currentCompany) return;
-  const { data, error } = await sb
-    .from("sites")
-    .select("*")
-    .eq("company_id", currentCompany.id)
-    .eq("active", true)
-    .order("created_at", { ascending:false });
-
-  if (error) return toast(error.message, true);
-
-  $("#sitesList").innerHTML = (data || []).map(s => `
-    <div class="item management-item">
-      <div class="item-main">
-        <strong>${escapeHtml(s.name)}</strong>
-        <small>${escapeHtml(s.location || "")}</small><br/>
-        <span class="pill">Aktivno gradilište</span>
-      </div>
-      <div class="management-actions">
-        <button class="archive-btn" type="button" onclick="archiveSite('${s.id}', '${escapeHtml(s.name || '')}')">✅ Završi / skloni gradilište</button>
-      </div>
-    </div>
-  `).join("") || `<p class="muted">Nema aktivnih gradilišta.</p>`;
-}
-
-async function loadAssets() {
-  if (!currentCompany) return;
-  const { data, error } = await sb
-    .from("assets")
-    .select("*")
-    .eq("company_id", currentCompany.id)
-    .order("created_at", { ascending:false });
-
-  if (error) return toast(error.message, true);
-
-  $("#assetsList").innerHTML = (data || []).map(a => `
-    <div class="item management-item">
-      <div class="item-main">
-        <strong>${escapeHtml(a.name)}</strong>
-        <small>${escapeHtml(a.asset_type)} · ${escapeHtml(a.registration || "")} · ${escapeHtml(a.capacity || "")}</small>
-      </div>
-      <div class="management-actions">
-        <button class="delete-btn" type="button" onclick="deleteAsset('${a.id}', '${escapeHtml(a.name || '')}')">❌ Obriši ovu mašinu/vozilo</button>
-      </div>
-    </div>
-  `).join("") || `<p class="muted">Nema mašina/vozila.</p>`;
-}
-
-
-async function loadMaterials() {
-  if (!currentCompany) return;
-  const list = $("#materialsList");
-  const datalist = $("#materialsDatalist");
-
-  const { data, error } = await sb
-    .from("materials")
-    .select("*")
-    .eq("company_id", currentCompany.id)
-    .order("created_at", { ascending:false });
-
-  if (error) {
-    if (list) list.innerHTML = `<p class="muted">Tabela materials još nije dodata u Supabase. Pokreni SQL dopunu iz supabase-dopuna-v2.sql.</p>`;
-    return;
-  }
-
-  if (list) {
-    list.innerHTML = (data || []).map(m => `
-      <div class="item management-item">
-        <div class="item-main">
-          <strong>${escapeHtml(m.name)}</strong>
-          <small>${escapeHtml(m.unit || "")} ${m.category ? "· " + escapeHtml(m.category) : ""}</small>
-        </div>
-        <div class="management-actions">
-          <button class="delete-btn" type="button" onclick="deleteMaterial('${m.id}', '${escapeHtml(m.name || '')}')">❌ Obriši materijal</button>
-        </div>
-      </div>
-    `).join("") || `<p class="muted">Nema dodatih materijala.</p>`;
-  }
-
-  if (datalist) {
-    datalist.innerHTML = (data || []).map(m => `<option value="${escapeHtml(m.name)}"></option>`).join("");
-  }
-}
-
-
-window.archiveSite = async (id, name = "") => {
-  const label = name ? ` (${name})` : "";
-  if (!confirm("Skloniti gradilište iz aktivnog spiska" + label + "?\\n\\nStari izveštaji ostaju sačuvani zbog evidencije.")) return;
-
-  const { error } = await sb
-    .from("sites")
-    .update({ active: false })
-    .eq("id", id)
-    .eq("company_id", currentCompany.id);
-
-  if (error) return toast(error.message, true);
-  toast("Gradilište je sklonjeno iz aktivnog spiska.");
-  loadSites();
-};
-
-window.deletePerson = async (id, name = "") => {
-  try {
-    if (!currentCompany) throw new Error("Nema aktivne firme.");
-
-    if (!name) {
-      const { data: person, error: readError } = await sb
-        .from("company_users")
-        .select("first_name,last_name")
-        .eq("id", id)
-        .eq("company_id", currentCompany.id)
-        .maybeSingle();
-      if (readError) throw readError;
-      if (person) name = `${person.first_name || ""} ${person.last_name || ""}`.trim();
+  },
+  en: {
+    privacy: {
+      title: "Privacy Policy",
+      body: `
+        <p><strong>cvfast.app</strong> is a browser-based CV builder. The app does not require registration and does not upload your CV data to our server.</p>
+        <h3>What data is used?</h3>
+        <p>The information you enter, including your name, contact details, work experience, skills and photo, is stored locally in your browser using LocalStorage.</p>
+        <h3>LocalStorage</h3>
+        <p>If you clear your browser data, use another device or another browser, your saved CV data and PDF unlock may be lost.</p>
+        <h3>PDF and payment/support</h3>
+        <p>PDF generation happens in your browser. Payment/support processing is handled by PayPal. We do not store your payment card details.</p>
+        <h3>Google Translate</h3>
+        <p>If you use the Google Translate helper, the text you choose to translate may be opened in Google Translate and processed under Google’s own policies.</p>
+      `
+    },
+    terms: {
+      title: "Terms of Use",
+      body: `
+        <p><strong>cvfast.app</strong> provides a simple tool for creating and previewing CV documents.</p>
+        <ul>
+          <li>We do not guarantee employment, interviews, job offers or acceptance by any employer.</li>
+          <li>You are responsible for the accuracy of the information you enter into your CV.</li>
+          <li>Creating and previewing a CV is free. PDF download may require a one-time support payment.</li>
+          <li>Because the app works without accounts and without a database, PDF unlock is stored only in the browser/device used at the time of unlock.</li>
+          <li>The app is provided “as is”. Features may be changed, updated or removed.</li>
+        </ul>
+      `
+    },
+    support: {
+      title: "Support",
+      body: `
+        <p>If you have a problem with PDF download, CV display or unlock after support, contact support.</p>
+        <p><strong>Email:</strong> support@cvfast.app</p>
+        <p>If this email is not active yet, use the contact provided on the official project page.</p>
+      `
     }
-
-    const label = name ? ` (${name})` : "";
-    if (!confirm("Obrisati osobu/radnika iz aktivnog spiska" + label + "?\n\nStari izveštaji ostaju sačuvani zbog evidencije.")) return;
-
-    const { error } = await sb
-      .from("company_users")
-      .update({ active: false })
-      .eq("id", id)
-      .eq("company_id", currentCompany.id);
-
-    if (error) throw error;
-    toast("Osoba je obrisana iz aktivnog spiska.");
-    clearPersonForm();
-    loadPeople();
-  } catch (e) {
-    toast(e.message, true);
-  }
-};
-
-window.deleteAsset = async (id, name = "") => {
-  const label = name ? ` (${name})` : "";
-  if (!confirm("Obrisati ovu mašinu/vozilo iz spiska" + label + "?")) return;
-
-  const { error } = await sb
-    .from("assets")
-    .delete()
-    .eq("id", id)
-    .eq("company_id", currentCompany.id);
-
-  if (error) return toast(error.message, true);
-  toast("Mašina/vozilo je obrisano iz spiska.");
-  loadAssets();
-};
-
-window.deleteMaterial = async (id, name = "") => {
-  const label = name ? ` (${name})` : "";
-  if (!confirm("Obrisati ovaj materijal iz spiska" + label + "?")) return;
-
-  const { error } = await sb
-    .from("materials")
-    .delete()
-    .eq("id", id)
-    .eq("company_id", currentCompany.id);
-
-  if (error) return toast(error.message, true);
-  toast("Materijal je obrisan iz spiska.");
-  loadMaterials();
-};
-
-
-window.archiveReport = async (id) => {
-  if (!confirm("Arhivirati/skloniti ovaj izveštaj iz glavnog inbox-a?\\n\\nIzveštaj ostaje u bazi kao evidencija.")) return;
-  const { error } = await sb
-    .from("reports")
-    .update({ status: "archived" })
-    .eq("id", id)
-    .eq("company_id", currentCompany.id);
-
-  if (error) return toast(error.message, true);
-  toast("Izveštaj je arhiviran i sklonjen iz inbox-a.");
-  loadReports();
-  runDirectorGlobalSearch(false);
-};
-
-function searchMatch(text, q) {
-  return String(text || "").toLowerCase().includes(String(q || "").toLowerCase());
-}
-
-async function runDirectorGlobalSearch(showEmptyMessage = true) {
-  const input = $("#directorGlobalSearch");
-  const box = $("#directorSearchResults");
-  const list = $("#directorSearchResultsList");
-  if (!input || !box || !list || !currentCompany) return;
-
-  const q = input.value.trim().toLowerCase();
-  list.innerHTML = "";
-  box.classList.add("hidden");
-
-  if (!q) {
-    if (showEmptyMessage) toast("Upiši pojam za pretragu.");
-    return;
-  }
-
-  box.classList.remove("hidden");
-
-  const results = [];
-
-  try {
-    const [peopleRes, assetsRes, sitesRes, materialsRes, reportsRes] = await Promise.all([
-      sb.from("company_users").select("*").eq("company_id", currentCompany.id),
-      sb.from("assets").select("*").eq("company_id", currentCompany.id),
-      sb.from("sites").select("*").eq("company_id", currentCompany.id),
-      sb.from("materials").select("*").eq("company_id", currentCompany.id),
-      sb.from("reports").select("id, report_date, status, returned_reason, data, company_users(first_name,last_name,function_title)").eq("company_id", currentCompany.id).neq("status", "archived").order("created_at", { ascending:false }).limit(150)
-    ]);
-
-    if (peopleRes.data) peopleRes.data.forEach(p => {
-      const text = `${p.first_name} ${p.last_name} ${p.function_title} ${p.access_code} ${p.active ? "aktivan" : "neaktivan"}`;
-      if (searchMatch(text, q)) results.push({
-        type:"Radnik / osoba",
-        title:`${p.first_name} ${p.last_name}`,
-        subtitle:`${p.function_title} · kod: ${p.access_code} · ${p.active ? "aktivan" : "neaktivan"}`,
-        actions:`${p.active ? `<button class="edit-btn" onclick="editPerson('${p.id}')">✏️ Uredi profil</button><button class="delete-btn" onclick="deletePerson('${p.id}')">❌ Obriši iz spiska</button>` : `<span class="pill">već sklonjen</span>`}`
-      });
-    });
-
-    if (assetsRes.data) assetsRes.data.forEach(a => {
-      const text = `${a.name} ${a.asset_type} ${a.registration || ""} ${a.capacity || ""}`;
-      if (searchMatch(text, q)) results.push({
-        type:"Mašina / vozilo",
-        title:a.name,
-        subtitle:`${a.asset_type} · ${a.registration || ""} · ${a.capacity || ""}`,
-        actions:`<button class="delete-btn" onclick="deleteAsset('${a.id}', '${escapeHtml(a.name || '')}')">❌ Obriši ovu mašinu/vozilo</button>`
-      });
-    });
-
-    if (sitesRes.data) sitesRes.data.forEach(s => {
-      const text = `${s.name} ${s.location || ""} ${s.active ? "aktivno" : "završeno sklonjeno"}`;
-      if (searchMatch(text, q)) results.push({
-        type:"Gradilište",
-        title:s.name,
-        subtitle:`${s.location || ""} · ${s.active ? "aktivno" : "završeno/sklonjeno"}`,
-        actions:`${s.active ? `<button class="archive-btn" onclick="archiveSite('${s.id}', '${escapeHtml(s.name || '')}')">✅ Završi / skloni gradilište</button>` : `<span class="pill">već sklonjeno</span>`}`
-      });
-    });
-
-    if (materialsRes.data) materialsRes.data.forEach(m => {
-      const text = `${m.name} ${m.unit || ""} ${m.category || ""}`;
-      if (searchMatch(text, q)) results.push({
-        type:"Materijal",
-        title:m.name,
-        subtitle:`${m.unit || ""} ${m.category ? "· " + m.category : ""}`,
-        actions:`<button class="delete-btn" onclick="deleteMaterial('${m.id}', '${escapeHtml(m.name || '')}')">❌ Obriši materijal</button>`
-      });
-    });
-
-    if (reportsRes.data) reportsRes.data.forEach(r => {
-      const d = r.data || {};
-      const person = r.company_users ? `${r.company_users.first_name} ${r.company_users.last_name}` : "";
-      const text = `${person} ${r.status} ${r.report_date} ${d.site_name || ""} ${d.description || ""} ${d.machine || ""} ${d.vehicle || ""} ${d.material || ""} ${d.defect || ""} ${d.note || ""}`;
-      if (searchMatch(text, q)) results.push({
-        type:"Izveštaj",
-        title:`${person || "Izveštaj"} · ${r.report_date || ""}`,
-        subtitle:`status: ${r.status} · ${d.site_name || "bez gradilišta"} ${d.defect ? "· kvar: " + d.defect : ""}`,
-        actions:`${r.status !== "archived" ? `<button class="archive-report-btn" onclick="archiveReport('${r.id}')">📦 Arhiviraj izveštaj</button>` : `<span class="pill">arhivirano</span>`}`
-      });
-    });
-
-    list.innerHTML = results.length ? results.map(r => `
-      <div class="item management-item">
-        <div class="item-main">
-          <span class="search-result-type">${escapeHtml(r.type)}</span>
-          <strong>${escapeHtml(r.title)}</strong>
-          <small>${escapeHtml(r.subtitle || "")}</small>
-        </div>
-        <div class="management-actions">${r.actions}</div>
-      </div>
-    `).join("") : `<p class="muted">Nema rezultata za: ${escapeHtml(q)}</p>`;
-  } catch(e) {
-    list.innerHTML = `<p class="muted">Greška pretrage: ${escapeHtml(e.message)}</p>`;
-  }
-}
-
-async function loadReports() {
-  if (!currentCompany) return;
-  const { data, error } = await sb.from("reports").select("*, company_users(first_name,last_name,function_title)").eq("company_id", currentCompany.id).neq("status", "archived").order("submitted_at", { ascending:false });
-  if (error) return toast(error.message, true);
-  $("#reportsList").innerHTML = (data || []).map(r => reportHtml(r)).join("") || `<p class="muted">Nema poslatih izveštaja.</p>`;
-}
-
-
-function renderReportReadableDetails(d = {}) {
-  const esc = escapeHtml;
-  const safe = (x) => (x === undefined || x === null || x === "" ? "" : String(x));
-  const val = (x) => safe(x) ? esc(safe(x)) : "<span class='report-empty'>—</span>";
-
-  const rows = (pairs) => pairs.map(([k, v]) => `<b>${esc(k)}</b><span>${val(v)}</span>`).join("");
-
-  const machines = Array.isArray(d.machines) ? d.machines : [];
-  const fuels = Array.isArray(d.fuel_entries) ? d.fuel_entries : [];
-
-  const machineTable = machines.length ? `
-    <table class="report-mini-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Mašina</th>
-          <th>Početak MTČ/KM</th>
-          <th>Kraj MTČ/KM</th>
-          <th>Sati</th>
-          <th>Rad</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${machines.map((m, i) => `
-          <tr>
-            <td>${i + 1}</td>
-            <td>${val(m.name)}</td>
-            <td>${val(m.start)}</td>
-            <td>${val(m.end)}</td>
-            <td>${val(m.hours)}</td>
-            <td>${val(m.work)}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>` : `<p class="report-empty">Nema unetih mašina.</p>`;
-
-  const fuelTable = fuels.length ? `
-    <table class="report-mini-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Mašina</th>
-          <th>Litara</th>
-          <th>MTČ/KM pri sipanju</th>
-          <th>Sipao</th>
-          <th>Primio</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${fuels.map((f, i) => `
-          <tr>
-            <td>${i + 1}</td>
-            <td>${val(f.machine)}</td>
-            <td>${val(f.liters)}</td>
-            <td>${val(f.reading)}</td>
-            <td>${val(f.by)}</td>
-            <td>${val(f.receiver || d.fuel_receiver)}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>` : `<p class="report-empty">Nema sipanja goriva.</p>`;
-
-  const hasDefect = safe(d.defect) || safe(d.defect_exists) === "da" || safe(d.defect_urgency) || safe(d.defect_status);
-  const hasMaterial = safe(d.material) || safe(d.quantity) || safe(d.warehouse_item) || safe(d.route) || safe(d.tours);
-
-  return `
-    <div class="report-readable">
-      <div class="report-section">
-        <h4>Osnovno</h4>
-        <div class="report-kv">
-          ${rows([
-            ["Gradilište", d.site_name],
-            ["Opis rada", d.description],
-            ["Sati rada", d.hours],
-            ["Napomena", d.note]
-          ])}
-        </div>
-      </div>
-
-      <div class="report-section">
-        <h4>Mašine / vozila</h4>
-        ${machineTable}
-      </div>
-
-      <div class="report-section">
-        <h4>Gorivo</h4>
-        ${fuelTable}
-      </div>
-
-      ${hasDefect ? `
-        <div class="report-section">
-          <h4>Kvar</h4>
-          <div class="report-kv">
-            ${rows([
-              ["Ima kvar", d.defect_exists],
-              ["Opis kvara", d.defect],
-              ["Hitnost", d.defect_urgency],
-              ["Zaustavlja rad", d.defect_stops_work],
-              ["Može nastaviti rad", d.defect_can_continue],
-              ["Šef mehanizacije pozvan", d.called_mechanic_by_phone],
-              ["Status kvara", d.defect_status]
-            ])}
-          </div>
-        </div>` : ""}
-
-      ${hasMaterial ? `
-        <div class="report-section">
-          <h4>Materijal / magacin / ture</h4>
-          <div class="report-kv">
-            ${rows([
-              ["Materijal", d.material],
-              ["Količina", d.quantity],
-              ["Jedinica", d.unit],
-              ["Magacin tip", d.warehouse_type],
-              ["Magacin stavka", d.warehouse_item],
-              ["Magacin količina", d.warehouse_qty],
-              ["Relacija", d.route],
-              ["Ture", d.tours]
-            ])}
-          </div>
-        </div>` : ""}
-    </div>
-  `;
-}
-
-function reportHtml(r) {
-  const d = r.data || {};
-  const person = r.company_users ? `${r.company_users.first_name} ${r.company_users.last_name}` : "Nepoznat korisnik";
-
-  return `
-    <div class="item report-item">
-      <strong>${d.report_type === "defect_record" || d.report_type === "defect_alert" ? "🚨 EVIDENCIJA KVARA" : "📄 DNEVNI IZVEŠTAJ"} · ${escapeHtml(r.report_date)}</strong>
-      <small>${escapeHtml(person)} · ${escapeHtml(r.company_users?.function_title || "")} · status: ${escapeHtml(r.status)}</small><br/>
-
-      <span class="pill">${escapeHtml(d.site_name || "bez gradilišta")}</span>
-      ${d.hours ? `<span class="pill">${escapeHtml(String(d.hours))} h</span>` : ""}
-      ${d.fuel_liters ? `<span class="pill">${escapeHtml(String(d.fuel_liters))} L</span>` : ""}
-      ${d.defect_exists === "da" ? `<span class="pill">Kvar: ${escapeHtml(d.defect_urgency || "prijavljen")}</span>` : ""}
-      ${d.defect_stops_work ? `<span class="pill">Zaustavlja rad: ${escapeHtml(d.defect_stops_work)}</span>` : ""}
-      ${d.defect_status ? `<span class="pill">Status kvara: ${escapeHtml(d.defect_status)}</span>` : ""}
-      ${d.called_mechanic_by_phone ? `<span class="pill">Šef pozvan: ${escapeHtml(d.called_mechanic_by_phone)}</span>` : ""}
-
-      <p>${escapeHtml(d.defect || d.description || d.note || "")}</p>
-      ${r.returned_reason ? `<p class="muted">Razlog vraćanja: ${escapeHtml(r.returned_reason)}</p>` : ""}
-      ${renderReportReadableDetails(d)}
-
-      <div class="actions">
-        ${d.report_type === "defect_record" || d.report_type === "defect_alert" ? `
-          <button class="secondary" onclick="setDefectRecordStatus('${r.id}','primljeno')">Primljeno</button>
-          <button class="secondary" onclick="setDefectRecordStatus('${r.id}','u_popravci')">U popravci</button>
-          <button class="secondary" onclick="setDefectRecordStatus('${r.id}','reseno')">Rešeno</button>
-        ` : ""}
-
-        <button class="secondary" onclick="setReportStatus('${r.id}','approved')">Odobri</button>
-        <button class="secondary" onclick="returnReport('${r.id}')">Vrati na dopunu</button>
-        <button class="secondary" onclick="setReportStatus('${r.id}','exported')">Označi izvezeno</button>
-        <button class="archive-report-btn" onclick="archiveReport('${r.id}')">📦 Arhiviraj</button>
-        <button class="hard-delete-report-btn" onclick="deleteReportPermanently('${r.id}')">🔥 Obriši iz baze</button>
-      </div>
-    </div>`;
-}
-
-window.setReportStatus = async (id, status) => {
-  const patch = { status };
-  if (status === "approved") patch.approved_at = new Date().toISOString();
-  if (status === "exported") patch.exported_at = new Date().toISOString();
-  const { error } = await sb.from("reports").update(patch).eq("id", id);
-  if (error) return toast(error.message, true);
-  toast("Status izveštaja promenjen.");
-  loadReports();
-};
-
-window.returnReport = async (id) => {
-  const reason = prompt("Razlog vraćanja radniku na dopunu/ispravku:");
-  if (!reason) return;
-  const { error } = await sb.from("reports").update({ status:"returned", returned_reason:reason }).eq("id", id);
-  if (error) return toast(error.message, true);
-  toast("Izveštaj vraćen.");
-  loadReports();
-};
-
-window.setDefectRecordStatus = async (id, newStatus) => {
-  const { data: row, error: readError } = await sb.from("reports").select("data").eq("id", id).maybeSingle();
-  if (readError) return toast(readError.message, true);
-  const d = row?.data || {};
-  d.defect_status = newStatus;
-  if (newStatus === "primljeno") d.defect_received_at = new Date().toISOString();
-  if (newStatus === "u_popravci") d.defect_repair_started_at = new Date().toISOString();
-  if (newStatus === "reseno") d.defect_resolved_at = new Date().toISOString();
-  const { error } = await sb.from("reports").update({ data: d }).eq("id", id);
-  if (error) return toast(error.message, true);
-  toast("Status kvara promenjen.");
-  loadReports();
-};
-
-function collectPermissions() {
-  const obj = {};
-  $$(".perm").forEach(ch => obj[ch.value] = ch.checked);
-  return obj;
-}
-
-function workerSetSections(perms) {
-  const map = {
-    daily_work: "#secDailyWork",
-    machines: "#secMachines",
-    vehicles: "#secVehicles",
-    fuel: "#secFuel",
-    materials: "#secMaterials",
-    warehouse: "#secWarehouse",
-    defects: "#secDefects"
-  };
-  Object.entries(map).forEach(([key, sel]) => $(sel).classList.toggle("active", !!perms[key]));
-}
-
-
-function addMachineEntry(values = {}) {
-  const list = $("#machineEntries");
-  if (!list) return;
-  const idx = list.querySelectorAll(".machine-entry").length + 1;
-  const div = document.createElement("div");
-  div.className = "entry-card machine-entry";
-  div.innerHTML = `
-    <div class="entry-card-head">
-      <strong>Mašina ${idx}</strong>
-      <button type="button" class="remove-entry">Ukloni</button>
-    </div>
-
-    <label>Mašina / vozilo</label>
-    <input class="m-name" placeholder="npr. CAT 330, D6R, MAN kiper" value="${escapeHtml(values.name || "")}" />
-
-    <div class="mini-grid">
-      <div>
-        <label>Početni sati / MTČ</label>
-        <input class="m-start" type="number" step="0.1" placeholder="npr. 1250.5" value="${escapeHtml(values.start || "")}" />
-      </div>
-      <div>
-        <label>Završni sati / MTČ</label>
-        <input class="m-end" type="number" step="0.1" placeholder="npr. 1258.5" value="${escapeHtml(values.end || "")}" />
-      </div>
-    </div>
-
-    <label>Ukupno sati rada</label>
-    <input class="m-hours" type="number" step="0.1" placeholder="automatski ili ručno" value="${escapeHtml(values.hours || "")}" />
-
-    <label>Opis rada za ovu mašinu</label>
-    <input class="m-work" placeholder="iskop, utovar, ravnanje..." value="${escapeHtml(values.work || "")}" />
-  `;
-
-  const startEl = div.querySelector(".m-start");
-  const endEl = div.querySelector(".m-end");
-  const hoursEl = div.querySelector(".m-hours");
-
-  function calcHours() {
-    const s = parseFloat(startEl.value);
-    const e = parseFloat(endEl.value);
-    if (!Number.isNaN(s) && !Number.isNaN(e) && e >= s) {
-      hoursEl.value = (Math.round((e - s) * 10) / 10).toString();
+  },
+  de: {
+    privacy: {
+      title: "Datenschutz",
+      body: `
+        <p><strong>cvfast.app</strong> ist ein browserbasierter CV-/Lebenslauf-Builder. Die App erfordert keine Registrierung und lädt deine CV-Daten nicht auf unseren Server hoch.</p>
+        <h3>Welche Daten werden verwendet?</h3>
+        <p>Die Daten, die du eingibst, einschließlich Name, Kontaktdaten, Berufserfahrung, Fähigkeiten und Foto, werden lokal in deinem Browser über LocalStorage gespeichert.</p>
+        <h3>LocalStorage</h3>
+        <p>Wenn du Browserdaten löschst, ein anderes Gerät oder einen anderen Browser verwendest, können gespeicherte CV-Daten und PDF-Freischaltung verloren gehen.</p>
+        <h3>PDF und Zahlung/Support</h3>
+        <p>Die PDF-Erstellung erfolgt in deinem Browser. Die Verarbeitung von Unterstützung/Zahlung erfolgt über PayPal. Wir speichern keine Kreditkarten- oder Zahlungsdaten.</p>
+        <h3>Google Translate</h3>
+        <p>Wenn du die Google-Translate-Hilfe verwendest, kann der Text in Google Translate geöffnet und gemäß den Google-Richtlinien verarbeitet werden.</p>
+      `
+    },
+    terms: {
+      title: "Nutzungsbedingungen",
+      body: `
+        <p><strong>cvfast.app</strong> bietet ein einfaches Tool zum Erstellen und Anzeigen von CV-/Lebenslauf-Dokumenten.</p>
+        <ul>
+          <li>Wir garantieren keine Arbeitsstelle, kein Vorstellungsgespräch, kein Jobangebot und keine Annahme durch Arbeitgeber.</li>
+          <li>Du bist für die Richtigkeit der eingegebenen Daten verantwortlich.</li>
+          <li>Erstellung und Vorschau sind kostenlos. Der PDF-Download kann eine einmalige Unterstützung erfordern.</li>
+          <li>Da die App ohne Konto und ohne Datenbank funktioniert, wird die PDF-Freischaltung nur im verwendeten Browser/Gerät gespeichert.</li>
+          <li>Die App wird „wie sie ist“ bereitgestellt. Funktionen können geändert, aktualisiert oder entfernt werden.</li>
+        </ul>
+      `
+    },
+    support: {
+      title: "Support",
+      body: `
+        <p>Wenn du ein Problem mit PDF-Download, CV-Anzeige oder Freischaltung nach Unterstützung hast, kontaktiere den Support.</p>
+        <p><strong>Email:</strong> support@cvfast.app</p>
+        <p>Falls diese E-Mail noch nicht aktiv ist, nutze den Kontakt auf der offiziellen Projektseite.</p>
+      `
     }
   }
-
-  startEl.addEventListener("input", calcHours);
-  endEl.addEventListener("input", calcHours);
-
-  div.querySelector(".remove-entry").addEventListener("click", () => {
-    div.remove();
-    refreshFuelMachineOptions();
-  });
-
-  div.querySelector(".m-name").addEventListener("input", refreshFuelMachineOptions);
-  list.appendChild(div);
-  refreshFuelMachineOptions();
-}
-
-function getMachineEntries() {
-  return $$("#machineEntries .machine-entry").map((el, i) => ({
-    no: i + 1,
-    name: el.querySelector(".m-name")?.value.trim() || "",
-    start: el.querySelector(".m-start")?.value || "",
-    end: el.querySelector(".m-end")?.value || "",
-    hours: el.querySelector(".m-hours")?.value || "",
-    work: el.querySelector(".m-work")?.value.trim() || ""
-  })).filter(m => m.name || m.start || m.end || m.hours || m.work);
-}
-
-function addFuelEntry(values = {}) {
-  const list = $("#fuelEntries");
-  if (!list) return;
-  const idx = list.querySelectorAll(".fuel-entry").length + 1;
-  const div = document.createElement("div");
-  div.className = "entry-card fuel-entry";
-  div.innerHTML = `
-    <div class="entry-card-head">
-      <strong>Sipanje goriva ${idx}</strong>
-      <button type="button" class="remove-entry">Ukloni</button>
-    </div>
-
-    <label>Za koju mašinu / vozilo</label>
-    <select class="f-machine"></select>
-
-    <label>Ako mašina nije gore dodata, upiši ručno</label>
-    <input class="f-machine-custom" placeholder="npr. agregat / druga mašina" value="${escapeHtml(values.machine_custom || "")}" />
-
-    <div class="mini-grid">
-      <div>
-        <label>Litara</label>
-        <input class="f-liters" type="number" step="0.1" placeholder="npr. 120" value="${escapeHtml(values.liters || "")}" />
-      </div>
-      <div>
-        <label>MTČ / KM pri sipanju</label>
-        <input class="f-reading" type="number" step="0.1" placeholder="npr. 1255.0" value="${escapeHtml(values.reading || "")}" />
-      </div>
-    </div>
-
-    <label>Ko je sipao</label>
-    <input class="f-by" placeholder="npr. Marko" value="${escapeHtml(values.by || "")}" />
-
-    <p class="hint">Primalac goriva je automatski prijavljeni radnik koji šalje izveštaj.</p>
-  `;
-
-  div.querySelector(".remove-entry").addEventListener("click", () => div.remove());
-  list.appendChild(div);
-  refreshFuelMachineOptions();
-
-  if (values.machine) div.querySelector(".f-machine").value = values.machine;
-}
-
-function getFuelEntries() {
-  return $$("#fuelEntries .fuel-entry").map((el, i) => {
-    const selected = el.querySelector(".f-machine")?.value || "";
-    const custom = el.querySelector(".f-machine-custom")?.value.trim() || "";
-    return {
-      no: i + 1,
-      machine: custom || selected,
-      machine_custom: custom,
-      liters: el.querySelector(".f-liters")?.value || "",
-      reading: el.querySelector(".f-reading")?.value || "",
-      by: el.querySelector(".f-by")?.value.trim() || "",
-      receiver: currentWorker?.full_name || ""
-    };
-  }).filter(f => f.machine || f.liters || f.reading || f.by);
-}
-
-function refreshFuelMachineOptions() {
-  const machines = getMachineEntries().map(m => m.name).filter(Boolean);
-  $$("#fuelEntries .f-machine").forEach(sel => {
-    const old = sel.value;
-    sel.innerHTML = `<option value="">-- izaberi mašinu --</option>` + machines.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("");
-    if (machines.includes(old)) sel.value = old;
-  });
-}
+};
 
 
-// Direktno izlaganje funkcija za onclick fallback
-window.addMachineEntry = addMachineEntry;
-window.addFuelEntry = addFuelEntry;
-window.refreshFuelMachineOptions = refreshFuelMachineOptions;
 
-
-async function loadWorkerReturnedReports() {
-  const panel = $("#workerReturnedReports");
-  const list = $("#workerReturnedList");
-  if (!panel || !list || !currentWorker) return;
-
-  list.innerHTML = "";
-  panel.classList.add("hidden");
-
-  try {
-    const { data, error } = await sb
-      .from("reports")
-      .select("id, report_date, status, returned_reason, data, created_at")
-      .eq("company_id", currentWorker.company_id)
-      .eq("user_id", currentWorker.user_id)
-      .eq("status", "returned")
-      .order("created_at", { ascending: false });
-
-    if (error) throw error;
-    if (!data || !data.length) return;
-
-    panel.classList.remove("hidden");
-
-    list.innerHTML = data.map(r => {
-      const d = r.data || {};
-      const title = d.report_type === "defect_record" || d.report_type === "defect_alert" ? "Evidencija kvara" : "Dnevni izveštaj";
-      const site = d.site_name || "Bez gradilišta";
-      const reason = r.returned_reason || "Direkcija nije upisala razlog.";
-      const opis = d.defect || d.description || d.note || "";
-      return `
-        <div class="returned-item">
-          <strong>↩️ ${escapeHtml(title)} — ${escapeHtml(r.report_date || "")}</strong>
-          <small>${escapeHtml(site)} ${opis ? "· " + escapeHtml(opis) : ""}</small>
-          <div class="returned-reason"><b>Razlog dopune:</b> ${escapeHtml(reason)}</div>
-          <div class="returned-actions">
-            <button class="secondary" type="button" onclick="loadReturnedReportIntoForm('${r.id}')">Otvori za ispravku</button>
-          </div>
+const installTexts = {
+  sr: {
+    title: "Preuzmi cvfast.app",
+    android: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>📱 Android / Chrome</h3>
+          <ol>
+            <li>Otvori cvfast.app u Chrome browseru.</li>
+            <li>Tapni meni <strong>⋮</strong> gore desno.</li>
+            <li>Izaberi <strong>Add to Home screen</strong> ili <strong>Install app</strong>.</li>
+            <li>Potvrdi na <strong>Add</strong>.</li>
+          </ol>
         </div>
-      `;
-    }).join("");
-  } catch(e) {
-    toast(e.message, true);
-  }
-}
-
-window.loadReturnedReportIntoForm = async (reportId) => {
-  try {
-    if (!currentWorker) throw new Error("Radnik nije prijavljen.");
-
-    const { data: r, error } = await sb
-      .from("reports")
-      .select("id, report_date, data")
-      .eq("id", reportId)
-      .eq("company_id", currentWorker.company_id)
-      .eq("user_id", currentWorker.user_id)
-      .maybeSingle();
-
-    if (error) throw error;
-    if (!r) throw new Error("Izveštaj nije pronađen.");
-
-    const d = r.data || {};
-    $("#wrDate").value = r.report_date || today();
-
-    if ($("#machineEntries")) $("#machineEntries").innerHTML = "";
-    if ($("#fuelEntries")) $("#fuelEntries").innerHTML = "";
-
-    (d.machines || []).forEach(m => addMachineEntry(m));
-    (d.fuel_entries || []).forEach(f => addFuelEntry(f));
-
-    Object.entries({
-      wrSiteName:"site_name",
-      wrDescription:"description",
-      wrHours:"hours",
-      wrVehicle:"vehicle",
-      wrKmStart:"km_start",
-      wrKmEnd:"km_end",
-      wrRoute:"route",
-      wrTours:"tours",
-      wrMaterial:"material",
-      wrQuantity:"quantity",
-      wrUnit:"unit",
-      wrWarehouseType:"warehouse_type",
-      wrWarehouseItem:"warehouse_item",
-      wrWarehouseQty:"warehouse_qty",
-      wrDefectExists:"defect_exists",
-      wrDefect:"defect",
-      wrDefectStopsWork:"defect_stops_work",
-      wrDefectCanContinue:"defect_can_continue",
-      wrDefectUrgency:"defect_urgency",
-      wrDefectCalledMechanic:"called_mechanic_by_phone",}).forEach(([id,key]) => {
-      const el = $("#" + id);
-      if (el) el.value = d[key] || "";
-    });
-
-    localStorage.setItem("swp_returned_report_id", reportId);
-    toast("Izveštaj je otvoren. Ispravi ga i pošalji ponovo Direkciji.");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  } catch(e) {
-    toast(e.message, true);
+      </div>
+    `,
+    ios: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>🍎 iPhone / Safari</h3>
+          <ol>
+            <li>Otvori cvfast.app u <strong>Safari</strong> browseru.</li>
+            <li>Tapni <strong>Share</strong> dugme.</li>
+            <li>Izaberi <strong>Add to Home Screen</strong>.</li>
+            <li>Tapni <strong>Add</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    desktop: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>💻 Laptop / Chrome / Edge</h3>
+          <ol>
+            <li>Otvori cvfast.app u Chrome ili Edge browseru.</li>
+            <li>Klikni ikonicu za instalaciju u address baru ako se pojavi.</li>
+            <li>Ako se ne pojavi, otvori meni <strong>⋮</strong> i izaberi <strong>Install app</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ok: "Razumem"
+  },
+  en: {
+    title: "Install cvfast.app",
+    android: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>📱 Android / Chrome</h3>
+          <ol>
+            <li>Open cvfast.app in Chrome.</li>
+            <li>Tap the <strong>⋮</strong> menu.</li>
+            <li>Choose <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li>
+            <li>Confirm with <strong>Add</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ios: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>🍎 iPhone / Safari</h3>
+          <ol>
+            <li>Open cvfast.app in <strong>Safari</strong>.</li>
+            <li>Tap the <strong>Share</strong> button.</li>
+            <li>Choose <strong>Add to Home Screen</strong>.</li>
+            <li>Tap <strong>Add</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    desktop: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>💻 Laptop / Chrome / Edge</h3>
+          <ol>
+            <li>Open cvfast.app in Chrome or Edge.</li>
+            <li>Click the install icon in the address bar if it appears.</li>
+            <li>If it does not appear, open the <strong>⋮</strong> menu and choose <strong>Install app</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ok: "Got it"
+  },
+  de: {
+    title: "cvfast.app installieren",
+    android: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>📱 Android / Chrome</h3>
+          <ol>
+            <li>Öffne cvfast.app in Chrome.</li>
+            <li>Tippe auf das Menü <strong>⋮</strong>.</li>
+            <li>Wähle <strong>Zum Startbildschirm hinzufügen</strong> oder <strong>App installieren</strong>.</li>
+            <li>Bestätige mit <strong>Hinzufügen</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ios: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>🍎 iPhone / Safari</h3>
+          <ol>
+            <li>Öffne cvfast.app in <strong>Safari</strong>.</li>
+            <li>Tippe auf <strong>Teilen</strong>.</li>
+            <li>Wähle <strong>Zum Home-Bildschirm</strong>.</li>
+            <li>Tippe auf <strong>Hinzufügen</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    desktop: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>💻 Laptop / Chrome / Edge</h3>
+          <ol>
+            <li>Öffne cvfast.app in Chrome oder Edge.</li>
+            <li>Klicke auf das Installationssymbol in der Adressleiste, falls es erscheint.</li>
+            <li>Falls nicht, öffne das Menü <strong>⋮</strong> und wähle <strong>App installieren</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ok: "Verstanden"
   }
 };
 
-function collectWorkerData() {
-  const machines = getMachineEntries();
-  const fuelEntries = getFuelEntries();
+
+const demoDataByLang = {
+  sr: {
+    fullName: "Milan Petrović",
+    jobTitle: "Rukovalac građevinskih mašina",
+    phone: "+381 64 000 0000",
+    email: "milan.petrovic@example.com",
+    location: "Beograd, Srbija",
+    profile: "Iskusan i pouzdan radnik sa praktičnim iskustvom, fokusiran na bezbednost, tačnost i kvalitet rada.",
+    experience: "Rukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena\nRad u dinamičnim uslovima gradilišta",
+    machines: "Bager CAT 330\nBuldozer D6R",
+    skills: "Niskogradnja\nZemljani radovi\nBezbedan rad\nPreciznost\nTimski rad",
+    education: "Kurs / obuka",
+    traits: "Odgovoran, pouzdan, precizan i naviknut na rad u dinamičnim uslovima."
+  },
+  en: {
+    fullName: "John Worker",
+    jobTitle: "Heavy Equipment Operator",
+    phone: "+381 64 000 0000",
+    email: "john.worker@example.com",
+    location: "City, Country",
+    profile: "Experienced and reliable worker with practical field experience, focused on safety, precision and quality of work.",
+    experience: "Machine operator — 10 years of experience\nEarthworks and site preparation\nWork in dynamic construction site conditions",
+    machines: "CAT 330 excavator\nD6R bulldozer",
+    skills: "Earthworks\nSite preparation\nSafe work\nPrecision\nTeamwork",
+    education: "Training / course",
+    traits: "Responsible, reliable, precise and used to working in dynamic conditions."
+  },
+  de: {
+    fullName: "Max Mustermann",
+    jobTitle: "Baumaschinenführer",
+    phone: "+381 64 000 0000",
+    email: "max.mustermann@example.com",
+    location: "Stadt, Land",
+    profile: "Erfahrener und zuverlässiger Arbeiter mit praktischer Erfahrung, Fokus auf Sicherheit, Genauigkeit und Qualität der Arbeit.",
+    experience: "Maschinenführer — 10 Jahre Erfahrung\nErdarbeiten und Baustellenvorbereitung\nArbeit unter dynamischen Baustellenbedingungen",
+    machines: "Bagger CAT 330\nBulldozer D6R",
+    skills: "Erdarbeiten\nBaustellenvorbereitung\nSicheres Arbeiten\nPräzision\nTeamarbeit",
+    education: "Ausbildung / Kurs",
+    traits: "Verantwortungsbewusst, zuverlässig, präzise und an dynamische Arbeitsbedingungen gewöhnt."
+  }
+};
+
+function emptyData() {
   return {
-    site_name: $("#wrSiteName").value.trim(),
-    description: $("#wrDescription").value.trim(),
-    hours: $("#wrHours").value,
-    machines,
-    fuel_entries: fuelEntries,
-
-    // Summary fields for older report/CSV display
-    machine: machines.map(m => m.name).filter(Boolean).join(" | "),
-    mtc_start: machines.map(m => m.start).filter(Boolean).join(" | "),
-    mtc_end: machines.map(m => m.end).filter(Boolean).join(" | "),
-    machine_hours: machines.map(m => m.hours).filter(Boolean).join(" | "),
-    fuel_liters: fuelEntries.reduce((sum, f) => sum + (parseFloat(f.liters) || 0), 0) || "",
-    fuel_readings: fuelEntries.map(f => f.reading).filter(Boolean).join(" | "),
-    fuel_by: fuelEntries.map(f => f.by).filter(Boolean).join(" | "),
-    fuel_receiver: currentWorker?.full_name || "",
-
-    vehicle: $("#wrVehicle").value.trim(),
-    km_start: $("#wrKmStart").value,
-    km_end: $("#wrKmEnd").value,
-    route: $("#wrRoute").value.trim(),
-    tours: $("#wrTours").value,
-    material: $("#wrMaterial").value.trim(),
-    quantity: $("#wrQuantity").value,
-    unit: $("#wrUnit").value.trim(),
-    warehouse_type: $("#wrWarehouseType").value,
-    warehouse_item: $("#wrWarehouseItem").value.trim(),
-    warehouse_qty: $("#wrWarehouseQty").value.trim(),
-    defect_exists: $("#wrDefectExists")?.value || "ne",
-    defect: $("#wrDefect").value.trim(),
-    defect_stops_work: $("#wrDefectStopsWork")?.value || "",
-    defect_can_continue: $("#wrDefectCanContinue")?.value || "",
-    defect_urgency: $("#wrDefectUrgency").value,
-    called_mechanic_by_phone: $("#wrDefectCalledMechanic")?.value || ""
+    appLanguage: "sr",
+    cvLanguage: "sr",
+    template: "classic",
+    fullName: "",
+    jobTitle: "",
+    phone: "",
+    email: "",
+    location: "",
+    photo: "",
+    profile: "",
+    experience: "",
+    machines: "",
+    skills: "",
+    education: "",
+    traits: ""
   };
 }
 
-function clearWorkerForm() {
-  ["wrSiteName","wrDescription","wrHours","wrVehicle","wrKmStart","wrKmEnd","wrRoute","wrTours","wrMaterial","wrQuantity","wrUnit","wrWarehouseType","wrWarehouseItem","wrWarehouseQty","wrDefectExists","wrDefect","wrDefectStopsWork","wrDefectCanContinue","wrDefectUrgency","wrDefectCalledMechanic"].forEach(id => {
-    const el = $("#" + id);
-    if (el) el.value = "";
-  });
-  if ($("#machineEntries")) $("#machineEntries").innerHTML = "";
-  if ($("#fuelEntries")) $("#fuelEntries").innerHTML = "";
-  if ($("#wrDefectExists")) $("#wrDefectExists").value = "ne";
-  localStorage.removeItem("swp_draft");
-  localStorage.removeItem("swp_returned_report_id");
+function loadStored() {
+  try {
+    return { ...emptyData(), ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}) };
+  } catch {
+    return emptyData();
+  }
 }
 
-function saveDraft() {
-  const draft = {
-    date: $("#wrDate").value,
-    data: collectWorkerData()
+function saveRaw(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function getLang() {
+  const stored = loadStored();
+  return stored.appLanguage || stored.cvLanguage || "sr";
+}
+
+
+function updateLanguageSelectLabels(lang) {
+  const cvLanguage = $("#cvLanguage");
+  if (!cvLanguage) return;
+
+  const labels = {
+    sr: { sr: "Srpski", en: "Engleski", de: "Nemački" },
+    en: { sr: "Serbian", en: "English", de: "German" },
+    de: { sr: "Serbisch", en: "Englisch", de: "Deutsch" }
   };
-  localStorage.setItem("swp_draft", JSON.stringify(draft));
-  toast("Nacrt je sačuvan na ovom uređaju.");
-}
 
-function loadDraft() {
-  try {
-    const raw = localStorage.getItem("swp_draft");
-    if (!raw) return;
-    const draft = JSON.parse(raw);
-    $("#wrDate").value = draft.date || today();
-    const d = draft.data || {};
-
-    if ($("#machineEntries")) $("#machineEntries").innerHTML = "";
-    if ($("#fuelEntries")) $("#fuelEntries").innerHTML = "";
-    (d.machines || []).forEach(m => addMachineEntry(m));
-    (d.fuel_entries || []).forEach(f => addFuelEntry(f));
-
-    Object.entries({
-      wrSiteName:"site_name", wrDescription:"description", wrHours:"hours", wrVehicle:"vehicle", wrKmStart:"km_start", wrKmEnd:"km_end", wrRoute:"route", wrTours:"tours", wrMaterial:"material", wrQuantity:"quantity", wrUnit:"unit", wrWarehouseType:"warehouse_type", wrWarehouseItem:"warehouse_item", wrWarehouseQty:"warehouse_qty", wrDefectExists:"defect_exists", wrDefect:"defect", wrDefectStopsWork:"defect_stops_work", wrDefectCanContinue:"defect_can_continue", wrDefectUrgency:"defect_urgency", wrDefectCalledMechanic:"called_mechanic_by_phone"
-    }).forEach(([id,key]) => { if ($("#"+id)) $("#"+id).value = d[key] || ""; });
-  } catch {}
-}
-
-function escapeHtml(str) {
-  return String(str ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-}
-
-function csvEscape(v) {
-  return `"${String(v ?? "").replaceAll('"','""')}"`;
-}
-
-async function exportCsv() {
-  if (!currentCompany) return;
-  let q = sb.from("reports").select("*, company_users(first_name,last_name,function_title)").eq("company_id", currentCompany.id);
-  const from = $("#exportFrom").value;
-  const to = $("#exportTo").value;
-  if (from) q = q.gte("report_date", from);
-  if (to) q = q.lte("report_date", to);
-  const { data, error } = await q.order("report_date", { ascending: true });
-  if (error) return toast(error.message, true);
-
-  const headers = ["Datum","Ime","Funkcija","Gradiliste","Sati","Masina","MTC pocetak","MTC kraj","Sati masine","Vozilo","KM pocetak","KM kraj","Relacija","Ture","Gorivo L","MTC/KM pri sipanju","Materijal","Kolicina","Jedinica","Kvar","Status","Napomena"];
-  const rows = (data || []).map(r => {
-    const d = r.data || {};
-    return [
-      r.report_date,
-      r.company_users ? `${r.company_users.first_name} ${r.company_users.last_name}` : "",
-      r.company_users?.function_title || "",
-      d.site_name,
-      d.hours,
-      d.machine,
-      d.mtc_start,
-      d.mtc_end,
-      d.machine_hours,
-      d.vehicle,
-      d.km_start,
-      d.km_end,
-      d.route,
-      d.tours,
-      d.fuel_liters,
-      d.fuel_readings,
-      d.material,
-      d.quantity,
-      d.unit,
-      d.defect,
-      r.status,
-      d.note || d.description
-    ].map(csvEscape).join(",");
+  [...cvLanguage.options].forEach((option) => {
+    if (labels[lang] && labels[lang][option.value]) {
+      option.textContent = labels[lang][option.value];
+    }
   });
-  const csv = [headers.map(csvEscape).join(","), ...rows].join("\n");
-  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `startwork-export-${today()}.csv`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-  toast("CSV export je preuzet.");
 }
 
 
-async function sendDefectNow() {
-  try {
-    if (!navigator.onLine) {
-      saveDraft();
-      throw new Error("Nema interneta. Kvar nije poslat, nacrt je sačuvan na ovom uređaju.");
-    }
+function applyLanguage(lang) {
+  if (!ui[lang]) lang = "sr";
 
-    const worker = currentWorker || JSON.parse(localStorage.getItem("swp_worker") || "null");
-    if (!worker) throw new Error("Radnik nije prijavljen.");
+  const data = loadStored();
+  data.appLanguage = lang;
+  data.cvLanguage = lang;
+  saveRaw(data);
 
-    const defectText = $("#wrDefect")?.value.trim() || "";
-    const exists = $("#wrDefectExists")?.value || "ne";
+  document.documentElement.lang = lang;
+  const cvLang = $("#cvLanguage");
+  if (cvLang) cvLang.value = lang;
+  updateLanguageSelectLabels(lang);
 
-    if (exists !== "da" && !defectText) {
-      throw new Error("Prvo označi da ima kvar ili upiši opis kvara.");
-    }
+  $$("[data-i18n]").forEach((el) => {
+    const key = el.dataset.i18n;
+    if (Object.prototype.hasOwnProperty.call(ui[lang], key)) el.textContent = ui[lang][key];
+  });
 
-    const machines = getMachineEntries ? getMachineEntries() : [];
-    const firstMachine = machines[0]?.name || "";
+  $$("[data-placeholder]").forEach((el) => {
+    const key = el.dataset.placeholder;
+    if (Object.prototype.hasOwnProperty.call(ui[lang], key)) el.placeholder = ui[lang][key];
+  });
 
-    const urgentData = {
-      report_type: "defect_record",
-      sent_immediately: true,
-      defect_status: "prijavljen",
-      defect_reported_at: new Date().toISOString(),
-      site_name: $("#wrSiteName")?.value.trim() || "",
-      machine: firstMachine,
-      machines,
-      defect_exists: "da",
-      defect: defectText,
-      defect_stops_work: $("#wrDefectStopsWork")?.value || "",
-      defect_can_continue: $("#wrDefectCanContinue")?.value || "",
-      defect_urgency: $("#wrDefectUrgency")?.value || "",
-      created_by_worker: worker.full_name,
-      function_title: worker.function_title,
-      called_mechanic_by_phone: $("#wrDefectCalledMechanic")?.value || "",
-      sent_to: "direkcija_mehanizacija_direktor"
-    };
+  $$(".lang-pill, .lang-mini").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.setLang === lang);
+  });
 
-    const { error } = await sb.rpc("submit_worker_report", {
-      p_company_code: worker.company_code,
-      p_access_code: worker.access_code,
-      p_report_date: $("#wrDate").value || today(),
-      p_site_id: null,
-      p_data: urgentData
-    });
+  refreshPreview();
+}
 
-    if (error) throw error;
+function getData() {
+  const stored = loadStored();
+  const data = { ...emptyData(), ...stored };
+  fields.forEach((field) => {
+    const el = $("#" + field);
+    if (el) data[field] = el.value || "";
+  });
+  data.appLanguage = stored.appLanguage || data.cvLanguage || "sr";
+  data.photo = stored.photo || "";
+  return data;
+}
 
-    toast("Kvar je evidentiran odmah 🚨 Direkcija i direktor mogu pratiti vreme rešavanja.");
-  } catch(e) {
-    toast(e.message, true);
+function setFormData(data) {
+  fields.forEach((field) => {
+    const el = $("#" + field);
+    if (el && data[field] !== undefined) el.value = data[field];
+  });
+}
+
+function saveData() {
+  const data = getData();
+  data.appLanguage = data.cvLanguage;
+  saveRaw(data);
+  showSaveStatus();
+}
+
+function showSaveStatus() {
+  const status = $("#saveStatus");
+  if (!status) return;
+  const lang = getLang();
+  status.textContent = ui[lang].saved;
+  setTimeout(() => (status.textContent = ui[lang].autoSave), 900);
+}
+
+function splitLines(text) {
+  return String(text || "")
+    .split("\n")
+    .map((x) => x.trim())
+    .filter(Boolean);
+}
+
+function esc(text) {
+  return String(text || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function initials(name) {
+  const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "CV";
+  return parts.slice(0, 2).map(p => p[0]?.toUpperCase()).join("");
+}
+
+function withPlaceholders(data) {
+  const lang = cvLabels[data.cvLanguage] ? data.cvLanguage : "sr";
+  const demo = demoDataByLang[lang];
+  return {
+    ...data,
+    fullName: data.fullName || demo.fullName,
+    jobTitle: data.jobTitle || demo.jobTitle,
+    phone: data.phone || demo.phone,
+    email: data.email || demo.email,
+    location: data.location || demo.location,
+    profile: data.profile || demo.profile,
+    experience: data.experience || demo.experience,
+    machines: data.machines || demo.machines,
+    skills: data.skills || demo.skills,
+    education: data.education || demo.education,
+    traits: data.traits || demo.traits
+  };
+}
+
+function renderCv(target, data, options = {}) {
+  const usePlaceholders = Boolean(options.placeholders);
+  const d = usePlaceholders ? withPlaceholders(data) : data;
+  const lang = cvLabels[d.cvLanguage] ? d.cvLanguage : "sr";
+  const L = cvLabels[lang];
+
+  const machineItems = splitLines(d.machines);
+  const skillItems = splitLines(d.skills);
+  const expItems = splitLines(d.experience);
+
+  const photoHtml = d.photo
+    ? `<img class="cv-photo" src="${d.photo}" alt="CV photo" />`
+    : `<div class="cv-photo-placeholder">${esc(initials(d.fullName))}</div>`;
+
+  const contactHtml = `
+    <ul class="cv-contact">
+      ${d.phone ? `<li>📞 ${esc(d.phone)}</li>` : ""}
+      ${d.email ? `<li>✉️ ${esc(d.email)}</li>` : ""}
+      ${d.location ? `<li>📍 ${esc(d.location)}</li>` : ""}
+    </ul>
+  `;
+
+  const section = (title, html) => html ? `
+    <section class="cv-section">
+      <div class="cv-section-title"><h2>${esc(title)}</h2></div>
+      ${html}
+    </section>
+  ` : "";
+
+  const listHtml = (items) => items.length ? `<ul class="cv-list">${items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>` : "";
+  const tagsHtml = (items) => items.length ? `<div class="cv-tags">${items.map(i => `<span>${esc(i)}</span>`).join("")}</div>` : "";
+  const paragraphHtml = (text) => text ? `<p class="cv-text">${esc(text)}</p>` : "";
+
+  target.className = `cv-page ${d.template || "classic"}`;
+
+  if (d.template === "sidebar") {
+    target.innerHTML = `
+      <div class="cv-inner">
+        <aside class="cv-side">
+          ${photoHtml}
+          <h1 class="cv-name">${esc(d.fullName || L.placeholderName)}</h1>
+          <p class="cv-title">${esc(d.jobTitle || L.placeholderTitle)}</p>
+          <div class="cv-divider"></div>
+          ${contactHtml}
+          ${section(L.machines, listHtml(machineItems))}
+          ${section(L.skills, tagsHtml(skillItems))}
+          ${section(L.education, paragraphHtml(d.education))}
+        </aside>
+        <main class="cv-main">
+          ${section(L.profile, paragraphHtml(d.profile))}
+          ${section(L.experience, listHtml(expItems))}
+          ${section(L.traits, paragraphHtml(d.traits))}
+        </main>
+      </div>
+      <footer class="cv-footer">cvfast.app</footer>
+    `;
+    return;
+  }
+
+  target.innerHTML = `
+    <div class="cv-inner">
+      <header class="cv-header">
+        ${photoHtml}
+        <div>
+          <h1 class="cv-name">${esc(d.fullName || L.placeholderName)}</h1>
+          <p class="cv-title">${esc(d.jobTitle || L.placeholderTitle)}</p>
+          <div class="cv-divider"></div>
+          ${contactHtml}
+        </div>
+      </header>
+
+      ${section(L.profile, paragraphHtml(d.profile))}
+      ${section(L.experience, listHtml(expItems))}
+
+      <div class="cv-columns">
+        ${section(L.machines, listHtml(machineItems))}
+        ${section(L.skills, tagsHtml(skillItems))}
+      </div>
+
+      <div class="cv-columns">
+        ${section(L.education, paragraphHtml(d.education))}
+        ${section(L.traits, paragraphHtml(d.traits))}
+      </div>
+    </div>
+    <footer class="cv-footer">cvfast.app</footer>
+  `;
+}
+
+function refreshPreview() {
+  renderCv($("#cvPreview"), getData(), { placeholders: false });
+}
+
+function openPreviewModal(title = "") {
+  const data = getData();
+  const lang = cvLabels[data.cvLanguage] ? data.cvLanguage : "sr";
+  $("#previewModalTitle").textContent = title || cvLabels[lang].previewTitle;
+  renderCv($("#modalCvPreview"), data, { placeholders: true });
+  $("#previewModal").classList.remove("hidden");
+}
+
+function closePreviewModal() {
+  $("#previewModal").classList.add("hidden");
+}
+
+function showToast(message) {
+  const toast = $("#toast");
+  toast.textContent = message;
+  toast.classList.remove("hidden");
+  setTimeout(() => toast.classList.add("hidden"), 2200);
+}
+
+async function resizeImage(file) {
+  const dataUrl = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+  const img = await new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.src = dataUrl;
+  });
+
+  const maxSize = 700;
+  let { width, height } = img;
+
+  if (width > height && width > maxSize) {
+    height = Math.round((height * maxSize) / width);
+    width = maxSize;
+  } else if (height >= width && height > maxSize) {
+    width = Math.round((width * maxSize) / height);
+    height = maxSize;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0, width, height);
+
+  return canvas.toDataURL("image/jpeg", 0.82);
+}
+
+function isUnlocked() {
+  return localStorage.getItem(UNLOCK_KEY) === "true";
+}
+
+function handleUnlockFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("unlock") === UNLOCK_CODE) {
+    localStorage.setItem(UNLOCK_KEY, "true");
+    trackEvent("paypal_return_unlock");
+    window.history.replaceState({}, document.title, window.location.pathname);
+    showToast(ui[getLang()].pdfUnlockedBrowser);
   }
 }
 
 
-async function loginWorkerByCode() {
-  try {
-    if (!initSupabase()) return;
-
-    const companyInput = $("#workerCompanyCode");
-    const codeInput = $("#workerAccessCode");
-
-    if (!companyInput) throw new Error("Nedostaje polje Šifra firme.");
-    if (!codeInput) throw new Error("Nedostaje polje Šifra radnika.");
-
-    const companyCode = normalizeLoginCode(companyInput.value);
-    const accessCode = normalizeLoginCode(codeInput.value);
-
-    if (!companyCode) throw new Error("Unesi šifru firme.");
-    if (!accessCode) throw new Error("Unesi šifru radnika.");
-
-    const { data, error } = await sb.rpc("worker_login", {
-      p_company_code: companyCode,
-      p_access_code: accessCode
-    });
-
-    if (error) throw error;
-    if (!data || !data.length) throw new Error("Neispravna šifra firme ili šifra radnika. Proveri oba polja tačno kako ih je dala Direkcija.");
-
-    currentWorker = {
-      ...data[0],
-      company_code: companyCode,
-      access_code: accessCode
-    };
-
-    localStorage.setItem("swp_worker", JSON.stringify(currentWorker));
-    openWorkerForm();
-    toast("Radnik je prijavljen.");
-  } catch(e) {
-    toast(e.message, true);
-  }
-}
-
-
-function installNavigationFallback() {
-  if (window.__swpNavFallbackInstalled) return;
-  window.__swpNavFallbackInstalled = true;
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest && e.target.closest("[data-goto]");
-    if (!btn) return;
-    e.preventDefault();
-    show(btn.dataset.goto);
-  });
-}
-
-function bindEvents() {
-
-  ["workerCompanyCode","workerAccessCode"].forEach(id => {
-    const el = $("#" + id);
-    if (el) el.addEventListener("keydown", e => {
-      if (e.key === "Enter") loginWorkerByCode();
-    });
-  });
-
-  if ($("#internalLogoutBtn")) $("#internalLogoutBtn").addEventListener("click", signOut);
-  $$("[data-goto]").forEach(btn => btn.addEventListener("click", () => show(btn.dataset.goto)));
-  if ($("#logoutBtn")) $("#logoutBtn").addEventListener("click", signOut);
-  if ($("#directorTopLogoutBtn")) $("#directorTopLogoutBtn").addEventListener("click", signOut);
-
-  $("#adminSignupBtn").addEventListener("click", async () => {
-    try {
-      await signUp($("#adminEmail").value.trim(), $("#adminPassword").value);
-      toast("Admin nalog registrovan. Ako stigne email potvrda, potvrdi ga pa se prijavi.");
-    } catch(e) { toast(e.message, true); }
-  });
-  $("#adminLoginBtn").addEventListener("click", async () => {
-    try {
-      await signIn($("#adminEmail").value.trim(), $("#adminPassword").value);
-      await loadAdmin();
-    } catch(e) { toast(e.message, true); }
-  });
-  $("#refreshAdminBtn").addEventListener("click", loadAdmin);
-  $("#addApprovedCompanyBtn").addEventListener("click", async () => {
-    try {
-      const payload = {
-        company_name: $("#acCompanyName").value.trim(),
-        approved_email: $("#acEmail").value.trim(),
-        company_code: $("#acCompanyCode").value.trim(),
-        invite_code: $("#acInviteCode").value.trim(),
-        status: "trial",
-        plan: "trial",
-        trial_until: $("#acTrialUntil").value || null,
-        note: $("#acNote").value.trim()
-      };
-      if (!payload.company_name || !payload.approved_email || !payload.company_code || !payload.invite_code) throw new Error("Popuni naziv, email, šifru firme i pozivni kod.");
-      const { error } = await sb.from("approved_companies").insert(payload);
-      if (error) throw error;
-      ["acCompanyName","acEmail","acCompanyCode","acInviteCode","acTrialUntil","acNote"].forEach(id => $("#"+id).value = "");
-      toast("Firma je odobrena.");
-      loadApprovedCompanies();
-    } catch(e) { toast(e.message, true); }
-  });
-
-  $("#directorSignupBtn").addEventListener("click", async () => {
-    try {
-      await signUp($("#directorEmail").value.trim(), $("#directorPassword").value);
-      toast("Direkcija email registrovan. Ako stigne potvrda, potvrdi email pa se prijavi.");
-    } catch(e) { toast(e.message, true); }
-  });
-  $("#directorLoginBtn").addEventListener("click", async () => {
-    try {
-      await signIn($("#directorEmail").value.trim(), $("#directorPassword").value);
-      await loadDirectorCompany();
-    } catch(e) { toast(e.message, true); }
-  });
-  $("#activateCompanyBtn").addEventListener("click", async () => {
-    try {
-      if (!sb) initSupabase();
-      const { data: userData } = await sb.auth.getUser();
-      if (!userData?.user) {
-        await signIn($("#directorEmail").value.trim(), $("#directorPassword").value);
-      }
-      const { data, error } = await sb.rpc("activate_company", {
-        p_company_code: $("#directorCompanyCode").value.trim(),
-        p_invite_code: $("#directorInviteCode").value.trim()
-      });
-      if (error) throw error;
-      toast("Firma je aktivirana.");
-      await loadDirectorCompany();
-    } catch(e) { toast(e.message, true); }
-  });
-  $("#refreshDirectorBtn").addEventListener("click", loadDirectorCompany);
-
-  $$(".tab").forEach(btn => btn.addEventListener("click", () => {
-    $$(".tab").forEach(b => b.classList.remove("active"));
-    $$(".tab-panel").forEach(p => p.classList.remove("active"));
-    btn.classList.add("active");
-    $("#tab" + btn.dataset.tab.charAt(0).toUpperCase() + btn.dataset.tab.slice(1)).classList.add("active");
-  }));
-  $("#addPersonBtn").addEventListener("click", savePersonForm);
-  if ($("#cancelEditPersonBtn")) $("#cancelEditPersonBtn").addEventListener("click", clearPersonForm);
-
-  $("#addSiteBtn").addEventListener("click", async () => {
-    try {
-      const { error } = await sb.from("sites").insert({ company_id: currentCompany.id, name: $("#siteName").value.trim(), location: $("#siteLocation").value.trim(), active: true });
-      if (error) throw error;
-      $("#siteName").value = ""; $("#siteLocation").value = "";
-      toast("Gradilište dodato.");
-      loadSites();
-    } catch(e) { toast(e.message, true); }
-  });
-
-  $("#addAssetBtn").addEventListener("click", async () => {
-    try {
-      const { error } = await sb.from("assets").insert({ company_id: currentCompany.id, name: $("#assetName").value.trim(), asset_type: $("#assetType").value, registration: $("#assetReg").value.trim(), capacity: $("#assetCapacity").value.trim() });
-      if (error) throw error;
-      ["assetName","assetReg","assetCapacity"].forEach(id => $("#"+id).value = "");
-      toast("Mašina/vozilo dodato.");
-      loadAssets();
-    } catch(e) { toast(e.message, true); }
-  });
-
-
-  if ($("#directorSearchBtn")) $("#directorSearchBtn").addEventListener("click", () => runDirectorGlobalSearch(true));
-  if ($("#directorClearSearchBtn")) $("#directorClearSearchBtn").addEventListener("click", () => {
-    $("#directorGlobalSearch").value = "";
-    $("#directorSearchResults").classList.add("hidden");
-    $("#directorSearchResultsList").innerHTML = "";
-  });
-  if ($("#directorGlobalSearch")) $("#directorGlobalSearch").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") runDirectorGlobalSearch(true);
-  });
-
-  if ($("#addMaterialBtn")) $("#addMaterialBtn").addEventListener("click", async () => {
-    try {
-      if (!currentCompany) throw new Error("Nema aktivne firme.");
-      const name = $("#materialName").value.trim();
-      if (!name) throw new Error("Upiši naziv materijala.");
-      const { error } = await sb.from("materials").insert({
-        company_id: currentCompany.id,
-        name,
-        unit: $("#materialUnit").value,
-        category: $("#materialCategory").value.trim()
-      });
-      if (error) throw error;
-      ["materialName","materialCategory"].forEach(id => $("#"+id).value = "");
-      toast("Materijal je dodat.");
-      loadMaterials();
-    } catch(e) { toast(e.message, true); }
-  });
-
-  $("#exportCsvBtn").addEventListener("click", exportCsv);
-
-  // Add mašina / gorivo koriste onclick direktno u HTML-u zbog pouzdanosti na mobilnom/PWA cache-u.
-  if ($("#sendDefectNowBtn")) $("#sendDefectNowBtn").addEventListener("click", sendDefectNow);
-
-  if ($("#workerLoginBtn")) $("#workerLoginBtn").addEventListener("click", loginWorkerByCode);
-
-  $("#workerLogoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("swp_worker");
-    localStorage.removeItem("swp_draft");
-    currentWorker = null;
-    setInternalHeader("", "", false);
-    show("WorkerLogin");
-  });
-
-  $("#saveDraftBtn").addEventListener("click", saveDraft);
-
-  $("#submitReportBtn").addEventListener("click", async () => {
-    try {
-      if (!navigator.onLine) {
-        saveDraft();
-        throw new Error("Nema interneta. Nacrt je sačuvan na ovom telefonu.");
-      }
-      const worker = currentWorker || JSON.parse(localStorage.getItem("swp_worker") || "null");
-      if (!worker) throw new Error("Radnik nije prijavljen.");
-      const data = collectWorkerData();
-    if (await submitReturnedCorrectionIfNeeded(data)) return;
-      const { error } = await sb.rpc("submit_worker_report", {
-        p_company_code: worker.company_code,
-        p_access_code: worker.access_code,
-        p_report_date: $("#wrDate").value || today(),
-        p_site_id: null,
-        p_data: data
-      });
-      if (error) throw error;
-      clearWorkerForm();
-      $("#wrDate").value = today();
-      toast("Izveštaj je poslat Direkciji ✅ Forma je očišćena.");
-    } catch(e) { toast(e.message, true); }
-  });
-}
-
-function openWorkerForm() {
-  $("#wrDate").value = today();
-  $("#workerHello").textContent = `Dobrodošli, ${currentWorker.full_name}`;
-  $("#workerCompanyLabel").textContent = `${currentWorker.company_name} · ${currentWorker.function_title}`;
-  workerSetSections(currentWorker.permissions || {});
-  setInternalHeader("Dnevni izveštaj", `${currentWorker?.full_name || "Radnik"} · ${currentWorker?.company_name || currentWorker?.company_code || ""}`, true);
-  show("WorkerForm");
-  loadDraft();
-  loadWorkerReturnedReports();
-  if ($("#machineEntries") && !$("#machineEntries").children.length) addMachineEntry();
-  if ($("#fuelEntries") && !$("#fuelEntries").children.length) addFuelEntry();
-}
-
-async function boot() {
-  installNavigationFallback();
-  bindEvents();
-  initSupabase();
-  $("#wrDate").value = today();
-  const stored = localStorage.getItem("swp_worker");
-  if (stored) {
-    try {
-      currentWorker = JSON.parse(stored);
-      openWorkerForm();
+function loadExternalScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      if (existing.dataset.loaded === "true") resolve();
+      existing.addEventListener("load", resolve, { once: true });
+      existing.addEventListener("error", reject, { once: true });
       return;
-    } catch {}
+    }
+
+    const s = document.createElement("script");
+    s.src = src;
+    s.async = true;
+    s.onload = () => {
+      s.dataset.loaded = "true";
+      resolve();
+    };
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+async function ensurePdfLibraries() {
+  if (!window.html2canvas) {
+    await loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
   }
+
+  if (!window.jspdf) {
+    await loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+  }
+}
+
+
+async function downloadPdf() {
+  showToast(getLang() === "de" ? "PDF wird vorbereitet..." : getLang() === "en" ? "Preparing PDF..." : "Pripremam PDF...");
+  await ensurePdfLibraries();
+
+  const preview = $("#cvPreview");
+  renderCv(preview, getData(), { placeholders: false });
+
+  const footer = preview.querySelector(".cv-footer");
+  const oldFooterText = footer?.textContent;
+  if (footer && !SHOW_CVFAST_FOOTER_IN_PDF) footer.textContent = "";
+
+  const originalTransform = preview.style.transform;
+  preview.style.transform = "none";
+
+  await new Promise((r) => setTimeout(r, 80));
+
+  const canvas = await html2canvas(preview, {
+    scale: 2,
+    backgroundColor: "#ffffff",
+    useCORS: true
+  });
+
+  preview.style.transform = originalTransform;
+  if (footer && oldFooterText !== undefined) footer.textContent = oldFooterText;
+
+  const imgData = canvas.toDataURL("image/jpeg", 0.96);
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  pdf.addImage(imgData, "JPEG", 0, 0, 210, 297);
+  const name = (getData().fullName || "cvfast-cv").trim().replace(/[^\p{L}\p{N}]+/gu, "_");
+  pdf.save(`${name}_CV.pdf`);
+}
+
+function openSupportModal() {
+  trackEvent("support_modal_open");
+  $("#paymentLink").href = PAYMENT_LINK;
+  $("#supportModal").classList.remove("hidden");
+}
+
+function closeSupportModal() {
+  $("#supportModal").classList.add("hidden");
+}
+
+function openTranslateHelper() {
+  const data = getData();
+  const target = data.cvLanguage === "de" ? "de" : data.cvLanguage === "en" ? "en" : "sr";
+  const lang = getLang();
+  const sourceText = [
+    data.profile,
+    data.experience,
+    data.machines,
+    data.skills,
+    data.education,
+    data.traits
+  ].filter(Boolean).join("\n\n");
+
+  if (!sourceText.trim()) {
+    showToast(ui[lang].enterTextFirst);
+    return;
+  }
+
+  if (target === "sr") {
+    showToast(ui[lang].chooseTarget);
+    return;
+  }
+
+  const url = "https://translate.google.com/?sl=auto&tl=" + encodeURIComponent(target) + "&text=" + encodeURIComponent(sourceText) + "&op=translate";
+  window.open(url, "_blank", "noopener");
+}
+
+
+function isIosDevice() {
+  return (
+    /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  );
+}
+
+function isAndroidDevice() {
+  return /android/i.test(navigator.userAgent);
+}
+
+function showInstallInstructions(mode = "auto") {
+  const lang = getLang();
+  const texts = installTexts[lang] || installTexts.sr;
+  let body = texts.desktop;
+
+  if (mode === "ios" || (mode === "auto" && isIosDevice())) {
+    body = texts.ios;
+  } else if (mode === "android" || (mode === "auto" && isAndroidDevice())) {
+    body = texts.android;
+  }
+
+  $("#installModalTitle").textContent = texts.title;
+  $("#installModalBody").innerHTML = body;
+  $("#installOkBtn").textContent = texts.ok;
+  $("#installModal").classList.remove("hidden");
+}
+
+function closeInstallModal() {
+  $("#installModal").classList.add("hidden");
+}
+
+
+let deferredPrompt = null;
+
+function setupPwaInstall() {
+  window.addEventListener("beforeinstallprompt", (e) => {
+    console.log("✅ beforeinstallprompt event uhvaćen");
+    e.preventDefault();
+    deferredPrompt = e;
+
+    const installBtn = $("#installBtn");
+    if (installBtn) {
+      installBtn.classList.add("install-ready");
+    }
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    const lang = getLang();
+    showToast(
+      ui[lang]?.installAccepted ||
+        "Aplikacija je dodata na početni ekran ✅"
+    );
+  });
+
+  $("#installBtn")?.addEventListener("click", async () => {
+    trackEvent("install_app_click");
+    const lang = getLang();
+    const installBtn = $("#installBtn");
+
+    const originalText =
+      installBtn?.textContent ||
+      ui[lang]?.installApp ||
+      "⬇️ Preuzmi app";
+
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true;
+
+    if (isStandalone) {
+      showToast(
+        ui[lang]?.alreadyInstalled ||
+          "Aplikacija je već instalirana ✅"
+      );
+      return;
+    }
+
+    // Ako browser nije poslao realan install prompt, ne prikazuj ništa.
+    if (!deferredPrompt) {
+      console.log("PWA install prompt nije dostupan na ovom browseru/uređaju.");
+      return;
+    }
+
+    try {
+      if (installBtn) {
+        installBtn.disabled = true;
+        installBtn.textContent =
+          ui[lang]?.installingApp ||
+          "Pripremam instalaciju...";
+      }
+
+      await deferredPrompt.prompt();
+
+      const choice = await deferredPrompt.userChoice;
+      const outcome = choice?.outcome;
+
+      deferredPrompt = null;
+
+      if (outcome === "accepted") {
+        showToast(
+          ui[lang]?.installAccepted ||
+            "Aplikacija je dodata na početni ekran ✅"
+        );
+      }
+    } catch (error) {
+      console.error("PWA install error:", error);
+    } finally {
+      if (installBtn) {
+        installBtn.disabled = false;
+        installBtn.textContent = originalText;
+      }
+    }
+  });
+}
+
+
+function setupShare() {
+  $("#shareBtn")?.addEventListener("click", async () => {
+    trackEvent("share_app_click");
+    const lang = getLang();
+    const shareData = {
+      title: "cvfast.app",
+      text: lang === "de"
+        ? "Lebenslauf schnell erstellen. Kein Konto. Kein Server-Upload."
+        : lang === "en"
+          ? "Create your CV fast. No account. No server upload."
+          : "Napravi CV brzo. Bez naloga. Bez slanja na server.",
+      url: window.location.origin + window.location.pathname
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareData.url);
+        showToast(ui[lang].linkCopied);
+      }
+    } catch {
+      // user cancelled share
+    }
+  });
+}
+
+
+function openLegalModal(type) {
+  const lang = getLang();
+  const content = (legalTexts[lang] && legalTexts[lang][type]) ? legalTexts[lang][type] : legalTexts.sr.privacy;
+  $("#legalModalTitle").textContent = content.title;
+  $("#legalModalBody").innerHTML = content.body;
+  $("#legalModal").classList.remove("hidden");
+}
+
+function closeLegalModal() {
+  $("#legalModal").classList.add("hidden");
+}
+
+
+function init() {
+  handleUnlockFromUrl();
+
+  const stored = loadStored();
+  setFormData(stored);
+  applyLanguage(stored.appLanguage || stored.cvLanguage || "sr");
+
+  fields.forEach((field) => {
+    const el = $("#" + field);
+    if (!el) return;
+
+    el.addEventListener("input", () => {
+      saveData();
+      refreshPreview();
+    });
+
+    el.addEventListener("change", () => {
+      if (field === "cvLanguage") {
+        applyLanguage(el.value);
+      } else {
+        saveData();
+        refreshPreview();
+      }
+    });
+  });
+
+
+  document.querySelector('a[href="#builder"]')?.addEventListener("click", () => {
+    trackEvent("start_cv_click");
+  });
+
+  $("#photo")?.addEventListener("change", async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const photo = await resizeImage(file);
+      const data = getData();
+      data.photo = photo;
+      saveRaw(data);
+      refreshPreview();
+      showToast(ui[getLang()].photoAdded);
+    } catch {
+      showToast("Image error");
+    }
+  });
+
+  $("#fillDemoBtn")?.addEventListener("click", () => {
+    trackEvent("fill_demo_click");
+    const current = loadStored();
+    const lang = getLang();
+    const data = {
+      ...current,
+      ...demoDataByLang[lang],
+      appLanguage: lang,
+      cvLanguage: lang,
+      template: current.template || "classic",
+      photo: current.photo || ""
+    };
+    saveRaw(data);
+    setFormData(data);
+    refreshPreview();
+    showToast(ui[lang].demoFilled);
+  });
+
+  $("#clearDataBtn")?.addEventListener("click", () => {
+    const lang = getLang();
+    if (!confirm(ui[lang].confirmClear)) return;
+    localStorage.removeItem(STORAGE_KEY);
+    const data = emptyData();
+    data.appLanguage = lang;
+    data.cvLanguage = lang;
+    setFormData(data);
+    saveRaw(data);
+    applyLanguage(lang);
+    refreshPreview();
+    showToast(ui[lang].dataCleared);
+  });
+
+  $("#downloadPdfBtn")?.addEventListener("click", async () => {
+    trackEvent("download_pdf_click", { unlocked: isUnlocked() });
+    const lang = getLang();
+    if (!isUnlocked()) {
+      openSupportModal();
+      return;
+    }
+
+    try {
+      await downloadPdf();
+    } catch (err) {
+      console.error(err);
+      showToast(ui[lang].pdfError);
+    }
+  });
+
+  $("#paymentLink")?.addEventListener("click", () => {
+    trackEvent("paypal_click", { value: 5, currency: "EUR" });
+  });
+
+$("#closeSupportModal")?.addEventListener("click", closeSupportModal);
+  $("#supportModal")?.addEventListener("click", (e) => {
+    if (e.target.id === "supportModal") closeSupportModal();
+  });
+
+  $("#openFullPreviewBtn")?.addEventListener("click", () => openPreviewModal());
+  $$(".preview-help").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const lang = getLang();
+      const titles = {
+        sr: {
+          basic: "Osnovni podaci u gotovom CV-u",
+          profile: "Primer profesionalnog profila",
+          experience: "Primer radnog iskustva",
+          skills: "Primer mašina i veština",
+          education: "Primer obrazovanja i osobina"
+        },
+        en: {
+          basic: "Basic information in the final CV",
+          profile: "Professional profile example",
+          experience: "Work experience example",
+          skills: "Machines and skills example",
+          education: "Education and qualities example"
+        },
+        de: {
+          basic: "Grunddaten im fertigen CV",
+          profile: "Beispiel für ein berufliches Profil",
+          experience: "Beispiel für Berufserfahrung",
+          skills: "Beispiel für Maschinen und Fähigkeiten",
+          education: "Beispiel für Ausbildung und Eigenschaften"
+        }
+      };
+      openPreviewModal(titles[lang][btn.dataset.help] || "");
+    });
+  });
+
+  $("#closePreviewModal")?.addEventListener("click", closePreviewModal);
+  $("#previewModal")?.addEventListener("click", (e) => {
+    if (e.target.id === "previewModal") closePreviewModal();
+  });
+
+  $("#menuBtn")?.addEventListener("click", () => {
+    $("#mobileMenu").classList.toggle("hidden");
+  });
+
+  $$("[data-set-lang]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      applyLanguage(btn.dataset.setLang);
+      saveData();
+    });
+  });
+
+  $("#translateHelperBtn")?.addEventListener("click", openTranslateHelper);
+
+
+  $$("[data-legal]").forEach((btn) => {
+    btn.addEventListener("click", () => openLegalModal(btn.dataset.legal));
+  });
+
+  $("#closeLegalModal")?.addEventListener("click", closeLegalModal);
+  $("#legalModal")?.addEventListener("click", (e) => {
+    if (e.target.id === "legalModal") closeLegalModal();
+  });
+
+
+
+  $("#closeInstallModal")?.addEventListener("click", closeInstallModal);
+  $("#installOkBtn")?.addEventListener("click", closeInstallModal);
+  $("#installModal")?.addEventListener("click", (e) => {
+    if (e.target.id === "installModal") closeInstallModal();
+  });
+
+
+  setupPwaInstall();
+  setupShare();
+
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    });
   }
+
+  refreshPreview();
 }
 
-document.addEventListener("DOMContentLoaded", boot);
-
-// Default: public landing keeps big brand header.
-try { setInternalHeader('', '', false); } catch(e) {}
-
-
-async function submitReturnedCorrectionIfNeeded(reportData) {
-  const returnedId = localStorage.getItem("swp_returned_report_id");
-  if (!returnedId || !currentWorker) return false;
-
-  const { error } = await sb
-    .from("reports")
-    .update({
-      data: reportData,
-      status: "sent",
-      returned_reason: null
-    })
-    .eq("id", returnedId)
-    .eq("company_id", currentWorker.company_id)
-    .eq("user_id", currentWorker.user_id);
-
-  if (error) throw error;
-
-  localStorage.removeItem("swp_returned_report_id");
-  toast("Ispravljen izveštaj je ponovo poslat Direkciji ✅");
-  clearWorkerForm();
-  loadWorkerReturnedReports();
-  return true;
-}
+document.addEventListener("DOMContentLoaded", init);
