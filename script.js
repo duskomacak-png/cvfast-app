@@ -345,6 +345,7 @@ window.deleteReportPermanently = async (id) => {
 
 async function loadPeople() {
   if (!currentCompany) return;
+
   const { data, error } = await sb
     .from("company_users")
     .select("*")
@@ -358,14 +359,16 @@ async function loadPeople() {
     <div class="item management-item">
       <div class="item-main">
         <strong>${escapeHtml(p.first_name)} ${escapeHtml(p.last_name)}</strong>
-        <small>${escapeHtml(p.function_title)} · kod: ${escapeHtml(p.access_code)}</small><br/>
+        <small>${escapeHtml(p.function_title)} · šifra radnika: ${escapeHtml(p.access_code)}</small><br/>
         <span class="pill">Aktivan</span>
         <span class="pill">${Object.keys(p.permissions || {}).filter(k => p.permissions[k]).length} rubrika</span>
       </div>
       <div class="management-actions">
+        <button class="edit-btn" type="button" onclick="editPerson('${p.id}')">✏️ Uredi profil</button>
         <button class="delete-btn" type="button" onclick="deletePerson('${p.id}', '${escapeHtml((p.first_name || '') + ' ' + (p.last_name || ''))}')">❌ Obriši iz spiska</button>
       </div>
-    </div>`).join("") || `<p class="muted">Nema dodatih osoba.</p>`;
+    </div>
+  `).join("") || `<p class="muted">Nema dodatih osoba.</p>`;
 }
 
 async function loadSites() {
@@ -763,10 +766,12 @@ function renderReportReadableDetails(d = {}) {
 function reportHtml(r) {
   const d = r.data || {};
   const person = r.company_users ? `${r.company_users.first_name} ${r.company_users.last_name}` : "Nepoznat korisnik";
+
   return `
-    <div class="item">
+    <div class="item report-item">
       <strong>${d.report_type === "defect_record" || d.report_type === "defect_alert" ? "🚨 EVIDENCIJA KVARA" : "📄 DNEVNI IZVEŠTAJ"} · ${escapeHtml(r.report_date)}</strong>
       <small>${escapeHtml(person)} · ${escapeHtml(r.company_users?.function_title || "")} · status: ${escapeHtml(r.status)}</small><br/>
+
       <span class="pill">${escapeHtml(d.site_name || "bez gradilišta")}</span>
       ${d.hours ? `<span class="pill">${escapeHtml(String(d.hours))} h</span>` : ""}
       ${d.fuel_liters ? `<span class="pill">${escapeHtml(String(d.fuel_liters))} L</span>` : ""}
@@ -774,18 +779,22 @@ function reportHtml(r) {
       ${d.defect_stops_work ? `<span class="pill">Zaustavlja rad: ${escapeHtml(d.defect_stops_work)}</span>` : ""}
       ${d.defect_status ? `<span class="pill">Status kvara: ${escapeHtml(d.defect_status)}</span>` : ""}
       ${d.called_mechanic_by_phone ? `<span class="pill">Šef pozvan: ${escapeHtml(d.called_mechanic_by_phone)}</span>` : ""}
+
       <p>${escapeHtml(d.defect || d.description || d.note || "")}</p>
       ${r.returned_reason ? `<p class="muted">Razlog vraćanja: ${escapeHtml(r.returned_reason)}</p>` : ""}
       ${renderReportReadableDetails(d)}
+
       <div class="actions">
         ${d.report_type === "defect_record" || d.report_type === "defect_alert" ? `
           <button class="secondary" onclick="setDefectRecordStatus('${r.id}','primljeno')">Primljeno</button>
           <button class="secondary" onclick="setDefectRecordStatus('${r.id}','u_popravci')">U popravci</button>
           <button class="secondary" onclick="setDefectRecordStatus('${r.id}','reseno')">Rešeno</button>
         ` : ""}
+
         <button class="secondary" onclick="setReportStatus('${r.id}','approved')">Odobri</button>
         <button class="secondary" onclick="returnReport('${r.id}')">Vrati na dopunu</button>
         <button class="secondary" onclick="setReportStatus('${r.id}','exported')">Označi izvezeno</button>
+        <button class="archive-report-btn" onclick="archiveReport('${r.id}')">📦 Arhiviraj</button>
         <button class="hard-delete-report-btn" onclick="deleteReportPermanently('${r.id}')">🔥 Obriši iz baze</button>
       </div>
     </div>`;

@@ -138,3 +138,7 @@ Direkcija sada ima dugme ✏️ Uredi profil kod svakog radnika. Forma levo se p
 
 IZMENA v1.11.4 EDIT WORKER + DELETE REPORT:
 Stabilizovano uređivanje radnika u Direkciji. Dugme ✏️ Uredi profil otvara radnika u postojećoj formi, a Sačuvaj izmene ažurira isti company_users red. Dodato je pojedinačno trajno brisanje izveštaja iz baze preko dugmeta 🔥 Obriši iz baze. Ovo brisanje radi delete iz reports tabele. Hard-delete radnika nije dodat ako ima istoriju, da se ne pokvare veze i evidencija. Cache podignut na startwork-pro-v1114.
+
+
+IZMENA v1.11.5 VISIBLE EDIT DELETE:
+Provereno je da u v1.11.4 funkcija za uređivanje radnika postoji, ali dugme nije bilo ubačeno u listu radnika. U ovoj verziji je kompletna loadPeople funkcija prepisana tako da svaka kartica radnika sigurno prikazuje ✏️ Uredi profil i ❌ Obriši iz spiska. Kompletan reportHtml je prepisan tako da svaki izveštaj sigurno prikazuje 📦 Arhiviraj i 🔥 Obriši iz baze. Cache podignut na startwork-pro-v1115.

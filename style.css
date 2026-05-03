@@ -1100,3 +1100,45 @@ pre.raw-details{
     white-space:normal;
   }
 }
+
+
+/* v1.11.5 — visible edit worker and hard delete report */
+.edit-btn{
+  border:1px solid #bfdbfe !important;
+  background:#eff6ff !important;
+  color:#1d4ed8 !important;
+  border-radius:12px !important;
+  padding:8px 12px !important;
+  font-size:.84rem !important;
+  line-height:1.1 !important;
+  font-weight:900 !important;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.edit-btn:hover{ background:#dbeafe !important; }
+
+.hard-delete-report-btn{
+  border:1px solid #fecaca !important;
+  background:#fff1f2 !important;
+  color:#991b1b !important;
+  border-radius:10px !important;
+  padding:7px 10px !important;
+  font-size:.84rem !important;
+  font-weight:900 !important;
+  cursor:pointer;
+}
+.hard-delete-report-btn:hover{ background:#ffe4e6 !important; }
+
+.report-item .actions{
+  align-items:center;
+}
+
+.person-form-actions{ margin-top:12px; }
+
+@media(max-width:700px){
+  .edit-btn,
+  .hard-delete-report-btn{
+    width:100%;
+    white-space:normal;
+  }
+}
