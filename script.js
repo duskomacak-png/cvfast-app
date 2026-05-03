@@ -7,6 +7,8 @@
 
 const SUPABASE_URL = "https://kzwawwrewakjbfhgrbdt.supabase.co";
 const SUPABASE_KEY = "sb_publishable_tounvJXNQqJmmkeEfm84Ow_rncVTr3V";
+const APP_VERSION = "1.11.6";
+
 
 let sb = null;
 let currentCompany = null;
@@ -343,6 +345,24 @@ window.deleteReportPermanently = async (id) => {
   }
 };
 
+function renderPersonItem(p) {
+  const permissionCount = Object.keys(p.permissions || {}).filter(k => p.permissions[k]).length;
+  return `
+    <div class="item person-card-v1116" data-person-id="${escapeHtml(p.id)}">
+      <div class="item-main">
+        <strong>${escapeHtml(p.first_name)} ${escapeHtml(p.last_name)}</strong>
+        <small>${escapeHtml(p.function_title)} · šifra radnika: ${escapeHtml(p.access_code)}</small><br/>
+        <span class="pill">Aktivan</span>
+        <span class="pill">${permissionCount} rubrika</span>
+      </div>
+      <div class="person-actions-v1116">
+        <button class="edit-btn" type="button" onclick="editPerson('${p.id}')">✏️ Uredi profil</button>
+        <button class="delete-btn" type="button" onclick="deletePerson('${p.id}')">❌ Obriši iz spiska</button>
+      </div>
+    </div>
+  `;
+}
+
 async function loadPeople() {
   if (!currentCompany) return;
 
@@ -355,20 +375,9 @@ async function loadPeople() {
 
   if (error) return toast(error.message, true);
 
-  $("#peopleList").innerHTML = (data || []).map(p => `
-    <div class="item management-item">
-      <div class="item-main">
-        <strong>${escapeHtml(p.first_name)} ${escapeHtml(p.last_name)}</strong>
-        <small>${escapeHtml(p.function_title)} · šifra radnika: ${escapeHtml(p.access_code)}</small><br/>
-        <span class="pill">Aktivan</span>
-        <span class="pill">${Object.keys(p.permissions || {}).filter(k => p.permissions[k]).length} rubrika</span>
-      </div>
-      <div class="management-actions">
-        <button class="edit-btn" type="button" onclick="editPerson('${p.id}')">✏️ Uredi profil</button>
-        <button class="delete-btn" type="button" onclick="deletePerson('${p.id}', '${escapeHtml((p.first_name || '') + ' ' + (p.last_name || ''))}')">❌ Obriši iz spiska</button>
-      </div>
-    </div>
-  `).join("") || `<p class="muted">Nema dodatih osoba.</p>`;
+  const list = $("#peopleList");
+  if (!list) return;
+  list.innerHTML = (data || []).map(renderPersonItem).join("") || `<p class="muted">Nema dodatih osoba.</p>`;
 }
 
 async function loadSites() {
@@ -472,18 +481,36 @@ window.archiveSite = async (id, name = "") => {
 };
 
 window.deletePerson = async (id, name = "") => {
-  const label = name ? ` (${name})` : "";
-  if (!confirm("Obrisati osobu/radnika iz aktivnog spiska" + label + "?\n\nStari izveštaji ostaju sačuvani zbog evidencije.")) return;
+  try {
+    if (!currentCompany) throw new Error("Nema aktivne firme.");
 
-  const { error } = await sb
-    .from("company_users")
-    .update({ active: false })
-    .eq("id", id)
-    .eq("company_id", currentCompany.id);
+    if (!name) {
+      const { data: person, error: readError } = await sb
+        .from("company_users")
+        .select("first_name,last_name")
+        .eq("id", id)
+        .eq("company_id", currentCompany.id)
+        .maybeSingle();
+      if (readError) throw readError;
+      if (person) name = `${person.first_name || ""} ${person.last_name || ""}`.trim();
+    }
 
-  if (error) return toast(error.message, true);
-  toast("Osoba je obrisana iz aktivnog spiska.");
-  loadPeople();
+    const label = name ? ` (${name})` : "";
+    if (!confirm("Obrisati osobu/radnika iz aktivnog spiska" + label + "?\n\nStari izveštaji ostaju sačuvani zbog evidencije.")) return;
+
+    const { error } = await sb
+      .from("company_users")
+      .update({ active: false })
+      .eq("id", id)
+      .eq("company_id", currentCompany.id);
+
+    if (error) throw error;
+    toast("Osoba je obrisana iz aktivnog spiska.");
+    clearPersonForm();
+    loadPeople();
+  } catch (e) {
+    toast(e.message, true);
+  }
 };
 
 window.deleteAsset = async (id, name = "") => {
@@ -569,7 +596,7 @@ async function runDirectorGlobalSearch(showEmptyMessage = true) {
         type:"Radnik / osoba",
         title:`${p.first_name} ${p.last_name}`,
         subtitle:`${p.function_title} · kod: ${p.access_code} · ${p.active ? "aktivan" : "neaktivan"}`,
-        actions:`${p.active ? `<button class="delete-btn" onclick="deletePerson('${p.id}', '${escapeHtml((p.first_name || '') + ' ' + (p.last_name || ''))}')">❌ Obriši iz spiska</button>` : `<span class="pill">već sklonjen</span>`}`
+        actions:`${p.active ? `<button class="edit-btn" onclick="editPerson('${p.id}')">✏️ Uredi profil</button><button class="delete-btn" onclick="deletePerson('${p.id}')">❌ Obriši iz spiska</button>` : `<span class="pill">već sklonjen</span>`}`
       });
     });
 

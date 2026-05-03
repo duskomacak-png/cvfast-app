@@ -142,3 +142,6 @@ Stabilizovano uređivanje radnika u Direkciji. Dugme ✏️ Uredi profil otvara 
 
 IZMENA v1.11.5 VISIBLE EDIT DELETE:
 Provereno je da u v1.11.4 funkcija za uređivanje radnika postoji, ali dugme nije bilo ubačeno u listu radnika. U ovoj verziji je kompletna loadPeople funkcija prepisana tako da svaka kartica radnika sigurno prikazuje ✏️ Uredi profil i ❌ Obriši iz spiska. Kompletan reportHtml je prepisan tako da svaki izveštaj sigurno prikazuje 📦 Arhiviraj i 🔥 Obriši iz baze. Cache podignut na startwork-pro-v1115.
+
+v1.11.6 — vidljiva dugmad za radnike bez oslanjanja na desni grid
+Popravljen je prikaz radnika u Direkcija → Ljudi i funkcije. Kartica radnika sada koristi novi render person-card-v1116 i dugmad ✏️ Uredi profil / ❌ Obriši iz spiska stoje direktno ispod podataka radnika, tako da ih CSS/grid ne može gurnuti van vidljivog dela. Uređivanje radnika i dalje radi update postojećeg reda u company_users preko id + company_id. Brisanje radnika ostaje soft-delete: active=false. Nije potreban novi Supabase SQL. Cache i linkovi su podignuti na v1116.
