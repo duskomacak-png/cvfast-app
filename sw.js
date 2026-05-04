@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v16-ga4-tracking";
+const CACHE_NAME = "cvfast-v17-global-market-en-de";
 
 const APP_SHELL = [
   "/",
