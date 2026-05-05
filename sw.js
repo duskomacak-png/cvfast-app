@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v17-global-market-en-de";
+const CACHE_NAME = "cvfast-v17-google-clean";
 
 const APP_SHELL = [
   "/",
@@ -9,7 +9,15 @@ const APP_SHELL = [
   "/icon-192.png",
   "/icon-512.png",
   "/apple-touch-icon.png",
-  "/favicon-32.png"
+  "/favicon-32.png",
+  "/privacy.html",
+  "/terms.html",
+  "/how-it-works.html",
+  "/resume-templates.html",
+  "/no-subscription.html",
+  "/ats-friendly-resume.html",
+  "/sitemap.xml",
+  "/robots.txt"
 ];
 
 // Install: cache files one by one so one missing file cannot break the whole PWA install.

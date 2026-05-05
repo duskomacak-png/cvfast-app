@@ -1,13 +1,13 @@
 {
   "name": "cvfast.app - Resume & CV Builder",
   "short_name": "cvfast",
-  "description": "Create a professional resume or CV online. No account, no subscription, no server upload. PDF unlock with one-time support.",
+  "description": "Create a professional resume or CV without sign-up. Free preview, one-time PDF unlock, no subscription.",
   "start_url": "/",
   "scope": "/",
   "id": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0b5cff",
+  "theme_color": "#2563eb",
   "orientation": "portrait",
   "categories": [
     "productivity",

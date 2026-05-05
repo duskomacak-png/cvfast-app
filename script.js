@@ -2,6 +2,7 @@ const STORAGE_KEY = "cvfast_app_data_v2";
 const UNLOCK_KEY = "cvfast_pdf_unlocked_v1";
 const UNLOCK_CODE = "cvfast_pdf_2026_ok";
 
+// TODO: kad napraviš PayPal link, zameni ovde.
 // PayPal return URL: https://cvfast.app/?unlock=cvfast_pdf_2026_ok
 const PAYMENT_LINK = "https://www.paypal.com/ncp/payment/LU67SFVC967EY";
 
@@ -9,8 +10,6 @@ const SHOW_CVFAST_FOOTER_IN_PDF = false;
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
-const PUBLIC_LANGS = ["en", "de"];
-const DEFAULT_LANG = "en";
 
 function trackEvent(name, params = {}) {
   if (typeof gtag === "function") {
@@ -48,7 +47,7 @@ const ui = {
     privacyBadge: "🛡️ Bez naloga • Bez slanja na server",
     heroTitle: "Napravi CV brzo",
     heroSubtitle: "Napravi i pregledaj CV besplatno. PDF preuzimanje se otključava jednokratnom podrškom.",
-    startCv: "📄 Start resume/CV",
+    startCv: "📄 Start CV",
     installApp: "⬇️ Preuzmi app",
     shareApp: "🔗 Podeli app",
     demoInitials: "MP",
@@ -148,9 +147,9 @@ const ui = {
     navFeatures: "Features",
     navStart: "Start CV",
     privacyBadge: "🛡️ No account • No server upload",
-    heroTitle: "Build your resume fast",
-    heroSubtitle: "Create and preview your resume/CV for free. Unlock PDF download with one-time support — no subscription.",
-    startCv: "📄 Start resume/CV",
+    heroTitle: "Create your resume fast",
+    heroSubtitle: "Build and preview your CV for free. PDF download unlocks with a one-time €5 support payment. No subscription.",
+    startCv: "📄 Start CV",
     installApp: "⬇️ Install app",
     shareApp: "🔗 Share app",
     demoInitials: "JW",
@@ -172,19 +171,17 @@ const ui = {
     step1: "Fill in your data",
     step2: "Preview live",
     step3: "Download PDF",
-    supportTitle: "Free preview • PDF unlock €5",
-    supportText: "One-time support keeps cvfast.app online, fast and ad-light.",
+    supportTitle: "Free preview • one-time €5 PDF unlock",
+    supportText: "Build first. Pay only when your PDF is ready. No subscription.",
     browserNote: "🔒 Your data stays in your browser",
     feature1Title: "📱 Mobile first",
-    feature1Text: "Works on phone, laptop and desktop. Create a CV or resume immediately.",
+    feature1Text: "Works on phone, laptop and desktop. You can create your CV immediately.",
     feature2Title: "🧾 Live preview",
     feature2Text: "Every change appears instantly on your CV. No blind form filling.",
     feature3Title: "🛡️ Privacy first",
-    feature3Text: "No account and no database. CV data stays in the user’s browser.",
-    feature4Title: "✅ ATS-friendly structure",
-    feature4Text: "Clean sections, readable layout and professional PDF output for job applications.",
+    feature3Text: "No account and no database. Data is stored only in the user’s browser.",
     builderEyebrow: "CV BUILDER",
-    builderTitle: "Create your resume/CV",
+    builderTitle: "Create your CV",
     fullPreview: "👁 View full CV",
     basicTitle: "1. Basic information",
     exampleBtn: "👁 Example",
@@ -211,19 +208,19 @@ const ui = {
     autoSave: "Auto-save active",
     translateBtn: "🌍 Translate with Google Translate",
     supportModalTitle: "Your CV is ready ✅",
-    supportModalText: "Creating and previewing your CV is free. PDF download unlocks with one-time support of €5.",
+    supportModalText: "Creating and previewing your CV is free. PDF download unlocks with a one-time €5 support payment.",
     supportModalMuted: "Your support helps keep cvfast.app online, fast and available without registration. No subscription.",
     supportPayBtn: "☕ Support €5 and unlock PDF",
     alreadyPaid: "",
-    mvpNote: "After support, PayPal returns you to the app and PDF download unlocks in this browser/device. No subscription.",
+    mvpNote: "After support, PayPal returns you to cvfast.app and PDF download unlocks in this browser/device. No subscription.",
     privacyLink: "Privacy Policy",
     termsLink: "Terms of Use",
     supportLink: "Support",
-    footerNote: "No account. No subscription. No CV data upload to our server.",
+    footerNote: "No account. No CV data upload to our server.",
     fullNamePlaceholder: "John Worker",
     jobTitlePlaceholder: "Heavy Equipment Operator",
     locationPlaceholder: "City, Country",
-    profilePlaceholder: "Short professional profile. Example: reliable warehouse worker with 3 years of experience...",
+    profilePlaceholder: "Short professional profile...",
     experiencePlaceholder: "One item per line. Example:\nMachine operator — 10 years of experience\nEarthworks and site preparation",
     machinesPlaceholder: "CAT 330 excavator\nD6R bulldozer",
     skillsPlaceholder: "Earthworks\nSafe work\nPrecision",
@@ -236,7 +233,7 @@ const ui = {
     chooseTarget: "Choose English or German as CV language",
     enterTextFirst: "First enter the text you want to translate",
     unlocked: "PDF unlocked ✅",
-    pdfUnlockedBrowser: "PDF is unlocked in this browser/device ✅",
+    pdfUnlockedBrowser: "PDF is unlocked in this browser ✅",
     installIos: "For iPhone: open cvfast.app in Safari → tap Share → Add to Home Screen.",
     installOther: "If the install prompt does not appear: use Chrome/Edge menu → Install app or Add to Home Screen.",
     alreadyInstalled: "App is already installed ✅",
@@ -276,17 +273,15 @@ const ui = {
     step1: "Daten eingeben",
     step2: "Live ansehen",
     step3: "PDF herunterladen",
-    supportTitle: "Vorschau kostenlos • PDF unlock €5",
-    supportText: "Einmalige Unterstützung hilft, cvfast.app online zu halten.",
+    supportTitle: "Kostenlose Vorschau • einmalige PDF-Freischaltung 5€",
+    supportText: "Erst erstellen. Erst zahlen, wenn dein PDF bereit ist. Kein Abo.",
     browserNote: "🔒 Deine Daten bleiben in deinem Browser",
     feature1Title: "📱 Mobile first",
     feature1Text: "Funktioniert auf Handy, Laptop und Desktop. Du kannst deinen Lebenslauf sofort erstellen.",
     feature2Title: "🧾 Live-Vorschau",
     feature2Text: "Jede Änderung erscheint sofort im Lebenslauf. Kein blindes Ausfüllen.",
     feature3Title: "🛡️ Datenschutz zuerst",
-    feature3Text: "Kein Konto und keine Datenbank. Daten bleiben nur im Browser des Nutzers.",
-    feature4Title: "✅ ATS-freundliche Struktur",
-    feature4Text: "Klare Abschnitte, lesbares Layout und professioneller PDF-Export für Bewerbungen.",
+    feature3Text: "Kein Konto und keine Datenbank. Daten werden nur im Browser gespeichert.",
     builderEyebrow: "CV BUILDER",
     builderTitle: "Lebenslauf erstellen",
     fullPreview: "👁 Ganzen CV ansehen",
@@ -315,11 +310,11 @@ const ui = {
     autoSave: "Auto-save aktiv",
     translateBtn: "🌍 Mit Google Translate übersetzen",
     supportModalTitle: "Dein CV ist bereit ✅",
-    supportModalText: "Erstellen und Vorschau sind kostenlos. PDF-Download wird nach einmaliger Unterstützung von 5€ freigeschaltet.",
-    supportModalMuted: "Deine Unterstützung hilft, cvfast.app online, schnell und ohne Registrierung verfügbar zu halten. Kein Abonnement.",
+    supportModalText: "Erstellen und Vorschau sind kostenlos. PDF-Download wird durch eine einmalige Unterstützung von 5€ freigeschaltet.",
+    supportModalMuted: "Deine Unterstützung hilft, cvfast.app online, schnell und ohne Registrierung verfügbar zu halten.",
     supportPayBtn: "☕ 5€ unterstützen und PDF freischalten",
     alreadyPaid: "",
-    mvpNote: "Nach der Unterstützung führt PayPal zurück zur App und der PDF-Download wird in diesem Browser/Gerät freigeschaltet. Kein Abonnement.",
+    mvpNote: "Nach der Unterstützung bringt PayPal dich zurück zu cvfast.app und der PDF-Download wird in diesem Browser/Gerät freigeschaltet. Kein Abo.",
     privacyLink: "Datenschutz",
     termsLink: "Nutzungsbedingungen",
     supportLink: "Support",
@@ -435,32 +430,27 @@ const legalTexts = {
     privacy: {
       title: "Privacy Policy",
       body: `
-        <p><strong>cvfast.app</strong> is a browser-based resume/CV builder. The app does not require an account and does not upload your CV data to our server.</p>
-        <h3>CV data</h3>
-        <p>The information you enter, including name, contact details, work experience, skills and photo, is stored locally in your browser using LocalStorage.</p>
-        <h3>LocalStorage and device limits</h3>
-        <p>If you clear browser data, use private browsing, change browser or switch device, your saved CV data and PDF unlock may be lost.</p>
-        <h3>PDF generation</h3>
-        <p>PDF generation happens inside your browser. Your CV is not sent to our server for PDF creation.</p>
-        <h3>Payment/support</h3>
-        <p>Payment/support processing is handled by PayPal. We do not store card details, bank details or PayPal passwords.</p>
-        <h3>Google Translate helper</h3>
+        <p><strong>cvfast.app</strong> is a browser-based CV builder. The app does not require registration and does not upload your CV data to our server.</p>
+        <h3>What data is used?</h3>
+        <p>The information you enter, including your name, contact details, work experience, skills and photo, is stored locally in your browser using LocalStorage.</p>
+        <h3>LocalStorage</h3>
+        <p>If you clear your browser data, use another device or another browser, your saved CV data and PDF unlock may be lost.</p>
+        <h3>PDF and payment/support</h3>
+        <p>PDF generation happens in your browser. Payment/support processing is handled by PayPal. We do not store your payment card details.</p>
+        <h3>Google Translate</h3>
         <p>If you use the Google Translate helper, the text you choose to translate may be opened in Google Translate and processed under Google’s own policies.</p>
       `
     },
     terms: {
       title: "Terms of Use",
       body: `
-        <p><strong>cvfast.app</strong> provides a simple browser-based tool for creating, previewing and exporting resume/CV documents.</p>
+        <p><strong>cvfast.app</strong> provides a simple tool for creating and previewing CV documents.</p>
         <ul>
-          <li>Creating and previewing a CV is free.</li>
-          <li>PDF download unlocks with a one-time €5 support payment. It is not a subscription.</li>
-          <li>PDF unlock is saved only on the browser/device used at the time of unlock.</li>
-          <li>If you clear browser data, use another browser or switch device, the unlock may be lost because the app works without login and without a user account.</li>
-          <li>You are responsible for checking the accuracy, spelling and truthfulness of the information you put into your CV.</li>
-          <li>We do not guarantee employment, interviews, job offers, employer acceptance or ATS results.</li>
-          <li>Digital unlock/refund requests caused by technical issues may be reviewed individually.</li>
-          <li>The app is provided “as is” and “as available”. Features, templates, pricing and text may be changed, updated or removed.</li>
+          <li>We do not guarantee employment, interviews, job offers or acceptance by any employer.</li>
+          <li>You are responsible for the accuracy of the information you enter into your CV.</li>
+          <li>Creating and previewing a CV is free. PDF download may require a one-time support payment.</li>
+          <li>Because the app works without accounts and without a database, PDF unlock is stored only in the browser/device used at the time of unlock.</li>
+          <li>The app is provided “as is”. Features may be changed, updated or removed.</li>
         </ul>
       `
     },
@@ -495,10 +485,9 @@ const legalTexts = {
         <ul>
           <li>Wir garantieren keine Arbeitsstelle, kein Vorstellungsgespräch, kein Jobangebot und keine Annahme durch Arbeitgeber.</li>
           <li>Du bist für die Richtigkeit der eingegebenen Daten verantwortlich.</li>
-          <li>Erstellung und Vorschau sind kostenlos.</li>
-          <li>Der PDF-Download wird durch eine einmalige Unterstützung von 5€ freigeschaltet. Es ist kein Abonnement.</li>
+          <li>Erstellung und Vorschau sind kostenlos. Der PDF-Download kann eine einmalige Unterstützung erfordern.</li>
           <li>Da die App ohne Konto und ohne Datenbank funktioniert, wird die PDF-Freischaltung nur im verwendeten Browser/Gerät gespeichert.</li>
-          <li>Die App wird „wie sie ist“ bereitgestellt. Funktionen, Vorlagen, Preis und Texte können geändert, aktualisiert oder entfernt werden.</li>
+          <li>Die App wird „wie sie ist“ bereitgestellt. Funktionen können geändert, aktualisiert oder entfernt werden.</li>
         </ul>
       `
     },
@@ -689,8 +678,8 @@ const demoDataByLang = {
 
 function emptyData() {
   return {
-    appLanguage: DEFAULT_LANG,
-    cvLanguage: DEFAULT_LANG,
+    appLanguage: "en",
+    cvLanguage: "en",
     template: "classic",
     fullName: "",
     jobTitle: "",
@@ -709,7 +698,10 @@ function emptyData() {
 
 function loadStored() {
   try {
-    return { ...emptyData(), ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}) };
+    const stored = { ...emptyData(), ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}) };
+    if (stored.appLanguage === "sr") stored.appLanguage = "en";
+    if (stored.cvLanguage === "sr") stored.cvLanguage = "en";
+    return stored;
   } catch {
     return emptyData();
   }
@@ -721,8 +713,7 @@ function saveRaw(data) {
 
 function getLang() {
   const stored = loadStored();
-  const lang = stored.appLanguage || stored.cvLanguage || DEFAULT_LANG;
-  return PUBLIC_LANGS.includes(lang) ? lang : DEFAULT_LANG;
+  return stored.appLanguage || stored.cvLanguage || "en";
 }
 
 
@@ -730,7 +721,6 @@ function updateLanguageSelectLabels(lang) {
   const cvLanguage = $("#cvLanguage");
   if (!cvLanguage) return;
 
-  // Public version for cvfast.app: English first, German optional. Serbian is kept only internally for old saved drafts.
   const labels = {
     en: { en: "English", de: "German" },
     de: { en: "Englisch", de: "Deutsch" }
@@ -745,7 +735,7 @@ function updateLanguageSelectLabels(lang) {
 
 
 function applyLanguage(lang) {
-  if (!PUBLIC_LANGS.includes(lang) || !ui[lang]) lang = DEFAULT_LANG;
+  if (lang === "sr" || !ui[lang]) lang = "en";
 
   const data = loadStored();
   data.appLanguage = lang;
@@ -781,8 +771,9 @@ function getData() {
     const el = $("#" + field);
     if (el) data[field] = el.value || "";
   });
-  data.appLanguage = PUBLIC_LANGS.includes(stored.appLanguage || data.cvLanguage) ? (stored.appLanguage || data.cvLanguage) : DEFAULT_LANG;
-  if (!PUBLIC_LANGS.includes(data.cvLanguage)) data.cvLanguage = DEFAULT_LANG;
+  data.appLanguage = stored.appLanguage || data.cvLanguage || "en";
+  if (data.appLanguage === "sr") data.appLanguage = "en";
+  if (data.cvLanguage === "sr") data.cvLanguage = "en";
   data.photo = stored.photo || "";
   return data;
 }
@@ -796,8 +787,7 @@ function setFormData(data) {
 
 function saveData() {
   const data = getData();
-  data.appLanguage = PUBLIC_LANGS.includes(data.cvLanguage) ? data.cvLanguage : DEFAULT_LANG;
-  data.cvLanguage = data.appLanguage;
+  data.appLanguage = data.cvLanguage;
   saveRaw(data);
   showSaveStatus();
 }
@@ -832,7 +822,7 @@ function initials(name) {
 }
 
 function withPlaceholders(data) {
-  const lang = cvLabels[data.cvLanguage] && PUBLIC_LANGS.includes(data.cvLanguage) ? data.cvLanguage : DEFAULT_LANG;
+  const lang = cvLabels[data.cvLanguage] && data.cvLanguage !== "sr" ? data.cvLanguage : "en";
   const demo = demoDataByLang[lang];
   return {
     ...data,
@@ -853,7 +843,7 @@ function withPlaceholders(data) {
 function renderCv(target, data, options = {}) {
   const usePlaceholders = Boolean(options.placeholders);
   const d = usePlaceholders ? withPlaceholders(data) : data;
-  const lang = cvLabels[d.cvLanguage] && PUBLIC_LANGS.includes(d.cvLanguage) ? d.cvLanguage : DEFAULT_LANG;
+  const lang = cvLabels[d.cvLanguage] && d.cvLanguage !== "sr" ? d.cvLanguage : "en";
   const L = cvLabels[lang];
 
   const machineItems = splitLines(d.machines);
@@ -944,7 +934,7 @@ function refreshPreview() {
 
 function openPreviewModal(title = "") {
   const data = getData();
-  const lang = cvLabels[data.cvLanguage] && PUBLIC_LANGS.includes(data.cvLanguage) ? data.cvLanguage : DEFAULT_LANG;
+  const lang = cvLabels[data.cvLanguage] && data.cvLanguage !== "sr" ? data.cvLanguage : "en";
   $("#previewModalTitle").textContent = title || cvLabels[lang].previewTitle;
   renderCv($("#modalCvPreview"), data, { placeholders: true });
   $("#previewModal").classList.remove("hidden");
@@ -1106,7 +1096,6 @@ function openTranslateHelper() {
     return;
   }
 
-
   const url = "https://translate.google.com/?sl=auto&tl=" + encodeURIComponent(target) + "&text=" + encodeURIComponent(sourceText) + "&op=translate";
   window.open(url, "_blank", "noopener");
 }
@@ -1236,8 +1225,10 @@ function setupShare() {
     const shareData = {
       title: "cvfast.app",
       text: lang === "de"
-        ? "Lebenslauf schnell erstellen. Kein Konto. Kein Abonnement. Kein Server-Upload."
-        : "Create your resume/CV fast. No account. No subscription. No server upload.",
+        ? "Lebenslauf schnell erstellen. Kein Konto. Kein Server-Upload."
+        : lang === "en"
+          ? "Create your CV fast. No account. No server upload."
+          : "Create your CV fast. No account. No server upload.",
       url: window.location.origin + window.location.pathname
     };
 
@@ -1273,7 +1264,7 @@ function init() {
 
   const stored = loadStored();
   setFormData(stored);
-  applyLanguage(stored.appLanguage || stored.cvLanguage || DEFAULT_LANG);
+  applyLanguage(stored.appLanguage || stored.cvLanguage || "en");
 
   fields.forEach((field) => {
     const el = $("#" + field);
@@ -1338,8 +1329,8 @@ function init() {
     if (!confirm(ui[lang].confirmClear)) return;
     localStorage.removeItem(STORAGE_KEY);
     const data = emptyData();
-    data.appLanguage = PUBLIC_LANGS.includes(lang) ? lang : DEFAULT_LANG;
-    data.cvLanguage = data.appLanguage;
+    data.appLanguage = lang;
+    data.cvLanguage = lang;
     setFormData(data);
     saveRaw(data);
     applyLanguage(lang);

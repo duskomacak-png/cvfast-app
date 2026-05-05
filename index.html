@@ -1,376 +1,315 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>cvfast.app - Free Resume & CV Builder | PDF CV Maker</title>
-  <meta name="description" content="Create a professional resume or CV online. No account, no subscription, no server upload. Build and preview for free, then unlock PDF download with one-time support." />
-  <meta name="keywords" content="resume builder, CV builder, free CV maker, PDF resume, professional CV, ATS-friendly resume, no account resume builder" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://cvfast.app/" />
-  <meta property="og:title" content="cvfast.app - Free Resume & CV Builder" />
-  <meta property="og:description" content="Build your resume or CV for free. No account. No subscription. Unlock PDF download with one-time support." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://cvfast.app/" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="cvfast.app - Free Resume & CV Builder" />
-  <meta name="twitter:description" content="Create a professional resume or CV online. No account, no subscription, PDF unlock after one-time support." />
-  <meta name="theme-color" content="#0b5cff" />
-
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="cvfast" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
-  <link rel="stylesheet" href="style.css" />
-  <script type="application/ld+json">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CVFast.app - Resume &amp; CV Builder Without Sign-Up</title>
+<meta content="Create a professional resume or CV online without sign-up. Build and preview for free, then unlock PDF download with a one-time €5 support payment. No subscription." name="description"/>
+<meta content="#0b5cff" name="theme-color"/>
+<meta content="index, follow" name="robots"/>
+<link href="https://cvfast.app/" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="https://cvfast.app/" property="og:url"/>
+<meta content="CVFast.app - Resume &amp; CV Builder Without Sign-Up" property="og:title"/>
+<meta content="Build and preview your CV for free. Unlock PDF download with a one-time €5 support payment. No account. No subscription." property="og:description"/>
+<meta content="cvfast.app" property="og:site_name"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="CVFast.app - Resume &amp; CV Builder Without Sign-Up" name="twitter:title"/>
+<meta content="Create a professional resume or CV without sign-up. Free preview. One-time PDF unlock. No subscription." name="twitter:description"/>
+<script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "cvfast.app",
     "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web",
-    "description": "Browser-based resume and CV builder with live preview, local storage and PDF export unlock.",
+    "operatingSystem": "Web, Android, iOS, Windows, macOS",
+    "url": "https://cvfast.app/",
+    "description": "A browser-based resume and CV builder without sign-up. Build and preview for free, then unlock PDF download with a one-time support payment.",
     "offers": {
       "@type": "Offer",
-      "price": "5",
+      "price": "5.00",
       "priceCurrency": "EUR",
-      "description": "One-time support payment to unlock PDF download on this device/browser."
+      "description": "One-time support payment to unlock PDF download. No subscription."
     }
   }
   </script>
 
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF9CV5P5H5"></script>
-  <script>
+<link href="manifest.webmanifest" rel="manifest"/>
+<link href="favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<meta content="yes" name="mobile-web-app-capable"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="cvfast" name="apple-mobile-web-app-title"/>
+<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
+<link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
+<link href="icon-512.png" rel="icon" sizes="512x512" type="image/png"/>
+<link href="style.css" rel="stylesheet"/>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QF9CV5P5H5"></script>
+<script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag("js", new Date());
     gtag("config", "G-QF9CV5P5H5");
   </script>
 </head>
-
 <body>
-  <div class="app">
-    <header class="site-header">
-      <a class="logo" href="#home" aria-label="cvfast.app home">
-        <span>cvfast</span><b>.app</b>
-      </a>
+<div class="app">
+<header class="site-header">
+<a aria-label="cvfast.app home" class="logo" href="#home">
+<span>cvfast</span><b>.app</b>
+</a>
+<nav class="desktop-nav">
+<a data-i18n="navHow" href="#how">How it works</a>
+<a data-i18n="navFeatures" href="#features">Features</a>
+<a data-i18n="navStart" href="#builder">Start CV</a>
+</nav>
+<div class="header-actions">
 
-      <nav class="desktop-nav">
-        <a href="#how" data-i18n="navHow">How it works</a>
-        <a href="#features" data-i18n="navFeatures">Benefits</a>
-        <a href="#builder" data-i18n="navStart">Start CV</a>
-      </nav>
+<button class="lang-mini active" data-set-lang="en" type="button">EN</button>
+<button class="lang-mini" data-set-lang="de" type="button">DE</button>
+<button aria-label="Open menu" class="hamburger" id="menuBtn" type="button">☰</button>
+</div>
+</header>
+<div class="mobile-menu hidden" id="mobileMenu">
+<a data-i18n="navHow" href="#how">How it works</a>
+<a data-i18n="navFeatures" href="#features">Features</a>
+<a data-i18n="navStart" href="#builder">Start CV</a>
+</div>
+<main id="home">
+<section class="hero">
+<div class="privacy-badge" data-i18n="privacyBadge">🛡️ No account • No server upload</div>
+<h1 data-i18n="heroTitle">Create your resume fast</h1>
+<p class="hero-subtitle" data-i18n="heroSubtitle">Build and preview your CV for free. PDF download unlocks with a one-time €5 support payment. No subscription.</p>
+<div class="hero-actions">
+<a class="primary-btn" data-i18n="startCv" href="#builder">📄 Start CV</a>
+<button class="secondary-btn" data-i18n="installApp" id="installBtn" type="button">⬇️ Install app</button>
+<button class="secondary-btn" data-i18n="shareApp" id="shareBtn" type="button">🔗 Share app</button>
+</div>
+<div aria-label="CV example" class="mini-cv-card">
+<div class="mini-cv-header">
+<div class="avatar-demo" data-i18n="demoInitials">JW</div>
+<div>
+<h2 data-i18n="demoName">John Worker</h2>
+<p data-i18n="demoTitle">Heavy Equipment Operator</p>
+<div class="mini-line"></div>
+<ul class="mini-contact">
+<li data-i18n="demoPhone">📞 +44 7000 000000</li>
+<li data-i18n="demoEmail">✉️ john.worker@example.com</li>
+<li data-i18n="demoLocation">📍 City, Country</li>
+</ul>
+</div>
+</div>
+<div class="mini-section">
+<h3 data-i18n="cvProfile">PROFILE</h3>
+<p data-i18n="demoProfile">Reliable and experienced worker focused on safety, efficiency and quality of work.</p>
+</div>
+<div class="mini-section">
+<h3 data-i18n="cvExperience">WORK EXPERIENCE</h3>
+<ul>
+<li data-i18n="demoExperience1">Machine operator — sample company</li>
+<li data-i18n="demoExperience2">Earthworks and site preparation</li>
+</ul>
+</div>
+<div class="mini-section">
+<h3 data-i18n="cvSkills">SKILLS</h3>
+<div class="skill-tags">
+<span data-i18n="demoSkill1">Practical work</span>
+<span data-i18n="demoSkill2">Safety</span>
+<span data-i18n="demoSkill3">Precision</span>
+</div>
+</div>
+</div>
+<section class="how-strip" id="how">
+<h2 data-i18n="howTitle">How it works</h2>
+<div class="steps">
+<div><b>1</b><span data-i18n="step1">Fill in your data</span></div>
+<div><b>2</b><span data-i18n="step2">Preview live</span></div>
+<div><b>3</b><span data-i18n="step3">Download PDF</span></div>
+</div>
+</section>
+<div class="support-strip">
+<span class="coffee">☕</span>
+<div>
+<strong data-i18n="supportTitle">Free preview • one-time €5 PDF unlock</strong>
+<p data-i18n="supportText">Build first. Pay only when your PDF is ready. No subscription.</p>
+</div>
+</div>
+<div aria-label="Language options" class="language-row">
 
-      <div class="header-actions">
-        <button class="lang-mini active" data-set-lang="en" type="button">EN</button>
-        <button class="lang-mini" data-set-lang="de" type="button">DE</button>
-        <button class="hamburger" id="menuBtn" type="button" aria-label="Open menu">☰</button>
-      </div>
-    </header>
+<button class="lang-pill active" data-set-lang="en" type="button">EN</button>
+<button class="lang-pill" data-set-lang="de" type="button">DE</button>
+</div>
+<p class="browser-note" data-i18n="browserNote">🔒 Your data stays in your browser</p>
+</section>
+<section class="features" id="features">
+<article>
+<h3 data-i18n="feature1Title">📱 Mobile first</h3>
+<p data-i18n="feature1Text">Works on phone, laptop and desktop. Create your CV immediately.</p>
+</article>
+<article>
+<h3 data-i18n="feature2Title">🧾 Live preview</h3>
+<p data-i18n="feature2Text">Every change appears instantly on your CV. No blind form filling.</p>
+</article>
+<article>
+<h3 data-i18n="feature3Title">🛡️ Privacy first</h3>
+<p data-i18n="feature3Text">No account and no database. Data is stored only in the user’s browser.</p>
+</article>
+</section>
+<section class="builder-section" id="builder">
+<div class="builder-header">
+<div>
+<p class="eyebrow" data-i18n="builderEyebrow">CV BUILDER</p>
+<h2 data-i18n="builderTitle">Create your CV</h2>
+</div>
+<button class="secondary-btn small" data-i18n="fullPreview" id="openFullPreviewBtn" type="button">👁 View full CV</button>
+</div>
+<div class="builder-grid">
+<form class="form-panel" id="cvForm">
+<div class="form-block">
+<div class="block-title">
+<h3 data-i18n="basicTitle">1. Basic information</h3>
+<button class="preview-help" data-help="basic" data-i18n="exampleBtn" type="button">👁 Example</button>
+</div>
+<div class="two-col">
+<label><span data-i18n="cvLanguageLabel">CV language</span>
+<select id="cvLanguage" name="cvLanguage">
 
-    <div class="mobile-menu hidden" id="mobileMenu">
-      <a href="#how" data-i18n="navHow">How it works</a>
-      <a href="#features" data-i18n="navFeatures">Benefits</a>
-      <a href="#builder" data-i18n="navStart">Start CV</a>
-    </div>
-
-    <main id="home">
-      <section class="hero">
-        <div class="privacy-badge" data-i18n="privacyBadge">🛡️ No account • No server upload</div>
-
-        <h1 data-i18n="heroTitle">Build your resume fast</h1>
-        <p class="hero-subtitle" data-i18n="heroSubtitle">
-          Create and preview your resume/CV for free. Unlock PDF download with one-time support — no subscription.
-        </p>
-
-        <div class="hero-actions">
-          <a class="primary-btn" href="#builder" data-i18n="startCv">📄 Start CV</a>
-          <button class="secondary-btn" id="installBtn" type="button" data-i18n="installApp">⬇️ Install app</button>
-          <button class="secondary-btn" id="shareBtn" type="button" data-i18n="shareApp">🔗 Share app</button>
-        </div>
-
-        <div class="mini-cv-card" aria-label="CV example">
-          <div class="mini-cv-header">
-            <div class="avatar-demo" data-i18n="demoInitials">MP</div>
-            <div>
-              <h2 data-i18n="demoName">John Worker</h2>
-              <p data-i18n="demoTitle">Heavy Equipment Operator</p>
-              <div class="mini-line"></div>
-              <ul class="mini-contact">
-                <li data-i18n="demoPhone">📞 +44 7000 000000</li>
-                <li data-i18n="demoEmail">✉️ john.worker@example.com</li>
-                <li data-i18n="demoLocation">📍 City, Country</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="mini-section">
-            <h3 data-i18n="cvProfile">PROFIL</h3>
-            <p data-i18n="demoProfile">Reliable, experienced worker focused on safety, efficiency and quality of work.</p>
-          </div>
-
-          <div class="mini-section">
-            <h3 data-i18n="cvExperience">RADNO ISKUSTVO</h3>
-            <ul>
-              <li data-i18n="demoExperience1">Machine operator — sample company</li>
-              <li data-i18n="demoExperience2">Earthworks and site preparation</li>
-            </ul>
-          </div>
-
-          <div class="mini-section">
-            <h3 data-i18n="cvSkills">VEŠTINE</h3>
-            <div class="skill-tags">
-              <span data-i18n="demoSkill1">Practical work</span>
-              <span data-i18n="demoSkill2">Safety</span>
-              <span data-i18n="demoSkill3">Precision</span>
-            </div>
-          </div>
-        </div>
-
-        <section class="how-strip" id="how">
-          <h2 data-i18n="howTitle">How it works</h2>
-          <div class="steps">
-            <div><b>1</b><span data-i18n="step1">Fill in your data</span></div>
-            <div><b>2</b><span data-i18n="step2">Preview live</span></div>
-            <div><b>3</b><span data-i18n="step3">Download PDF</span></div>
-          </div>
-        </section>
-
-        <div class="support-strip">
-          <span class="coffee">☕</span>
-          <div>
-            <strong data-i18n="supportTitle">Free preview • PDF unlock €5</strong>
-            <p data-i18n="supportText">One-time support keeps cvfast.app online, fast and ad-light.</p>
-          </div>
-        </div>
-
-        <div class="language-row" aria-label="Language options">
-          <button class="lang-pill active" data-set-lang="en" type="button">EN</button>
-          <button class="lang-pill" data-set-lang="de" type="button">DE</button>
-        </div>
-
-        <p class="browser-note" data-i18n="browserNote">🔒 Your data stays in your browser</p>
-      </section>
-
-      <section class="features" id="features">
-        <article>
-          <h3 data-i18n="feature1Title">📱 Mobile first</h3>
-          <p data-i18n="feature1Text">Works on phone, laptop and desktop. Create a CV or resume immediately.</p>
-        </article>
-        <article>
-          <h3 data-i18n="feature2Title">🧾 Live preview</h3>
-          <p data-i18n="feature2Text">Every change appears instantly on your CV. No blind form filling.</p>
-        </article>
-        <article>
-          <h3 data-i18n="feature3Title">🛡️ Privacy first</h3>
-          <p data-i18n="feature3Text">No account and no database. CV data stays in the user’s browser.</p>
-        </article>
-        <article>
-          <h3 data-i18n="feature4Title">✅ ATS-friendly structure</h3>
-          <p data-i18n="feature4Text">Clean sections, readable layout and professional PDF output for job applications.</p>
-        </article>
-      </section>
-
-      <section class="builder-section" id="builder">
-        <div class="builder-header">
-          <div>
-            <p class="eyebrow" data-i18n="builderEyebrow">CV BUILDER</p>
-            <h2 data-i18n="builderTitle">Create your resume/CV</h2>
-          </div>
-          <button class="secondary-btn small" id="openFullPreviewBtn" type="button" data-i18n="fullPreview">👁 Vidi ceo CV</button>
-        </div>
-
-        <div class="builder-grid">
-          <form class="form-panel" id="cvForm">
-            <div class="form-block">
-              <div class="block-title">
-                <h3 data-i18n="basicTitle">1. Basic information</h3>
-                <button type="button" class="preview-help" data-help="basic" data-i18n="exampleBtn">👁 Primer</button>
-              </div>
-
-              <div class="two-col">
-                <label><span data-i18n="cvLanguageLabel">CV language</span>
-                  <select id="cvLanguage" name="cvLanguage">
-                    <option value="en" selected>English</option>
-                    <option value="de">Deutsch</option>
-                  </select>
-                  <button type="button" class="mini-action" id="translateHelperBtn" data-i18n="translateBtn">🌍 Translate with Google Translate</button>
-                </label>
-
-                <label><span data-i18n="templateLabel">Template</span>
-                  <select id="template" name="template">
-                    <option value="classic">Classic Clean</option>
-                    <option value="sidebar">Modern Sidebar</option>
-                  </select>
-                </label>
-
-                <label><span data-i18n="fullNameLabel">Full name</span>
-                  <input id="fullName" name="fullName" type="text" data-placeholder="fullNamePlaceholder" placeholder="John Worker" />
-                </label>
-
-                <label><span data-i18n="jobTitleLabel">Position</span>
-                  <input id="jobTitle" name="jobTitle" type="text" data-placeholder="jobTitlePlaceholder" placeholder="Heavy Equipment Operator" />
-                </label>
-
-                <label><span data-i18n="phoneLabel">Phone</span>
-                  <input id="phone" name="phone" type="tel" placeholder="+44 7000 000000" />
-                </label>
-
-                <label><span data-i18n="emailLabel">Email</span>
-                  <input id="email" name="email" type="email" placeholder="john.worker@example.com" />
-                </label>
-
-                <label><span data-i18n="locationLabel">Location</span>
-                  <input id="location" name="location" type="text" data-placeholder="locationPlaceholder" placeholder="City, Country" />
-                </label>
-
-                <label><span data-i18n="photoLabel">Photo</span>
-                  <input id="photo" name="photo" type="file" accept="image/*" />
-                </label>
-              </div>
-            </div>
-
-            <div class="form-block">
-              <div class="block-title">
-                <h3 data-i18n="profileTitle">2. Profile</h3>
-                <button type="button" class="preview-help" data-help="profile" data-i18n="exampleBtn">👁 Primer</button>
-              </div>
-              <textarea id="profile" name="profile" rows="5" data-placeholder="profilePlaceholder" placeholder="Short professional profile..."></textarea>
-            </div>
-
-            <div class="form-block">
-              <div class="block-title">
-                <h3 data-i18n="experienceTitle">3. Work experience</h3>
-                <button type="button" class="preview-help" data-help="experience" data-i18n="exampleBtn">👁 Primer</button>
-              </div>
-              <textarea id="experience" name="experience" rows="7" data-placeholder="experiencePlaceholder" placeholder="Jedna stavka po redu..."></textarea>
-            </div>
-
-            <div class="form-block">
-              <div class="block-title">
-                <h3 data-i18n="machinesSkillsTitle">4. Machines and skills</h3>
-                <button type="button" class="preview-help" data-help="skills" data-i18n="exampleBtn">👁 Primer</button>
-              </div>
-
-              <div class="two-col">
-                <label><span data-i18n="machinesLabel">Machines / tools</span>
-                  <textarea id="machines" name="machines" rows="5" data-placeholder="machinesPlaceholder" placeholder="CAT 330 excavator&#10;D6R bulldozer"></textarea>
-                </label>
-
-                <label><span data-i18n="skillsLabel">Skills</span>
-                  <textarea id="skills" name="skills" rows="5" data-placeholder="skillsPlaceholder" placeholder="Civil works&#10;Safe work"></textarea>
-                </label>
-              </div>
-            </div>
-
-            <div class="form-block">
-              <div class="block-title">
-                <h3 data-i18n="educationExtraTitle">5. Education and extra</h3>
-                <button type="button" class="preview-help" data-help="education" data-i18n="exampleBtn">👁 Primer</button>
-              </div>
-
-              <div class="two-col">
-                <label><span data-i18n="educationLabel">Education / licences / course</span>
-                  <textarea id="education" name="education" rows="4" data-placeholder="educationPlaceholder" placeholder="Training / course"></textarea>
-                </label>
-
-                <label><span data-i18n="traitsLabel">Personal qualities</span>
-                  <textarea id="traits" name="traits" rows="4" data-placeholder="traitsPlaceholder" placeholder="Responsible, reliable, precise..."></textarea>
-                </label>
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button type="button" class="secondary-btn" id="fillDemoBtn" data-i18n="fillDemo">Fill demo</button>
-              <button type="button" class="primary-btn" id="downloadPdfBtn" data-i18n="downloadPdf">Download PDF</button>
-              <button type="button" class="danger-btn" id="clearDataBtn" data-i18n="clearData">Clear</button>
-            </div>
-          </form>
-
-          <aside class="live-preview">
-            <div class="preview-top">
-              <strong data-i18n="livePreview">Live CV Preview</strong>
-              <span id="saveStatus" data-i18n="autoSave">Auto-save active</span>
-            </div>
-            <div class="paper-scroll">
-              <article id="cvPreview" class="cv-page classic"></article>
-            </div>
-          </aside>
-        </div>
-      </section>
-
-      <footer class="legal-footer">
-        <p>© 2026 cvfast.app</p>
-        <div class="legal-links">
-          <button type="button" data-legal="privacy" data-i18n="privacyLink">Privacy Policy</button>
-          <button type="button" data-legal="terms" data-i18n="termsLink">Terms of Use</button>
-          <button type="button" data-legal="support" data-i18n="supportLink">Support</button>
-        </div>
-        <small data-i18n="footerNote">No account. No CV data upload to our server.</small>
-      </footer>
-
-    </main>
-  </div>
-
-  <div class="modal hidden" id="previewModal" role="dialog" aria-modal="true">
-    <div class="modal-card preview-modal-card">
-      <button class="modal-x" id="closePreviewModal" type="button">×</button>
-      <h2 id="previewModalTitle">This is how your CV will look</h2>
-      <div class="modal-preview-scroll">
-        <article id="modalCvPreview" class="cv-page classic"></article>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal hidden" id="supportModal" role="dialog" aria-modal="true">
-    <div class="modal-card support-modal-card">
-      <button class="modal-x" id="closeSupportModal" type="button">×</button>
-      <h2 data-i18n="supportModalTitle">Your CV is ready ✅</h2>
-      <p data-i18n="supportModalText">
-        Creating and previewing your CV is free. PDF download unlocks with one-time support of €5.
-      </p>
-      <p class="muted" data-i18n="supportModalMuted">
-        Support pomaže da cvfast.app ostane online, brz i dostupan bez registracije.
-      </p>
-
-      <a class="primary-btn full" id="paymentLink" href="#" target="_blank" rel="noopener" data-i18n="supportPayBtn">
-        ☕ Support €5 and unlock PDF
-      </a>
-<small data-i18n="mvpNote">
-        After support, PayPal returns you to the app and PDF download unlocks in this browser/device.
-      </small>
-    </div>
-  </div>
-
-
-  <div class="modal hidden" id="legalModal" role="dialog" aria-modal="true">
-    <div class="modal-card legal-modal-card">
-      <button class="modal-x" id="closeLegalModal" type="button">×</button>
-      <h2 id="legalModalTitle">Privacy Policy</h2>
-      <div id="legalModalBody" class="legal-body"></div>
-    </div>
-  </div>
-
-
-  <div class="modal hidden" id="installModal" role="dialog" aria-modal="true">
-    <div class="modal-card support-modal-card">
-      <button class="modal-x" id="closeInstallModal" type="button">×</button>
-      <h2 id="installModalTitle">Install cvfast.app</h2>
-      <div id="installModalBody" class="legal-body"></div>
-      <button class="primary-btn full" id="installOkBtn" type="button">OK</button>
-    </div>
-  </div>
-
-  <div class="toast hidden" id="toast"></div>
-
-  <script src="script.js"></script>
+<option selected="selected" value="en">English</option>
+<option value="de">Deutsch</option>
+</select>
+<button class="mini-action" data-i18n="translateBtn" id="translateHelperBtn" type="button">🌍 Translate with Google Translate</button>
+</label>
+<label><span data-i18n="templateLabel">Template</span>
+<select id="template" name="template">
+<option value="classic">Classic Clean</option>
+<option value="sidebar">Modern Sidebar</option>
+</select>
+</label>
+<label><span data-i18n="fullNameLabel">Full name</span>
+<input data-placeholder="fullNamePlaceholder" id="fullName" name="fullName" placeholder="John Worker" type="text"/>
+</label>
+<label><span data-i18n="jobTitleLabel">Position</span>
+<input data-placeholder="jobTitlePlaceholder" id="jobTitle" name="jobTitle" placeholder="Heavy Equipment Operator" type="text"/>
+</label>
+<label><span data-i18n="phoneLabel">Phone</span>
+<input id="phone" name="phone" placeholder="+381 64 000 0000" type="tel"/>
+</label>
+<label><span data-i18n="emailLabel">Email</span>
+<input id="email" name="email" placeholder="john.worker@example.com" type="email"/>
+</label>
+<label><span data-i18n="locationLabel">Location</span>
+<input data-placeholder="locationPlaceholder" id="location" name="location" placeholder="City, Country" type="text"/>
+</label>
+<label><span data-i18n="photoLabel">Photo</span>
+<input accept="image/*" id="photo" name="photo" type="file"/>
+</label>
+</div>
+</div>
+<div class="form-block">
+<div class="block-title">
+<h3 data-i18n="profileTitle">2. Profile</h3>
+<button class="preview-help" data-help="profile" data-i18n="exampleBtn" type="button">👁 Example</button>
+</div>
+<textarea data-placeholder="profilePlaceholder" id="profile" name="profile" placeholder="Short professional profile..." rows="5"></textarea>
+</div>
+<div class="form-block">
+<div class="block-title">
+<h3 data-i18n="experienceTitle">3. Work experience</h3>
+<button class="preview-help" data-help="experience" data-i18n="exampleBtn" type="button">👁 Example</button>
+</div>
+<textarea data-placeholder="experiencePlaceholder" id="experience" name="experience" placeholder="One item per line..." rows="7"></textarea>
+</div>
+<div class="form-block">
+<div class="block-title">
+<h3 data-i18n="machinesSkillsTitle">4. Machines and skills</h3>
+<button class="preview-help" data-help="skills" data-i18n="exampleBtn" type="button">👁 Example</button>
+</div>
+<div class="two-col">
+<label><span data-i18n="machinesLabel">Machines / tools</span>
+<textarea data-placeholder="machinesPlaceholder" id="machines" name="machines" placeholder="CAT 330 excavator
+D6R bulldozer" rows="5"></textarea>
+</label>
+<label><span data-i18n="skillsLabel">Skills</span>
+<textarea data-placeholder="skillsPlaceholder" id="skills" name="skills" placeholder="Earthworks
+Safe work" rows="5"></textarea>
+</label>
+</div>
+</div>
+<div class="form-block">
+<div class="block-title">
+<h3 data-i18n="educationExtraTitle">5. Education and extra</h3>
+<button class="preview-help" data-help="education" data-i18n="exampleBtn" type="button">👁 Example</button>
+</div>
+<div class="two-col">
+<label><span data-i18n="educationLabel">Education / licences / course</span>
+<textarea data-placeholder="educationPlaceholder" id="education" name="education" placeholder="Training / course" rows="4"></textarea>
+</label>
+<label><span data-i18n="traitsLabel">Personal qualities</span>
+<textarea data-placeholder="traitsPlaceholder" id="traits" name="traits" placeholder="Responsible, reliable, precise..." rows="4"></textarea>
+</label>
+</div>
+</div>
+<div class="form-actions">
+<button class="secondary-btn" data-i18n="fillDemo" id="fillDemoBtn" type="button">Fill demo</button>
+<button class="primary-btn" data-i18n="downloadPdf" id="downloadPdfBtn" type="button">Download PDF</button>
+<button class="danger-btn" data-i18n="clearData" id="clearDataBtn" type="button">Clear</button>
+</div>
+</form>
+<aside class="live-preview">
+<div class="preview-top">
+<strong data-i18n="livePreview">Live CV Preview</strong>
+<span data-i18n="autoSave" id="saveStatus">Auto-save active</span>
+</div>
+<div class="paper-scroll">
+<article class="cv-page classic" id="cvPreview"></article>
+</div>
+</aside>
+</div>
+</section>
+<footer class="legal-footer">
+<p>© 2026 cvfast.app</p>
+<div class="legal-links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a><a href="how-it-works.html">How it works</a><a href="resume-templates.html">Resume templates</a><a href="no-subscription.html">No subscription</a><a href="ats-friendly-resume.html">ATS-friendly CV</a></div>
+<small data-i18n="footerNote">No account. No CV data upload to our server.</small>
+</footer>
+</main>
+</div>
+<div aria-modal="true" class="modal hidden" id="previewModal" role="dialog">
+<div class="modal-card preview-modal-card">
+<button class="modal-x" id="closePreviewModal" type="button">×</button>
+<h2 id="previewModalTitle">This is how your CV will look</h2>
+<div class="modal-preview-scroll">
+<article class="cv-page classic" id="modalCvPreview"></article>
+</div>
+</div>
+</div>
+<div aria-modal="true" class="modal hidden" id="supportModal" role="dialog">
+<div class="modal-card support-modal-card">
+<button class="modal-x" id="closeSupportModal" type="button">×</button>
+<h2 data-i18n="supportModalTitle">Your CV is ready ✅</h2>
+<p data-i18n="supportModalText">Creating and previewing your CV is free. PDF download unlocks with a one-time €5 support payment.</p>
+<p class="muted" data-i18n="supportModalMuted">Your support helps keep cvfast.app online, fast and available without registration. No subscription.</p>
+<a class="primary-btn full" data-i18n="supportPayBtn" href="#" id="paymentLink" rel="noopener" target="_blank">☕ Support €5 and unlock PDF</a>
+<small data-i18n="mvpNote">After support, PayPal returns you to cvfast.app and PDF download unlocks in this browser/device. No subscription.</small>
+</div>
+</div>
+<div aria-modal="true" class="modal hidden" id="legalModal" role="dialog">
+<div class="modal-card legal-modal-card">
+<button class="modal-x" id="closeLegalModal" type="button">×</button>
+<h2 id="legalModalTitle">Privacy Policy</h2>
+<div class="legal-body" id="legalModalBody"></div>
+</div>
+</div>
+<div aria-modal="true" class="modal hidden" id="installModal" role="dialog">
+<div class="modal-card support-modal-card">
+<button class="modal-x" id="closeInstallModal" type="button">×</button>
+<h2 id="installModalTitle">Install cvfast.app</h2>
+<div class="legal-body" id="installModalBody"></div>
+<button class="primary-btn full" id="installOkBtn" type="button">Got it</button>
+</div>
+</div>
+<div class="toast hidden" id="toast"></div>
+<script src="script.js"></script>
 </body>
 </html>
