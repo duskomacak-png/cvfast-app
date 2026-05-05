@@ -1166,3 +1166,169 @@ textarea:focus {
 .static-links a { color: #0b5cff; text-decoration: none; font-weight: 800; }
 .static-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 18px; }
 .static-box { border: 1px solid rgba(15,23,42,.08); border-radius: 18px; padding: 18px; background: #f8fbff; }
+
+/* FINAL MOBILE LOCK + SUPPORT CLEANUP
+   Prevent accidental left-right page movement on phones without touching PDF/PayPal logic. */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+* ,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+canvas,
+svg,
+video {
+  max-width: 100%;
+}
+
+.app,
+.site-header,
+.mobile-menu,
+main,
+.hero,
+.features,
+.builder-section,
+.builder-grid,
+.form-panel,
+.live-preview,
+.preview-top,
+.paper-scroll,
+.modal,
+.modal-card,
+.modal-preview-scroll,
+.legal-footer,
+.static-wrap,
+.static-card,
+.static-links {
+  max-width: 100%;
+}
+
+.builder-grid,
+.form-panel,
+.live-preview,
+.form-block,
+.two-col,
+.block-title,
+.preview-top,
+.mini-cv-card,
+.support-strip,
+.legal-footer,
+.static-card {
+  min-width: 0;
+}
+
+input,
+select,
+textarea,
+button,
+.primary-btn,
+.secondary-btn,
+.danger-btn,
+.mini-action {
+  max-width: 100%;
+}
+
+.paper-scroll,
+.modal-preview-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.support-contact {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.support-contact a,
+.footer-support a,
+.static-support a {
+  color: #0b4aba;
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-support {
+  display: block;
+  margin-top: 9px;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.static-support {
+  margin: 20px 0 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #f8fbff;
+  color: #334155;
+  line-height: 1.55;
+}
+
+@media (max-width: 520px) {
+  .site-header {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .logo {
+    font-size: 21px;
+  }
+
+  .header-actions {
+    gap: 5px;
+  }
+
+  .hero-actions,
+  .form-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .primary-btn,
+  .secondary-btn,
+  .danger-btn {
+    width: 100%;
+    white-space: normal;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .support-strip {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .coffee {
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
+  }
+
+  .modal {
+    padding: 12px;
+  }
+
+  .modal-card {
+    width: min(100%, calc(100vw - 24px));
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .support-modal-card h2,
+  .preview-modal-card h2 {
+    margin-right: 46px;
+  }
+}

@@ -421,7 +421,7 @@ const legalTexts = {
       title: "Podrška",
       body: `
         <p>Ako imaš problem sa PDF preuzimanjem, prikazom CV-a ili otključavanjem nakon podrške, kontaktiraj podršku.</p>
-        <p><strong>Email:</strong> support@cvfast.app</p>
+        <p><strong>Email:</strong> <a href="mailto:support@cvfast.app">support@cvfast.app</a></p>
         <p>Ako ovaj email još nije aktiviran, privremeno koristi kontakt koji bude naveden na zvaničnoj stranici projekta.</p>
       `
     }
@@ -458,7 +458,7 @@ const legalTexts = {
       title: "Support",
       body: `
         <p>If you have a problem with PDF download, CV display or unlock after support, contact support.</p>
-        <p><strong>Email:</strong> support@cvfast.app</p>
+        <p><strong>Email:</strong> <a href="mailto:support@cvfast.app">support@cvfast.app</a></p>
         <p>If this email is not active yet, use the contact provided on the official project page.</p>
       `
     }
@@ -495,7 +495,7 @@ const legalTexts = {
       title: "Support",
       body: `
         <p>Wenn du ein Problem mit PDF-Download, CV-Anzeige oder Freischaltung nach Unterstützung hast, kontaktiere den Support.</p>
-        <p><strong>Email:</strong> support@cvfast.app</p>
+        <p><strong>Email:</strong> <a href="mailto:support@cvfast.app">support@cvfast.app</a></p>
         <p>Falls diese E-Mail noch nicht aktiv ist, nutze den Kontakt auf der offiziellen Projektseite.</p>
       `
     }
