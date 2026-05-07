@@ -147,8 +147,8 @@ const ui = {
     navFeatures: "Features",
     navStart: "Start CV",
     privacyBadge: "🛡️ No account • No server upload",
-    heroTitle: "Create your CV fast",
-    heroSubtitle: "Build and preview your CV for free. PDF download unlocks after one-time support.",
+    heroTitle: "Create your resume fast",
+    heroSubtitle: "Build and preview your CV for free. PDF download unlocks with a one-time €5 support payment. No subscription.",
     startCv: "📄 Start CV",
     installApp: "⬇️ Install app",
     shareApp: "🔗 Share app",
@@ -171,8 +171,8 @@ const ui = {
     step1: "Fill in your data",
     step2: "Preview live",
     step3: "Download PDF",
-    supportTitle: "Preview is free • PDF unlock €5",
-    supportText: "One-time support helps keep cvfast.app online.",
+    supportTitle: "Free preview • one-time €5 PDF unlock",
+    supportText: "Build first. Pay only when your PDF is ready. No subscription.",
     browserNote: "🔒 Your data stays in your browser",
     feature1Title: "📱 Mobile first",
     feature1Text: "Works on phone, laptop and desktop. You can create your CV immediately.",
@@ -208,11 +208,11 @@ const ui = {
     autoSave: "Auto-save active",
     translateBtn: "🌍 Translate with Google Translate",
     supportModalTitle: "Your CV is ready ✅",
-    supportModalText: "Creating and previewing the CV is free. PDF download unlocks after one-time support of €5.",
-    supportModalMuted: "Your support helps keep cvfast.app online, fast and available without registration.",
+    supportModalText: "Creating and previewing your CV is free. PDF download unlocks with a one-time €5 support payment.",
+    supportModalMuted: "Your support helps keep cvfast.app online, fast and available without registration. No subscription.",
     supportPayBtn: "☕ Support €5 and unlock PDF",
     alreadyPaid: "",
-    mvpNote: "MVP note: without a database there is no automatic payment verification. Unlock is stored in this browser.",
+    mvpNote: "After support, PayPal returns you to cvfast.app and PDF download unlocks in this browser/device. No subscription.",
     privacyLink: "Privacy Policy",
     termsLink: "Terms of Use",
     supportLink: "Support",
@@ -230,7 +230,7 @@ const ui = {
     dataCleared: "Data cleared",
     demoFilled: "Demo data inserted ✅",
     photoAdded: "Photo added ✅",
-    chooseTarget: "Choose EN or DE as CV language",
+    chooseTarget: "Choose English or German as CV language",
     enterTextFirst: "First enter the text you want to translate",
     unlocked: "PDF unlocked ✅",
     pdfUnlockedBrowser: "PDF is unlocked in this browser ✅",
@@ -273,8 +273,8 @@ const ui = {
     step1: "Daten eingeben",
     step2: "Live ansehen",
     step3: "PDF herunterladen",
-    supportTitle: "Vorschau kostenlos • PDF unlock €5",
-    supportText: "Einmalige Unterstützung hilft, cvfast.app online zu halten.",
+    supportTitle: "Kostenlose Vorschau • einmalige PDF-Freischaltung 5€",
+    supportText: "Erst erstellen. Erst zahlen, wenn dein PDF bereit ist. Kein Abo.",
     browserNote: "🔒 Deine Daten bleiben in deinem Browser",
     feature1Title: "📱 Mobile first",
     feature1Text: "Funktioniert auf Handy, Laptop und Desktop. Du kannst deinen Lebenslauf sofort erstellen.",
@@ -310,11 +310,11 @@ const ui = {
     autoSave: "Auto-save aktiv",
     translateBtn: "🌍 Mit Google Translate übersetzen",
     supportModalTitle: "Dein CV ist bereit ✅",
-    supportModalText: "Erstellen und Vorschau sind kostenlos. PDF-Download wird nach einmaliger Unterstützung von 5€ freigeschaltet.",
+    supportModalText: "Erstellen und Vorschau sind kostenlos. PDF-Download wird durch eine einmalige Unterstützung von 5€ freigeschaltet.",
     supportModalMuted: "Deine Unterstützung hilft, cvfast.app online, schnell und ohne Registrierung verfügbar zu halten.",
     supportPayBtn: "☕ 5€ unterstützen und PDF freischalten",
     alreadyPaid: "",
-    mvpNote: "MVP-Hinweis: Ohne Datenbank gibt es keine automatische Zahlungsprüfung. Die Freischaltung wird in diesem Browser gespeichert.",
+    mvpNote: "Nach der Unterstützung bringt PayPal dich zurück zu cvfast.app und der PDF-Download wird in diesem Browser/Gerät freigeschaltet. Kein Abo.",
     privacyLink: "Datenschutz",
     termsLink: "Nutzungsbedingungen",
     supportLink: "Support",
@@ -421,7 +421,7 @@ const legalTexts = {
       title: "Podrška",
       body: `
         <p>Ako imaš problem sa PDF preuzimanjem, prikazom CV-a ili otključavanjem nakon podrške, kontaktiraj podršku.</p>
-        <p><strong>Email:</strong> support@cvfast.app</p>
+        <p><strong>Email:</strong> <a href="mailto:support.cvfast@gmail.com">support.cvfast@gmail.com</a></p>
         <p>Ako ovaj email još nije aktiviran, privremeno koristi kontakt koji bude naveden na zvaničnoj stranici projekta.</p>
       `
     }
@@ -458,7 +458,7 @@ const legalTexts = {
       title: "Support",
       body: `
         <p>If you have a problem with PDF download, CV display or unlock after support, contact support.</p>
-        <p><strong>Email:</strong> support@cvfast.app</p>
+        <p><strong>Email:</strong> <a href="mailto:support.cvfast@gmail.com">support.cvfast@gmail.com</a></p>
         <p>If this email is not active yet, use the contact provided on the official project page.</p>
       `
     }
@@ -495,7 +495,7 @@ const legalTexts = {
       title: "Support",
       body: `
         <p>Wenn du ein Problem mit PDF-Download, CV-Anzeige oder Freischaltung nach Unterstützung hast, kontaktiere den Support.</p>
-        <p><strong>Email:</strong> support@cvfast.app</p>
+        <p><strong>Email:</strong> <a href="mailto:support.cvfast@gmail.com">support.cvfast@gmail.com</a></p>
         <p>Falls diese E-Mail noch nicht aktiv ist, nutze den Kontakt auf der offiziellen Projektseite.</p>
       `
     }
@@ -678,8 +678,8 @@ const demoDataByLang = {
 
 function emptyData() {
   return {
-    appLanguage: "sr",
-    cvLanguage: "sr",
+    appLanguage: "en",
+    cvLanguage: "en",
     template: "classic",
     fullName: "",
     jobTitle: "",
@@ -698,7 +698,10 @@ function emptyData() {
 
 function loadStored() {
   try {
-    return { ...emptyData(), ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}) };
+    const stored = { ...emptyData(), ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}) };
+    if (stored.appLanguage === "sr") stored.appLanguage = "en";
+    if (stored.cvLanguage === "sr") stored.cvLanguage = "en";
+    return stored;
   } catch {
     return emptyData();
   }
@@ -710,7 +713,7 @@ function saveRaw(data) {
 
 function getLang() {
   const stored = loadStored();
-  return stored.appLanguage || stored.cvLanguage || "sr";
+  return stored.appLanguage || stored.cvLanguage || "en";
 }
 
 
@@ -719,9 +722,8 @@ function updateLanguageSelectLabels(lang) {
   if (!cvLanguage) return;
 
   const labels = {
-    sr: { sr: "Srpski", en: "Engleski", de: "Nemački" },
-    en: { sr: "Serbian", en: "English", de: "German" },
-    de: { sr: "Serbisch", en: "Englisch", de: "Deutsch" }
+    en: { en: "English", de: "German" },
+    de: { en: "Englisch", de: "Deutsch" }
   };
 
   [...cvLanguage.options].forEach((option) => {
@@ -733,7 +735,7 @@ function updateLanguageSelectLabels(lang) {
 
 
 function applyLanguage(lang) {
-  if (!ui[lang]) lang = "sr";
+  if (lang === "sr" || !ui[lang]) lang = "en";
 
   const data = loadStored();
   data.appLanguage = lang;
@@ -769,7 +771,9 @@ function getData() {
     const el = $("#" + field);
     if (el) data[field] = el.value || "";
   });
-  data.appLanguage = stored.appLanguage || data.cvLanguage || "sr";
+  data.appLanguage = stored.appLanguage || data.cvLanguage || "en";
+  if (data.appLanguage === "sr") data.appLanguage = "en";
+  if (data.cvLanguage === "sr") data.cvLanguage = "en";
   data.photo = stored.photo || "";
   return data;
 }
@@ -818,7 +822,7 @@ function initials(name) {
 }
 
 function withPlaceholders(data) {
-  const lang = cvLabels[data.cvLanguage] ? data.cvLanguage : "sr";
+  const lang = cvLabels[data.cvLanguage] && data.cvLanguage !== "sr" ? data.cvLanguage : "en";
   const demo = demoDataByLang[lang];
   return {
     ...data,
@@ -839,7 +843,7 @@ function withPlaceholders(data) {
 function renderCv(target, data, options = {}) {
   const usePlaceholders = Boolean(options.placeholders);
   const d = usePlaceholders ? withPlaceholders(data) : data;
-  const lang = cvLabels[d.cvLanguage] ? d.cvLanguage : "sr";
+  const lang = cvLabels[d.cvLanguage] && d.cvLanguage !== "sr" ? d.cvLanguage : "en";
   const L = cvLabels[lang];
 
   const machineItems = splitLines(d.machines);
@@ -930,7 +934,7 @@ function refreshPreview() {
 
 function openPreviewModal(title = "") {
   const data = getData();
-  const lang = cvLabels[data.cvLanguage] ? data.cvLanguage : "sr";
+  const lang = cvLabels[data.cvLanguage] && data.cvLanguage !== "sr" ? data.cvLanguage : "en";
   $("#previewModalTitle").textContent = title || cvLabels[lang].previewTitle;
   renderCv($("#modalCvPreview"), data, { placeholders: true });
   $("#previewModal").classList.remove("hidden");
@@ -1076,7 +1080,7 @@ function closeSupportModal() {
 
 function openTranslateHelper() {
   const data = getData();
-  const target = data.cvLanguage === "de" ? "de" : data.cvLanguage === "en" ? "en" : "sr";
+  const target = data.cvLanguage === "de" ? "de" : "en";
   const lang = getLang();
   const sourceText = [
     data.profile,
@@ -1089,11 +1093,6 @@ function openTranslateHelper() {
 
   if (!sourceText.trim()) {
     showToast(ui[lang].enterTextFirst);
-    return;
-  }
-
-  if (target === "sr") {
-    showToast(ui[lang].chooseTarget);
     return;
   }
 
@@ -1115,7 +1114,7 @@ function isAndroidDevice() {
 
 function showInstallInstructions(mode = "auto") {
   const lang = getLang();
-  const texts = installTexts[lang] || installTexts.sr;
+  const texts = installTexts[lang] || installTexts.en;
   let body = texts.desktop;
 
   if (mode === "ios" || (mode === "auto" && isIosDevice())) {
@@ -1229,7 +1228,7 @@ function setupShare() {
         ? "Lebenslauf schnell erstellen. Kein Konto. Kein Server-Upload."
         : lang === "en"
           ? "Create your CV fast. No account. No server upload."
-          : "Napravi CV brzo. Bez naloga. Bez slanja na server.",
+          : "Create your CV fast. No account. No server upload.",
       url: window.location.origin + window.location.pathname
     };
 
@@ -1249,7 +1248,7 @@ function setupShare() {
 
 function openLegalModal(type) {
   const lang = getLang();
-  const content = (legalTexts[lang] && legalTexts[lang][type]) ? legalTexts[lang][type] : legalTexts.sr.privacy;
+  const content = (legalTexts[lang] && legalTexts[lang][type]) ? legalTexts[lang][type] : legalTexts.en.privacy;
   $("#legalModalTitle").textContent = content.title;
   $("#legalModalBody").innerHTML = content.body;
   $("#legalModal").classList.remove("hidden");
@@ -1265,7 +1264,7 @@ function init() {
 
   const stored = loadStored();
   setFormData(stored);
-  applyLanguage(stored.appLanguage || stored.cvLanguage || "sr");
+  applyLanguage(stored.appLanguage || stored.cvLanguage || "en");
 
   fields.forEach((field) => {
     const el = $("#" + field);
