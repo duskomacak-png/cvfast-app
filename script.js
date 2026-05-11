@@ -2,7 +2,6 @@ const STORAGE_KEY = "cvfast_app_data_v2";
 const UNLOCK_KEY = "cvfast_pdf_unlocked_v1";
 const UNLOCK_CODE = "cvfast_pdf_2026_ok";
 
-// TODO: kad napraviš PayPal link, zameni ovde.
 // PayPal return URL: https://cvfast.app/?unlock=cvfast_pdf_2026_ok
 const PAYMENT_LINK = "https://www.paypal.com/ncp/payment/LU67SFVC967EY";
 
@@ -48,17 +47,17 @@ const ui = {
     heroTitle: "Napravi CV brzo",
     heroSubtitle: "Napravi i pregledaj CV besplatno. PDF preuzimanje se otključava jednokratnom podrškom.",
     startCv: "📄 Start CV",
-    installApp: "⬇️ Preuzmi app",
+    installApp: "⬇️ Install app",
     shareApp: "🔗 Podeli app",
     demoInitials: "MP",
-    demoPhone: "📞 +381 64 000 0000",
-    demoEmail: "✉️ milan.petrovic@example.com",
+    demoPhone: "📞 +1 555 123 4567",
+    demoEmail: "✉️ john.worker@example.com",
     cvProfile: "PROFIL",
     cvExperience: "RADNO ISKUSTVO",
     cvSkills: "VEŠTINE",
-    demoName: "Milan Petrović",
+    demoName: "John Worker",
     demoTitle: "Rukovalac građevinskih mašina",
-    demoLocation: "📍 Beograd, Srbija",
+    demoLocation: "📍 City, Country",
     demoProfile: "Pouzdan i iskusan radnik sa fokusom na bezbednost, efikasnost i kvalitet rada.",
     demoExperience1: "Rukovalac mašina — primer firme",
     demoExperience2: "Zemljani radovi i priprema terena",
@@ -78,6 +77,9 @@ const ui = {
     feature2Text: "Svaka promena se odmah vidi na CV-u. Nema popunjavanja naslepo.",
     feature3Title: "🛡️ Privacy first",
     feature3Text: "Nema naloga i nema baze. Podaci se čuvaju samo u browseru korisnika.",
+    targetEyebrow: "INTERNATIONAL JOB APPLICATIONS",
+    targetTitle: "One CV builder for English and German applications",
+    targetText: "Use cvfast.app to prepare a clean resume or CV for applications in Germany, Austria, Switzerland, the United States, Canada, the United Kingdom and other international markets.",
     builderEyebrow: "CV BUILDER",
     builderTitle: "Napravi svoj CV",
     fullPreview: "👁 Vidi ceo CV",
@@ -115,9 +117,11 @@ const ui = {
     termsLink: "Uslovi korišćenja",
     supportLink: "Podrška",
     footerNote: "Bez naloga. Bez slanja CV podataka na server.",
-    fullNamePlaceholder: "Milan Petrović",
-    jobTitlePlaceholder: "Rukovalac građevinskih mašina",
-    locationPlaceholder: "Beograd, Srbija",
+    fullNamePlaceholder: "John Worker",
+    jobTitlePlaceholder: "Heavy Equipment Operator",
+    phonePlaceholder: "+1 555 123 4567",
+    emailPlaceholder: "john.worker@example.com",
+    locationPlaceholder: "City, Country",
     profilePlaceholder: "Kratak profesionalni opis...",
     experiencePlaceholder: "Jedna stavka po redu. Primer:\nRukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena",
     machinesPlaceholder: "Bager CAT 330\nBuldozer D6R",
@@ -135,8 +139,8 @@ const ui = {
     installIos: "Za iPhone: otvori cvfast.app u Safari browseru → tapni Share → Add to Home Screen.",
     installOther: "Ako se install prozor ne pojavi: u Chrome/Edge meniju izaberi Install app ili Add to Home Screen.",
     alreadyInstalled: "App je već instalirana ✅",
-    installingApp: "Pripremam instalaciju...",
-    installAccepted: "Aplikacija je instalirana na početni ekran ✅",
+    installingApp: "Preparing installation...",
+    installAccepted: "App installed on Home Screen ✅",
     installDismissed: "Instalacija je otkazana",
     linkCopied: "Link je kopiran ✅",
     confirmClear: "Da li sigurno želiš da obrišeš sve podatke iz browsera?",
@@ -147,8 +151,8 @@ const ui = {
     navFeatures: "Features",
     navStart: "Start CV",
     privacyBadge: "🛡️ No account • No server upload",
-    heroTitle: "Create your resume fast",
-    heroSubtitle: "Build and preview your CV for free. PDF download unlocks with a one-time €5 support payment. No subscription.",
+    heroTitle: "Create your resume for international jobs",
+    heroSubtitle: "Build an English or German CV for job applications abroad. Free live preview, no account, no subscription.",
     startCv: "📄 Start CV",
     installApp: "⬇️ Install app",
     shareApp: "🔗 Share app",
@@ -175,11 +179,14 @@ const ui = {
     supportText: "Build first. Pay only when your PDF is ready. No subscription.",
     browserNote: "🔒 Your data stays in your browser",
     feature1Title: "📱 Mobile first",
-    feature1Text: "Works on phone, laptop and desktop. You can create your CV immediately.",
+    feature1Text: "Works on phone, laptop and desktop. Create your CV immediately for applications abroad.",
     feature2Title: "🧾 Live preview",
     feature2Text: "Every change appears instantly on your CV. No blind form filling.",
     feature3Title: "🛡️ Privacy first",
     feature3Text: "No account and no database. Data is stored only in the user’s browser.",
+    targetEyebrow: "INTERNATIONAL JOB APPLICATIONS",
+    targetTitle: "One CV builder for English and German applications",
+    targetText: "Use cvfast.app to prepare a clean resume or CV for applications in Germany, Austria, Switzerland, the United States, Canada, the United Kingdom and other international markets.",
     builderEyebrow: "CV BUILDER",
     builderTitle: "Create your CV",
     fullPreview: "👁 View full CV",
@@ -219,6 +226,8 @@ const ui = {
     footerNote: "No account. No CV data upload to our server.",
     fullNamePlaceholder: "John Worker",
     jobTitlePlaceholder: "Heavy Equipment Operator",
+    phonePlaceholder: "+1 555 123 4567",
+    emailPlaceholder: "john.worker@example.com",
     locationPlaceholder: "City, Country",
     profilePlaceholder: "Short professional profile...",
     experiencePlaceholder: "One item per line. Example:\nMachine operator — 10 years of experience\nEarthworks and site preparation",
@@ -321,6 +330,8 @@ const ui = {
     footerNote: "Kein Konto. Kein Upload von CV-Daten auf unseren Server.",
     fullNamePlaceholder: "Max Mustermann",
     jobTitlePlaceholder: "Baumaschinenführer",
+    phonePlaceholder: "+49 170 1234567",
+    emailPlaceholder: "max.mustermann@example.com",
     locationPlaceholder: "Stadt, Land",
     profilePlaceholder: "Kurzes berufliches Profil...",
     experiencePlaceholder: "Eine Position pro Zeile. Beispiel:\nMaschinenführer — 10 Jahre Erfahrung\nErdarbeiten und Baustellenvorbereitung",
@@ -636,11 +647,11 @@ const installTexts = {
 
 const demoDataByLang = {
   sr: {
-    fullName: "Milan Petrović",
-    jobTitle: "Rukovalac građevinskih mašina",
-    phone: "+381 64 000 0000",
-    email: "milan.petrovic@example.com",
-    location: "Beograd, Srbija",
+    fullName: "John Worker",
+    jobTitle: "Heavy Equipment Operator",
+    phone: "+1 555 123 4567",
+    email: "john.worker@example.com",
+    location: "City, Country",
     profile: "Iskusan i pouzdan radnik sa praktičnim iskustvom, fokusiran na bezbednost, tačnost i kvalitet rada.",
     experience: "Rukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena\nRad u dinamičnim uslovima gradilišta",
     machines: "Bager CAT 330\nBuldozer D6R",
@@ -651,7 +662,7 @@ const demoDataByLang = {
   en: {
     fullName: "John Worker",
     jobTitle: "Heavy Equipment Operator",
-    phone: "+381 64 000 0000",
+    phone: "+1 555 123 4567",
     email: "john.worker@example.com",
     location: "City, Country",
     profile: "Experienced and reliable worker with practical field experience, focused on safety, precision and quality of work.",
@@ -664,7 +675,7 @@ const demoDataByLang = {
   de: {
     fullName: "Max Mustermann",
     jobTitle: "Baumaschinenführer",
-    phone: "+381 64 000 0000",
+    phone: "+49 170 1234567",
     email: "max.mustermann@example.com",
     location: "Stadt, Land",
     profile: "Erfahrener und zuverlässiger Arbeiter mit praktischer Erfahrung, Fokus auf Sicherheit, Genauigkeit und Qualität der Arbeit.",
@@ -1153,7 +1164,7 @@ function setupPwaInstall() {
     const lang = getLang();
     showToast(
       ui[lang]?.installAccepted ||
-        "Aplikacija je dodata na početni ekran ✅"
+        "App installed on Home Screen ✅"
     );
   });
 
@@ -1165,7 +1176,7 @@ function setupPwaInstall() {
     const originalText =
       installBtn?.textContent ||
       ui[lang]?.installApp ||
-      "⬇️ Preuzmi app";
+      "⬇️ Install app";
 
     const isStandalone =
       window.matchMedia("(display-mode: standalone)").matches ||
@@ -1174,7 +1185,7 @@ function setupPwaInstall() {
     if (isStandalone) {
       showToast(
         ui[lang]?.alreadyInstalled ||
-          "Aplikacija je već instalirana ✅"
+          "App is already installed ✅"
       );
       return;
     }
@@ -1190,7 +1201,7 @@ function setupPwaInstall() {
         installBtn.disabled = true;
         installBtn.textContent =
           ui[lang]?.installingApp ||
-          "Pripremam instalaciju...";
+          "Preparing installation...";
       }
 
       await deferredPrompt.prompt();
@@ -1203,7 +1214,7 @@ function setupPwaInstall() {
       if (outcome === "accepted") {
         showToast(
           ui[lang]?.installAccepted ||
-            "Aplikacija je dodata na početni ekran ✅"
+            "App installed on Home Screen ✅"
         );
       }
     } catch (error) {
@@ -1227,8 +1238,8 @@ function setupShare() {
       text: lang === "de"
         ? "Lebenslauf schnell erstellen. Kein Konto. Kein Server-Upload."
         : lang === "en"
-          ? "Create your CV fast. No account. No server upload."
-          : "Create your CV fast. No account. No server upload.",
+          ? "Create your CV for international job applications. No account. No server upload."
+          : "Create your CV for international job applications. No account. No server upload.",
       url: window.location.origin + window.location.pathname
     };
 

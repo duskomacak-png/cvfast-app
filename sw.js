@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v17-google-clean";
+const CACHE_NAME = "cvfast-v18-target-seo-clean";
 
 const APP_SHELL = [
   "/",
@@ -16,6 +16,8 @@ const APP_SHELL = [
   "/resume-templates.html",
   "/no-subscription.html",
   "/ats-friendly-resume.html",
+  "/cv-for-germany.html",
+  "/resume-for-international-jobs.html",
   "/sitemap.xml",
   "/robots.txt"
 ];
