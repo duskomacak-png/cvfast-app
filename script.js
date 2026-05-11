@@ -185,6 +185,9 @@ const ui = {
     feature2Text: "Jede Änderung erscheint sofort im Lebenslauf. Kein blindes Ausfüllen.",
     feature3Title: "🛡️ Datenschutz zuerst",
     feature3Text: "Kein Konto und keine Datenbank. Daten werden nur im Browser gespeichert.",
+    targetEyebrow: "INTERNATIONALE BEWERBUNGEN",
+    targetTitle: "Ein CV-Builder für englische und deutsche Bewerbungen",
+    targetText: "Nutze cvfast.app, um einen sauberen Lebenslauf oder CV für Bewerbungen in Deutschland, Österreich, der Schweiz, den USA, Kanada, Großbritannien und anderen internationalen Märkten vorzubereiten.",
     builderEyebrow: "CV BUILDER",
     builderTitle: "Lebenslauf erstellen",
     fullPreview: "👁 Ganzen CV ansehen",
@@ -987,9 +990,10 @@ function setupPwaInstall() {
       return;
     }
 
-    // Ako browser nije poslao realan install prompt, ne prikazuj ništa.
+    // If the browser does not provide a direct install prompt, show manual install steps.
     if (!deferredPrompt) {
-      console.log("PWA install prompt nije dostupan na ovom browseru/uređaju.");
+      console.log("PWA install prompt is not available on this browser/device.");
+      showInstallInstructions("auto");
       return;
     }
 
@@ -1176,13 +1180,6 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
     btn.addEventListener("click", () => {
       const lang = getLang();
       const titles = {
-        sr: {
-          basic: "Osnovni podaci u gotovom CV-u",
-          profile: "Primer profesionalnog profila",
-          experience: "Primer radnog iskustva",
-          skills: "Primer mašina i veština",
-          education: "Primer obrazovanja i osobina"
-        },
         en: {
           basic: "Basic information in the final CV",
           profile: "Professional profile example",

@@ -1,11 +1,11 @@
-const CACHE_NAME = "cvfast-v19-en-de-terms-clean";
+const CACHE_NAME = "cvfast-v20-en-de-terms-install-clean";
 
 const APP_SHELL = [
   "/",
   "/index.html",
-  "/style.css?v=seo2",
-  "/script.js?v=seo2",
-  "/manifest.webmanifest?v=seo2",
+  "/style.css?v=seo3",
+  "/script.js?v=seo3",
+  "/manifest.webmanifest?v=seo3",
   "/icon-192.png",
   "/icon-512.png",
   "/apple-touch-icon.png",
