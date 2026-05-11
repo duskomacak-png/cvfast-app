@@ -93,7 +93,9 @@ const ui = {
     emailLabel: "Email",
     locationLabel: "Location",
     photoLabel: "Photo",
-    photoBrowserNote: "The file button text may follow your device/browser language.",
+    choosePhotoBtn: "Choose photo",
+    noPhotoSelected: "No photo selected",
+    photoBrowserNote: "Optional. JPG, PNG or WEBP.",
     profileTitle: "2. Profile",
     experienceTitle: "3. Work experience",
     machinesSkillsTitle: "4. Tools and skills",
@@ -201,7 +203,9 @@ const ui = {
     emailLabel: "E-Mail",
     locationLabel: "Ort",
     photoLabel: "Foto",
-    photoBrowserNote: "Der Dateibutton kann die Sprache deines Geräts/Browsers verwenden.",
+    choosePhotoBtn: "Foto auswählen",
+    noPhotoSelected: "Kein Foto ausgewählt",
+    photoBrowserNote: "Optional. JPG, PNG oder WEBP.",
     profileTitle: "2. Profil",
     experienceTitle: "3. Berufserfahrung",
     machinesSkillsTitle: "4. Tools und Fähigkeiten",
@@ -545,6 +549,20 @@ function updateLanguageSelectLabels(lang) {
 }
 
 
+function updatePhotoFileName(fileName = "") {
+  const target = $("#photoFileName");
+  if (!target) return;
+  target.dataset.i18n = fileName ? "" : "noPhotoSelected";
+  target.textContent = fileName || ui[getLang()].noPhotoSelected;
+}
+
+function resetPhotoInput() {
+  const input = $("#photo");
+  if (input) input.value = "";
+  updatePhotoFileName("");
+}
+
+
 function applyLanguage(lang) {
   if (lang === "sr" || !ui[lang]) lang = "en";
 
@@ -567,6 +585,9 @@ function applyLanguage(lang) {
     const key = el.dataset.placeholder;
     if (Object.prototype.hasOwnProperty.call(ui[lang], key)) el.placeholder = ui[lang][key];
   });
+
+  const photoInput = $("#photo");
+  if (!photoInput?.files?.[0]) updatePhotoFileName("");
 
   $$(".lang-pill, .lang-mini").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.setLang === lang);
@@ -1104,7 +1125,12 @@ function init() {
 
   $("#photo")?.addEventListener("change", async (e) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      updatePhotoFileName("");
+      return;
+    }
+
+    updatePhotoFileName(file.name);
 
     try {
       const photo = await resizeImage(file);
@@ -1144,6 +1170,7 @@ function init() {
     data.appLanguage = lang;
     data.cvLanguage = lang;
     setFormData(data);
+    resetPhotoInput();
     saveRaw(data);
     applyLanguage(lang);
     refreshPreview();

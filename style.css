@@ -1423,3 +1423,13 @@ button,
 .legal-note-top a:hover{text-decoration:underline}
 .field-note{display:block;margin-top:6px;color:#64748b;font-size:12px;line-height:1.35}
 .desktop-nav a[href$="terms.html"],.desktop-nav a[href$="privacy.html"]{font-weight:800}
+
+
+.photo-field{display:grid;gap:7px;color:#334155;font-weight:800;font-size:14px}
+.field-label{display:block;color:#334155;font-weight:800;font-size:14px}
+.custom-file-wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%;border:1px solid #cbd5e1;background:#fff;border-radius:14px;padding:10px 12px}
+.native-file-hidden{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+.custom-file-button{display:inline-flex;align-items:center;justify-content:center;width:auto;min-height:40px;padding:10px 14px;border-radius:12px;border:1px solid #bfdbfe;background:#eff6ff;color:#0b4aba;font-weight:900;cursor:pointer;line-height:1}
+.custom-file-button:hover{background:#dbeafe}
+.custom-file-name{color:#475569;font-size:13px;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+@media (max-width:520px){.custom-file-wrap{display:grid}.custom-file-button{width:100%}.custom-file-name{white-space:normal}}

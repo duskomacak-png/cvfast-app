@@ -45,7 +45,7 @@
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
 <link href="icon-512.png" rel="icon" sizes="512x512" type="image/png"/>
-<link href="style.css?v=seo4" rel="stylesheet"/>
+<link href="style.css?v=seo5" rel="stylesheet"/>
 <!-- Google tag (gtag.js) -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QF9CV5P5H5"></script>
 <script>
@@ -220,10 +220,15 @@
 <label><span data-i18n="locationLabel">Location</span>
 <input data-placeholder="locationPlaceholder" id="location" name="location" placeholder="City, Country" type="text"/>
 </label>
-<label><span data-i18n="photoLabel">Photo</span>
-<input accept="image/*" id="photo" name="photo" type="file"/>
-<small class="field-note" data-i18n="photoBrowserNote">The file button text may follow your device/browser language.</small>
-</label>
+<div class="photo-field">
+<label class="field-label" for="photo"><span data-i18n="photoLabel">Photo</span></label>
+<div class="custom-file-wrap">
+<input accept="image/*" class="native-file-hidden" id="photo" name="photo" type="file"/>
+<label class="custom-file-button" for="photo" data-i18n="choosePhotoBtn">Choose photo</label>
+<span class="custom-file-name" id="photoFileName" data-i18n="noPhotoSelected">No photo selected</span>
+</div>
+<small class="field-note" data-i18n="photoBrowserNote">Optional. JPG, PNG or WEBP.</small>
+</div>
 </div>
 </div>
 <div class="form-block">
@@ -331,6 +336,6 @@ Safe work" rows="5"></textarea>
 </div>
 </div>
 <div class="toast hidden" id="toast"></div>
-<script src="script.js?v=seo4"></script>
+<script src="script.js?v=seo5"></script>
 </body>
 </html>

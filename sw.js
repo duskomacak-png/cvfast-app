@@ -1,11 +1,11 @@
-const CACHE_NAME = "cvfast-v21-en-de-student-demo-clean";
+const CACHE_NAME = "cvfast-v22-en-de-student-demo-filebutton-clean";
 
 const APP_SHELL = [
   "/",
   "/index.html",
-  "/style.css?v=seo4",
-  "/script.js?v=seo4",
-  "/manifest.webmanifest?v=seo4",
+  "/style.css?v=seo5",
+  "/script.js?v=seo5",
+  "/manifest.webmanifest?v=seo5",
   "/icon-192.png",
   "/icon-512.png",
   "/apple-touch-icon.png",
