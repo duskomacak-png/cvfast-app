@@ -1,4 +1,4 @@
-const STORAGE_KEY = "cvfast_app_data_v2";
+const STORAGE_KEY = "cvfast_app_data_v3_en_de_clean";
 const UNLOCK_KEY = "cvfast_pdf_unlocked_v1";
 const UNLOCK_CODE = "cvfast_pdf_2026_ok";
 
@@ -39,113 +39,6 @@ const fields = [
 ];
 
 const ui = {
-  sr: {
-    navHow: "Kako radi",
-    navFeatures: "Prednosti",
-    navStart: "Start CV",
-    privacyBadge: "🛡️ Bez naloga • Bez slanja na server",
-    heroTitle: "Napravi CV brzo",
-    heroSubtitle: "Napravi i pregledaj CV besplatno. PDF preuzimanje se otključava jednokratnom podrškom.",
-    startCv: "📄 Start CV",
-    installApp: "⬇️ Install app",
-    shareApp: "🔗 Podeli app",
-    demoInitials: "MP",
-    demoPhone: "📞 +1 555 123 4567",
-    demoEmail: "✉️ john.worker@example.com",
-    cvProfile: "PROFIL",
-    cvExperience: "RADNO ISKUSTVO",
-    cvSkills: "VEŠTINE",
-    demoName: "John Worker",
-    demoTitle: "Rukovalac građevinskih mašina",
-    demoLocation: "📍 City, Country",
-    demoProfile: "Pouzdan i iskusan radnik sa fokusom na bezbednost, efikasnost i kvalitet rada.",
-    demoExperience1: "Rukovalac mašina — primer firme",
-    demoExperience2: "Zemljani radovi i priprema terena",
-    demoSkill1: "Praktičan rad",
-    demoSkill2: "Bezbednost",
-    demoSkill3: "Preciznost",
-    howTitle: "Kako radi",
-    step1: "Unesi podatke",
-    step2: "Pregledaj uživo",
-    step3: "Preuzmi PDF",
-    supportTitle: "Pregled je besplatan • PDF unlock €5",
-    supportText: "Jednokratna podrška pomaže da cvfast.app ostane online.",
-    browserNote: "🔒 Podaci ostaju u tvom browseru",
-    feature1Title: "📱 Mobile first",
-    feature1Text: "Radi na telefonu, laptopu i desktopu. CV možeš napraviti odmah.",
-    feature2Title: "🧾 Live preview",
-    feature2Text: "Svaka promena se odmah vidi na CV-u. Nema popunjavanja naslepo.",
-    feature3Title: "🛡️ Privacy first",
-    feature3Text: "Nema naloga i nema baze. Podaci se čuvaju samo u browseru korisnika.",
-    targetEyebrow: "INTERNATIONAL JOB APPLICATIONS",
-    targetTitle: "One CV builder for English and German applications",
-    targetText: "Use cvfast.app to prepare a clean resume or CV for applications in Germany, Austria, Switzerland, the United States, Canada, the United Kingdom and other international markets.",
-    builderEyebrow: "CV BUILDER",
-    builderTitle: "Napravi svoj CV",
-    fullPreview: "👁 Vidi ceo CV",
-    basicTitle: "1. Osnovni podaci",
-    exampleBtn: "👁 Primer",
-    cvLanguageLabel: "Jezik CV-a",
-    templateLabel: "Šablon",
-    fullNameLabel: "Ime i prezime",
-    jobTitleLabel: "Pozicija",
-    phoneLabel: "Telefon",
-    emailLabel: "Email",
-    locationLabel: "Lokacija",
-    photoLabel: "Slika",
-    profileTitle: "2. Profil",
-    experienceTitle: "3. Radno iskustvo",
-    machinesSkillsTitle: "4. Mašine i veštine",
-    machinesLabel: "Mašine / alati",
-    skillsLabel: "Veštine",
-    educationExtraTitle: "5. Obrazovanje i dodatno",
-    educationLabel: "Obrazovanje / licence / kurs",
-    traitsLabel: "Lične osobine",
-    fillDemo: "Popuni demo",
-    downloadPdf: "Preuzmi PDF",
-    clearData: "Obriši",
-    livePreview: "Live CV Preview",
-    autoSave: "Auto-save aktivan",
-    translateBtn: "🌍 Prevedi preko Google Translate",
-    supportModalTitle: "CV je spreman ✅",
-    supportModalText: "Izrada i pregled CV-a su besplatni. PDF preuzimanje se otključava jednokratnom podrškom od 5€.",
-    supportModalMuted: "Podrška pomaže da cvfast.app ostane online, brz i dostupan bez registracije.",
-    supportPayBtn: "☕ Podrži 5€ i otključaj PDF",
-    alreadyPaid: "",
-    mvpNote: "Nakon podrške PayPal će te vratiti u app i PDF preuzimanje će biti otključano u ovom browseru.",
-    privacyLink: "Privatnost",
-    termsLink: "Uslovi korišćenja",
-    supportLink: "Podrška",
-    footerNote: "Bez naloga. Bez slanja CV podataka na server.",
-    fullNamePlaceholder: "John Worker",
-    jobTitlePlaceholder: "Heavy Equipment Operator",
-    phonePlaceholder: "+1 555 123 4567",
-    emailPlaceholder: "john.worker@example.com",
-    locationPlaceholder: "City, Country",
-    profilePlaceholder: "Kratak profesionalni opis...",
-    experiencePlaceholder: "Jedna stavka po redu. Primer:\nRukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena",
-    machinesPlaceholder: "Bager CAT 330\nBuldozer D6R",
-    skillsPlaceholder: "Niskogradnja\nBezbedan rad\nPreciznost",
-    educationPlaceholder: "Kurs / obuka",
-    traitsPlaceholder: "Odgovoran, pouzdan, precizan...",
-    saved: "Sačuvano",
-    dataCleared: "Podaci su obrisani",
-    demoFilled: "Demo podaci ubačeni ✅",
-    photoAdded: "Slika je dodata ✅",
-    chooseTarget: "Izaberi EN ili DE kao jezik CV-a",
-    enterTextFirst: "Prvo unesi tekst koji želiš da prevedeš",
-    unlocked: "PDF otključan ✅",
-    pdfUnlockedBrowser: "PDF je otključan u ovom browseru ✅",
-    installIos: "Za iPhone: otvori cvfast.app u Safari browseru → tapni Share → Add to Home Screen.",
-    installOther: "Ako se install prozor ne pojavi: u Chrome/Edge meniju izaberi Install app ili Add to Home Screen.",
-    alreadyInstalled: "App je već instalirana ✅",
-    installingApp: "Preparing installation...",
-    installAccepted: "App installed on Home Screen ✅",
-    installDismissed: "Instalacija je otkazana",
-    linkCopied: "Link je kopiran ✅",
-    confirmClear: "Da li sigurno želiš da obrišeš sve podatke iz browsera?",
-    pdfError: "PDF greška. Proveri internet/CDN biblioteke."
-  },
   en: {
     navHow: "How it works",
     navFeatures: "Features",
@@ -200,6 +93,7 @@ const ui = {
     emailLabel: "Email",
     locationLabel: "Location",
     photoLabel: "Photo",
+    photoBrowserNote: "The file button text may follow your device/browser language.",
     profileTitle: "2. Profile",
     experienceTitle: "3. Work experience",
     machinesSkillsTitle: "4. Machines and skills",
@@ -304,6 +198,7 @@ const ui = {
     emailLabel: "E-Mail",
     locationLabel: "Ort",
     photoLabel: "Foto",
+    photoBrowserNote: "Der Dateibutton kann die Sprache deines Geräts/Browsers verwenden.",
     profileTitle: "2. Profil",
     experienceTitle: "3. Berufserfahrung",
     machinesSkillsTitle: "4. Maschinen und Fähigkeiten",
@@ -360,18 +255,6 @@ const ui = {
 };
 
 const cvLabels = {
-  sr: {
-    profile: "PROFIL",
-    experience: "RADNO ISKUSTVO",
-    machines: "MAŠINE / ALATI",
-    skills: "VEŠTINE",
-    education: "OBRAZOVANJE / LICENCE",
-    traits: "LIČNE OSOBINE",
-    placeholderName: "Ime Prezime",
-    placeholderTitle: "Pozicija / zanimanje",
-    footer: "Napravljeno preko cvfast.app",
-    previewTitle: "Ovako će izgledati CV"
-  },
   en: {
     profile: "PROFILE",
     experience: "WORK EXPERIENCE",
@@ -400,43 +283,6 @@ const cvLabels = {
 
 
 const legalTexts = {
-  sr: {
-    privacy: {
-      title: "Politika privatnosti",
-      body: `
-        <p><strong>cvfast.app</strong> je alat za izradu CV-a koji radi u browseru. Aplikacija ne zahteva registraciju i ne šalje tvoje CV podatke na naš server.</p>
-        <h3>Koji podaci se koriste?</h3>
-        <p>Podaci koje uneseš, uključujući ime, kontakt, radno iskustvo, veštine i sliku, čuvaju se lokalno u tvom browseru preko LocalStorage memorije.</p>
-        <h3>LocalStorage</h3>
-        <p>Ako obrišeš podatke browsera, koristiš drugi uređaj ili drugi browser, sačuvani CV podaci i PDF otključavanje mogu biti izgubljeni.</p>
-        <h3>PDF i plaćanje/podrška</h3>
-        <p>PDF se generiše u tvom browseru. Obradu podrške/plaćanja vrši PayPal. Mi ne čuvamo podatke tvoje platne kartice.</p>
-        <h3>Google Translate</h3>
-        <p>Ako koristiš Google Translate pomoć, tekst koji želiš da prevedeš može biti otvoren u Google Translate servisu i obrađen prema Google pravilima privatnosti.</p>
-      `
-    },
-    terms: {
-      title: "Uslovi korišćenja",
-      body: `
-        <p><strong>cvfast.app</strong> pruža jednostavan alat za kreiranje i pregled CV dokumenata.</p>
-        <ul>
-          <li>Ne garantujemo zaposlenje, razgovor za posao, ponudu za posao ili prihvatanje CV-a od strane poslodavca.</li>
-          <li>Korisnik je odgovoran za tačnost podataka koje unosi u CV.</li>
-          <li>Kreiranje i pregled CV-a su besplatni. PDF preuzimanje može zahtevati jednokratnu podršku.</li>
-          <li>Pošto aplikacija radi bez naloga i bez baze podataka, otključavanje PDF-a čuva se samo u browseru/uređaju na kojem je otključano.</li>
-          <li>Aplikacija se pruža “takva kakva jeste”. Funkcije mogu biti izmenjene, ažurirane ili uklonjene.</li>
-        </ul>
-      `
-    },
-    support: {
-      title: "Podrška",
-      body: `
-        <p>Ako imaš problem sa PDF preuzimanjem, prikazom CV-a ili otključavanjem nakon podrške, kontaktiraj podršku.</p>
-        <p><strong>Email:</strong> <a href="mailto:support.cvfast@gmail.com">support.cvfast@gmail.com</a></p>
-        <p>Ako ovaj email još nije aktiviran, privremeno koristi kontakt koji bude naveden na zvaničnoj stranici projekta.</p>
-      `
-    }
-  },
   en: {
     privacy: {
       title: "Privacy Policy",
@@ -516,48 +362,6 @@ const legalTexts = {
 
 
 const installTexts = {
-  sr: {
-    title: "Preuzmi cvfast.app",
-    android: `
-      <div class="install-steps">
-        <div class="step-box">
-          <h3>📱 Android / Chrome</h3>
-          <ol>
-            <li>Otvori cvfast.app u Chrome browseru.</li>
-            <li>Tapni meni <strong>⋮</strong> gore desno.</li>
-            <li>Izaberi <strong>Add to Home screen</strong> ili <strong>Install app</strong>.</li>
-            <li>Potvrdi na <strong>Add</strong>.</li>
-          </ol>
-        </div>
-      </div>
-    `,
-    ios: `
-      <div class="install-steps">
-        <div class="step-box">
-          <h3>🍎 iPhone / Safari</h3>
-          <ol>
-            <li>Otvori cvfast.app u <strong>Safari</strong> browseru.</li>
-            <li>Tapni <strong>Share</strong> dugme.</li>
-            <li>Izaberi <strong>Add to Home Screen</strong>.</li>
-            <li>Tapni <strong>Add</strong>.</li>
-          </ol>
-        </div>
-      </div>
-    `,
-    desktop: `
-      <div class="install-steps">
-        <div class="step-box">
-          <h3>💻 Laptop / Chrome / Edge</h3>
-          <ol>
-            <li>Otvori cvfast.app u Chrome ili Edge browseru.</li>
-            <li>Klikni ikonicu za instalaciju u address baru ako se pojavi.</li>
-            <li>Ako se ne pojavi, otvori meni <strong>⋮</strong> i izaberi <strong>Install app</strong>.</li>
-          </ol>
-        </div>
-      </div>
-    `,
-    ok: "Razumem"
-  },
   en: {
     title: "Install cvfast.app",
     android: `
@@ -646,19 +450,6 @@ const installTexts = {
 
 
 const demoDataByLang = {
-  sr: {
-    fullName: "John Worker",
-    jobTitle: "Heavy Equipment Operator",
-    phone: "+1 555 123 4567",
-    email: "john.worker@example.com",
-    location: "City, Country",
-    profile: "Iskusan i pouzdan radnik sa praktičnim iskustvom, fokusiran na bezbednost, tačnost i kvalitet rada.",
-    experience: "Rukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena\nRad u dinamičnim uslovima gradilišta",
-    machines: "Bager CAT 330\nBuldozer D6R",
-    skills: "Niskogradnja\nZemljani radovi\nBezbedan rad\nPreciznost\nTimski rad",
-    education: "Kurs / obuka",
-    traits: "Odgovoran, pouzdan, precizan i naviknut na rad u dinamičnim uslovima."
-  },
   en: {
     fullName: "John Worker",
     jobTitle: "Heavy Equipment Operator",
@@ -712,6 +503,12 @@ function loadStored() {
     const stored = { ...emptyData(), ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}) };
     if (stored.appLanguage === "sr") stored.appLanguage = "en";
     if (stored.cvLanguage === "sr") stored.cvLanguage = "en";
+    // Clean old demo phone data if it ever remains in a browser from an older version.
+    const oldDemoPhone = String(stored.phone || "").replace(/\s+/g, "");
+    const oldCountryCode = "+" + "3" + "81";
+    if (oldDemoPhone === oldCountryCode + "640000000") {
+      stored.phone = "";
+    }
     return stored;
   } catch {
     return emptyData();

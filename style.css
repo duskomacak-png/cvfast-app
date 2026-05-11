@@ -1417,3 +1417,9 @@ button,
     margin-right: 46px;
   }
 }
+
+.legal-note-top{margin:10px 0 0;color:#475569;font-size:14px;line-height:1.45}
+.legal-note-top a{color:#0b5cff;font-weight:800;text-decoration:none}
+.legal-note-top a:hover{text-decoration:underline}
+.field-note{display:block;margin-top:6px;color:#64748b;font-size:12px;line-height:1.35}
+.desktop-nav a[href$="terms.html"],.desktop-nav a[href$="privacy.html"]{font-weight:800}

@@ -36,7 +36,7 @@
   }
   </script>
 
-<link href="manifest.webmanifest" rel="manifest"/>
+<link href="manifest.webmanifest?v=seo2" rel="manifest"/>
 <link href="favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
@@ -45,7 +45,7 @@
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
 <link href="icon-512.png" rel="icon" sizes="512x512" type="image/png"/>
-<link href="style.css" rel="stylesheet"/>
+<link href="style.css?v=seo2" rel="stylesheet"/>
 <!-- Google tag (gtag.js) -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QF9CV5P5H5"></script>
 <script>
@@ -65,6 +65,8 @@
 <a data-i18n="navHow" href="#how">How it works</a>
 <a data-i18n="navFeatures" href="#features">Features</a>
 <a data-i18n="navStart" href="#builder">Start CV</a>
+<a data-i18n="privacyLink" href="privacy.html">Privacy Policy</a>
+<a data-i18n="termsLink" href="terms.html">Terms of Use</a>
 </nav>
 <div class="header-actions">
 
@@ -77,6 +79,8 @@
 <a data-i18n="navHow" href="#how">How it works</a>
 <a data-i18n="navFeatures" href="#features">Features</a>
 <a data-i18n="navStart" href="#builder">Start CV</a>
+<a data-i18n="privacyLink" href="privacy.html">Privacy Policy</a>
+<a data-i18n="termsLink" href="terms.html">Terms of Use</a>
 </div>
 <main id="home">
 <section class="hero">
@@ -137,7 +141,8 @@
 <p data-i18n="supportText">Build first. Pay only when your PDF is ready. No subscription.</p>
 </div>
 </div>
-<div aria-label="Language options" class="language-row">
+<p class="legal-note-top"><a href="terms.html">Terms of Use</a> • <a href="privacy.html">Privacy Policy</a> • No subscription • One-time PDF unlock</p>
+	<div aria-label="Language options" class="language-row">
 
 <button class="lang-pill active" data-set-lang="en" type="button">EN</button>
 <button class="lang-pill" data-set-lang="de" type="button">DE</button>
@@ -217,6 +222,7 @@
 </label>
 <label><span data-i18n="photoLabel">Photo</span>
 <input accept="image/*" id="photo" name="photo" type="file"/>
+<small class="field-note" data-i18n="photoBrowserNote">The file button text may follow your device/browser language.</small>
 </label>
 </div>
 </div>
@@ -325,6 +331,6 @@ Safe work" rows="5"></textarea>
 </div>
 </div>
 <div class="toast hidden" id="toast"></div>
-<script src="script.js"></script>
+<script src="script.js?v=seo2"></script>
 </body>
 </html>

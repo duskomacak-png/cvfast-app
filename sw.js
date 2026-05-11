@@ -1,11 +1,11 @@
-const CACHE_NAME = "cvfast-v18-target-seo-clean";
+const CACHE_NAME = "cvfast-v19-en-de-terms-clean";
 
 const APP_SHELL = [
   "/",
   "/index.html",
-  "/style.css",
-  "/script.js",
-  "/manifest.webmanifest",
+  "/style.css?v=seo2",
+  "/script.js?v=seo2",
+  "/manifest.webmanifest?v=seo2",
   "/icon-192.png",
   "/icon-512.png",
   "/apple-touch-icon.png",
@@ -22,51 +22,40 @@ const APP_SHELL = [
   "/robots.txt"
 ];
 
-// Install: cache files one by one so one missing file cannot break the whole PWA install.
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
       for (const file of APP_SHELL) {
-        try {
-          await cache.add(file);
-        } catch (err) {
-          console.warn("Cache failed:", file, err);
-        }
+        try { await cache.add(file); } catch (err) { console.warn("Cache failed:", file, err); }
       }
     })
   );
-
   self.skipWaiting();
 });
 
-// Activate: remove old caches and control pages immediately.
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) =>
-        Promise.all(
-          keys
-            .filter((key) => key !== CACHE_NAME)
-            .map((key) => caches.delete(key))
-        )
-      )
+      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });
 
-// Fetch: cache-first with network fallback. For navigation fallback, return index.html.
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+  const request = event.request;
+
+  // Always try the network first for pages, so GitHub updates appear quickly.
+  if (request.mode === "navigate") {
+    event.respondWith(
+      fetch(request).catch(() => caches.match("/index.html"))
+    );
+    return;
+  }
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).catch(() => {
-        if (event.request.mode === "navigate") {
-          return caches.match("/index.html");
-        }
-
-        return Response.error();
-      });
+    caches.match(request).then((cached) => {
+      return cached || fetch(request).catch(() => Response.error());
     })
   );
 });
