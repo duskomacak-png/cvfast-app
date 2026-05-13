@@ -44,7 +44,7 @@
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
 <link href="icon-512.png" rel="icon" sizes="512x512" type="image/png"/>
-<link href="style.css?v=29" rel="stylesheet"/>
+<link href="style.css?v=30" rel="stylesheet"/>
 <!-- Google tag (gtag.js) -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QF9CV5P5H5"></script>
 <script>
@@ -159,30 +159,38 @@
   </div>
   <p data-i18n="templateShowcaseNote">These are visual examples only. They never enter your CV automatically.</p>
 </div>
-<div class="template-example-grid">
+<div class="template-example-grid template-example-grid-real">
   <button class="template-example-card active" data-template-pick="classic" type="button" aria-label="Choose Classic Clean template">
-    <span class="template-example-title">Classic Clean</span>
-    <div class="sample-cv sample-classic">
-      <div class="sample-name">Alex Miller</div>
-      <div class="sample-line strong"></div>
-      <div class="sample-line medium"></div>
-      <div class="sample-section"></div>
-      <div class="sample-line"></div>
-      <div class="sample-line short"></div>
-      <div class="sample-columns"><span></span><span></span></div>
+    <span class="template-example-title">Classic Clean <small>one-page professional CV</small></span>
+    <div class="sample-cv sample-classic sample-real-cv" aria-hidden="true">
+      <div class="sample-cv-top">
+        <div>
+          <strong>Alex Miller</strong>
+          <span>Operations Specialist</span>
+        </div>
+        <em>Visual sample only</em>
+      </div>
+      <div class="sample-cv-contact">alex@example.com · Berlin, Germany · +49 151 000000</div>
+      <div class="sample-cv-section"><b>Profile</b><p>Reliable professional with practical field experience and strong attention to detail.</p></div>
+      <div class="sample-cv-section"><b>Work experience</b><p>Daily operations · Equipment coordination · Safe work procedures</p></div>
+      <div class="sample-cv-chips"><span>Teamwork</span><span>Safety</span><span>Documentation</span></div>
     </div>
   </button>
   <button class="template-example-card" data-template-pick="sidebar" type="button" aria-label="Choose Modern Sidebar template">
-    <span class="template-example-title">Modern Sidebar</span>
-    <div class="sample-cv sample-sidebar">
-      <div class="sample-side"></div>
+    <span class="template-example-title">Modern Sidebar <small>modern CV with side column</small></span>
+    <div class="sample-cv sample-sidebar sample-real-cv" aria-hidden="true">
+      <div class="sample-side">
+        <div class="sample-avatar">AM</div>
+        <b>Contact</b>
+        <span>Email</span><span>Phone</span><span>Location</span>
+        <b>Skills</b>
+        <span>Planning</span><span>Tools</span>
+      </div>
       <div class="sample-main">
-        <div class="sample-name">Alex Miller</div>
-        <div class="sample-line strong"></div>
-        <div class="sample-line medium"></div>
-        <div class="sample-section"></div>
-        <div class="sample-line"></div>
-        <div class="sample-line short"></div>
+        <div class="sample-cv-top compact"><div><strong>Alex Miller</strong><span>Operations Specialist</span></div><em>Visual sample only</em></div>
+        <div class="sample-cv-section"><b>Profile</b><p>Clean modern layout with contact details and skills in a side column.</p></div>
+        <div class="sample-cv-section"><b>Experience</b><p>Projects · Field coordination · Quality control</p></div>
+        <div class="sample-cv-section"><b>Languages</b><p>English — B2 · German — A2</p></div>
       </div>
     </div>
   </button>
@@ -359,6 +367,6 @@
 </div>
 </div>
 <div class="toast hidden" id="toast"></div>
-<script src="script.js?v=29"></script>
+<script src="script.js?v=30"></script>
 </body>
 </html>

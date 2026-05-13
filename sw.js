@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v29-clean-final";
+const CACHE_NAME = "cvfast-v30-template-showcase";
 
 const APP_SHELL = [
   "/",
