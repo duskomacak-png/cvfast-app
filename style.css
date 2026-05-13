@@ -2160,19 +2160,24 @@ textarea {
 @media (max-width:700px){.cv-sample-ribbon{position:static;margin:0 0 10px auto;width:max-content;max-width:100%;}}
 
 
-/* V33: center the selected A4 CV page inside the Live CV Preview frame.
+/* V34: truly center the selected A4 CV page inside the Live CV Preview frame.
    Keep PayPal/PDF/logic untouched; this only fixes visual alignment. */
 .paper-scroll{
   position:relative !important;
+  display:flex !important;
+  justify-content:center !important;
+  align-items:flex-start !important;
   overflow:auto !important;
-  padding:18px 12px 26px !important;
+  padding:18px 16px 28px !important;
 }
 .paper-scroll .cv-page{
   position:relative !important;
-  left:50% !important;
-  margin-left:-397px !important;
-  margin-right:0 !important;
+  left:auto !important;
+  right:auto !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
   transform-origin:top center !important;
+  flex:0 0 auto !important;
 }
 @media (min-width:1180px){
   .paper-scroll{
