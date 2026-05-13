@@ -67,8 +67,8 @@
 </nav>
 <div class="header-actions">
 
-<button class="lang-mini active" data-set-lang="en" type="button" aria-label="Switch app language to English"><span class="lang-code">EN</span><span class="lang-name">English</span></button>
-<button class="lang-mini" data-set-lang="de" type="button" aria-label="Switch app language to German"><span class="lang-code">DE</span><span class="lang-name">Deutsch</span></button>
+<button class="lang-mini active" data-set-lang="en" type="button">EN</button>
+<button class="lang-mini" data-set-lang="de" type="button">DE</button>
 <button aria-label="Open menu" class="hamburger" id="menuBtn" type="button">☰</button>
 </div>
 </header>
@@ -138,8 +138,8 @@
 </div>
 <div aria-label="Language options" class="language-row">
 
-<button class="lang-pill active" data-set-lang="en" type="button" aria-label="Switch app language to English"><span class="lang-code">EN</span><span class="lang-name">English</span></button>
-<button class="lang-pill" data-set-lang="de" type="button" aria-label="Switch app language to German"><span class="lang-code">DE</span><span class="lang-name">Deutsch</span></button>
+<button class="lang-pill active" data-set-lang="en" type="button">EN</button>
+<button class="lang-pill" data-set-lang="de" type="button">DE</button>
 </div>
 <p class="browser-note" data-i18n="browserNote">🔒 Your data stays in your browser</p>
 </section>
@@ -165,6 +165,41 @@
 </div>
 <button class="secondary-btn small" data-i18n="fullPreview" id="openFullPreviewBtn" type="button">👁 View full CV</button>
 </div>
+
+<div class="template-showcase" aria-label="Choose CV template">
+  <div class="template-showcase-head">
+    <div>
+      <p class="eyebrow" data-i18n="templateShowcaseEyebrow">CV TEMPLATES</p>
+      <h3 data-i18n="templateShowcaseTitle">Choose your CV design</h3>
+    </div>
+    <span data-i18n="templateShowcaseNote">Both designs are visible before download.</span>
+  </div>
+  <div class="template-showcase-grid">
+    <button class="template-preview-card active" data-template-pick="classic" type="button">
+      <span class="template-thumb classic-thumb" aria-hidden="true">
+        <i class="thumb-photo"></i>
+        <i class="thumb-line wide"></i>
+        <i class="thumb-line"></i>
+        <i class="thumb-block"></i>
+        <i class="thumb-block short"></i>
+      </span>
+      <strong>Classic Clean</strong>
+      <small data-i18n="classicTemplateHint">Clean one-page CV</small>
+    </button>
+    <button class="template-preview-card" data-template-pick="sidebar" type="button">
+      <span class="template-thumb sidebar-thumb" aria-hidden="true">
+        <i class="thumb-side"></i>
+        <i class="thumb-photo"></i>
+        <i class="thumb-line wide"></i>
+        <i class="thumb-line"></i>
+        <i class="thumb-block"></i>
+      </span>
+      <strong>Modern Sidebar</strong>
+      <small data-i18n="sidebarTemplateHint">Modern CV with side column</small>
+    </button>
+  </div>
+</div>
+
 <div class="builder-grid">
 <form class="form-panel" id="cvForm">
 <div class="form-block">
