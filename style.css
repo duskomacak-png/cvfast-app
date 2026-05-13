@@ -1429,3 +1429,69 @@ button,
     grid-template-columns: 1fr;
   }
 }
+
+
+/* SAFE FIX: clearer EN/DE language switch buttons.
+   Only visual/HTML clarity change; PayPal, PDF unlock, PWA and CV logic are untouched. */
+.lang-mini,
+.lang-pill {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  line-height: 1;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+}
+
+.lang-mini {
+  min-width: 92px;
+  padding: 0 11px;
+}
+
+.lang-pill {
+  min-width: 126px;
+  padding: 0 14px;
+}
+
+.lang-code {
+  font-weight: 950;
+  letter-spacing: .03em;
+}
+
+.lang-name {
+  font-weight: 850;
+  font-size: 12px;
+  opacity: .88;
+}
+
+.lang-mini.active,
+.lang-pill.active {
+  box-shadow: 0 8px 20px rgba(11, 92, 255, 0.22);
+}
+
+.lang-mini:hover,
+.lang-pill:hover {
+  transform: translateY(-1px);
+  border-color: var(--blue);
+}
+
+@media (max-width: 520px) {
+  .lang-mini {
+    min-width: 40px;
+    width: 40px;
+    padding: 0;
+  }
+
+  .lang-mini .lang-name {
+    display: none;
+  }
+
+  .language-row {
+    flex-wrap: wrap;
+  }
+
+  .lang-pill {
+    min-width: 132px;
+  }
+}
