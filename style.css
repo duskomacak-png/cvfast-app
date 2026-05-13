@@ -1918,7 +1918,7 @@ textarea {
   .template-example-grid{grid-template-columns:1fr;}
 }
 
-/* V31: show both CV template examples as real A4 portrait pages before typing. */
+/* V32: show both CV template examples as real A4 portrait pages before typing. */
 .template-showcase{
   margin: 0 0 28px;
 }
@@ -2151,3 +2151,10 @@ textarea {
   .sample-cv-top em{display:inline-block;margin-top:8px;}
   .sample-cv-section p{font-size:.74rem;}
 }
+
+
+/* V32: when the form is empty, the selected A4 template appears in Live CV Preview as a visual sample. */
+.cv-live-template-sample{position:relative;}
+.cv-sample-ribbon{position:absolute;right:18px;top:14px;z-index:5;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.92);border:1px solid rgba(31,41,55,.12);box-shadow:0 8px 22px rgba(15,23,42,.08);font-size:.68rem;font-weight:900;color:#64748b;letter-spacing:.01em;}
+.cv-live-template-sample .cv-footer{opacity:.35;}
+@media (max-width:700px){.cv-sample-ribbon{position:static;margin:0 0 10px auto;width:max-content;max-width:100%;}}

@@ -962,7 +962,7 @@ function initials(name) {
 }
 
 function withPlaceholders(data) {
-  // V31 safety rule: never inject demo data into the real CV preview or PDF.
+  // V32 safety rule: never inject demo data into the real CV preview or PDF.
   // Demo data may only be inserted by the Fill demo button or by the Example modal.
   return { ...data };
 }
@@ -1100,8 +1100,66 @@ function renderCv(target, data, options = {}) {
   `;
 }
 
+function hasRealCvContent(data) {
+  return Boolean(
+    String(data.fullName || "").trim() ||
+    String(data.jobTitle || "").trim() ||
+    String(data.phone || "").trim() ||
+    String(data.email || "").trim() ||
+    String(data.location || "").trim() ||
+    String(data.profile || "").trim() ||
+    String(data.experience || "").trim() ||
+    String(data.machines || "").trim() ||
+    String(data.skills || "").trim() ||
+    String(data.education || "").trim() ||
+    String(data.traits || "").trim() ||
+    String(data.languages || "").trim() ||
+    String(data.languageNameDraft || "").trim() ||
+    data.photo
+  );
+}
+
+function templateSampleData(template, lang = "en") {
+  return {
+    ...emptyData(),
+    appLanguage: lang === "de" ? "de" : "en",
+    cvLanguage: lang === "de" ? "de" : "en",
+    template: template || "classic",
+    fullName: "Alex Miller",
+    jobTitle: lang === "de" ? "Operations Specialist" : "Operations Specialist",
+    email: "alex@example.com",
+    phone: "+49 151 000000",
+    location: "Berlin, Germany",
+    profile: lang === "de"
+      ? "Clean visual CV sample. Your own text appears here when you start typing."
+      : "Clean visual CV sample. Your own text appears here when you start typing.",
+    experience: lang === "de"
+      ? "Daily operations\nField coordination\nQuality control"
+      : "Daily operations\nField coordination\nQuality control",
+    skills: "Teamwork\nSafety\nDocumentation",
+    machines: "Planning tools\nWork equipment",
+    languages: JSON.stringify([{ name: "English", level: "B2" }, { name: "German", level: "A2" }]),
+    education: "Professional training",
+    traits: "Reliable, precise and organized."
+  };
+}
+
+function renderLiveTemplateSample(target, template, lang) {
+  const sample = templateSampleData(template, lang);
+  renderCv(target, sample, { placeholders: false });
+  target.classList.add("cv-live-template-sample");
+  target.insertAdjacentHTML("afterbegin", `<div class="cv-sample-ribbon">Visual sample only — start typing to replace it with your CV</div>`);
+}
+
 function refreshPreview() {
-  renderCv($("#cvPreview"), getData({ includeLanguageDraft: true }), { placeholders: false });
+  const data = getData({ includeLanguageDraft: true });
+  const preview = $("#cvPreview");
+  if (!preview) return;
+  if (!hasRealCvContent(data)) {
+    renderLiveTemplateSample(preview, data.template || "classic", data.cvLanguage || getLang());
+    return;
+  }
+  renderCv(preview, data, { placeholders: false });
 }
 
 function openPreviewModal(title = "") {
@@ -1651,7 +1709,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=31").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=32").catch(() => {});
     });
   }
 
