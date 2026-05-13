@@ -2158,3 +2158,45 @@ textarea {
 .cv-sample-ribbon{position:absolute;right:18px;top:14px;z-index:5;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.92);border:1px solid rgba(31,41,55,.12);box-shadow:0 8px 22px rgba(15,23,42,.08);font-size:.68rem;font-weight:900;color:#64748b;letter-spacing:.01em;}
 .cv-live-template-sample .cv-footer{opacity:.35;}
 @media (max-width:700px){.cv-sample-ribbon{position:static;margin:0 0 10px auto;width:max-content;max-width:100%;}}
+
+
+/* V33: center the selected A4 CV page inside the Live CV Preview frame.
+   Keep PayPal/PDF/logic untouched; this only fixes visual alignment. */
+.paper-scroll{
+  position:relative !important;
+  overflow:auto !important;
+  padding:18px 12px 26px !important;
+}
+.paper-scroll .cv-page{
+  position:relative !important;
+  left:50% !important;
+  margin-left:-397px !important;
+  margin-right:0 !important;
+  transform-origin:top center !important;
+}
+@media (min-width:1180px){
+  .paper-scroll{
+    min-height:845px !important;
+  }
+  .paper-scroll .cv-page{
+    transform:scale(.74) !important;
+    margin-bottom:-292px !important;
+  }
+}
+@media (max-width:1179px){
+  .paper-scroll .cv-page{
+    transform:scale(.68) !important;
+    margin-bottom:-360px !important;
+  }
+}
+@media (max-width:680px){
+  .paper-scroll .cv-page{
+    transform:scale(.44) !important;
+    margin-bottom:-629px !important;
+  }
+}
+.modal-preview-scroll .cv-page{
+  left:auto !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
