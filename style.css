@@ -1721,3 +1721,16 @@ textarea {
 .cv-page.sidebar .cv-main:empty {
   display: none;
 }
+
+
+/* v23 final CVFast stability/readability fixes */
+.template-sample-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.sample-cv-card{position:relative;min-height:150px;border:1px solid rgba(15,35,70,.14);border-radius:18px;background:#fff;padding:16px;box-shadow:0 12px 30px rgba(15,35,70,.08);overflow:hidden}
+.sample-cv-card .sample-cv-title{font-weight:900;color:#19324d;margin-bottom:12px}
+.sample-cv-line{height:9px;background:#d9e5f2;border-radius:99px;margin:8px 0;width:68%}.sample-cv-line.big{width:88%;height:12px}.sample-cv-line.short{width:45%}
+.sample-cv-section{height:42px;border-radius:12px;background:linear-gradient(180deg,#eef5fb,#ffffff);border:1px solid #e2ebf5;margin:12px 0}
+.sample-cv-card small{color:#607086;font-weight:700}.sidebar-sample{padding-left:76px}.sidebar-sample .sample-side{position:absolute;left:0;top:0;bottom:0;width:58px;background:#25435f}
+.example-box{margin-top:12px;border:1px solid #d7e3f0;background:#f8fbff;border-radius:14px;padding:10px 12px;color:#34495e;font-size:.92rem;line-height:1.45}
+.example-box summary{cursor:pointer;font-weight:900;color:#0b5cff}.example-box p{margin:9px 0 0}.language-list{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}.empty-language-note{font-size:.9rem;color:#64748b;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:12px;padding:10px}.language-chip{display:inline-flex;align-items:center;gap:10px;border:1px solid #bfd1e6;border-radius:999px;background:#fff;padding:8px 10px;font-weight:800}.language-chip button{border:0;background:#fee2e2;color:#991b1b;border-radius:999px;padding:5px 8px;font-weight:800;cursor:pointer}
+.form-panel input,.form-panel textarea,.form-panel select{font-weight:600;color:#1f2937}.form-panel textarea{line-height:1.45}.cv-empty-note{padding:22px;border:1px dashed #cbd5e1;border-radius:16px;color:#64748b;background:#f8fafc;font-weight:800;text-align:center}
+@media (max-width:900px){.template-sample-strip{grid-template-columns:1fr}.builder-grid,.two-col{grid-template-columns:1fr!important}.form-panel{max-width:100%}.cv-page{transform:none!important}}

@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v22-final-user-fields";
+const CACHE_NAME = "cvfast-v23-final-user-fields";
 
 const APP_SHELL = [
   "/",

@@ -910,7 +910,7 @@ function renderLanguageEditor(value) {
   const rows = parseLanguages(value || hidden.value);
   hidden.value = JSON.stringify(rows);
   if (!rows.length) {
-    list.innerHTML = `<div class="empty-language-note">${esc(ui[lang]?.languageLevelNote || "Use CEFR levels: A1, A2, B1, B2, C1, C2.")}</div>`;
+    list.innerHTML = `<div class="empty-language-note">No language added yet. Type a language, choose A1-C2, then click Add language.</div>`;
     return;
   }
   list.innerHTML = rows.map((item, index) => `
@@ -933,7 +933,8 @@ function addLanguageFromInputs() {
     return;
   }
   const rows = parseLanguages(hidden.value);
-  rows.push({ name, level });
+  const exists = rows.some((item) => item.name.toLowerCase() === name.toLowerCase() && item.level === level);
+  if (!exists) rows.push({ name, level });
   hidden.value = JSON.stringify(rows);
   nameEl.value = "";
   renderLanguageEditor(hidden.value);
@@ -1029,13 +1030,13 @@ function renderCv(target, data, options = {}) {
 
   const filledSections = [
     hasIdentity,
-    Boolean(d.profile),
+    Boolean(String(d.profile || "").trim()),
     expItems.length,
     machineItems.length,
     skillItems.length,
     languageItems.length,
-    Boolean(d.education),
-    Boolean(d.traits)
+    Boolean(String(d.education || "").trim()),
+    Boolean(String(d.traits || "").trim())
   ].some(Boolean);
 
   target.className = `cv-page ${d.template || "classic"}`;
