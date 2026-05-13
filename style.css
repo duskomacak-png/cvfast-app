@@ -1803,129 +1803,117 @@ textarea {
 }
 
 
-/* V26: keep examples visible and remove confusing duplicate/oversized blocks */
-.language-row { display: none !important; }
-.template-choices { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; margin-top: 10px !important; }
-.template-choice { min-height: 118px !important; align-items: stretch !important; justify-content: flex-start !important; text-align: left !important; padding: 12px !important; }
-.template-choice .template-mini { margin-top: 10px; border: 1px solid rgba(15, 23, 42, .14); border-radius: 10px; background: #fff; height: 48px; padding: 7px; display: grid; gap: 5px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.6); }
-.classic-mini div { height: 5px; border-radius: 999px; background: #cbd5e1; }
-.classic-mini div:first-child { width: 58%; background: #64748b; }
-.classic-mini div:nth-child(2) { width: 82%; }
-.classic-mini div:nth-child(3) { width: 74%; }
-.classic-mini div:nth-child(4) { width: 64%; }
-.sidebar-mini { grid-template-columns: 18px 1fr; align-items: stretch; }
-.sidebar-mini i { display:block; border-radius: 8px; background: #1e3a8a; }
-.sidebar-mini div { display:grid; gap:5px; align-content:center; }
-.sidebar-mini span { display:block; height:5px; border-radius:999px; background:#cbd5e1; }
-.sidebar-mini span:first-child { width:72%; background:#64748b; }
-.sidebar-mini span:nth-child(2) { width:88%; }
-.sidebar-mini span:nth-child(3) { width:62%; }
-.example-box[open] { display:block; margin-top: 12px; border: 1px solid #bfd7ff; background: #f8fbff; border-radius: 14px; padding: 10px 12px; color: #334155; font-size: .92rem; line-height: 1.45; }
-.example-box summary { cursor: pointer; font-weight: 900; color: #0b5cff; }
-.example-box p { margin: 9px 0 0; }
-@media (max-width: 680px) { .template-choices { grid-template-columns: 1fr !important; } }
-
-
-/* V27: keep one template control visible. The select stays in DOM for JS/localStorage, cards are the user-facing selector. */
-.template-hidden-select {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
+/* V29: clear visible template examples; the real select stays in DOM for stable JS logic. */
+.template-showcase{
+  display:block !important;
+  margin:28px 0 24px;
+  padding:22px;
+  border:1px solid var(--border);
+  border-radius:28px;
+  background:rgba(255,255,255,.88);
+  box-shadow:var(--shadow-soft);
 }
-.template-choices {
-  margin-top: 0;
-}
-input::placeholder, textarea::placeholder {
-  color: #8a96a8;
-  opacity: 1;
-}
-.example-box {
-  margin-top: 10px;
-}
-
-
-/* V28 hard cleanup: the real form must never display demo text as visible field content. */
-.template-showcase-v28 {
-  margin: 14px 0 18px;
-  border: 1px solid rgba(37, 99, 235, .18);
-  border-radius: 22px;
-  background: linear-gradient(135deg, #f8fbff, #ffffff);
-  padding: 14px;
-}
-.template-showcase-title {
+.template-showcase-head{
   display:flex;
-  align-items:flex-end;
   justify-content:space-between;
-  gap:12px;
-  margin-bottom:12px;
+  gap:18px;
+  align-items:flex-end;
+  margin-bottom:18px;
 }
-.template-showcase-title strong { color:#0f172a; font-size:16px; }
-.template-showcase-title span { color:#64748b; font-size:13px; font-weight:700; }
-.template-sample-strip-v28 {
+.template-showcase-head h2{
+  margin:4px 0 0;
+  font-size:clamp(1.25rem,2.4vw,2rem);
+}
+.template-showcase-head p{
+  max-width:420px;
+  color:var(--muted);
+  font-weight:700;
+}
+.template-example-grid{
   display:grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap:12px;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
 }
-.sample-cv-card-v28 {
-  position:relative;
-  min-height:130px;
-  border:1px solid #dbe8ff;
-  border-radius:18px;
+.template-example-card{
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:22px;
   background:#fff;
   padding:14px;
   text-align:left;
   cursor:pointer;
-  box-shadow:0 10px 25px rgba(15,35,70,.06);
+  transition:.2s ease;
 }
-.sample-cv-card-v28 b { display:block; margin-bottom:10px; color:#17315f; font-size:14px; }
-.sample-cv-card-v28 .line { display:block; height:8px; width:72%; background:#d9e5f2; border-radius:999px; margin:7px 0; }
-.sample-cv-card-v28 .line.big { width:88%; height:11px; background:#9fb2c8; }
-.sample-cv-card-v28 .line.short { width:45%; }
-.sample-cv-card-v28 em { display:block; height:28px; border:1px solid #e4edf8; background:#f8fbff; border-radius:10px; margin:11px 0; }
-.sample-cv-card-v28.sidebar { padding-left:78px; }
-.sample-cv-card-v28.sidebar i { position:absolute; left:0; top:0; bottom:0; width:58px; border-radius:18px 0 0 18px; background:#213b5a; }
-.sample-cv-card-v28.active, .sample-cv-card-v28:hover { border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.13), 0 10px 25px rgba(15,35,70,.08); }
-
-/* Remove inline demo boxes from production UI if old cached HTML still contains them. Example buttons can still open examples on demand. */
-.example-box { display:none !important; }
-
-/* Hide the real template select completely; cards are the only visible selector. */
-.template-hidden-select { display:none !important; }
-
-.form-panel input::placeholder,
-.form-panel textarea::placeholder { color:#9aa6b2 !important; opacity:1 !important; font-weight:500 !important; }
-
-@media (max-width: 760px) {
-  .template-showcase-title { align-items:flex-start; flex-direction:column; }
-  .template-sample-strip-v28 { grid-template-columns: 1fr; }
+.template-example-card.active,
+.template-example-card:hover{
+  border-color:rgba(37,99,235,.7);
+  box-shadow:0 14px 30px rgba(37,99,235,.16);
+  transform:translateY(-1px);
 }
-
-
-/* V28 hero skeleton: no fake person/demo CV text visible on the landing card. */
-.hero-skeleton-card .skeleton-line {
+.template-example-title{
   display:block;
+  margin-bottom:10px;
+  font-weight:900;
+  color:var(--ink);
+}
+.sample-cv{
+  min-height:180px;
+  border:1px solid #dbe4ee;
+  border-radius:16px;
+  padding:18px;
+  background:linear-gradient(180deg,#ffffff,#f8fbff);
+  overflow:hidden;
+}
+.sample-name{
+  font-weight:900;
+  font-size:1.05rem;
+  margin-bottom:12px;
+  color:#0f172a;
+}
+.sample-line{
   height:9px;
-  border-radius:999px;
-  background:#dbe7f4;
-  width:70%;
-  margin:8px 0;
+  border-radius:99px;
+  background:#d9e3ee;
+  margin:10px 0;
 }
-.hero-skeleton-card .skeleton-line.strong { height:15px; width:58%; background:#aebfd1; }
-.hero-skeleton-card .skeleton-line.medium { width:42%; }
-.hero-skeleton-card .skeleton-line.short { width:36%; }
-.hero-skeleton-card .skeleton-line.wide { width:88%; }
-.hero-skeleton-card .skill-tags span {
-  width:72px;
-  height:24px;
-  display:inline-block;
-  border-radius:999px;
-  background:#dbe7f4;
+.sample-line.strong{width:82%;background:#8da2b6;}
+.sample-line.medium{width:66%;}
+.sample-line.short{width:44%;}
+.sample-section{
+  width:32%;
+  height:11px;
+  border-radius:99px;
+  margin-top:20px;
+  background:#b9c8d6;
 }
-.hero-skeleton-card .skill-tags span:nth-child(2) { width:54px; }
-.hero-skeleton-card .skill-tags span:nth-child(3) { width:66px; }
+.sample-columns{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:18px;
+}
+.sample-columns span{
+  height:34px;
+  border-radius:12px;
+  background:#edf3f8;
+}
+.sample-sidebar{
+  display:grid;
+  grid-template-columns:96px 1fr;
+  gap:18px;
+  padding:0;
+}
+.sample-side{
+  min-height:180px;
+  background:#17324d;
+}
+.sample-main{
+  padding:18px 18px 18px 0;
+}
+.template-select-hidden{
+  display:none !important;
+}
+@media (max-width: 820px){
+  .template-showcase-head{display:block;}
+  .template-example-grid{grid-template-columns:1fr;}
+}

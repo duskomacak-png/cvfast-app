@@ -1,11 +1,13 @@
-const STORAGE_KEY = "cvfast_app_data_v28_clean_blank";
+const STORAGE_KEY = "cvfast_app_data_v29_stable_clean";
 const UNLOCK_KEY = "cvfast_pdf_unlocked_v1";
 const UNLOCK_CODE = "cvfast_pdf_2026_ok";
 
+// TODO: kad napraviš PayPal link, zameni ovde.
 // PayPal return URL: https://cvfast.app/?unlock=cvfast_pdf_2026_ok
 const PAYMENT_LINK = "https://www.paypal.com/ncp/payment/LU67SFVC967EY";
 
 const SHOW_CVFAST_FOOTER_IN_PDF = false;
+const LEGACY_CV_DATA_KEYS = ["cvfast_app_data_v24_clean", "cvfast_app_data_v25_clean", "cvfast_app_data_v28_clean_blank"];
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -48,7 +50,7 @@ const ui = {
     heroTitle: "Napravi CV brzo",
     heroSubtitle: "Napravi i pregledaj CV besplatno. PDF preuzimanje se otključava jednokratnom podrškom.",
     startCv: "📄 Start CV",
-    installApp: "⬇️ Install app",
+    installApp: "⬇️ Preuzmi app",
     shareApp: "🔗 Podeli app",
     demoInitials: "MP",
     demoPhone: "📞 +381 64 000 0000",
@@ -105,11 +107,10 @@ const ui = {
     languagesTitle: "5. Jezici",
     languageNameLabel: "Jezik",
     languageLevelLabel: "Nivo",
-    languageNamePlaceholder: "Language name",
+    languageNamePlaceholder: "e.g. English",
     addLanguage: "Dodaj jezik",
     removeLanguage: "Ukloni",
     languageLevelNote: "Koristi CEFR nivoe: A1, A2, B1, B2, C1, C2.",
-    emptyLanguageNote: "Još nije dodat nijedan jezik. Upiši jezik, izaberi A1-C2 i klikni Dodaj jezik.",
     classicTemplateHint: "Čist CV na jednoj strani",
     sidebarTemplateHint: "Moderan CV sa bočnom kolonom",
     fillDemo: "Popuni demo",
@@ -130,13 +131,13 @@ const ui = {
     footerNote: "Bez naloga. Bez slanja CV podataka na server.",
     fullNamePlaceholder: "Enter your full name",
     jobTitlePlaceholder: "Enter your position",
-    locationPlaceholder: "City, country",
+    locationPlaceholder: "Beograd, Srbija",
     profilePlaceholder: "Kratak profesionalni opis...",
-    experiencePlaceholder: "One item per line",
+    experiencePlaceholder: "Jedna stavka po redu. Primer:\nRukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena",
     machinesPlaceholder: "Add machines/tools, one per line",
     skillsPlaceholder: "Add skills, one per line",
-    educationPlaceholder: "Education, licence or course",
-    traitsPlaceholder: "Personal qualities",
+    educationPlaceholder: "Kurs / obuka",
+    traitsPlaceholder: "Odgovoran, pouzdan, precizan...",
     saved: "Sačuvano",
     dataCleared: "Podaci su obrisani",
     demoFilled: "Demo podaci ubačeni ✅",
@@ -148,7 +149,7 @@ const ui = {
     installIos: "Za iPhone: otvori cvfast.app u Safari browseru → tapni Share → Add to Home Screen.",
     installOther: "Ako se install prozor ne pojavi: u Chrome/Edge meniju izaberi Install app ili Add to Home Screen.",
     alreadyInstalled: "App je već instalirana ✅",
-    installingApp: "Preparing installation...",
+    installingApp: "Pripremam instalaciju...",
     installAccepted: "Aplikacija je instalirana na početni ekran ✅",
     installDismissed: "Instalacija je otkazana",
     linkCopied: "Link je kopiran ✅",
@@ -220,11 +221,10 @@ const ui = {
     languagesTitle: "5. Languages",
     languageNameLabel: "Language",
     languageLevelLabel: "Level",
-    languageNamePlaceholder: "Language name",
+    languageNamePlaceholder: "e.g. English",
     addLanguage: "Add language",
     removeLanguage: "Remove",
     languageLevelNote: "Use CEFR levels: A1, A2, B1, B2, C1, C2.",
-    emptyLanguageNote: "No language added yet. Type a language, choose A1-C2, then click Add language.",
     classicTemplateHint: "Clean one-page CV",
     sidebarTemplateHint: "Modern CV with side column",
     fillDemo: "Fill demo",
@@ -245,13 +245,13 @@ const ui = {
     footerNote: "No account. No CV data upload to our server.",
     fullNamePlaceholder: "Enter your full name",
     jobTitlePlaceholder: "Enter your position",
-    locationPlaceholder: "City, country",
+    locationPlaceholder: "City, Country",
     profilePlaceholder: "Short professional profile...",
     experiencePlaceholder: "One item per line",
     machinesPlaceholder: "Add machines/tools, one per line",
     skillsPlaceholder: "Add skills, one per line",
-    educationPlaceholder: "Education, licence or course",
-    traitsPlaceholder: "Personal qualities",
+    educationPlaceholder: "Training / course",
+    traitsPlaceholder: "Responsible, reliable, precise...",
     saved: "Saved",
     dataCleared: "Data cleared",
     demoFilled: "Demo data inserted ✅",
@@ -335,11 +335,10 @@ const ui = {
     languagesTitle: "5. Sprachen",
     languageNameLabel: "Sprache",
     languageLevelLabel: "Niveau",
-    languageNamePlaceholder: "Sprache",
+    languageNamePlaceholder: "z. B. Deutsch",
     addLanguage: "Sprache hinzufügen",
     removeLanguage: "Entfernen",
     languageLevelNote: "Nutze CEFR-Niveaus: A1, A2, B1, B2, C1, C2.",
-    emptyLanguageNote: "Noch keine Sprache hinzugefügt. Sprache eingeben, A1-C2 wählen und auf Sprache hinzufügen klicken.",
     classicTemplateHint: "Klarer einseitiger CV",
     sidebarTemplateHint: "Moderner CV mit Seitenleiste",
     fillDemo: "Demo ausfüllen",
@@ -358,15 +357,15 @@ const ui = {
     termsLink: "Nutzungsbedingungen",
     supportLink: "Support",
     footerNote: "Kein Konto. Kein Upload von CV-Daten auf unseren Server.",
-    fullNamePlaceholder: "Vorname und Nachname eingeben",
+    fullNamePlaceholder: "Vollständigen Namen eingeben",
     jobTitlePlaceholder: "Position eingeben",
     locationPlaceholder: "Stadt, Land",
     profilePlaceholder: "Kurzes berufliches Profil...",
-    experiencePlaceholder: "Eine Position pro Zeile",
-    machinesPlaceholder: "Maschinen/Werkzeuge eintragen, eine Zeile pro Eintrag",
-    skillsPlaceholder: "Fähigkeiten eintragen, eine Zeile pro Eintrag",
-    educationPlaceholder: "Ausbildung, Lizenz oder Kurs",
-    traitsPlaceholder: "Persönliche Eigenschaften",
+    experiencePlaceholder: "Eine Position pro Zeile. Beispiel:\nMaschinenführer — 10 Jahre Erfahrung\nErdarbeiten und Baustellenvorbereitung",
+    machinesPlaceholder: "Maschinen/Werkzeuge eingeben, eine Zeile pro Eintrag",
+    skillsPlaceholder: "Fähigkeiten eingeben, eine Zeile pro Eintrag",
+    educationPlaceholder: "Ausbildung / Kurs",
+    traitsPlaceholder: "Verantwortungsbewusst, zuverlässig, präzise...",
     saved: "Gespeichert",
     dataCleared: "Daten gelöscht",
     demoFilled: "Demo-Daten eingefügt ✅",
@@ -742,31 +741,6 @@ function emptyData() {
   };
 }
 
-function cleanupOldCvFastData() {
-  const oldKeys = [
-    "cvfast_app_data",
-    "cvfast_app_data_v1",
-    "cvfast_app_data_v19",
-    "cvfast_app_data_v23",
-    "cvfast_app_data_v24_clean",
-    "cvfast_app_data_v25_clean",
-    "cvfast_app_data_v26_clean",
-    "cvfast_app_data_v27_clean"
-  ];
-  oldKeys.forEach((key) => {
-    try { localStorage.removeItem(key); } catch {}
-  });
-
-  // Manual emergency reset: open cvfast.app/?resetcv=1
-  try {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("resetcv") === "1" || params.get("fresh") === "1") {
-      localStorage.removeItem(STORAGE_KEY);
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  } catch {}
-}
-
 function loadStored() {
   try {
     const stored = { ...emptyData(), ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}) };
@@ -845,7 +819,7 @@ function getLanguageRows(includeDraft = false) {
     const level = ($("#languageLevel")?.value || "").trim().toUpperCase();
     const allowed = ["A1", "A2", "B1", "B2", "C1", "C2"];
     const alreadyExists = rows.some((item) =>
-      item.name.toLowerCase() === name.toLowerCase()
+      item.name.toLowerCase() === name.toLowerCase() && item.level === level
     );
 
     if (name && allowed.includes(level) && !alreadyExists) {
@@ -937,8 +911,7 @@ function renderLanguageEditor(value) {
   const rows = parseLanguages(value || hidden.value);
   hidden.value = JSON.stringify(rows);
   if (!rows.length) {
-    const emptyNote = ui[lang]?.emptyLanguageNote || "No language added yet. Type a language, choose A1-C2, then click Add language.";
-    list.innerHTML = `<div class="empty-language-note">${esc(emptyNote)}</div>`;
+    list.innerHTML = `<div class="empty-language-note">No language added yet. Type a language, choose A1-C2, then click Add language.</div>`;
     return;
   }
   list.innerHTML = rows.map((item, index) => `
@@ -961,9 +934,9 @@ function addLanguageFromInputs() {
     return;
   }
   const rows = parseLanguages(hidden.value);
-  const existingIndex = rows.findIndex((item) => item.name.toLowerCase() === name.toLowerCase());
-  if (existingIndex >= 0) {
-    rows[existingIndex] = { name, level };
+  const existing = rows.find((item) => item.name.toLowerCase() === name.toLowerCase());
+  if (existing) {
+    existing.level = level;
   } else {
     rows.push({ name, level });
   }
@@ -989,24 +962,11 @@ function initials(name) {
 }
 
 function withPlaceholders(data) {
-  const lang = cvLabels[data.cvLanguage] && data.cvLanguage !== "sr" ? data.cvLanguage : "en";
-  const demo = demoDataByLang[lang];
-  return {
-    ...data,
-    fullName: data.fullName || demo.fullName,
-    jobTitle: data.jobTitle || demo.jobTitle,
-    phone: data.phone || demo.phone,
-    email: data.email || demo.email,
-    location: data.location || demo.location,
-    profile: data.profile || demo.profile,
-    experience: data.experience || demo.experience,
-    machines: data.machines || demo.machines,
-    skills: data.skills || demo.skills,
-    education: data.education || demo.education,
-    traits: data.traits || demo.traits,
-    languages: data.languages && parseLanguages(data.languages).length ? data.languages : demo.languages
-  };
+  // V29 safety rule: never inject demo data into the real CV preview or PDF.
+  // Demo data may only be inserted by the Fill demo button or by the Example modal.
+  return { ...data };
 }
+
 
 function updateTemplateChoice(template) {
   $$("[data-template-pick]").forEach((btn) => {
@@ -1350,7 +1310,7 @@ let deferredPrompt = null;
 
 function setupPwaInstall() {
   window.addEventListener("beforeinstallprompt", (e) => {
-    console.log("✅ beforeinstallprompt event captured");
+    console.log("✅ beforeinstallprompt event uhvaćen");
     e.preventDefault();
     deferredPrompt = e;
 
@@ -1365,7 +1325,7 @@ function setupPwaInstall() {
     const lang = getLang();
     showToast(
       ui[lang]?.installAccepted ||
-        "App added to home screen ✅"
+        "Aplikacija je dodata na početni ekran ✅"
     );
   });
 
@@ -1377,7 +1337,7 @@ function setupPwaInstall() {
     const originalText =
       installBtn?.textContent ||
       ui[lang]?.installApp ||
-      "⬇️ Install app";
+      "⬇️ Preuzmi app";
 
     const isStandalone =
       window.matchMedia("(display-mode: standalone)").matches ||
@@ -1386,15 +1346,14 @@ function setupPwaInstall() {
     if (isStandalone) {
       showToast(
         ui[lang]?.alreadyInstalled ||
-          "App is already installed ✅"
+          "Aplikacija je već instalirana ✅"
       );
       return;
     }
 
     // Ako browser nije poslao realan install prompt, ne prikazuj ništa.
     if (!deferredPrompt) {
-      console.log("PWA install prompt is not available on this browser/device. Showing manual install instructions.");
-      showInstallInstructions("auto");
+      console.log("PWA install prompt nije dostupan na ovom browseru/uređaju.");
       return;
     }
 
@@ -1403,7 +1362,7 @@ function setupPwaInstall() {
         installBtn.disabled = true;
         installBtn.textContent =
           ui[lang]?.installingApp ||
-          "Preparing installation...";
+          "Pripremam instalaciju...";
       }
 
       await deferredPrompt.prompt();
@@ -1416,7 +1375,7 @@ function setupPwaInstall() {
       if (outcome === "accepted") {
         showToast(
           ui[lang]?.installAccepted ||
-            "App added to home screen ✅"
+            "Aplikacija je dodata na početni ekran ✅"
         );
       }
     } catch (error) {
@@ -1473,8 +1432,8 @@ function closeLegalModal() {
 
 
 function init() {
-  cleanupOldCvFastData();
   handleUnlockFromUrl();
+  LEGACY_CV_DATA_KEYS.forEach((key) => { if (key !== STORAGE_KEY) localStorage.removeItem(key); });
 
   const stored = loadStored();
   setFormData(stored);
@@ -1505,8 +1464,8 @@ function init() {
   });
 
   $("#addLanguageBtn")?.addEventListener("click", addLanguageFromInputs);
-  $("#languageName")?.addEventListener("input", refreshPreview);
-  $("#languageLevel")?.addEventListener("change", refreshPreview);
+  $("#languageName")?.addEventListener("input", () => { saveData(); refreshPreview(); });
+  $("#languageLevel")?.addEventListener("change", () => { saveData(); refreshPreview(); });
   $("#languageName")?.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -1692,7 +1651,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=28").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=29").catch(() => {});
     });
   }
 

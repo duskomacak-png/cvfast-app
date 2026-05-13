@@ -44,7 +44,7 @@
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
 <link href="icon-512.png" rel="icon" sizes="512x512" type="image/png"/>
-<link href="style.css?v=28" rel="stylesheet"/>
+<link href="style.css?v=29" rel="stylesheet"/>
 <!-- Google tag (gtag.js) -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QF9CV5P5H5"></script>
 <script>
@@ -87,41 +87,43 @@
 <button class="secondary-btn" data-i18n="installApp" id="installBtn" type="button">⬇️ Install app</button>
 <button class="secondary-btn" data-i18n="shareApp" id="shareBtn" type="button">🔗 Share app</button>
 </div>
-<div aria-label="CV visual preview" class="mini-cv-card hero-skeleton-card">
-  <div class="mini-cv-header">
-    <div class="avatar-demo">CV</div>
-    <div class="hero-skeleton-lines">
-      <div class="skeleton-line strong"></div>
-      <div class="skeleton-line medium"></div>
-      <div class="mini-line"></div>
-      <div class="skeleton-line"></div>
-      <div class="skeleton-line short"></div>
-    </div>
-  </div>
-  <div class="mini-section">
-    <h3>PROFILE</h3>
-    <div class="skeleton-line wide"></div>
-    <div class="skeleton-line"></div>
-  </div>
-  <div class="mini-section">
-    <h3>SKILLS</h3>
-    <div class="skill-tags"><span></span><span></span><span></span></div>
-  </div>
+<div aria-label="CV visual preview" class="mini-cv-card mini-cv-neutral">
+<div class="mini-cv-header">
+<div class="avatar-demo">CV</div>
+<div>
+<h2>YOUR NAME</h2>
+<p>Your position</p>
+<div class="mini-line"></div>
+<ul class="mini-contact">
+<li>📞 phone</li>
+<li>✉️ email</li>
+<li>📍 location</li>
+</ul>
 </div>
-<section class="how-strip" id="how">
-<h2 data-i18n="howTitle">How it works</h2>
-<div class="steps">
-<div><b>1</b><span data-i18n="step1">Fill in your data</span></div>
-<div><b>2</b><span data-i18n="step2">Preview live</span></div>
-<div><b>3</b><span data-i18n="step3">Download PDF</span></div>
 </div>
-</section>
+<div class="mini-section">
+<h3>PROFILE</h3>
+<p>Live preview uses only the data you type.</p>
+</div>
+<div class="mini-section">
+<h3>SECTIONS</h3>
+<ul>
+<li>Only filled sections appear.</li>
+<li>Empty sections stay hidden.</li>
+</ul>
+</div>
+</div>
 <div class="support-strip">
 <span class="coffee">☕</span>
 <div>
 <strong data-i18n="supportTitle">Free preview • one-time €5 PDF unlock</strong>
 <p data-i18n="supportText">Build first. Pay only when your PDF is ready. No subscription.</p>
 </div>
+</div>
+<div aria-label="Language options" class="language-row">
+
+<button class="lang-pill active" data-set-lang="en" type="button">EN</button>
+<button class="lang-pill" data-set-lang="de" type="button">DE</button>
 </div>
 <p class="browser-note" data-i18n="browserNote">🔒 Your data stays in your browser</p>
 </section>
@@ -147,23 +149,45 @@
 </div>
 <button class="secondary-btn small" data-i18n="fullPreview" id="openFullPreviewBtn" type="button">👁 View full CV</button>
 </div>
-<div class="template-showcase-v28" aria-label="CV template examples">
-  <div class="template-showcase-title"><strong>CV template examples</strong><span>Visual examples only — they never enter your CV automatically.</span></div>
-  <div class="template-sample-strip-v28">
-    <button class="sample-cv-card-v28 classic" data-template-pick="classic" type="button" aria-label="Choose Classic Clean template">
-      <b>Classic Clean</b>
-      <span class="line big"></span><span class="line"></span><span class="line short"></span>
-      <em></em><span class="line"></span><span class="line"></span>
-    </button>
-    <button class="sample-cv-card-v28 sidebar" data-template-pick="sidebar" type="button" aria-label="Choose Modern Sidebar template">
-      <i></i><b>Modern Sidebar</b>
-      <span class="line big"></span><span class="line"></span><span class="line short"></span>
-      <em></em><span class="line"></span>
-    </button>
+
+
+<section class="template-showcase" aria-label="CV template examples">
+<div class="template-showcase-head">
+  <div>
+    <span class="section-kicker" data-i18n="templateShowcaseEyebrow">CV TEMPLATE EXAMPLES</span>
+    <h2 data-i18n="templateShowcaseTitle">See both CV layouts before you start</h2>
   </div>
+  <p data-i18n="templateShowcaseNote">These are visual examples only. They never enter your CV automatically.</p>
 </div>
-
-
+<div class="template-example-grid">
+  <button class="template-example-card active" data-template-pick="classic" type="button" aria-label="Choose Classic Clean template">
+    <span class="template-example-title">Classic Clean</span>
+    <div class="sample-cv sample-classic">
+      <div class="sample-name">Alex Miller</div>
+      <div class="sample-line strong"></div>
+      <div class="sample-line medium"></div>
+      <div class="sample-section"></div>
+      <div class="sample-line"></div>
+      <div class="sample-line short"></div>
+      <div class="sample-columns"><span></span><span></span></div>
+    </div>
+  </button>
+  <button class="template-example-card" data-template-pick="sidebar" type="button" aria-label="Choose Modern Sidebar template">
+    <span class="template-example-title">Modern Sidebar</span>
+    <div class="sample-cv sample-sidebar">
+      <div class="sample-side"></div>
+      <div class="sample-main">
+        <div class="sample-name">Alex Miller</div>
+        <div class="sample-line strong"></div>
+        <div class="sample-line medium"></div>
+        <div class="sample-section"></div>
+        <div class="sample-line"></div>
+        <div class="sample-line short"></div>
+      </div>
+    </div>
+  </button>
+</div>
+</section>
 <div class="builder-grid">
 <form class="form-panel" id="cvForm">
 <div class="form-block">
@@ -180,27 +204,12 @@
 </select>
 <button class="mini-action" data-i18n="translateBtn" id="translateHelperBtn" type="button">🌍 Translate with Google Translate</button>
 </label>
-<label><span data-i18n="templateLabel">Template</span>
-<select class="template-hidden-select" id="template" name="template" aria-hidden="true" tabindex="-1">
+<label class="template-select-hidden"><span data-i18n="templateLabel">Template</span>
+<select id="template" name="template">
 <option value="classic">Classic Clean</option>
 <option value="sidebar">Modern Sidebar</option>
 </select>
-<div class="template-choices" aria-label="Template previews">
-<button class="template-choice active" data-template-pick="classic" type="button">
-<strong>Classic Clean</strong>
-<span data-i18n="classicTemplateHint">Clean one-page CV</span>
-<div class="template-mini classic-mini" aria-hidden="true">
-<div></div><div></div><div></div><div></div>
-</div>
-</button>
-<button class="template-choice" data-template-pick="sidebar" type="button">
-<strong>Modern Sidebar</strong>
-<span data-i18n="sidebarTemplateHint">Modern CV with side column</span>
-<div class="template-mini sidebar-mini" aria-hidden="true">
-<i></i><div><span></span><span></span><span></span></div>
-</div>
-</button>
-</div>
+
 </label>
 <label><span data-i18n="fullNameLabel">Full name</span>
 <input data-placeholder="fullNamePlaceholder" id="fullName" name="fullName" placeholder="Enter your full name" type="text"/>
@@ -215,7 +224,7 @@
 <input id="email" name="email" placeholder="you@example.com" type="email"/>
 </label>
 <label><span data-i18n="locationLabel">Location</span>
-<input data-placeholder="locationPlaceholder" id="location" name="location" placeholder="City, country" type="text"/>
+<input data-placeholder="locationPlaceholder" id="location" name="location" placeholder="City, Country" type="text"/>
 </label>
 <label><span data-i18n="photoLabel">Photo</span>
 <input accept="image/*" id="photo" name="photo" type="file"/>
@@ -258,14 +267,14 @@
 <input id="languages" name="languages" type="hidden"/>
 <div class="language-builder">
 <label><span data-i18n="languageNameLabel">Language</span>
-<input data-placeholder="languageNamePlaceholder" id="languageName" placeholder="Language name" type="text"/>
+<input data-placeholder="languageNamePlaceholder" id="languageName" placeholder="e.g. English" type="text"/>
 </label>
 <label><span data-i18n="languageLevelLabel">Level</span>
 <select id="languageLevel">
-<option selected="selected" value="A1">A1</option>
+<option value="A1">A1</option>
 <option value="A2">A2</option>
 <option value="B1">B1</option>
-<option value="B2">B2</option>
+<option selected="selected" value="B2">B2</option>
 <option value="C1">C1</option>
 <option value="C2">C2</option>
 </select>
@@ -282,10 +291,10 @@
 </div>
 <div class="two-col">
 <label><span data-i18n="educationLabel">Education / licences / course</span>
-<textarea data-placeholder="educationPlaceholder" id="education" name="education" placeholder="Education, licence or course" rows="4"></textarea>
+<textarea data-placeholder="educationPlaceholder" id="education" name="education" placeholder="Training / course" rows="4"></textarea>
 </label>
 <label><span data-i18n="traitsLabel">Personal qualities</span>
-<textarea data-placeholder="traitsPlaceholder" id="traits" name="traits" placeholder="Personal qualities" rows="4"></textarea>
+<textarea data-placeholder="traitsPlaceholder" id="traits" name="traits" placeholder="Responsible, reliable, precise..." rows="4"></textarea>
 </label>
 </div>
 </div>
@@ -350,6 +359,6 @@
 </div>
 </div>
 <div class="toast hidden" id="toast"></div>
-<script src="script.js?v=28"></script>
+<script src="script.js?v=29"></script>
 </body>
 </html>
