@@ -1,7 +1,8 @@
-const STORAGE_KEY = "cvfast_app_data_v3_en_de_clean";
+const STORAGE_KEY = "cvfast_app_data_v2";
 const UNLOCK_KEY = "cvfast_pdf_unlocked_v1";
 const UNLOCK_CODE = "cvfast_pdf_2026_ok";
 
+// TODO: kad napraviš PayPal link, zameni ovde.
 // PayPal return URL: https://cvfast.app/?unlock=cvfast_pdf_2026_ok
 const PAYMENT_LINK = "https://www.paypal.com/ncp/payment/LU67SFVC967EY";
 
@@ -35,35 +36,147 @@ const fields = [
   "machines",
   "skills",
   "education",
-  "traits"
+  "traits",
+  "languages"
 ];
 
 const ui = {
+  sr: {
+    navHow: "Kako radi",
+    navFeatures: "Prednosti",
+    navStart: "Start CV",
+    privacyBadge: "🛡️ Bez naloga • Bez slanja na server",
+    heroTitle: "Napravi CV brzo",
+    heroSubtitle: "Napravi i pregledaj CV besplatno. PDF preuzimanje se otključava jednokratnom podrškom.",
+    startCv: "📄 Start CV",
+    installApp: "⬇️ Preuzmi app",
+    shareApp: "🔗 Podeli app",
+    demoInitials: "MP",
+    demoPhone: "📞 +381 64 000 0000",
+    demoEmail: "✉️ milan.petrovic@example.com",
+    cvProfile: "PROFIL",
+    cvExperience: "RADNO ISKUSTVO",
+    cvSkills: "VEŠTINE",
+    demoName: "Milan Petrović",
+    demoTitle: "Rukovalac građevinskih mašina",
+    demoLocation: "📍 Beograd, Srbija",
+    demoProfile: "Pouzdan i iskusan radnik sa fokusom na bezbednost, efikasnost i kvalitet rada.",
+    demoExperience1: "Rukovalac mašina — primer firme",
+    demoExperience2: "Zemljani radovi i priprema terena",
+    demoSkill1: "Praktičan rad",
+    demoSkill2: "Bezbednost",
+    demoSkill3: "Preciznost",
+    howTitle: "Kako radi",
+    step1: "Unesi podatke",
+    step2: "Pregledaj uživo",
+    step3: "Preuzmi PDF",
+    supportTitle: "Pregled je besplatan • PDF unlock €5",
+    supportText: "Jednokratna podrška pomaže da cvfast.app ostane online.",
+    browserNote: "🔒 Podaci ostaju u tvom browseru",
+    feature1Title: "📱 Mobile first",
+    feature1Text: "Radi na telefonu, laptopu i desktopu. CV možeš napraviti odmah.",
+    feature2Title: "🧾 Live preview",
+    feature2Text: "Svaka promena se odmah vidi na CV-u. Nema popunjavanja naslepo.",
+    feature3Title: "🛡️ Privacy first",
+    feature3Text: "Nema naloga i nema baze. Podaci se čuvaju samo u browseru korisnika.",
+    builderEyebrow: "CV BUILDER",
+    builderTitle: "Napravi svoj CV",
+    fullPreview: "👁 Vidi ceo CV",
+    basicTitle: "1. Osnovni podaci",
+    exampleBtn: "👁 Primer",
+    cvLanguageLabel: "Jezik CV-a",
+    templateLabel: "Šablon",
+    fullNameLabel: "Ime i prezime",
+    jobTitleLabel: "Pozicija",
+    phoneLabel: "Telefon",
+    emailLabel: "Email",
+    locationLabel: "Lokacija",
+    photoLabel: "Slika",
+    profileTitle: "2. Profil",
+    experienceTitle: "3. Radno iskustvo",
+    machinesSkillsTitle: "4. Mašine i veštine",
+    machinesLabel: "Mašine / alati",
+    skillsLabel: "Veštine",
+    educationExtraTitle: "6. Obrazovanje i dodatno",
+    educationLabel: "Obrazovanje / licence / kurs",
+    traitsLabel: "Lične osobine",
+    languagesTitle: "5. Jezici",
+    languageNameLabel: "Jezik",
+    languageLevelLabel: "Nivo",
+    languageNamePlaceholder: "Engleski",
+    addLanguage: "Dodaj jezik",
+    removeLanguage: "Ukloni",
+    languageLevelNote: "Koristi CEFR nivoe: A1, A2, B1, B2, C1, C2.",
+    classicTemplateHint: "Čist CV na jednoj strani",
+    sidebarTemplateHint: "Moderan CV sa bočnom kolonom",
+    fillDemo: "Popuni demo",
+    downloadPdf: "Preuzmi PDF",
+    clearData: "Obriši",
+    livePreview: "Live CV Preview",
+    autoSave: "Auto-save aktivan",
+    translateBtn: "🌍 Prevedi preko Google Translate",
+    supportModalTitle: "CV je spreman ✅",
+    supportModalText: "Izrada i pregled CV-a su besplatni. PDF preuzimanje se otključava jednokratnom podrškom od 5€.",
+    supportModalMuted: "Podrška pomaže da cvfast.app ostane online, brz i dostupan bez registracije.",
+    supportPayBtn: "☕ Podrži 5€ i otključaj PDF",
+    alreadyPaid: "",
+    mvpNote: "Nakon podrške PayPal će te vratiti u app i PDF preuzimanje će biti otključano u ovom browseru.",
+    privacyLink: "Privatnost",
+    termsLink: "Uslovi korišćenja",
+    supportLink: "Podrška",
+    footerNote: "Bez naloga. Bez slanja CV podataka na server.",
+    fullNamePlaceholder: "Milan Petrović",
+    jobTitlePlaceholder: "Rukovalac građevinskih mašina",
+    locationPlaceholder: "Beograd, Srbija",
+    profilePlaceholder: "Kratak profesionalni opis...",
+    experiencePlaceholder: "Jedna stavka po redu. Primer:\nRukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena",
+    machinesPlaceholder: "Bager CAT 330\nBuldozer D6R",
+    skillsPlaceholder: "Niskogradnja\nBezbedan rad\nPreciznost",
+    educationPlaceholder: "Kurs / obuka",
+    traitsPlaceholder: "Odgovoran, pouzdan, precizan...",
+    saved: "Sačuvano",
+    dataCleared: "Podaci su obrisani",
+    demoFilled: "Demo podaci ubačeni ✅",
+    photoAdded: "Slika je dodata ✅",
+    chooseTarget: "Izaberi EN ili DE kao jezik CV-a",
+    enterTextFirst: "Prvo unesi tekst koji želiš da prevedeš",
+    unlocked: "PDF otključan ✅",
+    pdfUnlockedBrowser: "PDF je otključan u ovom browseru ✅",
+    installIos: "Za iPhone: otvori cvfast.app u Safari browseru → tapni Share → Add to Home Screen.",
+    installOther: "Ako se install prozor ne pojavi: u Chrome/Edge meniju izaberi Install app ili Add to Home Screen.",
+    alreadyInstalled: "App je već instalirana ✅",
+    installingApp: "Pripremam instalaciju...",
+    installAccepted: "Aplikacija je instalirana na početni ekran ✅",
+    installDismissed: "Instalacija je otkazana",
+    linkCopied: "Link je kopiran ✅",
+    confirmClear: "Da li sigurno želiš da obrišeš sve podatke iz browsera?",
+    pdfError: "PDF greška. Proveri internet/CDN biblioteke."
+  },
   en: {
     navHow: "How it works",
     navFeatures: "Features",
     navStart: "Start CV",
     privacyBadge: "🛡️ No account • No server upload",
-    heroTitle: "Create your resume for international jobs",
-    heroSubtitle: "Build an English or German CV for job applications abroad. Free live preview, no account, no subscription.",
+    heroTitle: "Create your resume fast",
+    heroSubtitle: "Build and preview your CV for free. PDF download unlocks with a one-time €5 support payment. No subscription.",
     startCv: "📄 Start CV",
     installApp: "⬇️ Install app",
     shareApp: "🔗 Share app",
-    demoInitials: "AS",
+    demoInitials: "JW",
     demoPhone: "📞 +44 7000 000000",
-    demoEmail: "✉️ alex.student@example.com",
+    demoEmail: "✉️ john.worker@example.com",
     cvProfile: "PROFILE",
     cvExperience: "WORK EXPERIENCE",
     cvSkills: "SKILLS",
-    demoName: "Alex Student",
-    demoTitle: "Junior Marketing Assistant",
+    demoName: "John Worker",
+    demoTitle: "Heavy Equipment Operator",
     demoLocation: "📍 City, Country",
-    demoProfile: "Motivated student with communication skills, attention to detail and willingness to learn quickly.",
-    demoExperience1: "Student assistant — sample company",
-    demoExperience2: "Customer support and basic office tasks",
-    demoSkill1: "Communication",
-    demoSkill2: "Organization",
-    demoSkill3: "Microsoft Office",
+    demoProfile: "Reliable and experienced worker focused on safety, efficiency and quality of work.",
+    demoExperience1: "Machine operator — sample company",
+    demoExperience2: "Earthworks and site preparation",
+    demoSkill1: "Practical work",
+    demoSkill2: "Safety",
+    demoSkill3: "Precision",
     howTitle: "How it works",
     step1: "Fill in your data",
     step2: "Preview live",
@@ -72,14 +185,11 @@ const ui = {
     supportText: "Build first. Pay only when your PDF is ready. No subscription.",
     browserNote: "🔒 Your data stays in your browser",
     feature1Title: "📱 Mobile first",
-    feature1Text: "Works on phone, laptop and desktop. Create your CV immediately for applications abroad.",
+    feature1Text: "Works on phone, laptop and desktop. You can create your CV immediately.",
     feature2Title: "🧾 Live preview",
     feature2Text: "Every change appears instantly on your CV. No blind form filling.",
     feature3Title: "🛡️ Privacy first",
     feature3Text: "No account and no database. Data is stored only in the user’s browser.",
-    targetEyebrow: "INTERNATIONAL JOB APPLICATIONS",
-    targetTitle: "One CV builder for English and German applications",
-    targetText: "Use cvfast.app to prepare a clean resume or CV for applications in Germany, Austria, Switzerland, the United States, Canada, the United Kingdom and other international markets.",
     builderEyebrow: "CV BUILDER",
     builderTitle: "Create your CV",
     fullPreview: "👁 View full CV",
@@ -93,17 +203,23 @@ const ui = {
     emailLabel: "Email",
     locationLabel: "Location",
     photoLabel: "Photo",
-    choosePhotoBtn: "Choose photo",
-    noPhotoSelected: "No photo selected",
-    photoBrowserNote: "Optional. JPG, PNG or WEBP.",
     profileTitle: "2. Profile",
     experienceTitle: "3. Work experience",
-    machinesSkillsTitle: "4. Tools and skills",
-    machinesLabel: "Tools / software",
+    machinesSkillsTitle: "4. Machines and skills",
+    machinesLabel: "Machines / tools",
     skillsLabel: "Skills",
-    educationExtraTitle: "5. Education and extra",
+    educationExtraTitle: "6. Education and extra",
     educationLabel: "Education / licences / course",
     traitsLabel: "Personal qualities",
+    languagesTitle: "5. Languages",
+    languageNameLabel: "Language",
+    languageLevelLabel: "Level",
+    languageNamePlaceholder: "English",
+    addLanguage: "Add language",
+    removeLanguage: "Remove",
+    languageLevelNote: "Use CEFR levels: A1, A2, B1, B2, C1, C2.",
+    classicTemplateHint: "Clean one-page CV",
+    sidebarTemplateHint: "Modern CV with side column",
     fillDemo: "Fill demo",
     downloadPdf: "Download PDF",
     clearData: "Clear",
@@ -120,16 +236,14 @@ const ui = {
     termsLink: "Terms of Use",
     supportLink: "Support",
     footerNote: "No account. No CV data upload to our server.",
-    fullNamePlaceholder: "Alex Student",
-    jobTitlePlaceholder: "Junior Marketing Assistant",
-    phonePlaceholder: "+1 555 123 4567",
-    emailPlaceholder: "alex.student@example.com",
+    fullNamePlaceholder: "John Worker",
+    jobTitlePlaceholder: "Heavy Equipment Operator",
     locationPlaceholder: "City, Country",
     profilePlaceholder: "Short professional profile...",
-    experiencePlaceholder: "One item per line. Example:\nStudent assistant — 6 months of experience\nCustomer support and office tasks",
-    machinesPlaceholder: "Microsoft Word\nMicrosoft Excel\nGoogle Docs\nCanva",
-    skillsPlaceholder: "Communication\nOrganization\nTeamwork",
-    educationPlaceholder: "University studies / course / certificate",
+    experiencePlaceholder: "One item per line. Example:\nMachine operator — 10 years of experience\nEarthworks and site preparation",
+    machinesPlaceholder: "CAT 330 excavator\nD6R bulldozer",
+    skillsPlaceholder: "Earthworks\nSafe work\nPrecision",
+    educationPlaceholder: "Training / course",
     traitsPlaceholder: "Responsible, reliable, precise...",
     saved: "Saved",
     dataCleared: "Data cleared",
@@ -165,15 +279,15 @@ const ui = {
     cvProfile: "PROFIL",
     cvExperience: "BERUFSERFAHRUNG",
     cvSkills: "FÄHIGKEITEN",
-    demoName: "Max Student",
-    demoTitle: "Studentische Hilfskraft",
+    demoName: "Max Mustermann",
+    demoTitle: "Baumaschinenführer",
     demoLocation: "📍 Stadt, Land",
-    demoProfile: "Motivierter Student mit guter Kommunikation, Organisation und Lernbereitschaft.",
-    demoExperience1: "Studentische Aushilfe — Beispielfirma",
-    demoExperience2: "Kundenkommunikation und einfache Büroaufgaben",
-    demoSkill1: "Kommunikation",
-    demoSkill2: "Organisation",
-    demoSkill3: "Teamarbeit",
+    demoProfile: "Zuverlässiger und erfahrener Arbeiter mit Fokus auf Sicherheit, Effizienz und Arbeitsqualität.",
+    demoExperience1: "Maschinenführer — Beispielfirma",
+    demoExperience2: "Erdarbeiten und Baustellenvorbereitung",
+    demoSkill1: "Praktische Arbeit",
+    demoSkill2: "Sicherheit",
+    demoSkill3: "Präzision",
     howTitle: "So funktioniert es",
     step1: "Daten eingeben",
     step2: "Live ansehen",
@@ -187,9 +301,6 @@ const ui = {
     feature2Text: "Jede Änderung erscheint sofort im Lebenslauf. Kein blindes Ausfüllen.",
     feature3Title: "🛡️ Datenschutz zuerst",
     feature3Text: "Kein Konto und keine Datenbank. Daten werden nur im Browser gespeichert.",
-    targetEyebrow: "INTERNATIONALE BEWERBUNGEN",
-    targetTitle: "Ein CV-Builder für englische und deutsche Bewerbungen",
-    targetText: "Nutze cvfast.app, um einen sauberen Lebenslauf oder CV für Bewerbungen in Deutschland, Österreich, der Schweiz, den USA, Kanada, Großbritannien und anderen internationalen Märkten vorzubereiten.",
     builderEyebrow: "CV BUILDER",
     builderTitle: "Lebenslauf erstellen",
     fullPreview: "👁 Ganzen CV ansehen",
@@ -203,17 +314,23 @@ const ui = {
     emailLabel: "E-Mail",
     locationLabel: "Ort",
     photoLabel: "Foto",
-    choosePhotoBtn: "Foto auswählen",
-    noPhotoSelected: "Kein Foto ausgewählt",
-    photoBrowserNote: "Optional. JPG, PNG oder WEBP.",
     profileTitle: "2. Profil",
     experienceTitle: "3. Berufserfahrung",
-    machinesSkillsTitle: "4. Tools und Fähigkeiten",
-    machinesLabel: "Tools / Software",
+    machinesSkillsTitle: "4. Maschinen und Fähigkeiten",
+    machinesLabel: "Maschinen / Werkzeuge",
     skillsLabel: "Fähigkeiten",
-    educationExtraTitle: "5. Ausbildung und Zusatz",
+    educationExtraTitle: "6. Ausbildung und Zusatz",
     educationLabel: "Ausbildung / Lizenzen / Kurs",
     traitsLabel: "Persönliche Eigenschaften",
+    languagesTitle: "5. Sprachen",
+    languageNameLabel: "Sprache",
+    languageLevelLabel: "Niveau",
+    languageNamePlaceholder: "Deutsch",
+    addLanguage: "Sprache hinzufügen",
+    removeLanguage: "Entfernen",
+    languageLevelNote: "Nutze CEFR-Niveaus: A1, A2, B1, B2, C1, C2.",
+    classicTemplateHint: "Klarer einseitiger CV",
+    sidebarTemplateHint: "Moderner CV mit Seitenleiste",
     fillDemo: "Demo ausfüllen",
     downloadPdf: "PDF herunterladen",
     clearData: "Löschen",
@@ -230,16 +347,14 @@ const ui = {
     termsLink: "Nutzungsbedingungen",
     supportLink: "Support",
     footerNote: "Kein Konto. Kein Upload von CV-Daten auf unseren Server.",
-    fullNamePlaceholder: "Max Student",
-    jobTitlePlaceholder: "Studentische Hilfskraft",
-    phonePlaceholder: "+49 170 1234567",
-    emailPlaceholder: "max.student@example.com",
+    fullNamePlaceholder: "Max Mustermann",
+    jobTitlePlaceholder: "Baumaschinenführer",
     locationPlaceholder: "Stadt, Land",
     profilePlaceholder: "Kurzes berufliches Profil...",
-    experiencePlaceholder: "Eine Position pro Zeile. Beispiel:\nStudentische Aushilfe — Beispielunternehmen\nUnterstützung bei Kundenkommunikation, Dokumenten und einfachen Büroaufgaben",
-    machinesPlaceholder: "Microsoft Word\nMicrosoft Excel\nGoogle Docs\nCanva",
-    skillsPlaceholder: "Kommunikation\nOrganisation\nTeamarbeit",
-    educationPlaceholder: "Studium / Kurs / Zertifikat",
+    experiencePlaceholder: "Eine Position pro Zeile. Beispiel:\nMaschinenführer — 10 Jahre Erfahrung\nErdarbeiten und Baustellenvorbereitung",
+    machinesPlaceholder: "Bagger CAT 330\nBulldozer D6R",
+    skillsPlaceholder: "Erdarbeiten\nSicheres Arbeiten\nPräzision",
+    educationPlaceholder: "Ausbildung / Kurs",
     traitsPlaceholder: "Verantwortungsbewusst, zuverlässig, präzise...",
     saved: "Gespeichert",
     dataCleared: "Daten gelöscht",
@@ -262,13 +377,27 @@ const ui = {
 };
 
 const cvLabels = {
+  sr: {
+    profile: "PROFIL",
+    experience: "RADNO ISKUSTVO",
+    machines: "MAŠINE / ALATI",
+    skills: "VEŠTINE",
+    education: "OBRAZOVANJE / LICENCE",
+    traits: "LIČNE OSOBINE",
+    languages: "JEZICI",
+    placeholderName: "Ime Prezime",
+    placeholderTitle: "Pozicija / zanimanje",
+    footer: "Napravljeno preko cvfast.app",
+    previewTitle: "Ovako će izgledati CV"
+  },
   en: {
     profile: "PROFILE",
     experience: "WORK EXPERIENCE",
-    machines: "TOOLS / SOFTWARE",
+    machines: "MACHINES / TOOLS",
     skills: "SKILLS",
     education: "EDUCATION / LICENCES",
     traits: "PERSONAL QUALITIES",
+    languages: "LANGUAGES",
     placeholderName: "Full Name",
     placeholderTitle: "Job title / position",
     footer: "Created with cvfast.app",
@@ -277,10 +406,11 @@ const cvLabels = {
   de: {
     profile: "PROFIL",
     experience: "BERUFSERFAHRUNG",
-    machines: "TOOLS / SOFTWARE",
+    machines: "MASCHINEN / WERKZEUGE",
     skills: "FÄHIGKEITEN",
     education: "AUSBILDUNG / LIZENZEN",
     traits: "PERSÖNLICHE EIGENSCHAFTEN",
+    languages: "SPRACHEN",
     placeholderName: "Vorname Nachname",
     placeholderTitle: "Position / Beruf",
     footer: "Erstellt mit cvfast.app",
@@ -290,6 +420,43 @@ const cvLabels = {
 
 
 const legalTexts = {
+  sr: {
+    privacy: {
+      title: "Politika privatnosti",
+      body: `
+        <p><strong>cvfast.app</strong> je alat za izradu CV-a koji radi u browseru. Aplikacija ne zahteva registraciju i ne šalje tvoje CV podatke na naš server.</p>
+        <h3>Koji podaci se koriste?</h3>
+        <p>Podaci koje uneseš, uključujući ime, kontakt, radno iskustvo, veštine i sliku, čuvaju se lokalno u tvom browseru preko LocalStorage memorije.</p>
+        <h3>LocalStorage</h3>
+        <p>Ako obrišeš podatke browsera, koristiš drugi uređaj ili drugi browser, sačuvani CV podaci i PDF otključavanje mogu biti izgubljeni.</p>
+        <h3>PDF i plaćanje/podrška</h3>
+        <p>PDF se generiše u tvom browseru. Obradu podrške/plaćanja vrši PayPal. Mi ne čuvamo podatke tvoje platne kartice.</p>
+        <h3>Google Translate</h3>
+        <p>Ako koristiš Google Translate pomoć, tekst koji želiš da prevedeš može biti otvoren u Google Translate servisu i obrađen prema Google pravilima privatnosti.</p>
+      `
+    },
+    terms: {
+      title: "Uslovi korišćenja",
+      body: `
+        <p><strong>cvfast.app</strong> pruža jednostavan alat za kreiranje i pregled CV dokumenata.</p>
+        <ul>
+          <li>Ne garantujemo zaposlenje, razgovor za posao, ponudu za posao ili prihvatanje CV-a od strane poslodavca.</li>
+          <li>Korisnik je odgovoran za tačnost podataka koje unosi u CV.</li>
+          <li>Kreiranje i pregled CV-a su besplatni. PDF preuzimanje može zahtevati jednokratnu podršku.</li>
+          <li>Pošto aplikacija radi bez naloga i bez baze podataka, otključavanje PDF-a čuva se samo u browseru/uređaju na kojem je otključano.</li>
+          <li>Aplikacija se pruža “takva kakva jeste”. Funkcije mogu biti izmenjene, ažurirane ili uklonjene.</li>
+        </ul>
+      `
+    },
+    support: {
+      title: "Podrška",
+      body: `
+        <p>Ako imaš problem sa PDF preuzimanjem, prikazom CV-a ili otključavanjem nakon podrške, kontaktiraj podršku.</p>
+        <p><strong>Email:</strong> <a href="mailto:support.cvfast@gmail.com">support.cvfast@gmail.com</a></p>
+        <p>Ako ovaj email još nije aktiviran, privremeno koristi kontakt koji bude naveden na zvaničnoj stranici projekta.</p>
+      `
+    }
+  },
   en: {
     privacy: {
       title: "Privacy Policy",
@@ -369,6 +536,48 @@ const legalTexts = {
 
 
 const installTexts = {
+  sr: {
+    title: "Preuzmi cvfast.app",
+    android: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>📱 Android / Chrome</h3>
+          <ol>
+            <li>Otvori cvfast.app u Chrome browseru.</li>
+            <li>Tapni meni <strong>⋮</strong> gore desno.</li>
+            <li>Izaberi <strong>Add to Home screen</strong> ili <strong>Install app</strong>.</li>
+            <li>Potvrdi na <strong>Add</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ios: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>🍎 iPhone / Safari</h3>
+          <ol>
+            <li>Otvori cvfast.app u <strong>Safari</strong> browseru.</li>
+            <li>Tapni <strong>Share</strong> dugme.</li>
+            <li>Izaberi <strong>Add to Home Screen</strong>.</li>
+            <li>Tapni <strong>Add</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    desktop: `
+      <div class="install-steps">
+        <div class="step-box">
+          <h3>💻 Laptop / Chrome / Edge</h3>
+          <ol>
+            <li>Otvori cvfast.app u Chrome ili Edge browseru.</li>
+            <li>Klikni ikonicu za instalaciju u address baru ako se pojavi.</li>
+            <li>Ako se ne pojavi, otvori meni <strong>⋮</strong> i izaberi <strong>Install app</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    `,
+    ok: "Razumem"
+  },
   en: {
     title: "Install cvfast.app",
     android: `
@@ -457,31 +666,47 @@ const installTexts = {
 
 
 const demoDataByLang = {
+  sr: {
+    fullName: "Milan Petrović",
+    jobTitle: "Rukovalac građevinskih mašina",
+    phone: "+381 64 000 0000",
+    email: "milan.petrovic@example.com",
+    location: "Beograd, Srbija",
+    profile: "Iskusan i pouzdan radnik sa praktičnim iskustvom, fokusiran na bezbednost, tačnost i kvalitet rada.",
+    experience: "Rukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena\nRad u dinamičnim uslovima gradilišta",
+    machines: "Bager CAT 330\nBuldozer D6R",
+    skills: "Niskogradnja\nZemljani radovi\nBezbedan rad\nPreciznost\nTimski rad",
+    education: "Kurs / obuka",
+    traits: "Odgovoran, pouzdan, precizan i naviknut na rad u dinamičnim uslovima.",
+    languages: JSON.stringify([{ name: "Engleski", level: "B2" }, { name: "Nemački", level: "A2" }])
+  },
   en: {
-    fullName: "Alex Student",
-    jobTitle: "Junior Marketing Assistant",
-    phone: "+1 555 123 4567",
-    email: "alex.student@example.com",
+    fullName: "John Worker",
+    jobTitle: "Heavy Equipment Operator",
+    phone: "+49 151 23456789",
+    email: "john.worker@example.com",
     location: "City, Country",
-    profile: "Motivated student looking for an entry-level or part-time role, with good communication skills, attention to detail and a strong willingness to learn.",
-    experience: "Student assistant — sample company\nHelped with customer communication, documents and basic office tasks\nWorked in a team and completed tasks on time",
-    machines: "Microsoft Word\nMicrosoft Excel\nGoogle Docs\nCanva",
-    skills: "Communication\nMicrosoft Office\nOrganization\nTeamwork\nEnglish language",
-    education: "University studies / course / certificate",
-    traits: "Responsible, reliable, organized and ready to learn."
+    profile: "Experienced and reliable worker with practical field experience, focused on safety, precision and quality of work.",
+    experience: "Machine operator — 10 years of experience\nEarthworks and site preparation\nWork in dynamic construction site conditions",
+    machines: "CAT 330 excavator\nD6R bulldozer",
+    skills: "Earthworks\nSite preparation\nSafe work\nPrecision\nTeamwork",
+    education: "Training / course",
+    traits: "Responsible, reliable, precise and used to working in dynamic conditions.",
+    languages: JSON.stringify([{ name: "English", level: "B2" }, { name: "German", level: "A2" }])
   },
   de: {
-    fullName: "Max Student",
-    jobTitle: "Studentische Hilfskraft",
-    phone: "+49 170 1234567",
-    email: "max.student@example.com",
+    fullName: "Max Mustermann",
+    jobTitle: "Baumaschinenführer",
+    phone: "+49 151 23456789",
+    email: "max.mustermann@example.com",
     location: "Stadt, Land",
-    profile: "Motivierter Student für eine Einstiegsstelle oder Teilzeitstelle, mit guter Kommunikation, Organisation und Lernbereitschaft.",
-    experience: "Studentische Aushilfe — Beispielunternehmen\nUnterstützung bei Kundenkommunikation, Dokumenten und einfachen Büroaufgaben\nTeamarbeit und pünktliche Erledigung von Aufgaben",
-    machines: "Microsoft Word\nMicrosoft Excel\nGoogle Docs\nCanva",
-    skills: "Kommunikation\nMicrosoft Office\nOrganisation\nTeamarbeit\nEnglischkenntnisse",
-    education: "Studium / Kurs / Zertifikat",
-    traits: "Verantwortungsbewusst, zuverlässig, organisiert und lernbereit."
+    profile: "Erfahrener und zuverlässiger Arbeiter mit praktischer Erfahrung, Fokus auf Sicherheit, Genauigkeit und Qualität der Arbeit.",
+    experience: "Maschinenführer — 10 Jahre Erfahrung\nErdarbeiten und Baustellenvorbereitung\nArbeit unter dynamischen Baustellenbedingungen",
+    machines: "Bagger CAT 330\nBulldozer D6R",
+    skills: "Erdarbeiten\nBaustellenvorbereitung\nSicheres Arbeiten\nPräzision\nTeamarbeit",
+    education: "Ausbildung / Kurs",
+    traits: "Verantwortungsbewusst, zuverlässig, präzise und an dynamische Arbeitsbedingungen gewöhnt.",
+    languages: JSON.stringify([{ name: "Deutsch", level: "B2" }, { name: "Englisch", level: "B1" }])
   }
 };
 
@@ -501,7 +726,8 @@ function emptyData() {
     machines: "",
     skills: "",
     education: "",
-    traits: ""
+    traits: "",
+    languages: "[]"
   };
 }
 
@@ -510,12 +736,6 @@ function loadStored() {
     const stored = { ...emptyData(), ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}) };
     if (stored.appLanguage === "sr") stored.appLanguage = "en";
     if (stored.cvLanguage === "sr") stored.cvLanguage = "en";
-    // Clean old demo phone data if it ever remains in a browser from an older version.
-    const oldDemoPhone = String(stored.phone || "").replace(/\s+/g, "");
-    const oldCountryCode = "+" + "3" + "81";
-    if (oldDemoPhone === oldCountryCode + "640000000") {
-      stored.phone = "";
-    }
     return stored;
   } catch {
     return emptyData();
@@ -549,20 +769,6 @@ function updateLanguageSelectLabels(lang) {
 }
 
 
-function updatePhotoFileName(fileName = "") {
-  const target = $("#photoFileName");
-  if (!target) return;
-  target.dataset.i18n = fileName ? "" : "noPhotoSelected";
-  target.textContent = fileName || ui[getLang()].noPhotoSelected;
-}
-
-function resetPhotoInput() {
-  const input = $("#photo");
-  if (input) input.value = "";
-  updatePhotoFileName("");
-}
-
-
 function applyLanguage(lang) {
   if (lang === "sr" || !ui[lang]) lang = "en";
 
@@ -586,13 +792,11 @@ function applyLanguage(lang) {
     if (Object.prototype.hasOwnProperty.call(ui[lang], key)) el.placeholder = ui[lang][key];
   });
 
-  const photoInput = $("#photo");
-  if (!photoInput?.files?.[0]) updatePhotoFileName("");
-
   $$(".lang-pill, .lang-mini").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.setLang === lang);
   });
 
+  renderLanguageEditor($("#languages")?.value || loadStored().languages || "[]");
   refreshPreview();
 }
 
@@ -615,11 +819,14 @@ function setFormData(data) {
     const el = $("#" + field);
     if (el && data[field] !== undefined) el.value = data[field];
   });
+  renderLanguageEditor(data.languages || "[]");
+  updateTemplateChoice(data.template || "classic");
 }
 
 function saveData() {
   const data = getData();
   data.appLanguage = data.cvLanguage;
+  updateTemplateChoice(data.template || "classic");
   saveRaw(data);
   showSaveStatus();
 }
@@ -637,6 +844,66 @@ function splitLines(text) {
     .split("\n")
     .map((x) => x.trim())
     .filter(Boolean);
+}
+
+
+function parseLanguages(value) {
+  if (Array.isArray(value)) return value;
+  try {
+    const parsed = JSON.parse(value || "[]");
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((item) => ({
+        name: String(item.name || "").trim(),
+        level: String(item.level || "").trim().toUpperCase()
+      }))
+      .filter((item) => item.name && ["A1", "A2", "B1", "B2", "C1", "C2"].includes(item.level));
+  } catch {
+    return [];
+  }
+}
+
+function formatLanguages(value) {
+  return parseLanguages(value).map((item) => `${item.name} — ${item.level}`);
+}
+
+function renderLanguageEditor(value) {
+  const list = $("#languageList");
+  const hidden = $("#languages");
+  if (!list || !hidden) return;
+  const lang = getLang();
+  const rows = parseLanguages(value || hidden.value);
+  hidden.value = JSON.stringify(rows);
+  if (!rows.length) {
+    list.innerHTML = `<div class="empty-language-note">${esc(ui[lang]?.languageLevelNote || "Use CEFR levels: A1, A2, B1, B2, C1, C2.")}</div>`;
+    return;
+  }
+  list.innerHTML = rows.map((item, index) => `
+    <div class="language-chip">
+      <span>${esc(item.name)} <b>${esc(item.level)}</b></span>
+      <button type="button" data-remove-language="${index}">${esc(ui[lang]?.removeLanguage || "Remove")}</button>
+    </div>
+  `).join("");
+}
+
+function addLanguageFromInputs() {
+  const nameEl = $("#languageName");
+  const levelEl = $("#languageLevel");
+  const hidden = $("#languages");
+  if (!nameEl || !levelEl || !hidden) return;
+  const name = nameEl.value.trim();
+  const level = levelEl.value;
+  if (!name) {
+    nameEl.focus();
+    return;
+  }
+  const rows = parseLanguages(hidden.value);
+  rows.push({ name, level });
+  hidden.value = JSON.stringify(rows);
+  nameEl.value = "";
+  renderLanguageEditor(hidden.value);
+  saveData();
+  refreshPreview();
 }
 
 function esc(text) {
@@ -668,8 +935,15 @@ function withPlaceholders(data) {
     machines: data.machines || demo.machines,
     skills: data.skills || demo.skills,
     education: data.education || demo.education,
-    traits: data.traits || demo.traits
+    traits: data.traits || demo.traits,
+    languages: data.languages && parseLanguages(data.languages).length ? data.languages : demo.languages
   };
+}
+
+function updateTemplateChoice(template) {
+  $$("[data-template-pick]").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.templatePick === template);
+  });
 }
 
 function renderCv(target, data, options = {}) {
@@ -681,6 +955,7 @@ function renderCv(target, data, options = {}) {
   const machineItems = splitLines(d.machines);
   const skillItems = splitLines(d.skills);
   const expItems = splitLines(d.experience);
+  const languageItems = formatLanguages(d.languages);
 
   const photoHtml = d.photo
     ? `<img class="cv-photo" src="${d.photo}" alt="CV photo" />`
@@ -716,6 +991,7 @@ function renderCv(target, data, options = {}) {
           <p class="cv-title">${esc(d.jobTitle || L.placeholderTitle)}</p>
           <div class="cv-divider"></div>
           ${contactHtml}
+          ${section(L.languages, listHtml(languageItems))}
           ${section(L.machines, listHtml(machineItems))}
           ${section(L.skills, tagsHtml(skillItems))}
           ${section(L.education, paragraphHtml(d.education))}
@@ -752,9 +1028,11 @@ function renderCv(target, data, options = {}) {
       </div>
 
       <div class="cv-columns">
+        ${section(L.languages, listHtml(languageItems))}
         ${section(L.education, paragraphHtml(d.education))}
-        ${section(L.traits, paragraphHtml(d.traits))}
       </div>
+
+      ${section(L.traits, paragraphHtml(d.traits))}
     </div>
     <footer class="cv-footer">cvfast.app</footer>
   `;
@@ -985,7 +1263,7 @@ function setupPwaInstall() {
     const lang = getLang();
     showToast(
       ui[lang]?.installAccepted ||
-        "App installed on Home Screen ✅"
+        "Aplikacija je dodata na početni ekran ✅"
     );
   });
 
@@ -997,7 +1275,7 @@ function setupPwaInstall() {
     const originalText =
       installBtn?.textContent ||
       ui[lang]?.installApp ||
-      "⬇️ Install app";
+      "⬇️ Preuzmi app";
 
     const isStandalone =
       window.matchMedia("(display-mode: standalone)").matches ||
@@ -1006,15 +1284,14 @@ function setupPwaInstall() {
     if (isStandalone) {
       showToast(
         ui[lang]?.alreadyInstalled ||
-          "App is already installed ✅"
+          "Aplikacija je već instalirana ✅"
       );
       return;
     }
 
-    // If the browser does not provide a direct install prompt, show manual install steps.
+    // Ako browser nije poslao realan install prompt, ne prikazuj ništa.
     if (!deferredPrompt) {
-      console.log("PWA install prompt is not available on this browser/device.");
-      showInstallInstructions("auto");
+      console.log("PWA install prompt nije dostupan na ovom browseru/uređaju.");
       return;
     }
 
@@ -1023,7 +1300,7 @@ function setupPwaInstall() {
         installBtn.disabled = true;
         installBtn.textContent =
           ui[lang]?.installingApp ||
-          "Preparing installation...";
+          "Pripremam instalaciju...";
       }
 
       await deferredPrompt.prompt();
@@ -1036,7 +1313,7 @@ function setupPwaInstall() {
       if (outcome === "accepted") {
         showToast(
           ui[lang]?.installAccepted ||
-            "App installed on Home Screen ✅"
+            "Aplikacija je dodata na početni ekran ✅"
         );
       }
     } catch (error) {
@@ -1060,8 +1337,8 @@ function setupShare() {
       text: lang === "de"
         ? "Lebenslauf schnell erstellen. Kein Konto. Kein Server-Upload."
         : lang === "en"
-          ? "Create your CV for international job applications. No account. No server upload."
-          : "Create your CV for international job applications. No account. No server upload.",
+          ? "Create your CV fast. No account. No server upload."
+          : "Create your CV fast. No account. No server upload.",
       url: window.location.origin + window.location.pathname
     };
 
@@ -1123,14 +1400,37 @@ function init() {
     trackEvent("start_cv_click");
   });
 
+  $("#addLanguageBtn")?.addEventListener("click", addLanguageFromInputs);
+  $("#languageName")?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addLanguageFromInputs();
+    }
+  });
+  $("#languageList")?.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-remove-language]");
+    if (!btn) return;
+    const hidden = $("#languages");
+    const rows = parseLanguages(hidden.value);
+    rows.splice(Number(btn.dataset.removeLanguage), 1);
+    hidden.value = JSON.stringify(rows);
+    renderLanguageEditor(hidden.value);
+    saveData();
+    refreshPreview();
+  });
+  $$("[data-template-pick]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const template = btn.dataset.templatePick;
+      const templateEl = $("#template");
+      if (templateEl) templateEl.value = template;
+      saveData();
+      refreshPreview();
+    });
+  });
+
   $("#photo")?.addEventListener("change", async (e) => {
     const file = e.target.files?.[0];
-    if (!file) {
-      updatePhotoFileName("");
-      return;
-    }
-
-    updatePhotoFileName(file.name);
+    if (!file) return;
 
     try {
       const photo = await resizeImage(file);
@@ -1170,7 +1470,6 @@ function init() {
     data.appLanguage = lang;
     data.cvLanguage = lang;
     setFormData(data);
-    resetPhotoInput();
     saveRaw(data);
     applyLanguage(lang);
     refreshPreview();
@@ -1207,19 +1506,29 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
     btn.addEventListener("click", () => {
       const lang = getLang();
       const titles = {
+        sr: {
+          basic: "Osnovni podaci u gotovom CV-u",
+          profile: "Primer profesionalnog profila",
+          experience: "Primer radnog iskustva",
+          skills: "Primer mašina i veština",
+          education: "Primer obrazovanja i osobina",
+          languages: "Primer nivoa jezika"
+        },
         en: {
           basic: "Basic information in the final CV",
           profile: "Professional profile example",
           experience: "Work experience example",
-          skills: "Tools and skills example",
-          education: "Education and qualities example"
+          skills: "Machines and skills example",
+          education: "Education and qualities example",
+          languages: "Language levels example"
         },
         de: {
           basic: "Grunddaten im fertigen CV",
           profile: "Beispiel für ein berufliches Profil",
           experience: "Beispiel für Berufserfahrung",
-          skills: "Beispiel für Tools und Fähigkeiten",
-          education: "Beispiel für Ausbildung und Eigenschaften"
+          skills: "Beispiel für Maschinen und Fähigkeiten",
+          education: "Beispiel für Ausbildung und Eigenschaften",
+          languages: "Beispiel für Sprachniveaus"
         }
       };
       openPreviewModal(titles[lang][btn.dataset.help] || "");
