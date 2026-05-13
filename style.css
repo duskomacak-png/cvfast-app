@@ -1824,3 +1824,27 @@ textarea {
 .example-box summary { cursor: pointer; font-weight: 900; color: #0b5cff; }
 .example-box p { margin: 9px 0 0; }
 @media (max-width: 680px) { .template-choices { grid-template-columns: 1fr !important; } }
+
+
+/* V27: keep one template control visible. The select stays in DOM for JS/localStorage, cards are the user-facing selector. */
+.template-hidden-select {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.template-choices {
+  margin-top: 0;
+}
+input::placeholder, textarea::placeholder {
+  color: #8a96a8;
+  opacity: 1;
+}
+.example-box {
+  margin-top: 10px;
+}

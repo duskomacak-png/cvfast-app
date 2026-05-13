@@ -44,7 +44,7 @@
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
 <link href="icon-512.png" rel="icon" sizes="512x512" type="image/png"/>
-<link href="style.css?v=26" rel="stylesheet"/>
+<link href="style.css?v=27" rel="stylesheet"/>
 <!-- Google tag (gtag.js) -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QF9CV5P5H5"></script>
 <script>
@@ -179,7 +179,7 @@
 <button class="mini-action" data-i18n="translateBtn" id="translateHelperBtn" type="button">🌍 Translate with Google Translate</button>
 </label>
 <label><span data-i18n="templateLabel">Template</span>
-<select id="template" name="template">
+<select class="template-hidden-select" id="template" name="template" aria-hidden="true" tabindex="-1">
 <option value="classic">Classic Clean</option>
 <option value="sidebar">Modern Sidebar</option>
 </select>
@@ -201,19 +201,19 @@
 </div>
 </label>
 <label><span data-i18n="fullNameLabel">Full name</span>
-<input data-placeholder="fullNamePlaceholder" id="fullName" name="fullName" placeholder="John Worker" type="text"/>
+<input data-placeholder="fullNamePlaceholder" id="fullName" name="fullName" placeholder="Enter your full name" type="text"/>
 </label>
 <label><span data-i18n="jobTitleLabel">Position</span>
-<input data-placeholder="jobTitlePlaceholder" id="jobTitle" name="jobTitle" placeholder="Heavy Equipment Operator" type="text"/>
+<input data-placeholder="jobTitlePlaceholder" id="jobTitle" name="jobTitle" placeholder="Enter your position" type="text"/>
 </label>
 <label><span data-i18n="phoneLabel">Phone</span>
 <input id="phone" name="phone" placeholder="+49 151 23456789" type="tel"/>
 </label>
 <label><span data-i18n="emailLabel">Email</span>
-<input id="email" name="email" placeholder="john.worker@example.com" type="email"/>
+<input id="email" name="email" placeholder="you@example.com" type="email"/>
 </label>
 <label><span data-i18n="locationLabel">Location</span>
-<input data-placeholder="locationPlaceholder" id="location" name="location" placeholder="City, Country" type="text"/>
+<input data-placeholder="locationPlaceholder" id="location" name="location" placeholder="City, country" type="text"/>
 </label>
 <label><span data-i18n="photoLabel">Photo</span>
 <input accept="image/*" id="photo" name="photo" type="file"/>
@@ -243,12 +243,10 @@
 </div>
 <div class="two-col">
 <label><span data-i18n="machinesLabel">Machines / tools</span>
-<textarea data-placeholder="machinesPlaceholder" id="machines" name="machines" placeholder="CAT 330 excavator
-D6R bulldozer" rows="5"></textarea>
+<textarea data-placeholder="machinesPlaceholder" id="machines" name="machines" placeholder="Add machines/tools, one per line" rows="5"></textarea>
 </label>
 <label><span data-i18n="skillsLabel">Skills</span>
-<textarea data-placeholder="skillsPlaceholder" id="skills" name="skills" placeholder="Earthworks
-Safe work" rows="5"></textarea>
+<textarea data-placeholder="skillsPlaceholder" id="skills" name="skills" placeholder="Add skills, one per line" rows="5"></textarea>
 </label>
 </div>
 <details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>Machines: CAT 330 excavator, D6R bulldozer<br>Skills: Earthworks, safe work, precision, teamwork</p></details>
@@ -261,14 +259,14 @@ Safe work" rows="5"></textarea>
 <input id="languages" name="languages" type="hidden"/>
 <div class="language-builder">
 <label><span data-i18n="languageNameLabel">Language</span>
-<input data-placeholder="languageNamePlaceholder" id="languageName" placeholder="English" type="text"/>
+<input data-placeholder="languageNamePlaceholder" id="languageName" placeholder="Language name" type="text"/>
 </label>
 <label><span data-i18n="languageLevelLabel">Level</span>
 <select id="languageLevel">
-<option value="A1">A1</option>
+<option selected="selected" value="A1">A1</option>
 <option value="A2">A2</option>
 <option value="B1">B1</option>
-<option selected="selected" value="B2">B2</option>
+<option value="B2">B2</option>
 <option value="C1">C1</option>
 <option value="C2">C2</option>
 </select>
@@ -286,10 +284,10 @@ Safe work" rows="5"></textarea>
 </div>
 <div class="two-col">
 <label><span data-i18n="educationLabel">Education / licences / course</span>
-<textarea data-placeholder="educationPlaceholder" id="education" name="education" placeholder="Training / course" rows="4"></textarea>
+<textarea data-placeholder="educationPlaceholder" id="education" name="education" placeholder="Education, licence or course" rows="4"></textarea>
 </label>
 <label><span data-i18n="traitsLabel">Personal qualities</span>
-<textarea data-placeholder="traitsPlaceholder" id="traits" name="traits" placeholder="Responsible, reliable, precise..." rows="4"></textarea>
+<textarea data-placeholder="traitsPlaceholder" id="traits" name="traits" placeholder="Personal qualities" rows="4"></textarea>
 </label>
 </div>
 <details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>Training / course: Safety training, machine licence, completed course<br>Personal qualities: Responsible, reliable, precise, ready to learn</p></details>
@@ -355,6 +353,6 @@ Safe work" rows="5"></textarea>
 </div>
 </div>
 <div class="toast hidden" id="toast"></div>
-<script src="script.js?v=26"></script>
+<script src="script.js?v=27"></script>
 </body>
 </html>

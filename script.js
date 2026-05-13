@@ -220,7 +220,7 @@ const ui = {
     languagesTitle: "5. Languages",
     languageNameLabel: "Language",
     languageLevelLabel: "Level",
-    languageNamePlaceholder: "English",
+    languageNamePlaceholder: "Language name",
     addLanguage: "Add language",
     removeLanguage: "Remove",
     languageLevelNote: "Use CEFR levels: A1, A2, B1, B2, C1, C2.",
@@ -243,14 +243,14 @@ const ui = {
     termsLink: "Terms of Use",
     supportLink: "Support",
     footerNote: "No account. No CV data upload to our server.",
-    fullNamePlaceholder: "John Worker",
-    jobTitlePlaceholder: "Heavy Equipment Operator",
-    locationPlaceholder: "City, Country",
+    fullNamePlaceholder: "Enter your full name",
+    jobTitlePlaceholder: "Enter your position",
+    locationPlaceholder: "City, country",
     profilePlaceholder: "Short professional profile...",
     experiencePlaceholder: "One item per line. Example:\nMachine operator — 10 years of experience\nEarthworks and site preparation",
-    machinesPlaceholder: "CAT 330 excavator\nD6R bulldozer",
+    machinesPlaceholder: "Add machines/tools, one per line",
     skillsPlaceholder: "Earthworks\nSafe work\nPrecision",
-    educationPlaceholder: "Training / course",
+    educationPlaceholder: "Education, licence or course",
     traitsPlaceholder: "Responsible, reliable, precise...",
     saved: "Saved",
     dataCleared: "Data cleared",
@@ -335,7 +335,7 @@ const ui = {
     languagesTitle: "5. Sprachen",
     languageNameLabel: "Sprache",
     languageLevelLabel: "Niveau",
-    languageNamePlaceholder: "Deutsch",
+    languageNamePlaceholder: "Sprache",
     addLanguage: "Sprache hinzufügen",
     removeLanguage: "Entfernen",
     languageLevelNote: "Nutze CEFR-Niveaus: A1, A2, B1, B2, C1, C2.",
@@ -358,14 +358,14 @@ const ui = {
     termsLink: "Nutzungsbedingungen",
     supportLink: "Support",
     footerNote: "Kein Konto. Kein Upload von CV-Daten auf unseren Server.",
-    fullNamePlaceholder: "Max Mustermann",
-    jobTitlePlaceholder: "Baumaschinenführer",
+    fullNamePlaceholder: "Vorname und Nachname eingeben",
+    jobTitlePlaceholder: "Position eingeben",
     locationPlaceholder: "Stadt, Land",
     profilePlaceholder: "Kurzes berufliches Profil...",
     experiencePlaceholder: "Eine Position pro Zeile. Beispiel:\nMaschinenführer — 10 Jahre Erfahrung\nErdarbeiten und Baustellenvorbereitung",
-    machinesPlaceholder: "Bagger CAT 330\nBulldozer D6R",
+    machinesPlaceholder: "Maschinen/Werkzeuge eintragen, eine Zeile pro Eintrag",
     skillsPlaceholder: "Erdarbeiten\nSicheres Arbeiten\nPräzision",
-    educationPlaceholder: "Ausbildung / Kurs",
+    educationPlaceholder: "Ausbildung, Lizenz oder Kurs",
     traitsPlaceholder: "Verantwortungsbewusst, zuverlässig, präzise...",
     saved: "Gespeichert",
     dataCleared: "Daten gelöscht",
@@ -1666,7 +1666,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=25").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=27").catch(() => {});
     });
   }
 
