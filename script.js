@@ -1,8 +1,7 @@
-const STORAGE_KEY = "cvfast_app_data_v22_final";
+const STORAGE_KEY = "cvfast_app_data_v25_clean";
 const UNLOCK_KEY = "cvfast_pdf_unlocked_v1";
 const UNLOCK_CODE = "cvfast_pdf_2026_ok";
 
-// TODO: kad napraviš PayPal link, zameni ovde.
 // PayPal return URL: https://cvfast.app/?unlock=cvfast_pdf_2026_ok
 const PAYMENT_LINK = "https://www.paypal.com/ncp/payment/LU67SFVC967EY";
 
@@ -49,7 +48,7 @@ const ui = {
     heroTitle: "Napravi CV brzo",
     heroSubtitle: "Napravi i pregledaj CV besplatno. PDF preuzimanje se otključava jednokratnom podrškom.",
     startCv: "📄 Start CV",
-    installApp: "⬇️ Preuzmi app",
+    installApp: "⬇️ Install app",
     shareApp: "🔗 Podeli app",
     demoInitials: "MP",
     demoPhone: "📞 +381 64 000 0000",
@@ -110,6 +109,7 @@ const ui = {
     addLanguage: "Dodaj jezik",
     removeLanguage: "Ukloni",
     languageLevelNote: "Koristi CEFR nivoe: A1, A2, B1, B2, C1, C2.",
+    emptyLanguageNote: "Još nije dodat nijedan jezik. Upiši jezik, izaberi A1-C2 i klikni Dodaj jezik.",
     classicTemplateHint: "Čist CV na jednoj strani",
     sidebarTemplateHint: "Moderan CV sa bočnom kolonom",
     fillDemo: "Popuni demo",
@@ -148,7 +148,7 @@ const ui = {
     installIos: "Za iPhone: otvori cvfast.app u Safari browseru → tapni Share → Add to Home Screen.",
     installOther: "Ako se install prozor ne pojavi: u Chrome/Edge meniju izaberi Install app ili Add to Home Screen.",
     alreadyInstalled: "App je već instalirana ✅",
-    installingApp: "Pripremam instalaciju...",
+    installingApp: "Preparing installation...",
     installAccepted: "Aplikacija je instalirana na početni ekran ✅",
     installDismissed: "Instalacija je otkazana",
     linkCopied: "Link je kopiran ✅",
@@ -224,6 +224,7 @@ const ui = {
     addLanguage: "Add language",
     removeLanguage: "Remove",
     languageLevelNote: "Use CEFR levels: A1, A2, B1, B2, C1, C2.",
+    emptyLanguageNote: "No language added yet. Type a language, choose A1-C2, then click Add language.",
     classicTemplateHint: "Clean one-page CV",
     sidebarTemplateHint: "Modern CV with side column",
     fillDemo: "Fill demo",
@@ -338,6 +339,7 @@ const ui = {
     addLanguage: "Sprache hinzufügen",
     removeLanguage: "Entfernen",
     languageLevelNote: "Nutze CEFR-Niveaus: A1, A2, B1, B2, C1, C2.",
+    emptyLanguageNote: "Noch keine Sprache hinzugefügt. Sprache eingeben, A1-C2 wählen und auf Sprache hinzufügen klicken.",
     classicTemplateHint: "Klarer einseitiger CV",
     sidebarTemplateHint: "Moderner CV mit Seitenleiste",
     fillDemo: "Demo ausfüllen",
@@ -678,7 +680,7 @@ const demoDataByLang = {
   sr: {
     fullName: "Milan Petrović",
     jobTitle: "Rukovalac građevinskih mašina",
-    phone: "+381 64 000 0000",
+    phone: "+49 151 23456789",
     email: "milan.petrovic@example.com",
     location: "Beograd, Srbija",
     profile: "Iskusan i pouzdan radnik sa praktičnim iskustvom, fokusiran na bezbednost, tačnost i kvalitet rada.",
@@ -818,7 +820,7 @@ function getLanguageRows(includeDraft = false) {
     const level = ($("#languageLevel")?.value || "").trim().toUpperCase();
     const allowed = ["A1", "A2", "B1", "B2", "C1", "C2"];
     const alreadyExists = rows.some((item) =>
-      item.name.toLowerCase() === name.toLowerCase() && item.level === level
+      item.name.toLowerCase() === name.toLowerCase()
     );
 
     if (name && allowed.includes(level) && !alreadyExists) {
@@ -910,7 +912,8 @@ function renderLanguageEditor(value) {
   const rows = parseLanguages(value || hidden.value);
   hidden.value = JSON.stringify(rows);
   if (!rows.length) {
-    list.innerHTML = `<div class="empty-language-note">No language added yet. Type a language, choose A1-C2, then click Add language.</div>`;
+    const emptyNote = ui[lang]?.emptyLanguageNote || "No language added yet. Type a language, choose A1-C2, then click Add language.";
+    list.innerHTML = `<div class="empty-language-note">${esc(emptyNote)}</div>`;
     return;
   }
   list.innerHTML = rows.map((item, index) => `
@@ -933,8 +936,12 @@ function addLanguageFromInputs() {
     return;
   }
   const rows = parseLanguages(hidden.value);
-  const exists = rows.some((item) => item.name.toLowerCase() === name.toLowerCase() && item.level === level);
-  if (!exists) rows.push({ name, level });
+  const existingIndex = rows.findIndex((item) => item.name.toLowerCase() === name.toLowerCase());
+  if (existingIndex >= 0) {
+    rows[existingIndex] = { name, level };
+  } else {
+    rows.push({ name, level });
+  }
   hidden.value = JSON.stringify(rows);
   nameEl.value = "";
   renderLanguageEditor(hidden.value);
@@ -1318,7 +1325,7 @@ let deferredPrompt = null;
 
 function setupPwaInstall() {
   window.addEventListener("beforeinstallprompt", (e) => {
-    console.log("✅ beforeinstallprompt event uhvaćen");
+    console.log("✅ beforeinstallprompt event captured");
     e.preventDefault();
     deferredPrompt = e;
 
@@ -1333,7 +1340,7 @@ function setupPwaInstall() {
     const lang = getLang();
     showToast(
       ui[lang]?.installAccepted ||
-        "Aplikacija je dodata na početni ekran ✅"
+        "App added to home screen ✅"
     );
   });
 
@@ -1345,7 +1352,7 @@ function setupPwaInstall() {
     const originalText =
       installBtn?.textContent ||
       ui[lang]?.installApp ||
-      "⬇️ Preuzmi app";
+      "⬇️ Install app";
 
     const isStandalone =
       window.matchMedia("(display-mode: standalone)").matches ||
@@ -1354,14 +1361,15 @@ function setupPwaInstall() {
     if (isStandalone) {
       showToast(
         ui[lang]?.alreadyInstalled ||
-          "Aplikacija je već instalirana ✅"
+          "App is already installed ✅"
       );
       return;
     }
 
     // Ako browser nije poslao realan install prompt, ne prikazuj ništa.
     if (!deferredPrompt) {
-      console.log("PWA install prompt nije dostupan na ovom browseru/uređaju.");
+      console.log("PWA install prompt is not available on this browser/device. Showing manual install instructions.");
+      showInstallInstructions("auto");
       return;
     }
 
@@ -1370,7 +1378,7 @@ function setupPwaInstall() {
         installBtn.disabled = true;
         installBtn.textContent =
           ui[lang]?.installingApp ||
-          "Pripremam instalaciju...";
+          "Preparing installation...";
       }
 
       await deferredPrompt.prompt();
@@ -1383,7 +1391,7 @@ function setupPwaInstall() {
       if (outcome === "accepted") {
         showToast(
           ui[lang]?.installAccepted ||
-            "Aplikacija je dodata na početni ekran ✅"
+            "App added to home screen ✅"
         );
       }
     } catch (error) {
@@ -1658,7 +1666,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=22").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=25").catch(() => {});
     });
   }
 

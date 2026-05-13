@@ -1734,3 +1734,70 @@ textarea {
 .example-box summary{cursor:pointer;font-weight:900;color:#0b5cff}.example-box p{margin:9px 0 0}.language-list{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}.empty-language-note{font-size:.9rem;color:#64748b;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:12px;padding:10px}.language-chip{display:inline-flex;align-items:center;gap:10px;border:1px solid #bfd1e6;border-radius:999px;background:#fff;padding:8px 10px;font-weight:800}.language-chip button{border:0;background:#fee2e2;color:#991b1b;border-radius:999px;padding:5px 8px;font-weight:800;cursor:pointer}
 .form-panel input,.form-panel textarea,.form-panel select{font-weight:600;color:#1f2937}.form-panel textarea{line-height:1.45}.cv-empty-note{padding:22px;border:1px dashed #cbd5e1;border-radius:16px;color:#64748b;background:#f8fafc;font-weight:800;text-align:center}
 @media (max-width:900px){.template-sample-strip{grid-template-columns:1fr}.builder-grid,.two-col{grid-template-columns:1fr!important}.form-panel{max-width:100%}.cv-page{transform:none!important}}
+
+
+/* v24 emergency cleanup: remove duplicated huge template showcase if cached HTML/CSS still sees it */
+.template-showcase { display: none !important; }
+
+/* v24: keep template choice visible, compact and usable near the template select */
+.template-choices {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  margin-top: 10px !important;
+}
+.template-choice {
+  min-height: 78px !important;
+  padding: 12px !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+  border: 1px solid #dbe8ff !important;
+}
+.template-choice.active {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14) !important;
+}
+.template-choice strong { font-size: 14px !important; }
+.template-choice span { font-size: 12px !important; line-height: 1.25 !important; }
+
+/* v24: make form usable on laptop without giant bold fields */
+.form-panel input,
+.form-panel textarea,
+.form-panel select {
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+}
+.form-panel textarea { min-height: 112px; }
+.form-block { overflow: visible !important; }
+.two-col { align-items: start !important; }
+
+/* v24: live preview readable but not cut off */
+.paper-scroll {
+  overflow: auto !important;
+  background: #eef4ff !important;
+}
+.paper-scroll .cv-page {
+  transform: scale(0.72) !important;
+  transform-origin: top center !important;
+  margin: 18px auto 0 !important;
+}
+.modal-preview-scroll {
+  overflow: auto !important;
+  max-height: min(78vh, 920px) !important;
+}
+.modal-preview-scroll .cv-page {
+  transform: scale(0.92) !important;
+  transform-origin: top center !important;
+  margin: 0 auto !important;
+}
+.preview-modal-card {
+  width: min(1180px, 96vw) !important;
+}
+
+@media (max-width: 900px) {
+  .template-choices { grid-template-columns: 1fr !important; }
+  .builder-grid, .two-col { grid-template-columns: 1fr !important; }
+  .paper-scroll .cv-page,
+  .modal-preview-scroll .cv-page { transform: none !important; }
+}
