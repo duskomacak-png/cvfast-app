@@ -1101,6 +1101,7 @@ function renderCv(target, data, options = {}) {
 }
 
 function hasRealCvContent(data) {
+  const savedLanguages = parseLanguages(data.languages).filter((item) => String(item.name || "").trim());
   return Boolean(
     String(data.fullName || "").trim() ||
     String(data.jobTitle || "").trim() ||
@@ -1113,7 +1114,7 @@ function hasRealCvContent(data) {
     String(data.skills || "").trim() ||
     String(data.education || "").trim() ||
     String(data.traits || "").trim() ||
-    String(data.languages || "").trim() ||
+    savedLanguages.length ||
     String(data.languageNameDraft || "").trim() ||
     data.photo
   );
@@ -1588,13 +1589,16 @@ function init() {
   $("#clearDataBtn")?.addEventListener("click", () => {
     const lang = getLang();
     if (!confirm(ui[lang].confirmClear)) return;
+    const selectedTemplate = $("#template")?.value || loadStored().template || "classic";
     localStorage.removeItem(STORAGE_KEY);
     const data = emptyData();
     data.appLanguage = lang;
     data.cvLanguage = lang;
+    data.template = selectedTemplate;
     setFormData(data);
     saveRaw(data);
     applyLanguage(lang);
+    updateTemplateChoice(selectedTemplate);
     refreshPreview();
     showToast(ui[lang].dataCleared);
   });
@@ -1709,7 +1713,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=34").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=35").catch(() => {});
     });
   }
 
