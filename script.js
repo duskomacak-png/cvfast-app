@@ -922,6 +922,13 @@ function renderLanguageEditor(value) {
   `).join("");
 }
 
+function clearLanguageDraftInputs() {
+  const nameEl = $("#languageName");
+  const levelEl = $("#languageLevel");
+  if (nameEl) nameEl.value = "";
+  if (levelEl) levelEl.value = "A1";
+}
+
 function addLanguageFromInputs() {
   const nameEl = $("#languageName");
   const levelEl = $("#languageLevel");
@@ -1596,8 +1603,10 @@ function init() {
     data.cvLanguage = lang;
     data.template = selectedTemplate;
     setFormData(data);
+    clearLanguageDraftInputs();
     saveRaw(data);
     applyLanguage(lang);
+    clearLanguageDraftInputs();
     updateTemplateChoice(selectedTemplate);
     refreshPreview();
     showToast(ui[lang].dataCleared);
@@ -1713,7 +1722,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=35").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=36").catch(() => {});
     });
   }
 
