@@ -1579,3 +1579,116 @@ button,
     margin-bottom: -629px;
   }
 }
+
+
+/* v20 final readability fix: laptop form + preview must be readable */
+input,
+select,
+textarea {
+  font-size: 16px !important;
+  line-height: 1.45 !important;
+  font-weight: 500 !important;
+}
+textarea {
+  min-height: 138px;
+  white-space: pre-wrap;
+}
+.form-block .two-col:has(textarea) {
+  grid-template-columns: 1fr !important;
+}
+.language-builder {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px auto;
+  gap: 12px;
+  align-items: end;
+}
+.cv-page {
+  transform-origin: top center !important;
+}
+.template-showcase {
+  border: 3px solid rgba(37, 99, 235, 0.22);
+}
+.template-showcase-grid {
+  grid-template-columns: repeat(2, minmax(260px, 1fr)) !important;
+}
+.template-preview-card {
+  min-height: 190px;
+}
+.template-thumb {
+  width: 128px;
+  height: 166px;
+}
+.template-preview-card strong {
+  font-size: 21px;
+}
+.template-preview-card small {
+  font-size: 14px;
+}
+
+@media (min-width: 1180px) {
+  .builder-grid {
+    grid-template-columns: minmax(0, 1fr) 640px !important;
+  }
+  .live-preview {
+    min-height: 900px !important;
+  }
+  .paper-scroll .cv-page {
+    transform: scale(0.74) !important;
+    margin-bottom: -292px !important;
+  }
+}
+
+@media (min-width: 900px) {
+  .modal-card.preview-modal-card {
+    width: min(980px, 98vw) !important;
+    max-height: 96vh;
+  }
+  .modal-preview-scroll {
+    height: min(84vh, 920px) !important;
+    padding: 20px !important;
+    overflow: auto !important;
+  }
+  .modal-preview-scroll .cv-page {
+    transform: none !important;
+    margin: 0 auto 24px !important;
+  }
+}
+
+@media (max-width: 1179px) {
+  .builder-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .live-preview {
+    position: static !important;
+  }
+  .paper-scroll .cv-page {
+    transform: scale(0.68) !important;
+    margin-bottom: -360px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .template-showcase-grid,
+  .language-builder {
+    grid-template-columns: 1fr !important;
+  }
+  .template-preview-card {
+    grid-template-columns: 112px minmax(0, 1fr) !important;
+  }
+  .template-thumb {
+    width: 104px;
+    height: 136px;
+  }
+  .modal-preview-scroll .cv-page {
+    transform: scale(0.58) !important;
+    margin-bottom: -472px !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .paper-scroll .cv-page,
+  .modal-preview-scroll .cv-page {
+    transform: scale(0.44) !important;
+    margin-bottom: -629px !important;
+  }
+}

@@ -1055,7 +1055,7 @@ function openPreviewModal(title = "") {
   const data = getData();
   const lang = cvLabels[data.cvLanguage] && data.cvLanguage !== "sr" ? data.cvLanguage : "en";
   $("#previewModalTitle").textContent = title || cvLabels[lang].previewTitle;
-  renderCv($("#modalCvPreview"), data, { placeholders: true });
+  renderCv($("#modalCvPreview"), data, { placeholders: false });
   $("#previewModal").classList.remove("hidden");
 }
 
@@ -1586,7 +1586,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=20").catch(() => {});
     });
   }
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v19-preview-readable";
+const CACHE_NAME = "cvfast-v21-user-only-preview";
 
 const APP_SHELL = [
   "/",
