@@ -1,4 +1,4 @@
-const STORAGE_KEY = "cvfast_app_data_v25_clean";
+const STORAGE_KEY = "cvfast_app_data_v28_clean_blank";
 const UNLOCK_KEY = "cvfast_pdf_unlocked_v1";
 const UNLOCK_CODE = "cvfast_pdf_2026_ok";
 
@@ -105,7 +105,7 @@ const ui = {
     languagesTitle: "5. Jezici",
     languageNameLabel: "Jezik",
     languageLevelLabel: "Nivo",
-    languageNamePlaceholder: "Engleski",
+    languageNamePlaceholder: "Language name",
     addLanguage: "Dodaj jezik",
     removeLanguage: "Ukloni",
     languageLevelNote: "Koristi CEFR nivoe: A1, A2, B1, B2, C1, C2.",
@@ -128,15 +128,15 @@ const ui = {
     termsLink: "Uslovi korišćenja",
     supportLink: "Podrška",
     footerNote: "Bez naloga. Bez slanja CV podataka na server.",
-    fullNamePlaceholder: "Milan Petrović",
-    jobTitlePlaceholder: "Rukovalac građevinskih mašina",
-    locationPlaceholder: "Beograd, Srbija",
+    fullNamePlaceholder: "Enter your full name",
+    jobTitlePlaceholder: "Enter your position",
+    locationPlaceholder: "City, country",
     profilePlaceholder: "Kratak profesionalni opis...",
-    experiencePlaceholder: "Jedna stavka po redu. Primer:\nRukovalac mašina — 10 godina iskustva\nZemljani radovi i priprema terena",
-    machinesPlaceholder: "Bager CAT 330\nBuldozer D6R",
-    skillsPlaceholder: "Niskogradnja\nBezbedan rad\nPreciznost",
-    educationPlaceholder: "Kurs / obuka",
-    traitsPlaceholder: "Odgovoran, pouzdan, precizan...",
+    experiencePlaceholder: "One item per line",
+    machinesPlaceholder: "Add machines/tools, one per line",
+    skillsPlaceholder: "Add skills, one per line",
+    educationPlaceholder: "Education, licence or course",
+    traitsPlaceholder: "Personal qualities",
     saved: "Sačuvano",
     dataCleared: "Podaci su obrisani",
     demoFilled: "Demo podaci ubačeni ✅",
@@ -247,11 +247,11 @@ const ui = {
     jobTitlePlaceholder: "Enter your position",
     locationPlaceholder: "City, country",
     profilePlaceholder: "Short professional profile...",
-    experiencePlaceholder: "One item per line. Example:\nMachine operator — 10 years of experience\nEarthworks and site preparation",
+    experiencePlaceholder: "One item per line",
     machinesPlaceholder: "Add machines/tools, one per line",
-    skillsPlaceholder: "Earthworks\nSafe work\nPrecision",
+    skillsPlaceholder: "Add skills, one per line",
     educationPlaceholder: "Education, licence or course",
-    traitsPlaceholder: "Responsible, reliable, precise...",
+    traitsPlaceholder: "Personal qualities",
     saved: "Saved",
     dataCleared: "Data cleared",
     demoFilled: "Demo data inserted ✅",
@@ -362,11 +362,11 @@ const ui = {
     jobTitlePlaceholder: "Position eingeben",
     locationPlaceholder: "Stadt, Land",
     profilePlaceholder: "Kurzes berufliches Profil...",
-    experiencePlaceholder: "Eine Position pro Zeile. Beispiel:\nMaschinenführer — 10 Jahre Erfahrung\nErdarbeiten und Baustellenvorbereitung",
+    experiencePlaceholder: "Eine Position pro Zeile",
     machinesPlaceholder: "Maschinen/Werkzeuge eintragen, eine Zeile pro Eintrag",
-    skillsPlaceholder: "Erdarbeiten\nSicheres Arbeiten\nPräzision",
+    skillsPlaceholder: "Fähigkeiten eintragen, eine Zeile pro Eintrag",
     educationPlaceholder: "Ausbildung, Lizenz oder Kurs",
-    traitsPlaceholder: "Verantwortungsbewusst, zuverlässig, präzise...",
+    traitsPlaceholder: "Persönliche Eigenschaften",
     saved: "Gespeichert",
     dataCleared: "Daten gelöscht",
     demoFilled: "Demo-Daten eingefügt ✅",
@@ -740,6 +740,31 @@ function emptyData() {
     traits: "",
     languages: "[]"
   };
+}
+
+function cleanupOldCvFastData() {
+  const oldKeys = [
+    "cvfast_app_data",
+    "cvfast_app_data_v1",
+    "cvfast_app_data_v19",
+    "cvfast_app_data_v23",
+    "cvfast_app_data_v24_clean",
+    "cvfast_app_data_v25_clean",
+    "cvfast_app_data_v26_clean",
+    "cvfast_app_data_v27_clean"
+  ];
+  oldKeys.forEach((key) => {
+    try { localStorage.removeItem(key); } catch {}
+  });
+
+  // Manual emergency reset: open cvfast.app/?resetcv=1
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("resetcv") === "1" || params.get("fresh") === "1") {
+      localStorage.removeItem(STORAGE_KEY);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  } catch {}
 }
 
 function loadStored() {
@@ -1448,6 +1473,7 @@ function closeLegalModal() {
 
 
 function init() {
+  cleanupOldCvFastData();
   handleUnlockFromUrl();
 
   const stored = loadStored();
@@ -1666,7 +1692,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=27").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=28").catch(() => {});
     });
   }
 

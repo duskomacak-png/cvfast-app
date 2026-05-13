@@ -44,7 +44,7 @@
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
 <link href="icon-512.png" rel="icon" sizes="512x512" type="image/png"/>
-<link href="style.css?v=27" rel="stylesheet"/>
+<link href="style.css?v=28" rel="stylesheet"/>
 <!-- Google tag (gtag.js) -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QF9CV5P5H5"></script>
 <script>
@@ -87,39 +87,26 @@
 <button class="secondary-btn" data-i18n="installApp" id="installBtn" type="button">⬇️ Install app</button>
 <button class="secondary-btn" data-i18n="shareApp" id="shareBtn" type="button">🔗 Share app</button>
 </div>
-<div aria-label="CV example" class="mini-cv-card">
-<div class="mini-cv-header">
-<div class="avatar-demo" data-i18n="demoInitials">JW</div>
-<div>
-<h2 data-i18n="demoName">John Worker</h2>
-<p data-i18n="demoTitle">Heavy Equipment Operator</p>
-<div class="mini-line"></div>
-<ul class="mini-contact">
-<li data-i18n="demoPhone">📞 +44 7000 000000</li>
-<li data-i18n="demoEmail">✉️ john.worker@example.com</li>
-<li data-i18n="demoLocation">📍 City, Country</li>
-</ul>
-</div>
-</div>
-<div class="mini-section">
-<h3 data-i18n="cvProfile">PROFILE</h3>
-<p data-i18n="demoProfile">Reliable and experienced worker focused on safety, efficiency and quality of work.</p>
-</div>
-<div class="mini-section">
-<h3 data-i18n="cvExperience">WORK EXPERIENCE</h3>
-<ul>
-<li data-i18n="demoExperience1">Machine operator — sample company</li>
-<li data-i18n="demoExperience2">Earthworks and site preparation</li>
-</ul>
-</div>
-<div class="mini-section">
-<h3 data-i18n="cvSkills">SKILLS</h3>
-<div class="skill-tags">
-<span data-i18n="demoSkill1">Practical work</span>
-<span data-i18n="demoSkill2">Safety</span>
-<span data-i18n="demoSkill3">Precision</span>
-</div>
-</div>
+<div aria-label="CV visual preview" class="mini-cv-card hero-skeleton-card">
+  <div class="mini-cv-header">
+    <div class="avatar-demo">CV</div>
+    <div class="hero-skeleton-lines">
+      <div class="skeleton-line strong"></div>
+      <div class="skeleton-line medium"></div>
+      <div class="mini-line"></div>
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line short"></div>
+    </div>
+  </div>
+  <div class="mini-section">
+    <h3>PROFILE</h3>
+    <div class="skeleton-line wide"></div>
+    <div class="skeleton-line"></div>
+  </div>
+  <div class="mini-section">
+    <h3>SKILLS</h3>
+    <div class="skill-tags"><span></span><span></span><span></span></div>
+  </div>
 </div>
 <section class="how-strip" id="how">
 <h2 data-i18n="howTitle">How it works</h2>
@@ -159,6 +146,21 @@
 <h2 data-i18n="builderTitle">Create your CV</h2>
 </div>
 <button class="secondary-btn small" data-i18n="fullPreview" id="openFullPreviewBtn" type="button">👁 View full CV</button>
+</div>
+<div class="template-showcase-v28" aria-label="CV template examples">
+  <div class="template-showcase-title"><strong>CV template examples</strong><span>Visual examples only — they never enter your CV automatically.</span></div>
+  <div class="template-sample-strip-v28">
+    <button class="sample-cv-card-v28 classic" data-template-pick="classic" type="button" aria-label="Choose Classic Clean template">
+      <b>Classic Clean</b>
+      <span class="line big"></span><span class="line"></span><span class="line short"></span>
+      <em></em><span class="line"></span><span class="line"></span>
+    </button>
+    <button class="sample-cv-card-v28 sidebar" data-template-pick="sidebar" type="button" aria-label="Choose Modern Sidebar template">
+      <i></i><b>Modern Sidebar</b>
+      <span class="line big"></span><span class="line"></span><span class="line short"></span>
+      <em></em><span class="line"></span>
+    </button>
+  </div>
 </div>
 
 
@@ -226,7 +228,6 @@
 <button class="preview-help" data-help="profile" data-i18n="exampleBtn" type="button">👁 Example</button>
 </div>
 <textarea data-placeholder="profilePlaceholder" id="profile" name="profile" placeholder="Short professional profile..." rows="5"></textarea>
-<details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>Reliable worker with practical field experience, focused on safety, precision and quality work.</p></details>
 </div>
 <div class="form-block">
 <div class="block-title">
@@ -234,7 +235,6 @@
 <button class="preview-help" data-help="experience" data-i18n="exampleBtn" type="button">👁 Example</button>
 </div>
 <textarea data-placeholder="experiencePlaceholder" id="experience" name="experience" placeholder="One item per line..." rows="7"></textarea>
-<details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>Machine operator — 10 years of experience<br>Earthworks and site preparation<br>Work in dynamic construction site conditions</p></details>
 </div>
 <div class="form-block">
 <div class="block-title">
@@ -249,7 +249,6 @@
 <textarea data-placeholder="skillsPlaceholder" id="skills" name="skills" placeholder="Add skills, one per line" rows="5"></textarea>
 </label>
 </div>
-<details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>Machines: CAT 330 excavator, D6R bulldozer<br>Skills: Earthworks, safe work, precision, teamwork</p></details>
 </div>
 <div class="form-block">
 <div class="block-title">
@@ -275,7 +274,6 @@
 </div>
 <div class="language-list" id="languageList"></div>
 <p class="field-note" data-i18n="languageLevelNote">Use CEFR levels: A1, A2, B1, B2, C1, C2.</p>
-<details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>English — B2<br>German — A2<br>French — A1</p></details>
 </div>
 <div class="form-block">
 <div class="block-title">
@@ -290,7 +288,6 @@
 <textarea data-placeholder="traitsPlaceholder" id="traits" name="traits" placeholder="Personal qualities" rows="4"></textarea>
 </label>
 </div>
-<details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>Training / course: Safety training, machine licence, completed course<br>Personal qualities: Responsible, reliable, precise, ready to learn</p></details>
 </div>
 <div class="form-actions">
 <button class="secondary-btn" data-i18n="fillDemo" id="fillDemoBtn" type="button">Fill demo</button>
@@ -353,6 +350,6 @@
 </div>
 </div>
 <div class="toast hidden" id="toast"></div>
-<script src="script.js?v=27"></script>
+<script src="script.js?v=28"></script>
 </body>
 </html>
