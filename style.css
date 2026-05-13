@@ -1692,3 +1692,32 @@ textarea {
     margin-bottom: -629px !important;
   }
 }
+
+/* v22 final: user-only CV behavior and clearer language list */
+.cv-empty-note {
+  padding: 64px 58px;
+  color: #64748b;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.language-list {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.language-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.language-chip span {
+  white-space: nowrap;
+}
+.cv-page:not(.sidebar) .cv-header:empty,
+.cv-section:empty {
+  display: none;
+}
+.cv-page.sidebar .cv-main:empty {
+  display: none;
+}

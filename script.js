@@ -1,4 +1,4 @@
-const STORAGE_KEY = "cvfast_app_data_v2";
+const STORAGE_KEY = "cvfast_app_data_v22_final";
 const UNLOCK_KEY = "cvfast_pdf_unlocked_v1";
 const UNLOCK_CODE = "cvfast_pdf_2026_ok";
 
@@ -809,13 +809,39 @@ function applyLanguage(lang) {
   refreshPreview();
 }
 
-function getData() {
+function getLanguageRows(includeDraft = false) {
+  const hidden = $("#languages");
+  const rows = parseLanguages(hidden?.value || "[]");
+
+  if (includeDraft) {
+    const name = ($("#languageName")?.value || "").trim();
+    const level = ($("#languageLevel")?.value || "").trim().toUpperCase();
+    const allowed = ["A1", "A2", "B1", "B2", "C1", "C2"];
+    const alreadyExists = rows.some((item) =>
+      item.name.toLowerCase() === name.toLowerCase() && item.level === level
+    );
+
+    if (name && allowed.includes(level) && !alreadyExists) {
+      rows.push({ name, level });
+    }
+  }
+
+  return rows;
+}
+
+function getData(options = {}) {
   const stored = loadStored();
   const data = { ...emptyData(), ...stored };
   fields.forEach((field) => {
     const el = $("#" + field);
     if (el) data[field] = el.value || "";
   });
+
+  // Important: preview/PDF must include the language currently typed in the
+  // language row, even before the user presses "Add language".
+  const languageRows = getLanguageRows(Boolean(options.includeLanguageDraft));
+  data.languages = JSON.stringify(languageRows);
+
   data.appLanguage = stored.appLanguage || data.cvLanguage || "en";
   if (data.appLanguage === "sr") data.appLanguage = "en";
   if (data.cvLanguage === "sr") data.cvLanguage = "en";
@@ -966,16 +992,28 @@ function renderCv(target, data, options = {}) {
   const expItems = splitLines(d.experience);
   const languageItems = formatLanguages(d.languages);
 
+  const hasName = Boolean(String(d.fullName || "").trim());
+  const hasTitle = Boolean(String(d.jobTitle || "").trim());
+  const hasContact = Boolean(String(d.phone || d.email || d.location || "").trim());
+  const hasPhoto = Boolean(d.photo);
+  const hasIdentity = hasName || hasTitle || hasContact || hasPhoto;
+
   const photoHtml = d.photo
     ? `<img class="cv-photo" src="${d.photo}" alt="CV photo" />`
-    : `<div class="cv-photo-placeholder">${esc(initials(d.fullName))}</div>`;
+    : (hasName ? `<div class="cv-photo-placeholder">${esc(initials(d.fullName))}</div>` : "");
 
-  const contactHtml = `
+  const contactHtml = hasContact ? `
     <ul class="cv-contact">
       ${d.phone ? `<li>📞 ${esc(d.phone)}</li>` : ""}
       ${d.email ? `<li>✉️ ${esc(d.email)}</li>` : ""}
       ${d.location ? `<li>📍 ${esc(d.location)}</li>` : ""}
     </ul>
+  ` : "";
+
+  const nameTitleHtml = `
+    ${hasName ? `<h1 class="cv-name">${esc(d.fullName)}</h1>` : ""}
+    ${hasTitle ? `<p class="cv-title">${esc(d.jobTitle)}</p>` : ""}
+    ${(hasName || hasTitle) ? `<div class="cv-divider"></div>` : ""}
   `;
 
   const section = (title, html) => html ? `
@@ -987,24 +1025,40 @@ function renderCv(target, data, options = {}) {
 
   const listHtml = (items) => items.length ? `<ul class="cv-list">${items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>` : "";
   const tagsHtml = (items) => items.length ? `<div class="cv-tags">${items.map(i => `<span>${esc(i)}</span>`).join("")}</div>` : "";
-  const paragraphHtml = (text) => text ? `<p class="cv-text">${esc(text)}</p>` : "";
+  const paragraphHtml = (text) => String(text || "").trim() ? `<p class="cv-text">${esc(text)}</p>` : "";
+
+  const filledSections = [
+    hasIdentity,
+    Boolean(d.profile),
+    expItems.length,
+    machineItems.length,
+    skillItems.length,
+    languageItems.length,
+    Boolean(d.education),
+    Boolean(d.traits)
+  ].some(Boolean);
 
   target.className = `cv-page ${d.template || "classic"}`;
 
+  if (!filledSections) {
+    target.innerHTML = `<div class="cv-empty-note">Start by entering your name, contact details and CV content.</div>`;
+    return;
+  }
+
   if (d.template === "sidebar") {
+    const sideContent = `
+      ${photoHtml}
+      ${nameTitleHtml}
+      ${contactHtml}
+      ${section(L.languages, listHtml(languageItems))}
+      ${section(L.machines, listHtml(machineItems))}
+      ${section(L.skills, tagsHtml(skillItems))}
+      ${section(L.education, paragraphHtml(d.education))}
+    `.trim();
+
     target.innerHTML = `
       <div class="cv-inner">
-        <aside class="cv-side">
-          ${photoHtml}
-          <h1 class="cv-name">${esc(d.fullName || L.placeholderName)}</h1>
-          <p class="cv-title">${esc(d.jobTitle || L.placeholderTitle)}</p>
-          <div class="cv-divider"></div>
-          ${contactHtml}
-          ${section(L.languages, listHtml(languageItems))}
-          ${section(L.machines, listHtml(machineItems))}
-          ${section(L.skills, tagsHtml(skillItems))}
-          ${section(L.education, paragraphHtml(d.education))}
-        </aside>
+        ${sideContent ? `<aside class="cv-side">${sideContent}</aside>` : ""}
         <main class="cv-main">
           ${section(L.profile, paragraphHtml(d.profile))}
           ${section(L.experience, listHtml(expItems))}
@@ -1016,30 +1070,36 @@ function renderCv(target, data, options = {}) {
     return;
   }
 
+  const headerHtml = hasIdentity ? `
+    <header class="cv-header">
+      ${photoHtml}
+      <div>
+        ${nameTitleHtml}
+        ${contactHtml}
+      </div>
+    </header>
+  ` : "";
+
   target.innerHTML = `
     <div class="cv-inner">
-      <header class="cv-header">
-        ${photoHtml}
-        <div>
-          <h1 class="cv-name">${esc(d.fullName || L.placeholderName)}</h1>
-          <p class="cv-title">${esc(d.jobTitle || L.placeholderTitle)}</p>
-          <div class="cv-divider"></div>
-          ${contactHtml}
-        </div>
-      </header>
+      ${headerHtml}
 
       ${section(L.profile, paragraphHtml(d.profile))}
       ${section(L.experience, listHtml(expItems))}
 
-      <div class="cv-columns">
-        ${section(L.machines, listHtml(machineItems))}
-        ${section(L.skills, tagsHtml(skillItems))}
-      </div>
+      ${(machineItems.length || skillItems.length) ? `
+        <div class="cv-columns">
+          ${section(L.machines, listHtml(machineItems))}
+          ${section(L.skills, tagsHtml(skillItems))}
+        </div>
+      ` : ""}
 
-      <div class="cv-columns">
-        ${section(L.languages, listHtml(languageItems))}
-        ${section(L.education, paragraphHtml(d.education))}
-      </div>
+      ${(languageItems.length || d.education) ? `
+        <div class="cv-columns">
+          ${section(L.languages, listHtml(languageItems))}
+          ${section(L.education, paragraphHtml(d.education))}
+        </div>
+      ` : ""}
 
       ${section(L.traits, paragraphHtml(d.traits))}
     </div>
@@ -1048,11 +1108,11 @@ function renderCv(target, data, options = {}) {
 }
 
 function refreshPreview() {
-  renderCv($("#cvPreview"), getData(), { placeholders: false });
+  renderCv($("#cvPreview"), getData({ includeLanguageDraft: true }), { placeholders: false });
 }
 
 function openPreviewModal(title = "") {
-  const data = getData();
+  const data = getData({ includeLanguageDraft: true });
   const lang = cvLabels[data.cvLanguage] && data.cvLanguage !== "sr" ? data.cvLanguage : "en";
   $("#previewModalTitle").textContent = title || cvLabels[lang].previewTitle;
   renderCv($("#modalCvPreview"), data, { placeholders: false });
@@ -1158,7 +1218,7 @@ async function downloadPdf() {
   await ensurePdfLibraries();
 
   const preview = $("#cvPreview");
-  renderCv(preview, getData(), { placeholders: false });
+  renderCv(preview, getData({ includeLanguageDraft: true }), { placeholders: false });
 
   const footer = preview.querySelector(".cv-footer");
   const oldFooterText = footer?.textContent;
@@ -1183,7 +1243,7 @@ async function downloadPdf() {
   const pdf = new jsPDF("p", "mm", "a4");
 
   pdf.addImage(imgData, "JPEG", 0, 0, 210, 297);
-  const name = (getData().fullName || "cvfast-cv").trim().replace(/[^\p{L}\p{N}]+/gu, "_");
+  const name = (getData({ includeLanguageDraft: true }).fullName || "cvfast-cv").trim().replace(/[^\p{L}\p{N}]+/gu, "_");
   pdf.save(`${name}_CV.pdf`);
 }
 
@@ -1410,6 +1470,8 @@ function init() {
   });
 
   $("#addLanguageBtn")?.addEventListener("click", addLanguageFromInputs);
+  $("#languageName")?.addEventListener("input", refreshPreview);
+  $("#languageLevel")?.addEventListener("change", refreshPreview);
   $("#languageName")?.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -1540,7 +1602,16 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
           languages: "Beispiel für Sprachniveaus"
         }
       };
-      openPreviewModal(titles[lang][btn.dataset.help] || "");
+      const demo = {
+        ...emptyData(),
+        ...demoDataByLang[lang],
+        cvLanguage: lang,
+        appLanguage: lang,
+        template: $("#template")?.value || "classic"
+      };
+      $("#previewModalTitle").textContent = titles[lang][btn.dataset.help] || "";
+      renderCv($("#modalCvPreview"), demo, { placeholders: false });
+      $("#previewModal").classList.remove("hidden");
     });
   });
 
@@ -1586,7 +1657,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=20").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=22").catch(() => {});
     });
   }
 
