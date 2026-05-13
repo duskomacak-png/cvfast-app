@@ -44,7 +44,7 @@
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
 <link href="icon-512.png" rel="icon" sizes="512x512" type="image/png"/>
-<link href="style.css?v=25" rel="stylesheet"/>
+<link href="style.css?v=26" rel="stylesheet"/>
 <!-- Google tag (gtag.js) -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QF9CV5P5H5"></script>
 <script>
@@ -136,11 +136,6 @@
 <p data-i18n="supportText">Build first. Pay only when your PDF is ready. No subscription.</p>
 </div>
 </div>
-<div aria-label="Language options" class="language-row">
-
-<button class="lang-pill active" data-set-lang="en" type="button">EN</button>
-<button class="lang-pill" data-set-lang="de" type="button">DE</button>
-</div>
 <p class="browser-note" data-i18n="browserNote">🔒 Your data stays in your browser</p>
 </section>
 <section class="features" id="features">
@@ -192,10 +187,16 @@
 <button class="template-choice active" data-template-pick="classic" type="button">
 <strong>Classic Clean</strong>
 <span data-i18n="classicTemplateHint">Clean one-page CV</span>
+<div class="template-mini classic-mini" aria-hidden="true">
+<div></div><div></div><div></div><div></div>
+</div>
 </button>
 <button class="template-choice" data-template-pick="sidebar" type="button">
 <strong>Modern Sidebar</strong>
 <span data-i18n="sidebarTemplateHint">Modern CV with side column</span>
+<div class="template-mini sidebar-mini" aria-hidden="true">
+<i></i><div><span></span><span></span><span></span></div>
+</div>
 </button>
 </div>
 </label>
@@ -225,7 +226,7 @@
 <button class="preview-help" data-help="profile" data-i18n="exampleBtn" type="button">👁 Example</button>
 </div>
 <textarea data-placeholder="profilePlaceholder" id="profile" name="profile" placeholder="Short professional profile..." rows="5"></textarea>
-<details class="example-box"><summary>Example text</summary><p>Reliable worker with practical field experience, focused on safety, precision and quality work.</p></details>
+<details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>Reliable worker with practical field experience, focused on safety, precision and quality work.</p></details>
 </div>
 <div class="form-block">
 <div class="block-title">
@@ -233,7 +234,7 @@
 <button class="preview-help" data-help="experience" data-i18n="exampleBtn" type="button">👁 Example</button>
 </div>
 <textarea data-placeholder="experiencePlaceholder" id="experience" name="experience" placeholder="One item per line..." rows="7"></textarea>
-<details class="example-box"><summary>Example text</summary><p>Machine operator — 10 years of experience<br>Earthworks and site preparation<br>Work in dynamic construction site conditions</p></details>
+<details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>Machine operator — 10 years of experience<br>Earthworks and site preparation<br>Work in dynamic construction site conditions</p></details>
 </div>
 <div class="form-block">
 <div class="block-title">
@@ -250,7 +251,7 @@ D6R bulldozer" rows="5"></textarea>
 Safe work" rows="5"></textarea>
 </label>
 </div>
-<details class="example-box"><summary>Example text</summary><p>Machines: CAT 330 excavator, D6R bulldozer<br>Skills: Earthworks, safe work, precision, teamwork</p></details>
+<details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>Machines: CAT 330 excavator, D6R bulldozer<br>Skills: Earthworks, safe work, precision, teamwork</p></details>
 </div>
 <div class="form-block">
 <div class="block-title">
@@ -276,7 +277,7 @@ Safe work" rows="5"></textarea>
 </div>
 <div class="language-list" id="languageList"></div>
 <p class="field-note" data-i18n="languageLevelNote">Use CEFR levels: A1, A2, B1, B2, C1, C2.</p>
-<details class="example-box"><summary>Example text</summary><p>English — B2<br>German — A2<br>French — A1</p></details>
+<details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>English — B2<br>German — A2<br>French — A1</p></details>
 </div>
 <div class="form-block">
 <div class="block-title">
@@ -291,7 +292,7 @@ Safe work" rows="5"></textarea>
 <textarea data-placeholder="traitsPlaceholder" id="traits" name="traits" placeholder="Responsible, reliable, precise..." rows="4"></textarea>
 </label>
 </div>
-<details class="example-box"><summary>Example text</summary><p>Training / course: Safety training, machine licence, completed course<br>Personal qualities: Responsible, reliable, precise, ready to learn</p></details>
+<details class="example-box" open><summary>Example only — it will not enter your CV automatically</summary><p>Training / course: Safety training, machine licence, completed course<br>Personal qualities: Responsible, reliable, precise, ready to learn</p></details>
 </div>
 <div class="form-actions">
 <button class="secondary-btn" data-i18n="fillDemo" id="fillDemoBtn" type="button">Fill demo</button>
@@ -354,6 +355,6 @@ Safe work" rows="5"></textarea>
 </div>
 </div>
 <div class="toast hidden" id="toast"></div>
-<script src="script.js?v=25"></script>
+<script src="script.js?v=26"></script>
 </body>
 </html>
