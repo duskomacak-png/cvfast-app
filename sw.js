@@ -1,10 +1,12 @@
-const CACHE_NAME = "cvfast-v18-language-levels";
+const CACHE_NAME = "cvfast-v19-language-levels-cache-fix";
 
 const APP_SHELL = [
   "/",
   "/index.html",
   "/style.css",
+  "/style.css?v=19",
   "/script.js",
+  "/script.js?v=19",
   "/manifest.json",
   "/manifest.webmanifest",
   "/icon-192.png",
@@ -58,7 +60,7 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
+    caches.match(event.request, { ignoreSearch: true }).then((cached) => {
       return cached || fetch(event.request).catch(() => {
         if (event.request.mode === "navigate") {
           return caches.match("/index.html");

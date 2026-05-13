@@ -2,8 +2,7 @@ const STORAGE_KEY = "cvfast_app_data_v2";
 const UNLOCK_KEY = "cvfast_pdf_unlocked_v1";
 const UNLOCK_CODE = "cvfast_pdf_2026_ok";
 
-// TODO: kad napraviš PayPal link, zameni ovde.
-// PayPal return URL: https://cvfast.app/?unlock=cvfast_pdf_2026_ok
+// PayPal return URL configured in PayPal: https://cvfast.app/?unlock=cvfast_pdf_2026_ok
 const PAYMENT_LINK = "https://www.paypal.com/ncp/payment/LU67SFVC967EY";
 
 const SHOW_CVFAST_FOOTER_IN_PDF = false;
@@ -1289,9 +1288,10 @@ function setupPwaInstall() {
       return;
     }
 
-    // Ako browser nije poslao realan install prompt, ne prikazuj ništa.
+    // Ako browser nije poslao realan install prompt, prikaži uputstvo umesto da dugme deluje mrtvo.
     if (!deferredPrompt) {
       console.log("PWA install prompt nije dostupan na ovom browseru/uređaju.");
+      showInstallInstructions("auto");
       return;
     }
 
