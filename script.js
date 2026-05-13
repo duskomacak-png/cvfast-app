@@ -962,7 +962,7 @@ function initials(name) {
 }
 
 function withPlaceholders(data) {
-  // V30 safety rule: never inject demo data into the real CV preview or PDF.
+  // V31 safety rule: never inject demo data into the real CV preview or PDF.
   // Demo data may only be inserted by the Fill demo button or by the Example modal.
   return { ...data };
 }
@@ -1651,7 +1651,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=30").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=31").catch(() => {});
     });
   }
 

@@ -1918,61 +1918,115 @@ textarea {
   .template-example-grid{grid-template-columns:1fr;}
 }
 
-/* V30: stronger visible CV template examples before the user starts typing. */
+/* V31: show both CV template examples as real A4 portrait pages before typing. */
 .template-showcase{
-  margin-bottom:24px;
+  margin: 0 0 28px;
+}
+.template-showcase-head{
+  align-items:flex-end;
+  margin-bottom:16px;
+}
+.template-showcase-head h2{
+  margin:5px 0 0;
+  letter-spacing:-.04em;
+}
+.template-showcase-head p{
+  max-width:420px;
+  margin:0;
+  color:#64748b;
+  font-weight:800;
 }
 .template-example-grid-real{
-  align-items:stretch;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(330px,1fr));
+  gap:22px;
+  align-items:start;
 }
 .template-example-card{
-  min-height:360px;
   display:flex;
   flex-direction:column;
+  gap:12px;
+  min-height:0;
+  padding:14px;
+  border:2px solid #dbe5f0;
+  border-radius:22px;
+  background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);
+  cursor:pointer;
+  text-align:left;
+  box-shadow:0 14px 36px rgba(15,35,70,.09);
+  transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.template-example-card:hover{
+  transform:translateY(-2px);
+  border-color:#9bb7d5;
+  box-shadow:0 18px 46px rgba(15,35,70,.13);
+}
+.template-example-card.active{
+  border-color:#0b5cff;
+  box-shadow:0 0 0 4px rgba(11,92,255,.11),0 18px 48px rgba(15,35,70,.14);
 }
 .template-example-title{
-  font-size:1rem;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start;
+  color:#10243d;
+  font-size:1.02rem;
   line-height:1.25;
+  font-weight:950;
 }
 .template-example-title small{
   display:block;
   margin-top:3px;
-  color:var(--muted);
-  font-weight:700;
+  color:#64748b;
+  font-weight:800;
   font-size:.78rem;
 }
+.template-example-card.active .template-example-title::after{
+  content:'Selected';
+  flex:0 0 auto;
+  border-radius:999px;
+  padding:5px 9px;
+  background:#eaf2ff;
+  color:#0b5cff;
+  font-size:.72rem;
+  font-weight:950;
+}
 .sample-real-cv{
-  flex:1;
-  min-height:285px;
-  border-radius:18px;
-  border:1px solid #cfdbea;
+  width:100%;
+  aspect-ratio:210/297;
+  min-height:0;
+  border-radius:8px;
+  border:1px solid #c8d5e4;
   background:#fff;
   color:#111827;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.65);
+  box-shadow:0 16px 32px rgba(15,23,42,.14);
+  overflow:hidden;
 }
 .sample-classic.sample-real-cv{
-  padding:18px 20px;
-  background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
+  padding:28px 30px;
+  background:#fff;
 }
 .sample-cv-top{
   display:flex;
   justify-content:space-between;
-  gap:14px;
+  gap:12px;
   border-bottom:3px solid #18324d;
-  padding-bottom:12px;
-  margin-bottom:10px;
+  padding-bottom:14px;
+  margin-bottom:13px;
 }
 .sample-cv-top strong{
   display:block;
-  font-size:1.35rem;
-  letter-spacing:-.03em;
+  font-size:1.45rem;
+  letter-spacing:-.035em;
+  color:#0f172a;
 }
 .sample-cv-top span{
   display:block;
   margin-top:4px;
   color:#475569;
-  font-weight:800;
-  font-size:.85rem;
+  font-weight:850;
+  font-size:.86rem;
 }
 .sample-cv-top em{
   align-self:flex-start;
@@ -1983,40 +2037,42 @@ textarea {
   padding:5px 8px;
   color:#64748b;
   background:#f8fafc;
-  font-size:.7rem;
-  font-weight:900;
+  font-size:.68rem;
+  font-weight:950;
 }
 .sample-cv-contact{
-  font-size:.74rem;
+  font-size:.76rem;
   color:#475569;
-  font-weight:800;
+  font-weight:850;
+  padding-bottom:12px;
+  border-bottom:1px solid #e5edf5;
   margin-bottom:14px;
 }
 .sample-cv-section{
   border-top:1px solid #e5edf5;
-  padding-top:10px;
-  margin-top:10px;
+  padding-top:11px;
+  margin-top:12px;
 }
 .sample-cv-section b{
   display:block;
   color:#0f172a;
-  font-size:.83rem;
+  font-size:.82rem;
   text-transform:uppercase;
-  letter-spacing:.06em;
-  margin-bottom:5px;
+  letter-spacing:.075em;
+  margin-bottom:6px;
 }
 .sample-cv-section p{
   margin:0;
   color:#475569;
-  font-size:.78rem;
-  line-height:1.45;
+  font-size:.8rem;
+  line-height:1.5;
   font-weight:650;
 }
 .sample-cv-chips{
   display:flex;
   flex-wrap:wrap;
   gap:7px;
-  margin-top:14px;
+  margin-top:15px;
 }
 .sample-cv-chips span{
   border-radius:999px;
@@ -2024,31 +2080,30 @@ textarea {
   color:#1f3b57;
   padding:6px 9px;
   font-size:.72rem;
-  font-weight:900;
+  font-weight:950;
 }
 .sample-sidebar.sample-real-cv{
   display:grid;
-  grid-template-columns:130px 1fr;
+  grid-template-columns:30% 70%;
   gap:0;
   padding:0;
-  overflow:hidden;
   background:#fff;
 }
 .sample-sidebar .sample-side{
-  min-height:285px;
+  min-height:100%;
   background:linear-gradient(180deg,#17324d,#0f2238);
   color:#fff;
-  padding:16px 13px;
+  padding:28px 16px;
   display:flex;
   flex-direction:column;
   gap:8px;
 }
 .sample-sidebar .sample-side b{
   display:block;
-  margin-top:8px;
-  font-size:.76rem;
+  margin-top:11px;
+  font-size:.74rem;
   text-transform:uppercase;
-  letter-spacing:.07em;
+  letter-spacing:.08em;
 }
 .sample-sidebar .sample-side span{
   display:block;
@@ -2056,37 +2111,43 @@ textarea {
   font-size:.72rem;
   font-weight:800;
   border-bottom:1px solid rgba(255,255,255,.16);
-  padding-bottom:5px;
+  padding-bottom:6px;
 }
 .sample-avatar{
-  width:52px;
-  height:52px;
+  width:54px;
+  height:54px;
   display:grid;
   place-items:center;
   border-radius:16px;
   background:#fff;
   color:#17324d;
   font-weight:950;
-  margin-bottom:4px;
+  margin-bottom:8px;
 }
 .sample-sidebar .sample-main{
-  padding:17px 18px;
+  padding:30px 24px;
 }
 .sample-cv-top.compact{
   display:block;
   border-bottom:3px solid #dde7f1;
-  padding-bottom:10px;
+  padding-bottom:12px;
 }
 .sample-cv-top.compact strong{
-  font-size:1.2rem;
+  font-size:1.28rem;
 }
 .sample-cv-top.compact em{
   display:inline-block;
-  margin-top:7px;
+  margin-top:8px;
 }
-@media (max-width: 720px){
-  .template-example-card{min-height:auto;}
-  .sample-sidebar.sample-real-cv{grid-template-columns:105px 1fr;}
+@media (max-width: 920px){
+  .template-example-grid-real{grid-template-columns:1fr;}
+  .sample-real-cv{max-width:520px;margin:0 auto;}
+}
+@media (max-width: 560px){
+  .sample-classic.sample-real-cv{padding:20px 18px;}
+  .sample-sidebar .sample-side{padding:20px 10px;}
+  .sample-sidebar .sample-main{padding:20px 14px;}
   .sample-cv-top{display:block;}
   .sample-cv-top em{display:inline-block;margin-top:8px;}
+  .sample-cv-section p{font-size:.74rem;}
 }
