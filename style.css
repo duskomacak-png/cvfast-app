@@ -2205,3 +2205,156 @@ textarea {
   margin-left:auto !important;
   margin-right:auto !important;
 }
+
+
+/* V37: mobile-only visual fix.
+   1) The two A4 template examples above the form must not overlap on phones.
+   2) The Live CV Preview A4 page must fit and stay centered on phones.
+   No PayPal/PDF/unlock/JS logic changes. */
+@media (max-width: 680px){
+  .template-showcase{
+    padding-left:14px !important;
+    padding-right:14px !important;
+  }
+  .template-example-grid-real{
+    grid-template-columns:1fr !important;
+    gap:18px !important;
+  }
+  .template-example-card{
+    padding:14px !important;
+    border-radius:22px !important;
+  }
+  .template-example-title{
+    font-size:1rem !important;
+    gap:10px !important;
+  }
+  .template-example-title small{
+    font-size:.76rem !important;
+    line-height:1.25 !important;
+  }
+  .template-example-card.active .template-example-title::after{
+    font-size:.68rem !important;
+    padding:5px 8px !important;
+  }
+  .sample-real-cv{
+    max-width:100% !important;
+    aspect-ratio:210 / 297 !important;
+    overflow:hidden !important;
+  }
+  .sample-classic.sample-real-cv{
+    padding:18px 18px !important;
+  }
+  .sample-cv-top{
+    gap:8px !important;
+    padding-bottom:9px !important;
+    margin-bottom:8px !important;
+    border-bottom-width:2px !important;
+  }
+  .sample-cv-top strong{
+    font-size:1rem !important;
+    line-height:1.05 !important;
+  }
+  .sample-cv-top span{
+    font-size:.62rem !important;
+    line-height:1.15 !important;
+    margin-top:2px !important;
+  }
+  .sample-cv-top em{
+    font-size:.48rem !important;
+    padding:3px 6px !important;
+    line-height:1.1 !important;
+  }
+  .sample-cv-contact{
+    font-size:.50rem !important;
+    line-height:1.25 !important;
+    padding-bottom:8px !important;
+    margin-bottom:8px !important;
+  }
+  .sample-cv-section{
+    padding-top:6px !important;
+    margin-top:6px !important;
+  }
+  .sample-cv-section b{
+    font-size:.56rem !important;
+    line-height:1.1 !important;
+    letter-spacing:.055em !important;
+    margin-bottom:3px !important;
+  }
+  .sample-cv-section p{
+    font-size:.51rem !important;
+    line-height:1.22 !important;
+  }
+  .sample-cv-chips{
+    gap:4px !important;
+    margin-top:8px !important;
+  }
+  .sample-cv-chips span{
+    font-size:.48rem !important;
+    padding:3px 5px !important;
+    line-height:1.1 !important;
+  }
+  .sample-sidebar.sample-real-cv{
+    grid-template-columns:31% 69% !important;
+  }
+  .sample-sidebar .sample-side{
+    padding:16px 8px !important;
+    gap:4px !important;
+  }
+  .sample-avatar{
+    width:38px !important;
+    height:38px !important;
+    border-radius:12px !important;
+    font-size:.82rem !important;
+    margin-bottom:5px !important;
+  }
+  .sample-sidebar .sample-side b{
+    margin-top:7px !important;
+    font-size:.50rem !important;
+    line-height:1.1 !important;
+    letter-spacing:.055em !important;
+  }
+  .sample-sidebar .sample-side span{
+    font-size:.48rem !important;
+    line-height:1.1 !important;
+    padding-bottom:4px !important;
+  }
+  .sample-sidebar .sample-main{
+    padding:17px 13px !important;
+  }
+  .sample-cv-top.compact{
+    padding-bottom:8px !important;
+  }
+  .sample-cv-top.compact strong{
+    font-size:.94rem !important;
+  }
+  .sample-cv-top.compact em{
+    margin-top:5px !important;
+  }
+  .paper-scroll{
+    justify-content:center !important;
+    padding:12px 8px 20px !important;
+    overflow:auto !important;
+  }
+  .paper-scroll .cv-page{
+    transform:scale(.39) !important;
+    transform-origin:top center !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    margin-bottom:-685px !important;
+  }
+  .cv-sample-ribbon{
+    position:absolute !important;
+    right:14px !important;
+    top:12px !important;
+    max-width:330px !important;
+    white-space:normal !important;
+    text-align:center !important;
+    font-size:.66rem !important;
+  }
+}
+@media (max-width: 390px){
+  .paper-scroll .cv-page{
+    transform:scale(.37) !important;
+    margin-bottom:-708px !important;
+  }
+}
