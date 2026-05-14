@@ -1674,15 +1674,32 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
           languages: "Beispiel für Sprachniveaus"
         }
       };
-      const demo = {
-        ...emptyData(),
-        ...demoDataByLang[lang],
-        cvLanguage: lang,
-        appLanguage: lang,
-        template: $("#template")?.value || "classic"
-      };
-      $("#previewModalTitle").textContent = titles[lang][btn.dataset.help] || "";
-      renderCv($("#modalCvPreview"), demo, { placeholders: false });
+      const currentData = getData({ includeLanguageDraft: true });
+      currentData.cvLanguage = currentData.cvLanguage === "sr" ? "en" : currentData.cvLanguage;
+      currentData.appLanguage = currentData.appLanguage === "sr" ? "en" : currentData.appLanguage;
+      currentData.template = $("#template")?.value || currentData.template || "classic";
+
+      // V39: if the user has already started filling the CV, Example must show
+      // the user's current live CV, not a generic demo sample.
+      if (hasRealCvContent(currentData)) {
+        const liveTitles = {
+          sr: "Tvoj trenutni CV prikaz",
+          en: "Your current CV preview",
+          de: "Deine aktuelle CV-Vorschau"
+        };
+        $("#previewModalTitle").textContent = liveTitles[lang] || liveTitles.en;
+        renderCv($("#modalCvPreview"), currentData, { placeholders: false });
+      } else {
+        const demo = {
+          ...emptyData(),
+          ...demoDataByLang[lang],
+          cvLanguage: lang,
+          appLanguage: lang,
+          template: $("#template")?.value || "classic"
+        };
+        $("#previewModalTitle").textContent = titles[lang][btn.dataset.help] || "";
+        renderCv($("#modalCvPreview"), demo, { placeholders: false });
+      }
       $("#previewModal").classList.remove("hidden");
     });
   });
@@ -1729,7 +1746,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=38").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=39").catch(() => {});
     });
   }
 
