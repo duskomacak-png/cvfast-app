@@ -2358,3 +2358,19 @@ textarea {
     margin-bottom:-708px !important;
   }
 }
+
+
+/* V38: Mobile behavior fix.
+   When the user has typed real CV data, hide the top demo template examples on phones,
+   so mobile users see the real Live CV Preview instead of thinking demo data is still active. */
+@media (max-width: 760px){
+  body.has-cv-content .template-showcase{
+    display:none !important;
+  }
+  body.has-cv-content .builder-section{
+    padding-top:18px !important;
+  }
+  body.has-cv-content .live-preview{
+    margin-top:18px !important;
+  }
+}

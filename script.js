@@ -1163,7 +1163,14 @@ function refreshPreview() {
   const data = getData({ includeLanguageDraft: true });
   const preview = $("#cvPreview");
   if (!preview) return;
-  if (!hasRealCvContent(data)) {
+
+  const hasContent = hasRealCvContent(data);
+  // V38: on mobile, once the user starts typing, hide the demo template examples
+  // and show only the real live CV preview. Clear brings the samples back.
+  document.body.classList.toggle("has-cv-content", hasContent);
+  document.body.classList.toggle("cv-is-empty", !hasContent);
+
+  if (!hasContent) {
     renderLiveTemplateSample(preview, data.template || "classic", data.cvLanguage || getLang());
     return;
   }
@@ -1722,7 +1729,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=37").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=38").catch(() => {});
     });
   }
 
