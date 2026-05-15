@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v408-bottom-nav-fix";
+const CACHE_NAME = "cvfast-v409-step-scroll-fix";
 
 const APP_SHELL = [
   "/",

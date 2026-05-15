@@ -2848,3 +2848,5 @@ body.v40-active .app > footer { display:none !important; }
     font-size:13px;
   }
 }
+
+/* V40.9: JS scrolls the glass input card to the top after Next/Back/Jump. */

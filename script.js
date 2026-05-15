@@ -2203,9 +2203,27 @@ function v40RemovePhoto(){
 function v40UpdateDraft(type,key,value){ if(type==="experience") v40State.draftExperience[key]=value; if(type==="education") v40State.draftEducation[key]=value; v40CommitAndPreview(); }
 function v40CommitAndPreview(){ v40CommitToLegacy(); v40RenderPreview(); }
 function v40SelectTemplate(template){ v40State.selectedTemplate=template; v40Render(); }
-function v40Next(){ if(v40Step===2 && (!v40State.personal.firstName.trim() || !v40State.personal.lastName.trim())){ v40ShowError((V40_I18N[getLang()]||V40_I18N.en).firstLastError); return; } if(v40Step===5) v40SaveCurrentExperience(); if(v40Step===6) v40SaveCurrentEducation(); if(v40Step===8) v40SaveCurrentLanguage(); if(v40Step<9){ v40Step++; v40Render(); } }
-function v40Prev(){ if(v40Step>1){ if(v40Step===5) v40SaveCurrentExperience(); if(v40Step===6) v40SaveCurrentEducation(); if(v40Step===8) v40SaveCurrentLanguage(); v40Step--; v40Render(); } }
-function v40Go(step){ v40Step=step; v40Render(); }
+
+function v40ScrollStepToTop() {
+  // V40.9: Back/Next buttons are at the bottom, so after changing step
+  // the scrollable glass card must return to the top of the new form.
+  requestAnimationFrame(() => {
+    const sheet = document.querySelector(".v40-input-sheet");
+    const content = document.getElementById("v40StepContent");
+    if (sheet) {
+      try { sheet.scrollTo({ top: 0, behavior: "smooth" }); }
+      catch (err) { sheet.scrollTop = 0; }
+    }
+    if (content && typeof content.scrollIntoView === "function") {
+      try { content.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" }); }
+      catch (err) {}
+    }
+  });
+}
+
+function v40Next(){ if(v40Step===2 && (!v40State.personal.firstName.trim() || !v40State.personal.lastName.trim())){ v40ShowError((V40_I18N[getLang()]||V40_I18N.en).firstLastError); v40ScrollStepToTop(); return; } if(v40Step===5) v40SaveCurrentExperience(); if(v40Step===6) v40SaveCurrentEducation(); if(v40Step===8) v40SaveCurrentLanguage(); if(v40Step<9){ v40Step++; v40Render(); v40ScrollStepToTop(); } }
+function v40Prev(){ if(v40Step>1){ if(v40Step===5) v40SaveCurrentExperience(); if(v40Step===6) v40SaveCurrentEducation(); if(v40Step===8) v40SaveCurrentLanguage(); v40Step--; v40Render(); v40ScrollStepToTop(); } }
+function v40Go(step){ v40Step=step; v40Render(); v40ScrollStepToTop(); }
 function v40ShowError(msg){ const box=document.getElementById("v40ErrorBox"); if(box){ box.textContent=msg; box.classList.remove("hidden"); } }
 function v40ClearError(){ const box=document.getElementById("v40ErrorBox"); if(box){ box.textContent=""; box.classList.add("hidden"); } }
 function v40AddExperience(){ v40SaveCurrentExperience(); v40Render(); }
