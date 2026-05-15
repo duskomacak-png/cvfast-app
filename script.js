@@ -1504,6 +1504,239 @@ function closeLegalModal() {
 }
 
 
+
+/* =============================
+   V40 Phone Wizard Smart UI
+   Novo lice, isto srce: PayPal/PDF/unlock/localStorage logic stays unchanged.
+============================= */
+let v40CurrentStep = 0;
+let smartTargetField = null;
+const V40_TOTAL_STEPS = 9;
+const v40StepTitles = [
+  "Choose Template",
+  "Personal Details",
+  "Contact",
+  "Profile Summary",
+  "Work Experience",
+  "Education",
+  "Skills",
+  "Languages",
+  "Final Preview & Download"
+];
+
+function v40ElementsForStep(step){
+  return $$(`[data-v40-step="${step}"]`);
+}
+
+function v40ShowContactMode(step){
+  const basic = $('[data-v40-step="1"]');
+  if (!basic) return;
+  const labels = [...basic.querySelectorAll('label')];
+  labels.forEach((label) => {
+    const input = label.querySelector('input, select, button');
+    const id = input?.id;
+    if (step === 2) {
+      label.classList.toggle('v40-hidden-field', !['phone','email','location'].includes(id));
+    } else {
+      label.classList.toggle('v40-hidden-field', ['phone','email','location'].includes(id));
+    }
+  });
+  basic.dataset.v40Step = step === 2 ? "2" : "1";
+}
+
+function v40UpdateWizard(){
+  if (v40CurrentStep < 0) v40CurrentStep = 0;
+  if (v40CurrentStep > V40_TOTAL_STEPS - 1) v40CurrentStep = V40_TOTAL_STEPS - 1;
+
+  // Reset special contact split first.
+  const basic = $('[data-v40-step="2"]');
+  if (basic) basic.dataset.v40Step = "1";
+  v40ShowContactMode(v40CurrentStep);
+
+  $$('[data-v40-step]').forEach((el) => {
+    el.classList.toggle('v40-step-active', Number(el.dataset.v40Step) === v40CurrentStep);
+  });
+
+  const title = $('#v40StepTitle');
+  const meta = $('#v40StepMeta');
+  const bar = $('#v40ProgressBar');
+  if (title) title.textContent = v40StepTitles[v40CurrentStep] || v40StepTitles[0];
+  if (meta) meta.textContent = `Step ${v40CurrentStep + 1} of ${V40_TOTAL_STEPS} • ${V40_TOTAL_STEPS - v40CurrentStep - 1} steps left`;
+  if (bar) bar.style.width = `${Math.round(((v40CurrentStep + 1) / V40_TOTAL_STEPS) * 100)}%`;
+
+  $$('#v40BackBtn').forEach((btn) => { btn.disabled = v40CurrentStep === 0; });
+  const next = $('#v40NextBtn');
+  if (next) {
+    if (v40CurrentStep === V40_TOTAL_STEPS - 1) {
+      next.textContent = isUnlocked() ? 'Download PDF' : 'Pay & Unlock';
+    } else {
+      next.textContent = 'Next →';
+    }
+  }
+
+  $$('[data-v40-jump]').forEach((btn) => btn.classList.toggle('active', Number(btn.dataset.v40Jump) === v40CurrentStep));
+  updateAtsScore();
+}
+
+function v40CanLeaveStep(){
+  if (v40CurrentStep !== 1) return true;
+  const name = String($('#fullName')?.value || '').trim();
+  if (!name) {
+    showToast('Add your full name first.');
+    $('#fullName')?.focus();
+    return false;
+  }
+  return true;
+}
+
+function v40Go(step){
+  if (step > v40CurrentStep && !v40CanLeaveStep()) return;
+  v40CurrentStep = Number(step);
+  v40UpdateWizard();
+  document.querySelector('.builder-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function normalizeCvText(text){
+  let out = String(text || '').trim();
+  const replacements = [
+    [/\bgradjevinskih\b/gi, 'građevinskih'], [/\bgradjevinske\b/gi, 'građevinske'], [/\bgradjevinska\b/gi, 'građevinska'],
+    [/\bmasina\b/gi, 'mašina'], [/\bmasine\b/gi, 'mašine'], [/\bmasinama\b/gi, 'mašinama'],
+    [/\bvozac\b/gi, 'vozač'], [/\bnemacki\b/gi, 'nemački'], [/\bengleski\b/gi, 'engleski'],
+    [/\bodgovoran radnik\b/gi, 'odgovoran i pouzdan radnik'], [/\bradio sam\b/gi, 'radio'],
+    [/\biskopi\b/gi, 'iskopi'], [/\bizkop/gi, 'iskop'], [/\bgodina rada\b/gi, 'godina iskustva']
+  ];
+  replacements.forEach(([rx, rep]) => { out = out.replace(rx, rep); });
+  out = out.replace(/\s+/g, ' ').replace(/\s*\.\s*/g, '. ');
+  if (out && !/[.!?]$/.test(out)) out += '.';
+  return out;
+}
+
+function sentenceCase(text){
+  return String(text || '').replace(/(^\s*[a-zčćžšđäöü])|([.!?]\s+[a-zčćžšđäöü])/g, (m) => m.toUpperCase());
+}
+
+function smartImprove(target, text){
+  const lang = $('#cvLanguage')?.value || getLang() || 'en';
+  const original = normalizeCvText(text);
+  const lower = original.toLowerCase();
+  const hasYears = original.match(/\b(\d{1,2})\s*(years|year|godina|jahre)?/i)?.[1];
+
+  if (target === 'skills') {
+    const base = splitLines(original).join('\n');
+    const suggestions = lang === 'de'
+      ? ['Zuverlässigkeit', 'Genauigkeit', 'Teamarbeit', 'Sicheres Arbeiten', 'Zeitmanagement']
+      : ['Reliability', 'Attention to detail', 'Teamwork', 'Safe work procedures', 'Time management'];
+    const merged = [...new Set([...splitLines(base), ...suggestions])];
+    return merged.join('\n');
+  }
+
+  if (target === 'traits') {
+    return lang === 'de'
+      ? 'Zuverlässig, verantwortungsbewusst und präzise. Gewöhnt an dynamische Arbeitsbedingungen, klare Kommunikation und die Einhaltung vereinbarter Termine.'
+      : 'Responsible, reliable and precise professional. Used to dynamic working conditions, clear communication and meeting agreed deadlines.';
+  }
+
+  if (target === 'experience') {
+    const lines = splitLines(original);
+    if (lines.length > 1) return lines.map((line) => sentenceCase(normalizeCvText(line))).join('\n');
+    if (/bager|excavator|cat|bulldozer|construction|građevinskih|mašin/i.test(lower)) {
+      return lang === 'de'
+        ? `Baumaschinenführer${hasYears ? ` mit ${hasYears} Jahren Erfahrung` : ''}.\nErdarbeiten, Aushubarbeiten und Baustellenvorbereitung.\nPräzises Arbeiten nach Vorgaben, Sicherheitsregeln und Baustellenanweisungen.`
+        : `Heavy equipment operator${hasYears ? ` with ${hasYears} years of experience` : ''}.\nEarthworks, excavation and site preparation.\nPrecise work according to site instructions, safety rules and required levels.`;
+    }
+    return sentenceCase(original);
+  }
+
+  if (target === 'profile') {
+    if (/bager|excavator|cat|bulldozer|construction|građevinskih|mašin|iskop/i.test(lower)) {
+      return lang === 'de'
+        ? `Erfahrener Baumaschinenführer${hasYears ? ` mit ${hasYears} Jahren Erfahrung` : ''} in Erdarbeiten, Aushub und Baustellenvorbereitung. Bekannt für präzises, verantwortungsbewusstes und sicheres Arbeiten unter anspruchsvollen Baustellenbedingungen.`
+        : `Experienced heavy equipment operator${hasYears ? ` with ${hasYears} years of experience` : ''} in earthworks, excavation and site preparation. Known for precise, responsible and safe work in demanding construction site conditions.`;
+    }
+    return lang === 'de'
+      ? `Zuverlässige und verantwortungsbewusste Fachkraft. ${sentenceCase(original)}`
+      : `Reliable and responsible professional. ${sentenceCase(original)}`;
+  }
+
+  return sentenceCase(original);
+}
+
+function openSmartModal(target){
+  const el = $('#' + target);
+  if (!el) return;
+  const original = el.value.trim();
+  if (!original) {
+    showToast('Enter text first.');
+    el.focus();
+    return;
+  }
+  smartTargetField = target;
+  $('#smartOriginal').value = original;
+  $('#smartImproved').value = smartImprove(target, original);
+  $('#smartModal')?.classList.remove('hidden');
+}
+
+function closeSmartModal(){
+  $('#smartModal')?.classList.add('hidden');
+  smartTargetField = null;
+}
+
+function updateAtsScore(){
+  const data = getData({ includeLanguageDraft: true });
+  let score = 0;
+  if (String(data.fullName || '').trim()) score += 15;
+  if (String(data.email || data.phone || '').trim()) score += 15;
+  if (String(data.jobTitle || '').trim()) score += 10;
+  if (String(data.profile || '').trim().length > 40) score += 20;
+  if (splitLines(data.experience).length) score += 20;
+  if (splitLines(data.skills).length >= 3) score += 10;
+  if (parseLanguages(data.languages).length || String(data.languageNameDraft || '').trim()) score += 5;
+  if (String(data.education || '').trim()) score += 5;
+  score = Math.min(100, score);
+  const label = $('#atsScore');
+  const hint = $('#atsHint');
+  if (label) label.textContent = `ATS Readiness Score: ${score}%`;
+  if (hint) {
+    hint.textContent = score >= 80
+      ? 'Good structure. Check spelling and download when ready.'
+      : 'Add name, contact, profile, experience and at least 3 skills.';
+  }
+}
+
+function setupV40Wizard(){
+  $('#v40BackBtn')?.addEventListener('click', () => v40Go(v40CurrentStep - 1));
+  $('#v40NextBtn')?.addEventListener('click', async () => {
+    if (v40CurrentStep === V40_TOTAL_STEPS - 1) {
+      $('#downloadPdfBtn')?.click();
+      return;
+    }
+    v40Go(v40CurrentStep + 1);
+  });
+  $$('[data-v40-jump]').forEach((btn) => btn.addEventListener('click', () => v40Go(Number(btn.dataset.v40Jump))));
+  $$('[data-smart-target]').forEach((btn) => btn.addEventListener('click', () => openSmartModal(btn.dataset.smartTarget)));
+  $('#closeSmartModal')?.addEventListener('click', closeSmartModal);
+  $('#keepOriginalBtn')?.addEventListener('click', closeSmartModal);
+  $('#smartModal')?.addEventListener('click', (e) => { if (e.target.id === 'smartModal') closeSmartModal(); });
+  $('#useImprovedBtn')?.addEventListener('click', () => {
+    if (!smartTargetField) return;
+    const el = $('#' + smartTargetField);
+    if (el) {
+      el.value = $('#smartImproved').value;
+      saveData();
+      refreshPreview();
+      updateAtsScore();
+      showToast('Improved text added ✓');
+    }
+    closeSmartModal();
+  });
+  fields.forEach((field) => {
+    const el = $('#' + field);
+    el?.addEventListener('input', updateAtsScore);
+    el?.addEventListener('change', updateAtsScore);
+  });
+  v40UpdateWizard();
+}
+
 function init() {
   handleUnlockFromUrl();
   LEGACY_CV_DATA_KEYS.forEach((key) => { if (key !== STORAGE_KEY) localStorage.removeItem(key); });
@@ -1743,10 +1976,11 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   setupPwaInstall();
   setupShare();
+  setupV40Wizard();
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=39").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=40").catch(() => {});
     });
   }
 

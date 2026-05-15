@@ -44,7 +44,7 @@
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
 <link href="icon-512.png" rel="icon" sizes="512x512" type="image/png"/>
-<link href="style.css?v=39" rel="stylesheet"/>
+<link href="style.css?v=40" rel="stylesheet"/>
 <!-- Google tag (gtag.js) -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QF9CV5P5H5"></script>
 <script>
@@ -149,9 +149,28 @@
 </div>
 <button class="secondary-btn small" data-i18n="fullPreview" id="openFullPreviewBtn" type="button">👁 View full CV</button>
 </div>
+<div class="v40-wizard-status" aria-label="CV builder progress">
+  <div class="v40-step-copy">
+    <strong id="v40StepTitle">Choose Template</strong>
+    <span id="v40StepMeta">Step 1 of 9 • 8 steps left</span>
+  </div>
+  <div class="v40-progress"><span id="v40ProgressBar"></span></div>
+  <div class="v40-save-line">All changes saved locally ✓</div>
+</div>
+<div class="v40-jump-row" aria-label="Jump to section">
+  <button type="button" data-v40-jump="0">Template</button>
+  <button type="button" data-v40-jump="1">Details</button>
+  <button type="button" data-v40-jump="2">Contact</button>
+  <button type="button" data-v40-jump="3">Profile</button>
+  <button type="button" data-v40-jump="4">Experience</button>
+  <button type="button" data-v40-jump="5">Education</button>
+  <button type="button" data-v40-jump="6">Skills</button>
+  <button type="button" data-v40-jump="7">Languages</button>
+  <button type="button" data-v40-jump="8">Preview</button>
+</div>
 
 
-<section class="template-showcase" aria-label="CV template examples">
+<section class="template-showcase" data-v40-step="0" aria-label="CV template examples">
 <div class="template-showcase-head">
   <div>
     <span class="section-kicker" data-i18n="templateShowcaseEyebrow">CV TEMPLATE EXAMPLES</span>
@@ -194,11 +213,24 @@
       </div>
     </div>
   </button>
+
+  <button class="template-example-card" data-template-pick="executive" type="button" aria-label="Choose Executive template">
+    <span class="template-example-title">Executive <small>premium business CV</small></span>
+    <div class="sample-cv sample-classic sample-executive sample-real-cv" aria-hidden="true">
+      <div class="sample-cv-top">
+        <div><strong>Alex Miller</strong><span>Senior Operations Specialist</span></div><em>Visual sample only</em>
+      </div>
+      <div class="sample-cv-contact">alex@example.com · Vienna, Austria · +43 660 000000</div>
+      <div class="sample-cv-section"><b>Executive profile</b><p>Premium, clean and confident layout for experienced professionals.</p></div>
+      <div class="sample-cv-section"><b>Core strengths</b><p>Leadership · Reliability · Results · Documentation</p></div>
+      <div class="sample-cv-chips"><span>Premium</span><span>ATS-friendly</span><span>Clear</span></div>
+    </div>
+  </button>
 </div>
 </section>
 <div class="builder-grid">
 <form class="form-panel" id="cvForm">
-<div class="form-block">
+<div class="form-block" data-v40-step="1">
 <div class="block-title">
 <h3 data-i18n="basicTitle">1. Basic information</h3>
 <button class="preview-help" data-help="basic" data-i18n="exampleBtn" type="button">👁 Example</button>
@@ -216,6 +248,7 @@
 <select id="template" name="template">
 <option value="classic">Classic Clean</option>
 <option value="sidebar">Modern Sidebar</option>
+<option value="executive">Executive</option>
 </select>
 
 </label>
@@ -239,21 +272,23 @@
 </label>
 </div>
 </div>
-<div class="form-block">
+<div class="form-block" data-v40-step="3">
 <div class="block-title">
 <h3 data-i18n="profileTitle">2. Profile</h3>
 <button class="preview-help" data-help="profile" data-i18n="exampleBtn" type="button">👁 Example</button>
 </div>
 <textarea data-placeholder="profilePlaceholder" id="profile" name="profile" placeholder="Short professional profile..." rows="5"></textarea>
+<button class="smart-btn" data-smart-target="profile" type="button">✨ Smart Rewrite & Fix Mistakes</button>
 </div>
-<div class="form-block">
+<div class="form-block" data-v40-step="4">
 <div class="block-title">
 <h3 data-i18n="experienceTitle">3. Work experience</h3>
 <button class="preview-help" data-help="experience" data-i18n="exampleBtn" type="button">👁 Example</button>
 </div>
 <textarea data-placeholder="experiencePlaceholder" id="experience" name="experience" placeholder="One item per line..." rows="7"></textarea>
+<button class="smart-btn" data-smart-target="experience" type="button">✨ Smart Rewrite & Fix Mistakes</button>
 </div>
-<div class="form-block">
+<div class="form-block" data-v40-step="6">
 <div class="block-title">
 <h3 data-i18n="machinesSkillsTitle">4. Machines and skills</h3>
 <button class="preview-help" data-help="skills" data-i18n="exampleBtn" type="button">👁 Example</button>
@@ -264,10 +299,11 @@
 </label>
 <label><span data-i18n="skillsLabel">Skills</span>
 <textarea data-placeholder="skillsPlaceholder" id="skills" name="skills" placeholder="Add skills, one per line" rows="5"></textarea>
+<button class="smart-btn" data-smart-target="skills" type="button">✨ Suggest / improve skills</button>
 </label>
 </div>
 </div>
-<div class="form-block">
+<div class="form-block" data-v40-step="7">
 <div class="block-title">
 <h3 data-i18n="languagesTitle">5. Languages</h3>
 <button class="preview-help" data-help="languages" data-i18n="exampleBtn" type="button">👁 Example</button>
@@ -292,7 +328,7 @@
 <div class="language-list" id="languageList"></div>
 <p class="field-note" data-i18n="languageLevelNote">Use CEFR levels: A1, A2, B1, B2, C1, C2.</p>
 </div>
-<div class="form-block">
+<div class="form-block" data-v40-step="5">
 <div class="block-title">
 <h3 data-i18n="educationExtraTitle">6. Education and extra</h3>
 <button class="preview-help" data-help="education" data-i18n="exampleBtn" type="button">👁 Example</button>
@@ -303,13 +339,25 @@
 </label>
 <label><span data-i18n="traitsLabel">Personal qualities</span>
 <textarea data-placeholder="traitsPlaceholder" id="traits" name="traits" placeholder="Responsible, reliable, precise..." rows="4"></textarea>
+<button class="smart-btn" data-smart-target="traits" type="button">✨ Smart Rewrite & Fix Mistakes</button>
 </label>
 </div>
+</div>
+<div class="v40-final-card" data-v40-step="8">
+  <h3>Final Preview & Download</h3>
+  <p class="field-note">Check the CV preview, template and ATS readiness before unlocking the PDF.</p>
+  <div class="ats-card">
+    <div><strong id="atsScore">ATS Readiness Score: 0%</strong><span id="atsHint">Add name, contact, profile, experience and skills.</span></div>
+  </div>
 </div>
 <div class="form-actions">
 <button class="secondary-btn" data-i18n="fillDemo" id="fillDemoBtn" type="button">Fill demo</button>
 <button class="primary-btn" data-i18n="downloadPdf" id="downloadPdfBtn" type="button">Download PDF</button>
 <button class="danger-btn" data-i18n="clearData" id="clearDataBtn" type="button">Clear</button>
+</div>
+<div class="v40-nav-actions">
+  <button class="secondary-btn" id="v40BackBtn" type="button">← Back</button>
+  <button class="primary-btn" id="v40NextBtn" type="button">Next →</button>
 </div>
 </form>
 <aside class="live-preview">
@@ -366,7 +414,23 @@
 <button class="primary-btn full" id="installOkBtn" type="button">Got it</button>
 </div>
 </div>
+
+<div aria-modal="true" class="modal hidden" id="smartModal" role="dialog">
+  <div class="modal-card smart-modal-card">
+    <button class="modal-x" id="closeSmartModal" type="button">×</button>
+    <h2>Smart Rewrite & Fix Mistakes</h2>
+    <p class="muted">Review the improved text. Nothing changes until you choose “Use improved”.</p>
+    <div class="smart-compare">
+      <label><span>Original</span><textarea id="smartOriginal" readonly rows="8"></textarea></label>
+      <label><span>Improved suggestion</span><textarea id="smartImproved" rows="8"></textarea></label>
+    </div>
+    <div class="modal-actions">
+      <button class="secondary-btn" id="keepOriginalBtn" type="button">Keep original</button>
+      <button class="primary-btn" id="useImprovedBtn" type="button">Use improved</button>
+    </div>
+  </div>
+</div>
 <div class="toast hidden" id="toast"></div>
-<script src="script.js?v=39"></script>
+<script src="script.js?v=40"></script>
 </body>
 </html>
