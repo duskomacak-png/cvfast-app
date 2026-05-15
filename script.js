@@ -1826,13 +1826,11 @@ function v40DefaultState() {
 
 function v40TemplateToLegacy(t) {
   if (t === "modern") return "sidebar";
-  if (t === "executive") return "executive";
   return "classic";
 }
 
 function legacyTemplateToV40(t) {
   if (t === "sidebar") return "modern";
-  if (t === "executive") return "executive";
   return "classic";
 }
 
@@ -2009,9 +2007,11 @@ function v40RenderPreview() {
   if (!hasData) {
     target.className = "cv-page classic";
     target.innerHTML = `<div class="v40-empty-preview">Your CV preview will appear here<br>as you type.</div>`;
+    v40FitPreview();
     return;
   }
   renderCv(target, data, { placeholders: false });
+  v40FitPreview();
 }
 
 function v40RenderStepContent() {
@@ -2022,7 +2022,6 @@ function v40RenderStepContent() {
     el.innerHTML = `<div class="v40-template-grid">
       ${v40TemplateCard("classic", "Classic", "Clean and simple CV for most jobs.", "")}
       ${v40TemplateCard("modern", "Modern", "Modern side column layout.", "dark")}
-      ${v40TemplateCard("executive", "Executive", "Serious business style with more white space.", "")}
     </div>`;
     return;
   }
@@ -2093,7 +2092,7 @@ function v40RenderStepContent() {
     const score = v40AtsScore();
     el.innerHTML = `<div class="v40-score-card"><div class="v40-helper-text">ATS Readiness Score</div><div class="v40-score-num">${score.score}/100</div><div class="v40-helper-text">${score.tips.join(" • ")}</div></div>
       <div class="v40-jump-grid"><button type="button" onclick="v40Go(2)">Personal</button><button type="button" onclick="v40Go(3)">Contact</button><button type="button" onclick="v40Go(4)">Summary</button><button type="button" onclick="v40Go(5)">Experience</button><button type="button" onclick="v40Go(6)">Education</button><button type="button" onclick="v40Go(7)">Skills</button><button type="button" onclick="v40Go(8)">Languages</button></div>
-      <label>Template<select onchange="v40SelectTemplate(this.value)"><option value="classic" ${v40State.selectedTemplate==="classic"?"selected":""}>Classic</option><option value="modern" ${v40State.selectedTemplate==="modern"?"selected":""}>Modern</option><option value="executive" ${v40State.selectedTemplate==="executive"?"selected":""}>Executive</option></select></label>
+      <label>Template<select onchange="v40SelectTemplate(this.value)"><option value="classic" ${v40State.selectedTemplate==="classic"?"selected":""}>Classic</option><option value="modern" ${v40State.selectedTemplate==="modern"?"selected":""}>Modern</option></select></label>
       <div class="v40-final-action">${isUnlocked()?`<button class="v40-download-btn" type="button" onclick="v40DownloadPdf()">Download PDF</button>`:`<button class="v40-paypal-btn" type="button" onclick="v40PayUnlock()">Unlock PDF Download – 5€</button>`}</div><p class="v40-helper-text">100% private – stored only on your device.</p>`;
   }
 }
@@ -2135,6 +2134,30 @@ function v40UseImproved(){ const suggestion=document.getElementById("v40Suggeste
 function v40SummarySuggestion(){ const role=v40State.personal.jobTitle||"professional"; const skills=v40State.skills.slice(0,3).join(", ")||"communication, teamwork and problem solving"; return `Motivated ${role} with practical experience and strong skills in ${skills}. Focused on delivering reliable results, learning quickly and contributing to professional teams with responsibility and attention to detail.`; }
 function v40ExperienceSuggestion(text){ const base=String(text||"").trim(); if(!base) return "Delivered reliable results in daily operations.\nCollaborated with team members to complete tasks on time.\nMaintained quality, safety and professional standards."; return base.split("\n").filter(Boolean).map(line=>{ const clean=line.replace(/^[-•]\s*/,"").trim(); return `Improved results by ${clean.charAt(0).toLowerCase()}${clean.slice(1)}.`; }).join("\n"); }
 function v40AtsScore(){ let score=20; const tips=[]; if(v40State.personal.firstName&&v40State.personal.lastName) score+=10; else tips.push("Add full name"); if(v40State.personal.jobTitle) score+=10; else tips.push("Add job title"); if(v40State.contact.email) score+=8; else tips.push("Add email"); if(v40State.contact.phone) score+=7; else tips.push("Add phone"); if(v40State.summary.length>80) score+=15; else tips.push("Add stronger summary"); if(v40State.experience.length) score+=15; else tips.push("Add work experience"); if(v40State.skills.length>=4) score+=10; else tips.push("Add more skills"); if(v40State.languages.length) score+=5; const combined=[v40State.summary,...v40State.experience.map(e=>e.description||"")].join(" "); if(/\d+|%/.test(combined)) score+=5; else tips.push("Consider adding measurable results"); return {score:Math.min(score,100),tips:tips.length?tips.slice(0,3):["Good structure","Strong keywords","Ready for PDF"]}; }
+
+function v40FitPreview(){
+  const wrap=document.querySelector(".v40-cv-preview-wrap");
+  const page=document.getElementById("v40CvPreview");
+  if(!wrap||!page||page.querySelector(".v40-empty-preview")) return;
+  requestAnimationFrame(()=>{
+    const baseW=794;
+    const scale=Math.min(1, Math.max(.28, (wrap.clientWidth-22)/baseW));
+    page.style.transform=`scale(${scale})`;
+    page.style.marginBottom=`-${Math.max(0,1123*(1-scale)-18)}px`;
+  });
+}
+function v40OpenFullPreview(){
+  v40CommitToLegacy();
+  const modal=document.getElementById("v40FullPreviewModal");
+  const target=document.getElementById("v40FullPreviewCv");
+  if(!modal||!target) return;
+  renderCv(target, v40ToLegacyData(), {placeholders:false});
+  modal.classList.remove("hidden");
+}
+function v40CloseFullPreview(){
+  document.getElementById("v40FullPreviewModal")?.classList.add("hidden");
+}
+
 async function v40DownloadPdf(){ v40CommitToLegacy(); try{ await downloadPdf(); }catch(err){ console.error(err); showToast(ui[getLang()].pdfError); } }
 function v40PayUnlock(){ v40CommitToLegacy(); openSupportModal(); }
 function v40FillDemo(){ const lang=getLang(); const current=loadStored(); const data={...current,...demoDataByLang[lang],appLanguage:lang,cvLanguage:lang,template:current.template||"classic",photo:current.photo||""}; saveRaw(data); setFormData(data); v40State=legacyToV40State(data); v40Render(); showToast(ui[lang].demoFilled); }
@@ -2160,6 +2183,9 @@ function initV40() {
   document.getElementById("v40KeepOriginalBtn")?.addEventListener("click", v40CloseRewrite);
   document.getElementById("v40UseImprovedBtn")?.addEventListener("click", v40UseImproved);
   document.getElementById("v40RewriteModal")?.addEventListener("click", (e) => { if(e.target.id === "v40RewriteModal") v40CloseRewrite(); });
+  document.querySelector(".v40-cv-preview-wrap")?.addEventListener("click", v40OpenFullPreview);
+  document.getElementById("v40FullPreviewClose")?.addEventListener("click", v40CloseFullPreview);
+  document.getElementById("v40FullPreviewModal")?.addEventListener("click", (e) => { if(e.target.id === "v40FullPreviewModal") v40CloseFullPreview(); });
   document.addEventListener("keydown", (e) => { if((e.ctrlKey||e.metaKey) && e.key === "Enter" && !document.getElementById("v40Builder")?.classList.contains("hidden")) v40Next(); });
   v40SetLanguage(stored.appLanguage || stored.cvLanguage || "en");
   v40RenderPreview();

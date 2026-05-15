@@ -66,7 +66,7 @@
     <p class="v40-subtitle" data-v40-i18n="subtitle">Create a clean professional CV in minutes.</p>
     <div class="v40-benefits">
       <div class="v40-benefit">✅ <div><strong data-v40-i18n="benefit1Strong">No account.</strong> <span data-v40-i18n="benefit1">No server upload. Your CV stays on your device.</span></div></div>
-      <div class="v40-benefit">🎯 <div data-v40-i18n="benefit2"><strong>Choose a professional template.</strong> Classic, Modern or Executive.</div></div>
+      <div class="v40-benefit">🎯 <div data-v40-i18n="benefit2"><strong>Choose a professional template.</strong> Classic or Modern.</div></div>
       <div class="v40-benefit">📱 <div data-v40-i18n="benefit3"><strong>Fill step by step.</strong> Live preview updates while you type.</div></div>
       <div class="v40-benefit">🔓 <div data-v40-i18n="benefit4"><strong>Unlock & download PDF for 5€.</strong> One-time payment, no subscription.</div></div>
     </div>
@@ -109,6 +109,18 @@
     </div>
   </section>
 </main>
+
+<div class="v40-full-preview-backdrop hidden" id="v40FullPreviewModal" role="dialog" aria-modal="true" aria-label="Full CV preview">
+  <div class="v40-full-preview-panel">
+    <div class="v40-full-preview-top">
+      <strong>Live CV Preview</strong>
+      <button class="v40-full-preview-close" id="v40FullPreviewClose" type="button">Close ×</button>
+    </div>
+    <div class="v40-full-preview-scroll">
+      <article class="cv-page classic" id="v40FullPreviewCv"></article>
+    </div>
+  </div>
+</div>
 
 <div class="v40-modal-backdrop hidden" id="v40RewriteModal" role="dialog" aria-modal="true">
   <div class="v40-modal">
@@ -280,7 +292,6 @@
 <select id="template" name="template">
 <option value="classic">Classic Clean</option>
 <option value="sidebar">Modern Sidebar</option>
-<option value="executive">Executive</option>
 </select>
 
 </label>
