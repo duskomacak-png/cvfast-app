@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v416-red-glow-actions-safe";
+const CACHE_NAME = "cvfast-v418-seo-legal-final-action-safe";
 
 const APP_SHELL = [
   "/",

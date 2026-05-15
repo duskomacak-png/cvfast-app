@@ -1756,7 +1756,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=416").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=418").catch(() => {});
     });
   }
 
@@ -2229,14 +2229,23 @@ function v40RenderStepContent() {
 
   if (v40Step === 9) {
     const score = v40AtsScore();
-    el.innerHTML = `<div class="v40-score-card"><div class="v40-helper-text">ATS Readiness Score</div><div class="v40-score-num">${score.score}/100</div><div class="v40-helper-text">${score.tips.join(" • ")}</div></div>
-      <div class="v40-jump-grid"><button type="button" onclick="v40Go(2)">Personal</button><button type="button" onclick="v40Go(3)">Contact</button><button type="button" onclick="v40Go(4)">Summary</button><button type="button" onclick="v40Go(5)">Experience</button><button type="button" onclick="v40Go(6)">Education</button><button type="button" onclick="v40Go(7)">Skills</button><button type="button" onclick="v40Go(8)">Languages</button></div>
-      <label>Template<select onchange="v40SelectTemplate(this.value)"><option value="classic" ${v40State.selectedTemplate==="classic"?"selected":""}>Classic</option><option value="modern" ${v40State.selectedTemplate==="modern"?"selected":""}>Modern</option></select></label>
-      <div class="v40-unlock-info">
-        <strong>${isUnlocked() ? "PDF download is unlocked in this browser." : "Support CVFast.app with 5€ and unlock PDF downloads."}</strong>
-        <span>${isUnlocked() ? "You can edit your CV and download updated PDF versions." : "After unlocking, you can edit your CV and download more PDF versions in this browser until you clear browser data."}</span>
+    const unlocked = isUnlocked();
+    const tips = score.tips && score.tips.length ? score.tips.slice(0, 2).join(" • ") : "Your CV is ready for PDF.";
+    el.innerHTML = `<div class="v40-final-compact">
+      <div class="v40-score-card v40-score-card-compact">
+        <div>
+          <div class="v40-helper-text">ATS Readiness Score</div>
+          <div class="v40-score-num">${score.score}/100</div>
+        </div>
+        <div class="v40-helper-text">${tips}</div>
       </div>
-      <div class="v40-final-action">${isUnlocked()?`<button class="v40-download-btn" type="button" onclick="v40DownloadPdf()">Download PDF</button>`:`<button class="v40-paypal-btn" type="button" onclick="v40PayUnlock()">Support 5€ & Unlock PDF Downloads</button>`}</div><p class="v40-helper-text">100% private – stored only on your device.</p>`;
+      <label>Template<select onchange="v40SelectTemplate(this.value)"><option value="classic" ${v40State.selectedTemplate==="classic"?"selected":""}>Classic</option><option value="modern" ${v40State.selectedTemplate==="modern"?"selected":""}>Modern</option></select></label>
+      <div class="v40-unlock-info v40-unlock-info-compact">
+        <strong>${unlocked ? "PDF download is unlocked." : "Why 5€? It unlocks PDF downloads in this browser."}</strong>
+        <span>${unlocked ? "Edit your CV and press Download PDF below whenever you need a new version." : "This is not only one CV. After unlocking, edit and download updated PDFs on this same device/browser until browser data is cleared."}</span>
+      </div>
+      <div class="v40-jump-grid v40-jump-grid-compact"><button type="button" onclick="v40Go(2)">Edit personal</button><button type="button" onclick="v40Go(3)">Edit contact</button><button type="button" onclick="v40Go(5)">Edit work</button></div>
+    </div>`;
   }
 }
 
@@ -2328,6 +2337,14 @@ function v40AttachFieldGuide() {
 }
 
 function v40Next(){
+  if(v40Step===9){
+    if(isUnlocked()) {
+      v40DownloadPdf();
+    } else {
+      v40PayUnlock();
+    }
+    return;
+  }
   if(v40Step===2 && (!v40State.personal.firstName.trim() || !v40State.personal.lastName.trim())){ v40ShowError((V40_I18N[getLang()]||V40_I18N.en).firstLastError); v40ScrollStepToTop(); return; }
   const count = v40StepPagesCount(v40Step);
   if (v40SubStep < count - 1) { v40SubStep++; v40Render(); v40ScrollStepToTop(); return; }

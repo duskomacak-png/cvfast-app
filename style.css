@@ -3316,3 +3316,156 @@ body.v40-active .app > footer { display:none !important; }
   .v40-app-action-btn{min-height:44px;font-size:13px;border-radius:15px;}
   .v40-phone-frame::before{left:5%;right:5%;bottom:-18px;height:72px;}
 }
+
+
+/* V40.17: final step must always show Unlock/Download and Back button. */
+.v40-final-sheet #v40StepContent{
+  flex:0 0 auto !important;
+}
+.v40-final-compact{
+  display:grid;
+  gap:8px;
+}
+.v40-final-sheet .v40-score-card{
+  margin:0 !important;
+}
+.v40-score-card-compact{
+  display:grid !important;
+  grid-template-columns:96px 1fr;
+  align-items:center;
+  gap:10px;
+  padding:9px 10px !important;
+  border-radius:16px !important;
+}
+.v40-score-card-compact .v40-score-num{
+  font-size:22px !important;
+  line-height:1 !important;
+}
+.v40-score-card-compact .v40-helper-text{
+  font-size:10.5px !important;
+  line-height:1.25 !important;
+}
+.v40-unlock-info-compact{
+  padding:9px 10px !important;
+  border-radius:15px !important;
+}
+.v40-unlock-info-compact strong{
+  display:block;
+  font-size:12px !important;
+  line-height:1.2 !important;
+}
+.v40-unlock-info-compact span{
+  display:block;
+  margin-top:3px;
+  font-size:10.5px !important;
+  line-height:1.18 !important;
+}
+.v40-final-action-fixed{
+  margin-top:0 !important;
+}
+.v40-final-action-fixed .v40-download-btn,
+.v40-final-action-fixed .v40-paypal-btn{
+  width:100%;
+  min-height:42px !important;
+  padding:9px 10px !important;
+  border-radius:15px !important;
+  font-size:12.5px !important;
+  line-height:1.15 !important;
+}
+.v40-jump-grid-compact{
+  margin:0 !important;
+  gap:5px !important;
+}
+.v40-jump-grid-compact button{
+  padding:5px 7px !important;
+  font-size:10px !important;
+}
+.v40-final-sheet .v40-step-nav-bottom{
+  margin-top:7px !important;
+  padding-top:7px !important;
+}
+.v40-final-sheet .v40-saved{
+  display:none !important;
+}
+@media(max-height:760px){
+  .v40-final-sheet .v40-sheet-head{margin-bottom:6px !important;}
+  .v40-score-card-compact{grid-template-columns:82px 1fr;padding:8px !important;}
+  .v40-score-card-compact .v40-score-num{font-size:19px !important;}
+  .v40-unlock-info-compact{padding:8px !important;}
+  .v40-final-action-fixed .v40-download-btn,
+  .v40-final-action-fixed .v40-paypal-btn{min-height:38px !important;}
+}
+
+
+/* V40.18: SEO/support explanation, legal footer, no top 5€ pill, and final action in bottom button. */
+.v40-price-pill{display:none !important;}
+
+.v40-seo-note{
+  margin:16px 0 8px;
+  padding:14px;
+  border:1px solid rgba(125,211,252,.18);
+  border-radius:20px;
+  background:linear-gradient(180deg,rgba(56,189,248,.09),rgba(255,255,255,.045));
+  color:#dbeafe;
+  line-height:1.42;
+}
+.v40-seo-note h1{
+  margin:0 0 8px;
+  font-size:20px;
+  line-height:1.1;
+  letter-spacing:-.035em;
+  color:#fff;
+}
+.v40-seo-note p{
+  margin:7px 0;
+  font-size:13px;
+  color:#cbd5e1;
+}
+.v40-seo-note strong{color:#fff;}
+.v40-seo-note-small{color:#93c5fd !important;}
+
+.v40-legal-under-app{
+  width:100%;
+  text-align:center;
+  color:#94a3b8;
+  font-size:12px;
+  line-height:1.35;
+  padding:0 10px 8px;
+}
+.v40-legal-under-app a{
+  color:#dbeafe;
+  text-decoration:none;
+  font-weight:800;
+}
+.v40-legal-under-app a:hover{text-decoration:underline;}
+.v40-legal-under-app span{padding:0 5px;color:#64748b;}
+.v40-legal-under-app p{
+  margin:7px auto 0;
+  max-width:360px;
+}
+
+.v40-final-sheet .v40-step-nav-bottom{
+  grid-template-columns:.78fr 1.22fr !important;
+}
+.v40-final-sheet .v40-small-btn.v40-download-final-btn{
+  background:linear-gradient(135deg,#16a34a,#22c55e) !important;
+  border-color:rgba(134,239,172,.65) !important;
+  color:#fff !important;
+  font-size:13px !important;
+}
+.v40-final-sheet .v40-final-action{
+  display:none !important;
+}
+@media(max-width:520px){
+  .v40-seo-note{
+    padding:12px;
+    border-radius:18px;
+  }
+  .v40-seo-note h1{font-size:18px;}
+  .v40-seo-note p{font-size:12.5px;}
+  .v40-legal-under-app{font-size:11px;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));}
+}
+@media(max-height:760px){
+  .v40-seo-note p{font-size:12px;}
+  .v40-legal-under-app p{display:none;}
+}
