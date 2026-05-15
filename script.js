@@ -1756,7 +1756,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=404").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=412").catch(() => {});
     });
   }
 
@@ -2206,18 +2206,12 @@ function v40CommitAndPreview(){ v40CommitToLegacy(); v40RenderPreview(); }
 function v40SelectTemplate(template){ v40State.selectedTemplate=template; v40Render(); }
 
 function v40ScrollStepToTop() {
-  // V40.11: Back/Next buttons are at the bottom, so after changing step
-  // the scrollable glass card must return to the top of the new form.
+  // V40.12: the glass panel is fixed. Only the inner field area resets.
   requestAnimationFrame(() => {
-    const sheet = document.querySelector(".v40-input-sheet");
     const content = document.getElementById("v40StepContent");
-    if (sheet) {
-      try { sheet.scrollTo({ top: 0, behavior: "smooth" }); }
-      catch (err) { sheet.scrollTop = 0; }
-    }
-    if (content && typeof content.scrollIntoView === "function") {
-      try { content.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" }); }
-      catch (err) {}
+    if (content) {
+      try { content.scrollTo({ top: 0, behavior: "smooth" }); }
+      catch (err) { content.scrollTop = 0; }
     }
   });
 }

@@ -2850,3 +2850,66 @@ body.v40-active .app > footer { display:none !important; }
 }
 
 /* V40.10: clarified target position vs work-experience job title labels. */
+
+
+/* V40.12: fixed lower input panel.
+   Header, progress and Back/Next stay visible; only the fields area can move if a step is too long. */
+.v40-input-sheet{
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important;
+  min-height:0 !important;
+}
+#v40StepContent{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow:auto !important;
+  overscroll-behavior:contain;
+  padding-right:3px;
+}
+.v40-progress-row,
+.v40-progress-track,
+.v40-error,
+.v40-sheet-head,
+.v40-step-nav-bottom,
+.v40-saved{
+  flex:0 0 auto !important;
+}
+#v40StepContent::-webkit-scrollbar{width:4px;}
+#v40StepContent::-webkit-scrollbar-thumb{background:rgba(255,255,255,.22);border-radius:999px;}
+@media(max-width:520px){
+  .v40-phone-screen{
+    gap:9px !important;
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom,10px)) !important;
+  }
+  .v40-cv-preview-wrap{
+    flex:0 0 clamp(210px, 32dvh, 285px) !important;
+    min-height:210px !important;
+  }
+  .v40-input-sheet{
+    flex:1 1 0 !important;
+    max-height:none !important;
+    padding:13px !important;
+  }
+  #v40StepContent{
+    padding-bottom:4px;
+  }
+  .v40-photo-box{
+    grid-template-columns:68px 1fr !important;
+    gap:10px !important;
+    padding:10px !important;
+  }
+  .v40-photo-preview{
+    width:68px !important;
+    height:68px !important;
+    border-radius:18px !important;
+  }
+  .v40-photo-copy span{
+    font-size:11px !important;
+    line-height:1.25 !important;
+  }
+  .v40-file-btn,
+  .v40-remove-photo{
+    padding:8px 10px !important;
+  }
+}
