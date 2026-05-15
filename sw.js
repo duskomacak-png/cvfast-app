@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v410-job-title-labels";
+const CACHE_NAME = "cvfast-v411-guided-fields";
 
 const APP_SHELL = [
   "/",

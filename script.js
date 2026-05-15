@@ -1988,6 +1988,7 @@ function v40Render() {
   v40RenderStepContent();
   v40CommitToLegacy();
   v40RenderPreview();
+  v40AttachFieldGuide();
 }
 
 function v40SetLanguage(lang) {
@@ -2205,7 +2206,7 @@ function v40CommitAndPreview(){ v40CommitToLegacy(); v40RenderPreview(); }
 function v40SelectTemplate(template){ v40State.selectedTemplate=template; v40Render(); }
 
 function v40ScrollStepToTop() {
-  // V40.10: Back/Next buttons are at the bottom, so after changing step
+  // V40.11: Back/Next buttons are at the bottom, so after changing step
   // the scrollable glass card must return to the top of the new form.
   requestAnimationFrame(() => {
     const sheet = document.querySelector(".v40-input-sheet");
@@ -2218,6 +2219,48 @@ function v40ScrollStepToTop() {
       try { content.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" }); }
       catch (err) {}
     }
+  });
+}
+
+function v40AttachFieldGuide() {
+  // V40.11: guided form flow. After a user finishes one small field
+  // and leaves it, gently move focus to the next small field.
+  // Do not auto-jump from textareas, file inputs or buttons; those need manual control.
+  const content = document.getElementById("v40StepContent");
+  if (!content) return;
+
+  const selector = [
+    "input:not([type='file']):not([type='hidden']):not([disabled])",
+    "select:not([disabled])"
+  ].join(",");
+
+  const fields = Array.from(content.querySelectorAll(selector))
+    .filter((field) => field.offsetParent !== null && !field.readOnly);
+
+  fields.forEach((field, index) => {
+    field.addEventListener("blur", () => {
+      const value = String(field.value || "").trim();
+      if (!value) return;
+
+      window.setTimeout(() => {
+        const active = document.activeElement;
+        const userAlreadyMoved = active && active !== document.body && active !== document.documentElement && active !== field;
+        if (userAlreadyMoved) return;
+
+        const nextField = fields[index + 1];
+        if (!nextField) return;
+
+        try {
+          nextField.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" });
+        } catch (err) {}
+
+        try {
+          nextField.focus({ preventScroll: true });
+        } catch (err) {
+          nextField.focus();
+        }
+      }, 140);
+    });
   });
 }
 
