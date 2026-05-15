@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v409-step-scroll-fix";
+const CACHE_NAME = "cvfast-v410-job-title-labels";
 
 const APP_SHELL = [
   "/",

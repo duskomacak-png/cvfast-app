@@ -2086,7 +2086,7 @@ function v40RenderStepContent() {
     el.innerHTML = `<div class="v40-form-grid">
       <label>First name *<input value="${escAttr(v40State.personal.firstName)}" oninput="v40Update('personal.firstName', this.value)" placeholder="Ana"></label>
       <label>Last name *<input value="${escAttr(v40State.personal.lastName)}" oninput="v40Update('personal.lastName', this.value)" placeholder="Petrović"></label>
-      <label>Job title<input value="${escAttr(v40State.personal.jobTitle)}" oninput="v40Update('personal.jobTitle', this.value)" placeholder="Senior Software Engineer"></label>
+      <label>Target position / CV headline<input value="${escAttr(v40State.personal.jobTitle)}" oninput="v40Update('personal.jobTitle', this.value)" placeholder="Senior Software Engineer"></label>
       <div class="v40-photo-box">
         <div class="v40-photo-preview">${v40State.personal.photo ? `<img src="${escAttr(v40State.personal.photo)}" alt="CV photo preview">` : `<span>Photo</span>`}</div>
         <div class="v40-photo-copy">
@@ -2120,7 +2120,7 @@ function v40RenderStepContent() {
   if (v40Step === 5) {
     const d = v40State.draftExperience || {};
     el.innerHTML = `${v40RenderEntries(v40State.experience, "experience")}
-      <div class="v40-form-grid"><label>Job title<input value="${escAttr(d.jobTitle || "")}" oninput="v40UpdateDraft('experience','jobTitle',this.value)" placeholder="Software Engineer"></label>
+      <div class="v40-form-grid"><label>Job title in this job<input value="${escAttr(d.jobTitle || "")}" oninput="v40UpdateDraft('experience','jobTitle',this.value)" placeholder="Software Engineer"></label>
       <div class="v40-form-grid v40-two-col"><label>Company<input value="${escAttr(d.company || "")}" oninput="v40UpdateDraft('experience','company',this.value)" placeholder="Company"></label><label>Location<input value="${escAttr(d.location || "")}" oninput="v40UpdateDraft('experience','location',this.value)" placeholder="Berlin"></label></div>
       <div class="v40-form-grid v40-two-col"><label>Start date<input value="${escAttr(d.start || "")}" oninput="v40UpdateDraft('experience','start',this.value)" placeholder="MM/YYYY"></label><label>End date / Present<input value="${escAttr(d.end || "")}" oninput="v40UpdateDraft('experience','end',this.value)" placeholder="Present"></label></div>
       <label>Description<textarea oninput="v40UpdateDraft('experience','description',this.value)" placeholder="Describe your responsibilities and achievements.">${escHtml(d.description || "")}</textarea></label>
@@ -2205,7 +2205,7 @@ function v40CommitAndPreview(){ v40CommitToLegacy(); v40RenderPreview(); }
 function v40SelectTemplate(template){ v40State.selectedTemplate=template; v40Render(); }
 
 function v40ScrollStepToTop() {
-  // V40.9: Back/Next buttons are at the bottom, so after changing step
+  // V40.10: Back/Next buttons are at the bottom, so after changing step
   // the scrollable glass card must return to the top of the new form.
   requestAnimationFrame(() => {
     const sheet = document.querySelector(".v40-input-sheet");
