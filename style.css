@@ -2810,3 +2810,41 @@ body.v40-active .app > footer { display:none !important; }
   .v40-photo-box{grid-template-columns:70px 1fr;gap:10px;padding:10px;}
   .v40-photo-preview{width:70px;height:70px;border-radius:18px;}
 }
+
+/* V40.8 Back / Next moved to bottom of the glass input card */
+.v40-sheet-head{
+  display:block !important;
+  margin:0 0 12px !important;
+}
+.v40-step-nav-bottom{
+  display:grid !important;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:16px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.12);
+}
+.v40-step-nav-bottom .v40-small-btn{
+  width:100%;
+  min-height:42px;
+  padding:11px 13px;
+  border-radius:16px;
+  font-size:14px;
+}
+.v40-step-nav-bottom .v40-small-btn.hidden{
+  display:none !important;
+}
+.v40-step-nav-bottom .v40-small-btn.hidden + .v40-small-btn{
+  grid-column:1 / -1;
+}
+@media(max-width:520px){
+  .v40-step-nav-bottom{
+    position:relative;
+    margin-top:14px;
+    gap:9px;
+  }
+  .v40-step-nav-bottom .v40-small-btn{
+    min-height:44px;
+    font-size:13px;
+  }
+}

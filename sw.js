@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v407-photo-wizard-fix";
+const CACHE_NAME = "cvfast-v408-bottom-nav-fix";
 
 const APP_SHELL = [
   "/",
