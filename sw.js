@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v404-phone-wizard-smart-ui";
+const CACHE_NAME = "cvfast-v406-preview-template-fix";
 
 const APP_SHELL = [
   "/",

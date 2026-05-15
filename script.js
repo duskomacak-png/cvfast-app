@@ -2018,6 +2018,41 @@ function v40PreviewSampleData() {
   };
 }
 
+
+function v40HasUserData() {
+  if (!v40State) return false;
+  const expDraft = v40State.draftExperience || {};
+  const eduDraft = v40State.draftEducation || {};
+  const langDraft = v40State.draftLanguage || {};
+  return Boolean(
+    String(v40State.personal?.firstName || "").trim() ||
+    String(v40State.personal?.lastName || "").trim() ||
+    String(v40State.personal?.jobTitle || "").trim() ||
+    String(v40State.contact?.email || "").trim() ||
+    String(v40State.contact?.phone || "").trim() ||
+    String(v40State.contact?.city || "").trim() ||
+    String(v40State.contact?.country || "").trim() ||
+    String(v40State.contact?.linkedin || "").trim() ||
+    String(v40State.summary || "").trim() ||
+    (Array.isArray(v40State.experience) && v40State.experience.length > 0) ||
+    (Array.isArray(v40State.education) && v40State.education.length > 0) ||
+    (Array.isArray(v40State.skills) && v40State.skills.length > 0) ||
+    (Array.isArray(v40State.languages) && v40State.languages.length > 0) ||
+    String(v40State.draftSkill || "").trim() ||
+    Object.values(expDraft).some(v => String(v || "").trim()) ||
+    Object.values(eduDraft).some(v => String(v || "").trim()) ||
+    String(langDraft.language || "").trim()
+  );
+}
+
+function v40PreviewPayload() {
+  const hasData = v40HasUserData();
+  if (!hasData) {
+    return { hasData: false, data: v40PreviewSampleData() };
+  }
+  return { hasData: true, data: v40ToLegacyData() };
+}
+
 function v40RenderPreview() {
   const target = document.getElementById("v40CvPreview");
   if (!target) return;
@@ -2035,7 +2070,7 @@ function v40RenderStepContent() {
   if (v40Step === 1) {
     el.innerHTML = `<div class="v40-template-instruction">
       <strong>Choose your CV design</strong>
-      <span>Click one of the two examples below. The selected CV design is shown above immediately.</span>
+      <span>Select one example below. You can change it later.</span>
     </div>
     <div class="v40-template-grid">
       ${v40TemplateCard("classic", "Classic", "Clean and simple CV for most jobs.")}
@@ -2167,13 +2202,12 @@ function v40FitPreview(){
   const page=document.getElementById("v40CvPreview");
   if(!wrap||!stage||!page) return;
   requestAnimationFrame(()=>{
-    const baseW=794, baseH=1123;
-    const availableW=Math.max(120, wrap.clientWidth-16);
-    const availableH=Math.max(140, wrap.clientHeight-16);
-    const scale=Math.min(1, Math.max(.28, availableW/baseW));
-    stage.style.height = `${availableH}px`;
-    page.style.transform=`scale(${scale})`;
-    page.style.transformOrigin='top center';
+    const baseW=794;
+    const availableW=Math.max(220, wrap.clientWidth-20);
+    const scale=Math.min(1, Math.max(.34, availableW/baseW));
+    stage.style.height = `${Math.max(180, wrap.clientHeight-20)}px`;
+    page.style.setProperty("transform", `scale(${scale})`, "important");
+    page.style.setProperty("transform-origin", "top center", "important");
     page.style.margin='0 auto';
   });
 }
