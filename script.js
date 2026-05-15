@@ -1810,7 +1810,7 @@ let v40State = null;
 function v40DefaultState() {
   return {
     selectedTemplate: "classic",
-    personal: { firstName: "", lastName: "", jobTitle: "" },
+    personal: { firstName: "", lastName: "", jobTitle: "", photo: "" },
     contact: { email: "", phone: "", city: "", country: "", linkedin: "" },
     summary: "",
     experience: [],
@@ -1867,7 +1867,8 @@ function legacyToV40State(data) {
     personal: {
       firstName: fromSaved?.personal?.firstName ?? name.firstName,
       lastName: fromSaved?.personal?.lastName ?? name.lastName,
-      jobTitle: fromSaved?.personal?.jobTitle ?? (data.jobTitle || "")
+      jobTitle: fromSaved?.personal?.jobTitle ?? (data.jobTitle || ""),
+      photo: fromSaved?.personal?.photo ?? (data.photo || "")
     },
     contact: {
       email: fromSaved?.contact?.email ?? (data.email || ""),
@@ -1923,6 +1924,7 @@ function v40ToLegacyData() {
     phone: v40State.contact.phone || "",
     email: v40State.contact.email || "",
     location,
+    photo: v40State.personal.photo || existing.photo || "",
     profile: v40State.summary || "",
     experience: v40ExperienceToText(v40State.experience),
     education: v40EducationToText(v40State.education),
@@ -2028,6 +2030,7 @@ function v40HasUserData() {
     String(v40State.personal?.firstName || "").trim() ||
     String(v40State.personal?.lastName || "").trim() ||
     String(v40State.personal?.jobTitle || "").trim() ||
+    String(v40State.personal?.photo || "").trim() ||
     String(v40State.contact?.email || "").trim() ||
     String(v40State.contact?.phone || "").trim() ||
     String(v40State.contact?.city || "").trim() ||
@@ -2084,6 +2087,15 @@ function v40RenderStepContent() {
       <label>First name *<input value="${escAttr(v40State.personal.firstName)}" oninput="v40Update('personal.firstName', this.value)" placeholder="Ana"></label>
       <label>Last name *<input value="${escAttr(v40State.personal.lastName)}" oninput="v40Update('personal.lastName', this.value)" placeholder="Petrović"></label>
       <label>Job title<input value="${escAttr(v40State.personal.jobTitle)}" oninput="v40Update('personal.jobTitle', this.value)" placeholder="Senior Software Engineer"></label>
+      <div class="v40-photo-box">
+        <div class="v40-photo-preview">${v40State.personal.photo ? `<img src="${escAttr(v40State.personal.photo)}" alt="CV photo preview">` : `<span>Photo</span>`}</div>
+        <div class="v40-photo-copy">
+          <strong>Add CV photo</strong>
+          <span>Optional. Choose a clear headshot. It is saved only in this browser.</span>
+          <label class="v40-file-btn">Choose photo<input accept="image/*" type="file" onchange="v40HandlePhotoUpload(this)"></label>
+          ${v40State.personal.photo ? `<button class="v40-remove-photo" type="button" onclick="v40RemovePhoto()">Remove photo</button>` : ``}
+        </div>
+      </div>
     </div>`;
     return;
   }
@@ -2167,6 +2179,26 @@ function v40Update(path, value) {
   if (parts.length === 1) v40State[parts[0]] = value;
   else v40State[parts[0]][parts[1]] = value;
   v40CommitAndPreview();
+}
+
+async function v40HandlePhotoUpload(input){
+  const file = input?.files?.[0];
+  if(!file) return;
+  try{
+    if(!file.type || !file.type.startsWith("image/")) throw new Error("Not an image");
+    const photo = await resizeImage(file);
+    v40State.personal.photo = photo;
+    v40Render();
+    showToast((ui[getLang()] && ui[getLang()].photoAdded) || "Photo added ✅");
+  }catch(err){
+    console.error(err);
+    showToast("Image error");
+  }
+}
+
+function v40RemovePhoto(){
+  v40State.personal.photo = "";
+  v40Render();
 }
 function v40UpdateDraft(type,key,value){ if(type==="experience") v40State.draftExperience[key]=value; if(type==="education") v40State.draftEducation[key]=value; v40CommitAndPreview(); }
 function v40CommitAndPreview(){ v40CommitToLegacy(); v40RenderPreview(); }

@@ -2737,3 +2737,76 @@ body.v40-active .app > footer { display:none !important; }
     margin:0 auto -610px !important;
   }
 }
+
+/* V40.7 photo upload in phone wizard */
+.v40-photo-box{
+  display:grid;
+  grid-template-columns:82px 1fr;
+  gap:12px;
+  align-items:center;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  background:rgba(255,255,255,.06);
+}
+.v40-photo-preview{
+  width:82px;
+  height:82px;
+  border-radius:22px;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,rgba(37,99,235,.35),rgba(139,92,246,.35));
+  border:1px solid rgba(255,255,255,.16);
+  color:#dbeafe;
+  font-size:12px;
+  font-weight:900;
+}
+.v40-photo-preview img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.v40-photo-copy{
+  display:grid;
+  gap:6px;
+}
+.v40-photo-copy strong{
+  font-size:13px;
+  color:#fff;
+}
+.v40-photo-copy span{
+  color:#a7b0c2;
+  font-size:12px;
+  line-height:1.35;
+}
+.v40-file-btn{
+  display:inline-flex !important;
+  width:max-content;
+  padding:9px 12px;
+  border-radius:13px;
+  background:linear-gradient(135deg,#2563eb,#8b5cf6);
+  color:#fff !important;
+  cursor:pointer;
+  font-size:12px !important;
+  font-weight:900 !important;
+}
+.v40-file-btn input{
+  display:none !important;
+}
+.v40-remove-photo{
+  width:max-content;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;
+  background:rgba(255,255,255,.08);
+  color:#fecdd3;
+  padding:8px 10px;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+}
+@media(max-width:380px){
+  .v40-photo-box{grid-template-columns:70px 1fr;gap:10px;padding:10px;}
+  .v40-photo-preview{width:70px;height:70px;border-radius:18px;}
+}
