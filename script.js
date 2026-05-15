@@ -2003,14 +2003,10 @@ function v40RenderPreview() {
   if (!target) return;
   const data = v40ToLegacyData();
   const hasData = [data.fullName, data.jobTitle, data.email, data.phone, data.profile, data.experience, data.education, data.skills].some(x => String(x || "").trim()) || parseLanguages(data.languages).length;
-  document.getElementById("v40TemplateLabel").textContent = v40State.selectedTemplate[0].toUpperCase() + v40State.selectedTemplate.slice(1);
-  if (!hasData) {
-    target.className = "cv-page classic";
-    target.innerHTML = `<div class="v40-empty-preview">Your CV preview will appear here<br>as you type.</div>`;
-    v40FitPreview();
-    return;
-  }
-  renderCv(target, data, { placeholders: false });
+  document.getElementById("v40TemplateLabel").textContent = v40State.selectedTemplate === "modern" ? "Modern" : "Classic";
+  const previewData = hasData ? data : v40PreviewSampleData();
+  renderCv(target, previewData, { placeholders: false });
+  target.classList.toggle("v40-preview-sample", !hasData);
   v40FitPreview();
 }
 
@@ -2020,8 +2016,8 @@ function v40RenderStepContent() {
 
   if (v40Step === 1) {
     el.innerHTML = `<div class="v40-template-grid">
-      ${v40TemplateCard("classic", "Classic", "Clean and simple CV for most jobs.", "")}
-      ${v40TemplateCard("modern", "Modern", "Modern side column layout.", "dark")}
+      ${v40TemplateCard("classic", "Classic", "Clean and simple CV for most jobs.")}
+      ${v40TemplateCard("modern", "Modern", "Modern side column layout.")}
     </div>`;
     return;
   }
@@ -2097,8 +2093,12 @@ function v40RenderStepContent() {
   }
 }
 
-function v40TemplateCard(id, name, desc, miniClass) {
-  return `<div class="v40-template-card ${v40State.selectedTemplate===id?"active":""}" onclick="v40SelectTemplate('${id}')"><div class="v40-mini-cv ${miniClass}"><div class="v40-mini-line blue short"></div><div class="v40-mini-line"></div><div class="v40-mini-line"></div><div class="v40-mini-line short"></div><div class="v40-mini-line"></div></div><div><div class="v40-template-name">${name}</div><div class="v40-template-desc">${desc}</div></div></div>`;
+function v40TemplateCard(id, name, desc) {
+  const isModern = id === "modern";
+  const preview = isModern
+    ? `<div class="v40-template-preview v40-template-preview-modern"><div class="v40-template-side"><div class="v40-template-avatar">AM</div><span></span><span></span><span class="short"></span><div class="v40-template-side-title"></div><span></span><span class="short"></span></div><div class="v40-template-main"><div class="v40-template-head"><b>Alex Miller</b><small>Operations Specialist</small></div><div class="v40-template-line blue long"></div><div class="v40-template-line"></div><div class="v40-template-line"></div><div class="v40-template-line short"></div><div class="v40-template-line"></div></div></div>`
+    : `<div class="v40-template-preview v40-template-preview-classic"><div class="v40-template-head"><b>Alex Miller</b><small>Operations Specialist</small></div><div class="v40-template-line blue long"></div><div class="v40-template-line"></div><div class="v40-template-line"></div><div class="v40-template-line short"></div><div class="v40-template-line"></div><div class="v40-template-chip-row"><i></i><i></i><i></i></div></div>`;
+  return `<div class="v40-template-card ${v40State.selectedTemplate===id?"active":""}" onclick="v40SelectTemplate('${id}')">${preview}<div><div class="v40-template-name">${name}</div><div class="v40-template-desc">${desc}</div></div></div>`;
 }
 
 function v40Update(path, value) {
@@ -2137,13 +2137,18 @@ function v40AtsScore(){ let score=20; const tips=[]; if(v40State.personal.firstN
 
 function v40FitPreview(){
   const wrap=document.querySelector(".v40-cv-preview-wrap");
+  const stage=document.querySelector(".v40-preview-stage");
   const page=document.getElementById("v40CvPreview");
-  if(!wrap||!page||page.querySelector(".v40-empty-preview")) return;
+  if(!wrap||!stage||!page) return;
   requestAnimationFrame(()=>{
-    const baseW=794;
-    const scale=Math.min(1, Math.max(.28, (wrap.clientWidth-22)/baseW));
+    const baseW=794, baseH=1123;
+    const availableW=Math.max(120, wrap.clientWidth-18);
+    const availableH=Math.max(120, wrap.clientHeight-18);
+    const scale=Math.min(1, Math.max(.20, Math.min(availableW/baseW, availableH/baseH)));
+    stage.style.height = `${Math.round(baseH*scale)}px`;
     page.style.transform=`scale(${scale})`;
-    page.style.marginBottom=`-${Math.max(0,1123*(1-scale)-18)}px`;
+    page.style.transformOrigin='top center';
+    page.style.margin='0 auto';
   });
 }
 function v40OpenFullPreview(){
