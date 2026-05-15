@@ -2021,12 +2021,10 @@ function v40PreviewSampleData() {
 function v40RenderPreview() {
   const target = document.getElementById("v40CvPreview");
   if (!target) return;
-  const data = v40ToLegacyData();
-  const hasData = [data.fullName, data.jobTitle, data.email, data.phone, data.profile, data.experience, data.education, data.skills].some(x => String(x || "").trim()) || parseLanguages(data.languages).length;
+  const payload = v40PreviewPayload();
   document.getElementById("v40TemplateLabel").textContent = v40State.selectedTemplate === "modern" ? "Modern" : "Classic";
-  const previewData = hasData ? data : v40PreviewSampleData();
-  renderCv(target, previewData, { placeholders: false });
-  target.classList.toggle("v40-preview-sample", !hasData);
+  renderCv(target, payload.data, { placeholders: false });
+  target.classList.toggle("v40-preview-sample", !payload.hasData);
   v40FitPreview();
 }
 
@@ -2170,10 +2168,10 @@ function v40FitPreview(){
   if(!wrap||!stage||!page) return;
   requestAnimationFrame(()=>{
     const baseW=794, baseH=1123;
-    const availableW=Math.max(120, wrap.clientWidth-18);
-    const availableH=Math.max(120, wrap.clientHeight-18);
-    const scale=Math.min(1, Math.max(.20, Math.min(availableW/baseW, availableH/baseH)));
-    stage.style.height = `${Math.round(baseH*scale)}px`;
+    const availableW=Math.max(120, wrap.clientWidth-16);
+    const availableH=Math.max(140, wrap.clientHeight-16);
+    const scale=Math.min(1, Math.max(.28, availableW/baseW));
+    stage.style.height = `${availableH}px`;
     page.style.transform=`scale(${scale})`;
     page.style.transformOrigin='top center';
     page.style.margin='0 auto';
@@ -2184,7 +2182,8 @@ function v40OpenFullPreview(){
   const modal=document.getElementById("v40FullPreviewModal");
   const target=document.getElementById("v40FullPreviewCv");
   if(!modal||!target) return;
-  renderCv(target, v40ToLegacyData(), {placeholders:false});
+  const payload=v40PreviewPayload();
+  renderCv(target, payload.data, {placeholders:false});
   modal.classList.remove("hidden");
 }
 function v40CloseFullPreview(){

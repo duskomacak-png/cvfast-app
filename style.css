@@ -2663,3 +2663,20 @@ body.v40-active .app > footer { display:none !important; }
   font-size:12px;
   font-weight:800;
 }
+
+
+/* V40.5 wider template preview area */
+.v40-cv-preview-wrap{
+  flex:0 0 clamp(230px,36dvh,340px) !important;
+  min-height:230px !important;
+}
+.v40-preview-stage{
+  align-items:flex-start;
+  justify-content:center;
+}
+.v40-cv-preview-wrap .cv-page{
+  border-radius:18px;
+}
+.v40-full-preview-card .cv-page{
+  width:min(794px,100%) !important;
+}
