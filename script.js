@@ -1756,7 +1756,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=419").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=420").catch(() => {});
     });
   }
 
@@ -2007,8 +2007,15 @@ function v40Render() {
   v40ClampSubStep();
   if (title) title.textContent = `${V40_STEPS[v40Step - 1]}${v40StepPartLabel()}`;
   if (backBtn) backBtn.classList.toggle("hidden", v40Step === 1);
-  if (nextBtn) nextBtn.textContent = v40Step === 1 ? "Continue →" : v40Step === 9 ? "Done" : "Next →";
-  if (pricePill) pricePill.textContent = isUnlocked() ? "Unlocked" : "5€";
+  if (nextBtn) {
+    nextBtn.textContent = v40Step === 1 ? "Continue →" : v40Step === 9 ? (isUnlocked() ? "Download PDF" : "Unlock PDF 5€") : "Next →";
+    nextBtn.classList.toggle("v40-download-final-btn", v40Step === 9);
+  }
+  if (pricePill) {
+    pricePill.textContent = "";
+    pricePill.classList.add("hidden");
+  }
+  document.querySelector(".v40-input-sheet")?.classList.toggle("v40-final-sheet", v40Step === 9);
   if (saved) saved.textContent = t.saved;
 
   v40ClearError();

@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v419-responsive-device-safe";
+const CACHE_NAME = "cvfast-v420-final-button-fix-safe";
 
 const APP_SHELL = [
   "/",

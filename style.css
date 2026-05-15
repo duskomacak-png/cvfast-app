@@ -3638,3 +3638,17 @@ body.v40-active .app > footer { display:none !important; }
     font-size:11.5px !important;
   }
 }
+
+
+/* V40.20: final button text/style activation fix.
+   Step 9 bottom Next button becomes Unlock PDF 5€ or Download PDF. */
+.v40-price-pill{display:none !important;}
+.v40-final-sheet .v40-step-nav-bottom{
+  grid-template-columns:.78fr 1.22fr !important;
+}
+.v40-final-sheet .v40-small-btn.v40-download-final-btn{
+  background:linear-gradient(135deg,#16a34a,#22c55e) !important;
+  border-color:rgba(134,239,172,.68) !important;
+  color:#fff !important;
+  font-weight:900 !important;
+}
