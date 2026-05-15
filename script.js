@@ -1756,7 +1756,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=421").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=422").catch(() => {});
     });
   }
 
@@ -2016,6 +2016,7 @@ function v40Render() {
     pricePill.classList.add("hidden");
   }
   document.querySelector(".v40-input-sheet")?.classList.toggle("v40-final-sheet", v40Step === 9);
+  document.querySelector(".v40-phone-frame")?.classList.toggle("v40-final-phone", v40Step === 9);
   if (saved) saved.textContent = t.saved;
 
   v40ClearError();
@@ -2249,9 +2250,8 @@ function v40RenderStepContent() {
       <label>Template<select onchange="v40SelectTemplate(this.value)"><option value="classic" ${v40State.selectedTemplate==="classic"?"selected":""}>Classic</option><option value="modern" ${v40State.selectedTemplate==="modern"?"selected":""}>Modern</option></select></label>
       <div class="v40-unlock-info v40-unlock-info-compact">
         <strong>${unlocked ? "PDF download is unlocked." : "Why 5€? It unlocks PDF downloads in this browser."}</strong>
-        <span>${unlocked ? "Edit your CV and press Download PDF below whenever you need a new version." : "This is not only one CV. After unlocking, edit and download updated PDFs on this same device/browser until browser data is cleared."}</span>
+        <span>${unlocked ? "Edit your CV and press Download PDF below whenever you need a new version." : "Not only one CV. Edit and download updated PDFs on this same browser until browser data is cleared."}</span>
       </div>
-      <div class="v40-jump-grid v40-jump-grid-compact"><button type="button" onclick="v40Go(2)">Edit personal</button><button type="button" onclick="v40Go(3)">Edit contact</button><button type="button" onclick="v40Go(5)">Edit work</button></div>
     </div>`;
   }
 }

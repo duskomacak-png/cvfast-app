@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v421-laptop-final-visible-safe";
+const CACHE_NAME = "cvfast-v422-laptop-final-real-fix-safe";
 
 const APP_SHELL = [
   "/",
