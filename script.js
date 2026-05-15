@@ -120,11 +120,11 @@ const ui = {
     autoSave: "Auto-save aktivan",
     translateBtn: "🌍 Prevedi preko Google Translate",
     supportModalTitle: "CV je spreman ✅",
-    supportModalText: "Izrada i pregled CV-a su besplatni. PDF preuzimanje se otključava jednokratnom podrškom od 5€.",
-    supportModalMuted: "Podrška pomaže da cvfast.app ostane online, brz i dostupan bez registracije.",
-    supportPayBtn: "☕ Podrži 5€ i otključaj PDF",
+    supportModalText: "Izrada i pregled CV-a su besplatni. Jednokratnom podrškom od 5€ otključavaš PDF preuzimanje u ovom browseru.",
+    supportModalMuted: "Posle otključavanja možeš menjati CV i preuzimati više PDF verzija u ovom browseru, dok ne obrišeš podatke pregledača.",
+    supportPayBtn: "☕ Podrži projekat 5€ i otključaj PDF preuzimanje",
     alreadyPaid: "",
-    mvpNote: "Nakon podrške PayPal će te vratiti u app i PDF preuzimanje će biti otključano u ovom browseru.",
+    mvpNote: "PayPal će te vratiti u app. Otključavanje ostaje u ovom browseru dok ne obrišeš podatke pregledača.",
     privacyLink: "Privatnost",
     termsLink: "Uslovi korišćenja",
     supportLink: "Podrška",
@@ -234,11 +234,11 @@ const ui = {
     autoSave: "Auto-save active",
     translateBtn: "🌍 Translate with Google Translate",
     supportModalTitle: "Your CV is ready ✅",
-    supportModalText: "Creating and previewing your CV is free. PDF download unlocks with a one-time €5 support payment.",
-    supportModalMuted: "Your support helps keep cvfast.app online, fast and available without registration. No subscription.",
-    supportPayBtn: "☕ Support €5 and unlock PDF",
+    supportModalText: "Creating and previewing your CV is free. A one-time €5 support payment unlocks PDF downloads in this browser.",
+    supportModalMuted: "After unlocking, you can edit your CV and download more PDF versions in this browser until you clear browser data. No subscription.",
+    supportPayBtn: "☕ Support 5€ & unlock PDF downloads",
     alreadyPaid: "",
-    mvpNote: "After support, PayPal returns you to cvfast.app and PDF download unlocks in this browser/device. No subscription.",
+    mvpNote: "After payment, PayPal returns you to cvfast.app. PDF downloads stay unlocked in this browser until you clear browser data.",
     privacyLink: "Privacy Policy",
     termsLink: "Terms of Use",
     supportLink: "Support",
@@ -348,11 +348,11 @@ const ui = {
     autoSave: "Auto-save aktiv",
     translateBtn: "🌍 Mit Google Translate übersetzen",
     supportModalTitle: "Dein CV ist bereit ✅",
-    supportModalText: "Erstellen und Vorschau sind kostenlos. PDF-Download wird durch eine einmalige Unterstützung von 5€ freigeschaltet.",
-    supportModalMuted: "Deine Unterstützung hilft, cvfast.app online, schnell und ohne Registrierung verfügbar zu halten.",
-    supportPayBtn: "☕ 5€ unterstützen und PDF freischalten",
+    supportModalText: "Erstellen und Vorschau sind kostenlos. Eine einmalige Unterstützung von 5€ schaltet PDF-Downloads in diesem Browser frei.",
+    supportModalMuted: "Nach der Freischaltung kannst du deinen CV bearbeiten und weitere PDF-Versionen in diesem Browser herunterladen, bis du die Browserdaten löschst. Kein Abo.",
+    supportPayBtn: "☕ 5€ unterstützen & PDF-Downloads freischalten",
     alreadyPaid: "",
-    mvpNote: "Nach der Unterstützung bringt PayPal dich zurück zu cvfast.app und der PDF-Download wird in diesem Browser/Gerät freigeschaltet. Kein Abo.",
+    mvpNote: "Nach der Zahlung bringt PayPal dich zurück zu cvfast.app. PDF-Downloads bleiben in diesem Browser freigeschaltet, bis du die Browserdaten löschst.",
     privacyLink: "Datenschutz",
     termsLink: "Nutzungsbedingungen",
     supportLink: "Support",
@@ -1756,7 +1756,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=40").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=404").catch(() => {});
     });
   }
 
@@ -1998,6 +1998,26 @@ function v40SetLanguage(lang) {
   v40Render();
 }
 
+function v40PreviewSampleData() {
+  return {
+    ...emptyData(),
+    appLanguage: getLang(),
+    cvLanguage: getLang(),
+    template: v40TemplateToLegacy(v40State?.selectedTemplate || "classic"),
+    fullName: "Alex Miller",
+    jobTitle: "Operations Specialist",
+    phone: "+49 151 000000",
+    email: "alex@example.com",
+    location: "Berlin, Germany",
+    profile: "Reliable professional with practical field experience, strong attention to detail and a clear, professional CV layout.",
+    experience: "Operations Specialist — Sample Company\n2021 - Present\nDaily operations, planning and quality support.",
+    education: "Technical Course — Berlin\n2020\nProfessional training and certification.",
+    skills: "Planning\nTeamwork\nDocumentation",
+    languages: JSON.stringify([{ name: "English", level: "B2" }, { name: "German", level: "A2" }]),
+    photo: ""
+  };
+}
+
 function v40RenderPreview() {
   const target = document.getElementById("v40CvPreview");
   if (!target) return;
@@ -2015,7 +2035,11 @@ function v40RenderStepContent() {
   if (!el) return;
 
   if (v40Step === 1) {
-    el.innerHTML = `<div class="v40-template-grid">
+    el.innerHTML = `<div class="v40-template-instruction">
+      <strong>Choose your CV design</strong>
+      <span>Click one of the two examples below. The selected CV design is shown above immediately.</span>
+    </div>
+    <div class="v40-template-grid">
       ${v40TemplateCard("classic", "Classic", "Clean and simple CV for most jobs.")}
       ${v40TemplateCard("modern", "Modern", "Modern side column layout.")}
     </div>`;
@@ -2089,7 +2113,11 @@ function v40RenderStepContent() {
     el.innerHTML = `<div class="v40-score-card"><div class="v40-helper-text">ATS Readiness Score</div><div class="v40-score-num">${score.score}/100</div><div class="v40-helper-text">${score.tips.join(" • ")}</div></div>
       <div class="v40-jump-grid"><button type="button" onclick="v40Go(2)">Personal</button><button type="button" onclick="v40Go(3)">Contact</button><button type="button" onclick="v40Go(4)">Summary</button><button type="button" onclick="v40Go(5)">Experience</button><button type="button" onclick="v40Go(6)">Education</button><button type="button" onclick="v40Go(7)">Skills</button><button type="button" onclick="v40Go(8)">Languages</button></div>
       <label>Template<select onchange="v40SelectTemplate(this.value)"><option value="classic" ${v40State.selectedTemplate==="classic"?"selected":""}>Classic</option><option value="modern" ${v40State.selectedTemplate==="modern"?"selected":""}>Modern</option></select></label>
-      <div class="v40-final-action">${isUnlocked()?`<button class="v40-download-btn" type="button" onclick="v40DownloadPdf()">Download PDF</button>`:`<button class="v40-paypal-btn" type="button" onclick="v40PayUnlock()">Unlock PDF Download – 5€</button>`}</div><p class="v40-helper-text">100% private – stored only on your device.</p>`;
+      <div class="v40-unlock-info">
+        <strong>${isUnlocked() ? "PDF download is unlocked in this browser." : "Support CVFast.app with 5€ and unlock PDF downloads."}</strong>
+        <span>${isUnlocked() ? "You can edit your CV and download updated PDF versions." : "After unlocking, you can edit your CV and download more PDF versions in this browser until you clear browser data."}</span>
+      </div>
+      <div class="v40-final-action">${isUnlocked()?`<button class="v40-download-btn" type="button" onclick="v40DownloadPdf()">Download PDF</button>`:`<button class="v40-paypal-btn" type="button" onclick="v40PayUnlock()">Support 5€ & Unlock PDF Downloads</button>`}</div><p class="v40-helper-text">100% private – stored only on your device.</p>`;
   }
 }
 
