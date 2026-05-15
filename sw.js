@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v412-fixed-input-panel";
+const CACHE_NAME = "cvfast-v413-no-scroll-step-parts";
 
 const APP_SHELL = [
   "/",

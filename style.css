@@ -2913,3 +2913,119 @@ body.v40-active .app > footer { display:none !important; }
     padding:8px 10px !important;
   }
 }
+
+/* V40.13: no inner scrolling in wizard fields.
+   Each step is split into small parts so users see 2-3 inputs plus Back/Next without scrolling. */
+.v40-input-sheet{
+  overflow:hidden !important;
+  min-height:340px !important;
+}
+#v40StepContent{
+  overflow:hidden !important;
+  padding-right:0 !important;
+}
+.v40-no-scroll-page{
+  height:100%;
+  align-content:start;
+  gap:10px !important;
+}
+.v40-part-note,
+.v40-mini-status{
+  margin:0;
+  padding:8px 10px;
+  border:1px solid rgba(125,211,252,.18);
+  border-radius:13px;
+  background:rgba(56,189,248,.075);
+  color:#bfdbfe;
+  font-size:11px;
+  line-height:1.28;
+  font-weight:750;
+}
+.v40-mini-status{
+  border-color:rgba(134,239,172,.2);
+  background:rgba(34,197,94,.08);
+  color:#bbf7d0;
+}
+.v40-action-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.v40-action-row .v40-ghost-btn,
+.v40-action-row .v40-primary-btn{
+  width:100%;
+  padding:11px 10px;
+  border-radius:15px;
+  font-size:12px;
+}
+.v40-compact-textarea{
+  min-height:84px !important;
+  resize:none !important;
+}
+.v40-photo-box-compact{
+  grid-template-columns:66px 1fr !important;
+  gap:10px !important;
+  padding:10px !important;
+}
+.v40-photo-box-compact .v40-photo-preview{
+  width:66px !important;
+  height:66px !important;
+  border-radius:18px !important;
+}
+.v40-photo-box-compact .v40-photo-copy{
+  gap:5px !important;
+}
+.v40-photo-box-compact .v40-photo-copy span{
+  font-size:11px !important;
+  line-height:1.2 !important;
+}
+.v40-photo-box-compact .v40-file-btn,
+.v40-photo-box-compact .v40-remove-photo{
+  padding:7px 9px !important;
+  font-size:11px !important;
+  border-radius:11px !important;
+}
+.v40-input-sheet input,
+.v40-input-sheet select{
+  min-height:44px;
+}
+.v40-step-nav-bottom{
+  margin-top:12px !important;
+  padding-top:10px !important;
+}
+.v40-saved{
+  margin-top:8px !important;
+}
+@media(max-width:520px){
+  .v40-cv-preview-wrap{
+    flex:0 0 clamp(190px, 28dvh, 245px) !important;
+    min-height:190px !important;
+  }
+  .v40-input-sheet{
+    min-height:0 !important;
+    flex:1 1 0 !important;
+    padding:12px !important;
+  }
+  .v40-sheet-title{font-size:16px !important;}
+  .v40-progress-row{margin-bottom:7px !important;}
+  .v40-progress-track{margin-bottom:9px !important;}
+  .v40-input-sheet label{gap:5px !important;font-size:11px !important;}
+  .v40-input-sheet input,
+  .v40-input-sheet select,
+  .v40-input-sheet textarea{
+    border-radius:14px !important;
+    padding:10px 11px !important;
+    font-size:16px !important;
+  }
+  .v40-no-scroll-page{gap:9px !important;}
+  .v40-step-nav-bottom .v40-small-btn{min-height:42px !important;}
+  .v40-part-note,.v40-mini-status{padding:7px 9px;font-size:10.5px;}
+}
+@media(max-height:760px){
+  .v40-cv-preview-wrap{
+    flex:0 0 clamp(175px, 27dvh, 230px) !important;
+    min-height:175px !important;
+  }
+  .v40-input-sheet{padding:11px !important;}
+  .v40-compact-textarea{min-height:72px !important;}
+}

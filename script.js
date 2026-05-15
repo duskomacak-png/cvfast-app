@@ -1804,6 +1804,7 @@ const V40_I18N = {
 };
 
 let v40Step = 1;
+let v40SubStep = 0;
 let v40RewriteTarget = null;
 let v40State = null;
 
@@ -1963,6 +1964,27 @@ function v40CommitToLegacy() {
   return data;
 }
 
+
+function v40StepPagesCount(step) {
+  const pages = { 2: 2, 3: 2, 5: 3, 6: 3 };
+  return pages[step] || 1;
+}
+
+function v40ClampSubStep() {
+  const count = v40StepPagesCount(v40Step);
+  if (v40SubStep < 0) v40SubStep = 0;
+  if (v40SubStep >= count) v40SubStep = count - 1;
+}
+
+function v40StepPartLabel() {
+  const count = v40StepPagesCount(v40Step);
+  return count > 1 ? ` · Part ${v40SubStep + 1}/${count}` : "";
+}
+
+function v40SubNote(text) {
+  return `<p class="v40-part-note">${escHtml(text)}</p>`;
+}
+
 function v40Render() {
   const lang = getLang();
   const t = V40_I18N[lang] || V40_I18N.en;
@@ -1978,7 +2000,8 @@ function v40Render() {
   if (stepText) stepText.textContent = `Step ${v40Step} of 9`;
   if (stepsLeft) stepsLeft.textContent = v40Step === 9 ? t.done : `${9 - v40Step} ${t.stepsLeft}`;
   if (progress) progress.style.width = `${(v40Step / 9) * 100}%`;
-  if (title) title.textContent = V40_STEPS[v40Step - 1];
+  v40ClampSubStep();
+  if (title) title.textContent = `${V40_STEPS[v40Step - 1]}${v40StepPartLabel()}`;
   if (backBtn) backBtn.classList.toggle("hidden", v40Step === 1);
   if (nextBtn) nextBtn.textContent = v40Step === 1 ? "Continue →" : v40Step === 9 ? "Done" : "Next →";
   if (pricePill) pricePill.textContent = isUnlocked() ? "Unlocked" : "5€";
@@ -2084,15 +2107,22 @@ function v40RenderStepContent() {
   }
 
   if (v40Step === 2) {
-    el.innerHTML = `<div class="v40-form-grid">
-      <label>First name *<input value="${escAttr(v40State.personal.firstName)}" oninput="v40Update('personal.firstName', this.value)" placeholder="Ana"></label>
-      <label>Last name *<input value="${escAttr(v40State.personal.lastName)}" oninput="v40Update('personal.lastName', this.value)" placeholder="Petrović"></label>
+    if (v40SubStep === 0) {
+      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
+        ${v40SubNote("First add your name. The app will guide you field by field.")}
+        <label>First name *<input value="${escAttr(v40State.personal.firstName)}" oninput="v40Update('personal.firstName', this.value)" placeholder="Ana"></label>
+        <label>Last name *<input value="${escAttr(v40State.personal.lastName)}" oninput="v40Update('personal.lastName', this.value)" placeholder="Petrović"></label>
+      </div>`;
+      return;
+    }
+    el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
+      ${v40SubNote("Now add the CV headline and photo. Photo is optional.")}
       <label>Target position / CV headline<input value="${escAttr(v40State.personal.jobTitle)}" oninput="v40Update('personal.jobTitle', this.value)" placeholder="Senior Software Engineer"></label>
-      <div class="v40-photo-box">
+      <div class="v40-photo-box v40-photo-box-compact">
         <div class="v40-photo-preview">${v40State.personal.photo ? `<img src="${escAttr(v40State.personal.photo)}" alt="CV photo preview">` : `<span>Photo</span>`}</div>
         <div class="v40-photo-copy">
           <strong>Add CV photo</strong>
-          <span>Optional. Choose a clear headshot. It is saved only in this browser.</span>
+          <span>Optional. Saved only in this browser.</span>
           <label class="v40-file-btn">Choose photo<input accept="image/*" type="file" onchange="v40HandlePhotoUpload(this)"></label>
           ${v40State.personal.photo ? `<button class="v40-remove-photo" type="button" onclick="v40RemovePhoto()">Remove photo</button>` : ``}
         </div>
@@ -2102,9 +2132,16 @@ function v40RenderStepContent() {
   }
 
   if (v40Step === 3) {
-    el.innerHTML = `<div class="v40-form-grid">
-      <label>Email<input value="${escAttr(v40State.contact.email)}" oninput="v40Update('contact.email', this.value)" placeholder="ana@example.com"></label>
-      <label>Phone<input value="${escAttr(v40State.contact.phone)}" oninput="v40Update('contact.phone', this.value)" placeholder="+381 60 123 4567"></label>
+    if (v40SubStep === 0) {
+      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
+        ${v40SubNote("Add the main contact details first.")}
+        <label>Email<input value="${escAttr(v40State.contact.email)}" oninput="v40Update('contact.email', this.value)" placeholder="ana@example.com"></label>
+        <label>Phone<input value="${escAttr(v40State.contact.phone)}" oninput="v40Update('contact.phone', this.value)" placeholder="+381 60 123 4567"></label>
+      </div>`;
+      return;
+    }
+    el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
+      ${v40SubNote("Now add location and an optional profile link.")}
       <div class="v40-form-grid v40-two-col"><label>City<input value="${escAttr(v40State.contact.city)}" oninput="v40Update('contact.city', this.value)" placeholder="Belgrade"></label><label>Country<input value="${escAttr(v40State.contact.country)}" oninput="v40Update('contact.country', this.value)" placeholder="Serbia"></label></div>
       <label>LinkedIn<input value="${escAttr(v40State.contact.linkedin)}" oninput="v40Update('contact.linkedin', this.value)" placeholder="linkedin.com/in/your-name"></label>
     </div>`;
@@ -2120,23 +2157,49 @@ function v40RenderStepContent() {
 
   if (v40Step === 5) {
     const d = v40State.draftExperience || {};
-    el.innerHTML = `${v40RenderEntries(v40State.experience, "experience")}
-      <div class="v40-form-grid"><label>Job title in this job<input value="${escAttr(d.jobTitle || "")}" oninput="v40UpdateDraft('experience','jobTitle',this.value)" placeholder="Software Engineer"></label>
-      <div class="v40-form-grid v40-two-col"><label>Company<input value="${escAttr(d.company || "")}" oninput="v40UpdateDraft('experience','company',this.value)" placeholder="Company"></label><label>Location<input value="${escAttr(d.location || "")}" oninput="v40UpdateDraft('experience','location',this.value)" placeholder="Berlin"></label></div>
-      <div class="v40-form-grid v40-two-col"><label>Start date<input value="${escAttr(d.start || "")}" oninput="v40UpdateDraft('experience','start',this.value)" placeholder="MM/YYYY"></label><label>End date / Present<input value="${escAttr(d.end || "")}" oninput="v40UpdateDraft('experience','end',this.value)" placeholder="Present"></label></div>
-      <label>Description<textarea oninput="v40UpdateDraft('experience','description',this.value)" placeholder="Describe your responsibilities and achievements.">${escHtml(d.description || "")}</textarea></label>
-      <button class="v40-ghost-btn" type="button" onclick="v40OpenRewrite('experience')">✨ Improve description</button><button class="v40-primary-btn" type="button" onclick="v40AddExperience()">+ Add another job</button></div>`;
+    const savedInfo = v40State.experience?.length ? `<div class="v40-mini-status">Saved jobs: ${v40State.experience.length}</div>` : ``;
+    if (v40SubStep === 0) {
+      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Add the job title and company.")}
+        <label>Job title in this job<input value="${escAttr(d.jobTitle || "")}" oninput="v40UpdateDraft('experience','jobTitle',this.value)" placeholder="Software Engineer"></label>
+        <label>Company<input value="${escAttr(d.company || "")}" oninput="v40UpdateDraft('experience','company',this.value)" placeholder="Company"></label>
+      </div>`;
+      return;
+    }
+    if (v40SubStep === 1) {
+      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Add where and when you worked.")}
+        <label>Location<input value="${escAttr(d.location || "")}" oninput="v40UpdateDraft('experience','location',this.value)" placeholder="Berlin"></label>
+        <div class="v40-form-grid v40-two-col"><label>Start date<input value="${escAttr(d.start || "")}" oninput="v40UpdateDraft('experience','start',this.value)" placeholder="MM/YYYY"></label><label>End / Present<input value="${escAttr(d.end || "")}" oninput="v40UpdateDraft('experience','end',this.value)" placeholder="Present"></label></div>
+      </div>`;
+      return;
+    }
+    el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Add a short description, then save this job if needed.")}
+      <label>Description<textarea class="v40-compact-textarea" oninput="v40UpdateDraft('experience','description',this.value)" placeholder="Describe your responsibilities and achievements.">${escHtml(d.description || "")}</textarea></label>
+      <div class="v40-action-row"><button class="v40-ghost-btn" type="button" onclick="v40OpenRewrite('experience')">✨ Improve</button><button class="v40-primary-btn" type="button" onclick="v40AddExperience()">+ Save job</button></div>
+    </div>`;
     return;
   }
 
   if (v40Step === 6) {
     const d = v40State.draftEducation || {};
-    el.innerHTML = `${v40RenderEntries(v40State.education, "education")}
-      <div class="v40-form-grid"><label>School / University<input value="${escAttr(d.school || "")}" oninput="v40UpdateDraft('education','school',this.value)" placeholder="University of Belgrade"></label>
-      <label>Degree<input value="${escAttr(d.degree || "")}" oninput="v40UpdateDraft('education','degree',this.value)" placeholder="BSc in Computer Science"></label>
-      <div class="v40-form-grid v40-two-col"><label>Location<input value="${escAttr(d.location || "")}" oninput="v40UpdateDraft('education','location',this.value)" placeholder="Belgrade"></label><label>Dates<input value="${escAttr(d.dates || "")}" oninput="v40UpdateDraft('education','dates',this.value)" placeholder="2014 - 2018"></label></div>
-      <label>Description optional<textarea oninput="v40UpdateDraft('education','description',this.value)" placeholder="Optional details.">${escHtml(d.description || "")}</textarea></label>
-      <button class="v40-primary-btn" type="button" onclick="v40AddEducation()">+ Add education</button></div>`;
+    const savedInfo = v40State.education?.length ? `<div class="v40-mini-status">Saved education: ${v40State.education.length}</div>` : ``;
+    if (v40SubStep === 0) {
+      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Add school and degree first.")}
+        <label>School / University<input value="${escAttr(d.school || "")}" oninput="v40UpdateDraft('education','school',this.value)" placeholder="University of Belgrade"></label>
+        <label>Degree<input value="${escAttr(d.degree || "")}" oninput="v40UpdateDraft('education','degree',this.value)" placeholder="BSc in Computer Science"></label>
+      </div>`;
+      return;
+    }
+    if (v40SubStep === 1) {
+      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Add location and dates.")}
+        <label>Location<input value="${escAttr(d.location || "")}" oninput="v40UpdateDraft('education','location',this.value)" placeholder="Belgrade"></label>
+        <label>Dates<input value="${escAttr(d.dates || "")}" oninput="v40UpdateDraft('education','dates',this.value)" placeholder="2014 - 2018"></label>
+      </div>`;
+      return;
+    }
+    el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Optional: add a short note, then save education.")}
+      <label>Description optional<textarea class="v40-compact-textarea" oninput="v40UpdateDraft('education','description',this.value)" placeholder="Optional details.">${escHtml(d.description || "")}</textarea></label>
+      <button class="v40-primary-btn" type="button" onclick="v40AddEducation()">+ Save education</button>
+    </div>`;
     return;
   }
 
@@ -2245,10 +2308,6 @@ function v40AttachFieldGuide() {
         if (!nextField) return;
 
         try {
-          nextField.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" });
-        } catch (err) {}
-
-        try {
           nextField.focus({ preventScroll: true });
         } catch (err) {
           nextField.focus();
@@ -2258,17 +2317,36 @@ function v40AttachFieldGuide() {
   });
 }
 
-function v40Next(){ if(v40Step===2 && (!v40State.personal.firstName.trim() || !v40State.personal.lastName.trim())){ v40ShowError((V40_I18N[getLang()]||V40_I18N.en).firstLastError); v40ScrollStepToTop(); return; } if(v40Step===5) v40SaveCurrentExperience(); if(v40Step===6) v40SaveCurrentEducation(); if(v40Step===8) v40SaveCurrentLanguage(); if(v40Step<9){ v40Step++; v40Render(); v40ScrollStepToTop(); } }
-function v40Prev(){ if(v40Step>1){ if(v40Step===5) v40SaveCurrentExperience(); if(v40Step===6) v40SaveCurrentEducation(); if(v40Step===8) v40SaveCurrentLanguage(); v40Step--; v40Render(); v40ScrollStepToTop(); } }
-function v40Go(step){ v40Step=step; v40Render(); v40ScrollStepToTop(); }
+function v40Next(){
+  if(v40Step===2 && (!v40State.personal.firstName.trim() || !v40State.personal.lastName.trim())){ v40ShowError((V40_I18N[getLang()]||V40_I18N.en).firstLastError); v40ScrollStepToTop(); return; }
+  const count = v40StepPagesCount(v40Step);
+  if (v40SubStep < count - 1) { v40SubStep++; v40Render(); v40ScrollStepToTop(); return; }
+  if(v40Step===5) v40SaveCurrentExperience();
+  if(v40Step===6) v40SaveCurrentEducation();
+  if(v40Step===8) v40SaveCurrentLanguage();
+  if(v40Step<9){ v40Step++; v40SubStep=0; v40Render(); v40ScrollStepToTop(); }
+}
+function v40Prev(){
+  if (v40SubStep > 0) { v40SubStep--; v40Render(); v40ScrollStepToTop(); return; }
+  if(v40Step>1){
+    if(v40Step===5) v40SaveCurrentExperience();
+    if(v40Step===6) v40SaveCurrentEducation();
+    if(v40Step===8) v40SaveCurrentLanguage();
+    v40Step--;
+    v40SubStep = v40StepPagesCount(v40Step) - 1;
+    v40Render();
+    v40ScrollStepToTop();
+  }
+}
+function v40Go(step){ v40Step=step; v40SubStep=0; v40Render(); v40ScrollStepToTop(); }
 function v40ShowError(msg){ const box=document.getElementById("v40ErrorBox"); if(box){ box.textContent=msg; box.classList.remove("hidden"); } }
 function v40ClearError(){ const box=document.getElementById("v40ErrorBox"); if(box){ box.textContent=""; box.classList.add("hidden"); } }
-function v40AddExperience(){ v40SaveCurrentExperience(); v40Render(); }
+function v40AddExperience(){ v40SaveCurrentExperience(); v40SubStep=0; v40Render(); }
 function v40SaveCurrentExperience(){ const d=v40State.draftExperience||{}; if(!Object.values(d).some(v=>String(v||"").trim())) return; v40State.experience.push({...d}); v40State.draftExperience={}; v40CommitToLegacy(); }
-function v40AddEducation(){ v40SaveCurrentEducation(); v40Render(); }
+function v40AddEducation(){ v40SaveCurrentEducation(); v40SubStep=0; v40Render(); }
 function v40SaveCurrentEducation(){ const d=v40State.draftEducation||{}; if(!Object.values(d).some(v=>String(v||"").trim())) return; v40State.education.push({...d}); v40State.draftEducation={}; v40CommitToLegacy(); }
 function v40RenderEntries(items,type){ if(!items?.length) return ""; return `<div class="v40-entry-list">${items.map((item,i)=>`<div class="v40-entry-card"><div class="v40-entry-card-top"><div><strong>${escHtml(item.jobTitle||item.degree||item.school||"Entry")}</strong><small>${escHtml(item.company||item.school||"")}</small></div><div class="v40-entry-actions"><button class="v40-tiny-btn" type="button" onclick="v40EditEntry('${type}',${i})">Edit</button><button class="v40-tiny-btn danger" type="button" onclick="v40DeleteEntry('${type}',${i})">Delete</button></div></div></div>`).join("")}</div>`; }
-function v40EditEntry(type,index){ if(type==="experience"){ v40State.draftExperience={...v40State.experience[index]}; v40State.experience.splice(index,1); } if(type==="education"){ v40State.draftEducation={...v40State.education[index]}; v40State.education.splice(index,1); } v40Render(); }
+function v40EditEntry(type,index){ if(type==="experience"){ v40State.draftExperience={...v40State.experience[index]}; v40State.experience.splice(index,1); v40SubStep=0; } if(type==="education"){ v40State.draftEducation={...v40State.education[index]}; v40State.education.splice(index,1); v40SubStep=0; } v40Render(); }
 function v40DeleteEntry(type,index){ if(type==="experience") v40State.experience.splice(index,1); if(type==="education") v40State.education.splice(index,1); v40Render(); }
 function v40AddSkill(){ const skill=String(v40State.draftSkill||"").trim(); if(!skill) return; if(!v40State.skills.includes(skill)) v40State.skills.push(skill); v40State.draftSkill=""; v40Render(); }
 function v40RemoveSkill(i){ v40State.skills.splice(i,1); v40Render(); }
@@ -2314,7 +2392,7 @@ function v40CloseFullPreview(){
 async function v40DownloadPdf(){ v40CommitToLegacy(); try{ await downloadPdf(); }catch(err){ console.error(err); showToast(ui[getLang()].pdfError); } }
 function v40PayUnlock(){ v40CommitToLegacy(); openSupportModal(); }
 function v40FillDemo(){ const lang=getLang(); const current=loadStored(); const data={...current,...demoDataByLang[lang],appLanguage:lang,cvLanguage:lang,template:current.template||"classic",photo:current.photo||""}; saveRaw(data); setFormData(data); v40State=legacyToV40State(data); v40Render(); showToast(ui[lang].demoFilled); }
-function v40Clear(){ const lang=getLang(); if(!confirm(ui[lang].confirmClear)) return; const selectedTemplate=v40TemplateToLegacy(v40State.selectedTemplate||"classic"); localStorage.removeItem(STORAGE_KEY); const data=emptyData(); data.appLanguage=lang; data.cvLanguage=lang; data.template=selectedTemplate; saveRaw(data); setFormData(data); clearLanguageDraftInputs(); applyLanguage(lang); v40State=legacyToV40State(data); v40Step=1; v40Render(); showToast(ui[lang].dataCleared); }
+function v40Clear(){ const lang=getLang(); if(!confirm(ui[lang].confirmClear)) return; const selectedTemplate=v40TemplateToLegacy(v40State.selectedTemplate||"classic"); localStorage.removeItem(STORAGE_KEY); const data=emptyData(); data.appLanguage=lang; data.cvLanguage=lang; data.template=selectedTemplate; saveRaw(data); setFormData(data); clearLanguageDraftInputs(); applyLanguage(lang); v40State=legacyToV40State(data); v40Step=1; v40SubStep=0; v40Render(); showToast(ui[lang].dataCleared); }
 function escHtml(str){ return String(str||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
 function escAttr(str){ return escHtml(str).replaceAll("\n"," "); }
 
