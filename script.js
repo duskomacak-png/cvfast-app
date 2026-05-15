@@ -1756,7 +1756,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=412").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=416").catch(() => {});
     });
   }
 
@@ -1790,7 +1790,9 @@ const V40_I18N = {
     saved: "All changes saved locally ✓",
     stepsLeft: "steps left",
     done: "Done!",
-    firstLastError: "Please enter first name and last name before continuing."
+    firstLastError: "Please enter first name and last name before continuing.",
+    installApp: "⬇️ Install app",
+    shareApp: "🔗 Share app"
   },
   de: {
     subtitle: "Erstelle in wenigen Minuten einen sauberen professionellen CV.",
@@ -1799,7 +1801,9 @@ const V40_I18N = {
     saved: "Alle Änderungen lokal gespeichert ✓",
     stepsLeft: "Schritte übrig",
     done: "Fertig!",
-    firstLastError: "Bitte Vorname und Nachname eingeben."
+    firstLastError: "Bitte Vorname und Nachname eingeben.",
+    installApp: "⬇️ App installieren",
+    shareApp: "🔗 App teilen"
   }
 };
 
@@ -1966,7 +1970,7 @@ function v40CommitToLegacy() {
 
 
 function v40StepPagesCount(step) {
-  const pages = { 2: 2, 3: 2, 5: 3, 6: 3 };
+  const pages = { 2: 3, 3: 2, 5: 3, 6: 3 };
   return pages[step] || 1;
 }
 
@@ -2115,10 +2119,16 @@ function v40RenderStepContent() {
       </div>`;
       return;
     }
+    if (v40SubStep === 1) {
+      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
+        ${v40SubNote("Add the CV headline shown under your name.")}
+        <label>Target position / CV headline<input value="${escAttr(v40State.personal.jobTitle)}" oninput="v40Update('personal.jobTitle', this.value)" placeholder="Senior Software Engineer"></label>
+      </div>`;
+      return;
+    }
     el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
-      ${v40SubNote("Now add the CV headline and photo. Photo is optional.")}
-      <label>Target position / CV headline<input value="${escAttr(v40State.personal.jobTitle)}" oninput="v40Update('personal.jobTitle', this.value)" placeholder="Senior Software Engineer"></label>
-      <div class="v40-photo-box v40-photo-box-compact">
+      ${v40SubNote("Add a clear CV photo if you want. This is optional.")}
+      <div class="v40-photo-box v40-photo-box-compact v40-photo-only">
         <div class="v40-photo-preview">${v40State.personal.photo ? `<img src="${escAttr(v40State.personal.photo)}" alt="CV photo preview">` : `<span>Photo</span>`}</div>
         <div class="v40-photo-copy">
           <strong>Add CV photo</strong>
@@ -2417,6 +2427,14 @@ function initV40() {
   document.querySelector(".v40-cv-preview-wrap")?.addEventListener("click", v40OpenFullPreview);
   document.getElementById("v40FullPreviewClose")?.addEventListener("click", v40CloseFullPreview);
   document.getElementById("v40FullPreviewModal")?.addEventListener("click", (e) => { if(e.target.id === "v40FullPreviewModal") v40CloseFullPreview(); });
+  document.getElementById("v40InstallBtn")?.addEventListener("click", () => {
+    const original = document.getElementById("installBtn");
+    if (original) original.click();
+  });
+  document.getElementById("v40ShareBtn")?.addEventListener("click", () => {
+    const original = document.getElementById("shareBtn");
+    if (original) original.click();
+  });
   document.addEventListener("keydown", (e) => { if((e.ctrlKey||e.metaKey) && e.key === "Enter" && !document.getElementById("v40Builder")?.classList.contains("hidden")) v40Next(); });
   v40SetLanguage(stored.appLanguage || stored.cvLanguage || "en");
   v40RenderPreview();

@@ -3029,3 +3029,290 @@ body.v40-active .app > footer { display:none !important; }
   .v40-input-sheet{padding:11px !important;}
   .v40-compact-textarea{min-height:72px !important;}
 }
+
+/* V40.14: visible fields final safe fix.
+   The lower card must show the offered fields and buttons without hidden inner scroll.
+   Step 2 is split into 3 smaller parts; the preview is reduced on short screens. */
+.v40-input-sheet{
+  overflow:hidden !important;
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+#v40StepContent{
+  overflow:visible !important;
+  flex:1 0 auto !important;
+  min-height:0 !important;
+}
+.v40-no-scroll-page{
+  height:auto !important;
+  min-height:0 !important;
+  gap:8px !important;
+}
+.v40-part-note,
+.v40-mini-status{
+  padding:6px 9px !important;
+  font-size:10px !important;
+  line-height:1.2 !important;
+}
+.v40-input-sheet label{
+  gap:4px !important;
+  font-size:10.5px !important;
+}
+.v40-input-sheet input,
+.v40-input-sheet select{
+  min-height:38px !important;
+  padding:8px 10px !important;
+  border-radius:13px !important;
+  font-size:15px !important;
+}
+.v40-input-sheet textarea{
+  min-height:66px !important;
+  padding:8px 10px !important;
+  border-radius:13px !important;
+  font-size:15px !important;
+}
+.v40-photo-box-compact{
+  grid-template-columns:58px 1fr !important;
+  gap:8px !important;
+  padding:8px !important;
+  border-radius:15px !important;
+}
+.v40-photo-box-compact .v40-photo-preview{
+  width:58px !important;
+  height:58px !important;
+  border-radius:15px !important;
+}
+.v40-photo-box-compact .v40-photo-copy{
+  gap:4px !important;
+}
+.v40-photo-box-compact .v40-photo-copy strong{
+  font-size:12px !important;
+}
+.v40-photo-box-compact .v40-photo-copy span{
+  font-size:10px !important;
+  line-height:1.15 !important;
+}
+.v40-photo-box-compact .v40-file-btn,
+.v40-photo-box-compact .v40-remove-photo{
+  padding:6px 8px !important;
+  min-height:0 !important;
+  font-size:10.5px !important;
+  border-radius:10px !important;
+}
+.v40-step-nav-bottom{
+  margin-top:8px !important;
+  padding-top:8px !important;
+  gap:8px !important;
+}
+.v40-step-nav-bottom .v40-small-btn{
+  min-height:38px !important;
+  padding:8px 10px !important;
+  font-size:12px !important;
+  border-radius:14px !important;
+}
+.v40-saved{
+  margin-top:6px !important;
+  font-size:11px !important;
+}
+.v40-sheet-title{
+  font-size:15px !important;
+  margin:0 !important;
+}
+.v40-sheet-head{
+  margin-bottom:8px !important;
+}
+.v40-progress-row{
+  margin-bottom:6px !important;
+  font-size:11.5px !important;
+}
+.v40-progress-track{
+  height:6px !important;
+  margin-bottom:8px !important;
+}
+@media(max-height:820px){
+  .v40-cv-preview-wrap{
+    flex:0 0 clamp(145px, 23dvh, 200px) !important;
+    min-height:145px !important;
+  }
+  .v40-input-sheet{
+    padding:10px !important;
+  }
+  .v40-phone-screen{
+    gap:7px !important;
+  }
+}
+@media(max-width:520px){
+  .v40-cv-preview-wrap{
+    flex:0 0 clamp(150px, 24dvh, 215px) !important;
+    min-height:150px !important;
+  }
+  .v40-input-sheet{
+    padding:10px !important;
+  }
+  .v40-photo-box-compact{
+    grid-template-columns:56px 1fr !important;
+  }
+  .v40-photo-box-compact .v40-photo-preview{
+    width:56px !important;
+    height:56px !important;
+  }
+}
+@media(max-height:700px){
+  .v40-cv-preview-wrap{
+    flex:0 0 clamp(118px, 20dvh, 165px) !important;
+    min-height:118px !important;
+  }
+  .v40-input-sheet input,
+  .v40-input-sheet select{
+    min-height:35px !important;
+    padding:7px 9px !important;
+  }
+  .v40-step-nav-bottom .v40-small-btn{
+    min-height:35px !important;
+  }
+}
+
+
+/* V40.15: start template choice must show BOTH CV examples at once.
+   Also keep tiny steps readable without any hidden inner scroll on short screens. */
+.v40-template-instruction{
+  margin:0 0 8px !important;
+  padding:7px 9px !important;
+  border-radius:13px !important;
+  gap:2px !important;
+}
+.v40-template-instruction strong{font-size:12.5px !important;line-height:1.15 !important;}
+.v40-template-instruction span{font-size:10.5px !important;line-height:1.2 !important;}
+.v40-template-grid{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:8px !important;
+  align-items:stretch !important;
+}
+.v40-template-card{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  grid-template-rows:auto auto !important;
+  gap:6px !important;
+  padding:8px !important;
+  border-radius:15px !important;
+  min-width:0 !important;
+}
+.v40-template-preview{
+  width:100% !important;
+  height:86px !important;
+  border-radius:11px !important;
+}
+.v40-template-preview-classic{padding:8px !important;}
+.v40-template-preview-modern{grid-template-columns:34px 1fr !important;}
+.v40-template-side{padding:6px 5px !important;gap:4px !important;}
+.v40-template-avatar{width:23px !important;height:23px !important;font-size:9px !important;}
+.v40-template-main{padding:7px !important;}
+.v40-template-head{gap:2px !important;margin-bottom:5px !important;}
+.v40-template-head b{font-size:9px !important;}
+.v40-template-head small{font-size:7px !important;}
+.v40-template-line{height:4px !important;margin-bottom:4px !important;}
+.v40-template-chip-row{gap:3px !important;margin-top:5px !important;}
+.v40-template-chip-row i{height:7px !important;}
+.v40-template-name{
+  font-size:12px !important;
+  line-height:1.15 !important;
+}
+.v40-template-desc{
+  font-size:9.5px !important;
+  line-height:1.18 !important;
+  margin-top:2px !important;
+}
+.v40-template-card.active .v40-template-name::after{
+  content:" ✓" !important;
+  font-size:11px !important;
+}
+.v40-photo-only .v40-photo-copy span{
+  display:none !important;
+}
+.v40-photo-only .v40-photo-copy strong{
+  font-size:12px !important;
+}
+.v40-photo-only .v40-photo-preview{
+  width:64px !important;
+  height:64px !important;
+}
+.v40-photo-only{
+  align-items:center !important;
+}
+@media(max-height:760px){
+  .v40-template-preview{height:74px !important;}
+  .v40-template-card{padding:7px !important;gap:5px !important;}
+  .v40-template-instruction{padding:6px 8px !important;margin-bottom:7px !important;}
+  .v40-photo-only .v40-photo-preview{width:54px !important;height:54px !important;}
+}
+@media(max-width:360px){
+  .v40-template-grid{gap:6px !important;}
+  .v40-template-preview{height:70px !important;}
+  .v40-template-name{font-size:11px !important;}
+  .v40-template-desc{font-size:9px !important;}
+}
+
+
+/* V40.16: red accent ring on buttons, red underglow around the device, and install/share buttons below the phone. */
+.v40-device-stack{
+  width:min(420px,100%);
+  display:grid;
+  gap:14px;
+  justify-items:center;
+}
+.v40-phone-frame{
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 40px 110px rgba(0,0,0,.72),0 0 26px rgba(239,68,68,.28),0 0 72px rgba(239,68,68,.22),0 34px 86px rgba(239,68,68,.18) !important;
+}
+.v40-phone-frame::before{
+  content:"";
+  position:absolute;
+  left:8%;
+  right:8%;
+  bottom:-24px;
+  height:88px;
+  border-radius:999px;
+  background:radial-gradient(ellipse at center, rgba(239,68,68,.50) 0%, rgba(239,68,68,.22) 42%, rgba(239,68,68,0) 75%);
+  filter:blur(18px);
+  z-index:-1;
+  pointer-events:none;
+}
+.v40-phone-frame::after{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  border-radius:56px;
+  border:1px solid rgba(239,68,68,.34);
+  box-shadow:0 0 34px rgba(239,68,68,.16);
+  z-index:-1;
+  pointer-events:none;
+}
+.v40-lang-btn,.v40-start-btn,.v40-icon-btn,.v40-menu button,.v40-small-btn,.v40-primary-btn,.v40-ghost-btn,.v40-tiny-btn,.v40-jump-grid button,.v40-download-btn,.v40-paypal-btn,.v40-full-preview-close,.v40-file-btn,.v40-remove-photo,.v40-app-action-btn{
+  border:1px solid rgba(239,68,68,.58) !important;
+  box-shadow:0 0 0 1px rgba(127,29,29,.10), 0 0 12px rgba(239,68,68,.10) !important;
+}
+.v40-app-actions{
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.v40-app-action-btn{
+  min-height:46px;
+  padding:12px 14px;
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.07));
+  color:#fff;
+  font-weight:850;
+  backdrop-filter:blur(16px);
+}
+.v40-app-action-btn:hover{
+  transform:translateY(-1px);
+}
+@media(max-width:520px){
+  .v40-device-stack{width:100%;gap:10px;}
+  .v40-app-actions{padding:0 12px calc(10px + env(safe-area-inset-bottom,0px));}
+  .v40-app-action-btn{min-height:44px;font-size:13px;border-radius:15px;}
+  .v40-phone-frame::before{left:5%;right:5%;bottom:-18px;height:72px;}
+}
