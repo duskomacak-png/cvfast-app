@@ -817,7 +817,7 @@ function getLanguageRows(includeDraft = false) {
   if (includeDraft) {
     const name = ($("#languageName")?.value || "").trim();
     const level = ($("#languageLevel")?.value || "").trim().toUpperCase();
-    const allowed = ["A1", "A2", "B1", "B2", "C1", "C2"];
+    const allowed = ["A1", "A2", "B1", "B2", "C1", "C2", "NATIVE"];
     const alreadyExists = rows.some((item) =>
       item.name.toLowerCase() === name.toLowerCase() && item.level === level
     );
@@ -893,7 +893,7 @@ function parseLanguages(value) {
         name: String(item.name || "").trim(),
         level: String(item.level || "").trim().toUpperCase()
       }))
-      .filter((item) => item.name && ["A1", "A2", "B1", "B2", "C1", "C2"].includes(item.level));
+      .filter((item) => item.name && ["A1", "A2", "B1", "B2", "C1", "C2", "NATIVE"].includes(item.level));
   } catch {
     return [];
   }
@@ -1283,15 +1283,25 @@ async function downloadPdf() {
   showToast(getLang() === "de" ? "PDF wird vorbereitet..." : getLang() === "en" ? "Preparing PDF..." : "Pripremam PDF...");
   await ensurePdfLibraries();
 
-  const preview = $("#cvPreview");
-  renderCv(preview, getData({ includeLanguageDraft: true }), { placeholders: false });
+  // V40-safe PDF generation: render into a temporary visible/off-screen CV page.
+  // This keeps the old PDF engine intact even when the old builder UI is hidden.
+  const dataForPdf = getData({ includeLanguageDraft: true });
+  const preview = document.createElement("article");
+  preview.className = `cv-page ${dataForPdf.template || "classic"}`;
+  preview.style.position = "fixed";
+  preview.style.left = "-10000px";
+  preview.style.top = "0";
+  preview.style.width = "794px";
+  preview.style.minHeight = "1123px";
+  preview.style.background = "#ffffff";
+  preview.style.zIndex = "-1";
+  document.body.appendChild(preview);
+
+  renderCv(preview, dataForPdf, { placeholders: false });
 
   const footer = preview.querySelector(".cv-footer");
   const oldFooterText = footer?.textContent;
   if (footer && !SHOW_CVFAST_FOOTER_IN_PDF) footer.textContent = "";
-
-  const originalTransform = preview.style.transform;
-  preview.style.transform = "none";
 
   await new Promise((r) => setTimeout(r, 80));
 
@@ -1301,15 +1311,15 @@ async function downloadPdf() {
     useCORS: true
   });
 
-  preview.style.transform = originalTransform;
   if (footer && oldFooterText !== undefined) footer.textContent = oldFooterText;
+  preview.remove();
 
   const imgData = canvas.toDataURL("image/jpeg", 0.96);
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF("p", "mm", "a4");
 
   pdf.addImage(imgData, "JPEG", 0, 0, 210, 297);
-  const name = (getData({ includeLanguageDraft: true }).fullName || "cvfast-cv").trim().replace(/[^\p{L}\p{N}]+/gu, "_");
+  const name = (dataForPdf.fullName || "cvfast-cv").trim().replace(/[^\p{L}\p{N}]+/gu, "_");
   pdf.save(`${name}_CV.pdf`);
 }
 
@@ -1503,239 +1513,6 @@ function closeLegalModal() {
   $("#legalModal").classList.add("hidden");
 }
 
-
-
-/* =============================
-   V40 Phone Wizard Smart UI
-   Novo lice, isto srce: PayPal/PDF/unlock/localStorage logic stays unchanged.
-============================= */
-let v40CurrentStep = 0;
-let smartTargetField = null;
-const V40_TOTAL_STEPS = 9;
-const v40StepTitles = [
-  "Choose Template",
-  "Personal Details",
-  "Contact",
-  "Profile Summary",
-  "Work Experience",
-  "Education",
-  "Skills",
-  "Languages",
-  "Final Preview & Download"
-];
-
-function v40ElementsForStep(step){
-  return $$(`[data-v40-step="${step}"]`);
-}
-
-function v40ShowContactMode(step){
-  const basic = $('[data-v40-step="1"]');
-  if (!basic) return;
-  const labels = [...basic.querySelectorAll('label')];
-  labels.forEach((label) => {
-    const input = label.querySelector('input, select, button');
-    const id = input?.id;
-    if (step === 2) {
-      label.classList.toggle('v40-hidden-field', !['phone','email','location'].includes(id));
-    } else {
-      label.classList.toggle('v40-hidden-field', ['phone','email','location'].includes(id));
-    }
-  });
-  basic.dataset.v40Step = step === 2 ? "2" : "1";
-}
-
-function v40UpdateWizard(){
-  if (v40CurrentStep < 0) v40CurrentStep = 0;
-  if (v40CurrentStep > V40_TOTAL_STEPS - 1) v40CurrentStep = V40_TOTAL_STEPS - 1;
-
-  // Reset special contact split first.
-  const basic = $('[data-v40-step="2"]');
-  if (basic) basic.dataset.v40Step = "1";
-  v40ShowContactMode(v40CurrentStep);
-
-  $$('[data-v40-step]').forEach((el) => {
-    el.classList.toggle('v40-step-active', Number(el.dataset.v40Step) === v40CurrentStep);
-  });
-
-  const title = $('#v40StepTitle');
-  const meta = $('#v40StepMeta');
-  const bar = $('#v40ProgressBar');
-  if (title) title.textContent = v40StepTitles[v40CurrentStep] || v40StepTitles[0];
-  if (meta) meta.textContent = `Step ${v40CurrentStep + 1} of ${V40_TOTAL_STEPS} • ${V40_TOTAL_STEPS - v40CurrentStep - 1} steps left`;
-  if (bar) bar.style.width = `${Math.round(((v40CurrentStep + 1) / V40_TOTAL_STEPS) * 100)}%`;
-
-  $$('#v40BackBtn').forEach((btn) => { btn.disabled = v40CurrentStep === 0; });
-  const next = $('#v40NextBtn');
-  if (next) {
-    if (v40CurrentStep === V40_TOTAL_STEPS - 1) {
-      next.textContent = isUnlocked() ? 'Download PDF' : 'Pay & Unlock';
-    } else {
-      next.textContent = 'Next →';
-    }
-  }
-
-  $$('[data-v40-jump]').forEach((btn) => btn.classList.toggle('active', Number(btn.dataset.v40Jump) === v40CurrentStep));
-  updateAtsScore();
-}
-
-function v40CanLeaveStep(){
-  if (v40CurrentStep !== 1) return true;
-  const name = String($('#fullName')?.value || '').trim();
-  if (!name) {
-    showToast('Add your full name first.');
-    $('#fullName')?.focus();
-    return false;
-  }
-  return true;
-}
-
-function v40Go(step){
-  if (step > v40CurrentStep && !v40CanLeaveStep()) return;
-  v40CurrentStep = Number(step);
-  v40UpdateWizard();
-  document.querySelector('.builder-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function normalizeCvText(text){
-  let out = String(text || '').trim();
-  const replacements = [
-    [/\bgradjevinskih\b/gi, 'građevinskih'], [/\bgradjevinske\b/gi, 'građevinske'], [/\bgradjevinska\b/gi, 'građevinska'],
-    [/\bmasina\b/gi, 'mašina'], [/\bmasine\b/gi, 'mašine'], [/\bmasinama\b/gi, 'mašinama'],
-    [/\bvozac\b/gi, 'vozač'], [/\bnemacki\b/gi, 'nemački'], [/\bengleski\b/gi, 'engleski'],
-    [/\bodgovoran radnik\b/gi, 'odgovoran i pouzdan radnik'], [/\bradio sam\b/gi, 'radio'],
-    [/\biskopi\b/gi, 'iskopi'], [/\bizkop/gi, 'iskop'], [/\bgodina rada\b/gi, 'godina iskustva']
-  ];
-  replacements.forEach(([rx, rep]) => { out = out.replace(rx, rep); });
-  out = out.replace(/\s+/g, ' ').replace(/\s*\.\s*/g, '. ');
-  if (out && !/[.!?]$/.test(out)) out += '.';
-  return out;
-}
-
-function sentenceCase(text){
-  return String(text || '').replace(/(^\s*[a-zčćžšđäöü])|([.!?]\s+[a-zčćžšđäöü])/g, (m) => m.toUpperCase());
-}
-
-function smartImprove(target, text){
-  const lang = $('#cvLanguage')?.value || getLang() || 'en';
-  const original = normalizeCvText(text);
-  const lower = original.toLowerCase();
-  const hasYears = original.match(/\b(\d{1,2})\s*(years|year|godina|jahre)?/i)?.[1];
-
-  if (target === 'skills') {
-    const base = splitLines(original).join('\n');
-    const suggestions = lang === 'de'
-      ? ['Zuverlässigkeit', 'Genauigkeit', 'Teamarbeit', 'Sicheres Arbeiten', 'Zeitmanagement']
-      : ['Reliability', 'Attention to detail', 'Teamwork', 'Safe work procedures', 'Time management'];
-    const merged = [...new Set([...splitLines(base), ...suggestions])];
-    return merged.join('\n');
-  }
-
-  if (target === 'traits') {
-    return lang === 'de'
-      ? 'Zuverlässig, verantwortungsbewusst und präzise. Gewöhnt an dynamische Arbeitsbedingungen, klare Kommunikation und die Einhaltung vereinbarter Termine.'
-      : 'Responsible, reliable and precise professional. Used to dynamic working conditions, clear communication and meeting agreed deadlines.';
-  }
-
-  if (target === 'experience') {
-    const lines = splitLines(original);
-    if (lines.length > 1) return lines.map((line) => sentenceCase(normalizeCvText(line))).join('\n');
-    if (/bager|excavator|cat|bulldozer|construction|građevinskih|mašin/i.test(lower)) {
-      return lang === 'de'
-        ? `Baumaschinenführer${hasYears ? ` mit ${hasYears} Jahren Erfahrung` : ''}.\nErdarbeiten, Aushubarbeiten und Baustellenvorbereitung.\nPräzises Arbeiten nach Vorgaben, Sicherheitsregeln und Baustellenanweisungen.`
-        : `Heavy equipment operator${hasYears ? ` with ${hasYears} years of experience` : ''}.\nEarthworks, excavation and site preparation.\nPrecise work according to site instructions, safety rules and required levels.`;
-    }
-    return sentenceCase(original);
-  }
-
-  if (target === 'profile') {
-    if (/bager|excavator|cat|bulldozer|construction|građevinskih|mašin|iskop/i.test(lower)) {
-      return lang === 'de'
-        ? `Erfahrener Baumaschinenführer${hasYears ? ` mit ${hasYears} Jahren Erfahrung` : ''} in Erdarbeiten, Aushub und Baustellenvorbereitung. Bekannt für präzises, verantwortungsbewusstes und sicheres Arbeiten unter anspruchsvollen Baustellenbedingungen.`
-        : `Experienced heavy equipment operator${hasYears ? ` with ${hasYears} years of experience` : ''} in earthworks, excavation and site preparation. Known for precise, responsible and safe work in demanding construction site conditions.`;
-    }
-    return lang === 'de'
-      ? `Zuverlässige und verantwortungsbewusste Fachkraft. ${sentenceCase(original)}`
-      : `Reliable and responsible professional. ${sentenceCase(original)}`;
-  }
-
-  return sentenceCase(original);
-}
-
-function openSmartModal(target){
-  const el = $('#' + target);
-  if (!el) return;
-  const original = el.value.trim();
-  if (!original) {
-    showToast('Enter text first.');
-    el.focus();
-    return;
-  }
-  smartTargetField = target;
-  $('#smartOriginal').value = original;
-  $('#smartImproved').value = smartImprove(target, original);
-  $('#smartModal')?.classList.remove('hidden');
-}
-
-function closeSmartModal(){
-  $('#smartModal')?.classList.add('hidden');
-  smartTargetField = null;
-}
-
-function updateAtsScore(){
-  const data = getData({ includeLanguageDraft: true });
-  let score = 0;
-  if (String(data.fullName || '').trim()) score += 15;
-  if (String(data.email || data.phone || '').trim()) score += 15;
-  if (String(data.jobTitle || '').trim()) score += 10;
-  if (String(data.profile || '').trim().length > 40) score += 20;
-  if (splitLines(data.experience).length) score += 20;
-  if (splitLines(data.skills).length >= 3) score += 10;
-  if (parseLanguages(data.languages).length || String(data.languageNameDraft || '').trim()) score += 5;
-  if (String(data.education || '').trim()) score += 5;
-  score = Math.min(100, score);
-  const label = $('#atsScore');
-  const hint = $('#atsHint');
-  if (label) label.textContent = `ATS Readiness Score: ${score}%`;
-  if (hint) {
-    hint.textContent = score >= 80
-      ? 'Good structure. Check spelling and download when ready.'
-      : 'Add name, contact, profile, experience and at least 3 skills.';
-  }
-}
-
-function setupV40Wizard(){
-  $('#v40BackBtn')?.addEventListener('click', () => v40Go(v40CurrentStep - 1));
-  $('#v40NextBtn')?.addEventListener('click', async () => {
-    if (v40CurrentStep === V40_TOTAL_STEPS - 1) {
-      $('#downloadPdfBtn')?.click();
-      return;
-    }
-    v40Go(v40CurrentStep + 1);
-  });
-  $$('[data-v40-jump]').forEach((btn) => btn.addEventListener('click', () => v40Go(Number(btn.dataset.v40Jump))));
-  $$('[data-smart-target]').forEach((btn) => btn.addEventListener('click', () => openSmartModal(btn.dataset.smartTarget)));
-  $('#closeSmartModal')?.addEventListener('click', closeSmartModal);
-  $('#keepOriginalBtn')?.addEventListener('click', closeSmartModal);
-  $('#smartModal')?.addEventListener('click', (e) => { if (e.target.id === 'smartModal') closeSmartModal(); });
-  $('#useImprovedBtn')?.addEventListener('click', () => {
-    if (!smartTargetField) return;
-    const el = $('#' + smartTargetField);
-    if (el) {
-      el.value = $('#smartImproved').value;
-      saveData();
-      refreshPreview();
-      updateAtsScore();
-      showToast('Improved text added ✓');
-    }
-    closeSmartModal();
-  });
-  fields.forEach((field) => {
-    const el = $('#' + field);
-    el?.addEventListener('input', updateAtsScore);
-    el?.addEventListener('change', updateAtsScore);
-  });
-  v40UpdateWizard();
-}
 
 function init() {
   handleUnlockFromUrl();
@@ -1976,7 +1753,6 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   setupPwaInstall();
   setupShare();
-  setupV40Wizard();
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
@@ -1988,3 +1764,405 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+
+/* =========================
+   V40 PHONE WIZARD INTEGRATION
+   Uses legacy storage/PDF/PayPal functions.
+   ========================= */
+const V40_STEPS = [
+  "Choose Template",
+  "Personal Details",
+  "Contact Details",
+  "Profile Summary",
+  "Work Experience",
+  "Education",
+  "Skills",
+  "Languages",
+  "Final Preview"
+];
+
+const V40_I18N = {
+  en: {
+    subtitle: "Create a clean professional CV in minutes.",
+    start: "Start →",
+    livePreview: "Live CV Preview",
+    saved: "All changes saved locally ✓",
+    stepsLeft: "steps left",
+    done: "Done!",
+    firstLastError: "Please enter first name and last name before continuing."
+  },
+  de: {
+    subtitle: "Erstelle in wenigen Minuten einen sauberen professionellen CV.",
+    start: "Start →",
+    livePreview: "Live CV Vorschau",
+    saved: "Alle Änderungen lokal gespeichert ✓",
+    stepsLeft: "Schritte übrig",
+    done: "Fertig!",
+    firstLastError: "Bitte Vorname und Nachname eingeben."
+  }
+};
+
+let v40Step = 1;
+let v40RewriteTarget = null;
+let v40State = null;
+
+function v40DefaultState() {
+  return {
+    selectedTemplate: "classic",
+    personal: { firstName: "", lastName: "", jobTitle: "" },
+    contact: { email: "", phone: "", city: "", country: "", linkedin: "" },
+    summary: "",
+    experience: [],
+    education: [],
+    skills: [],
+    languages: [],
+    draftExperience: {},
+    draftEducation: {},
+    draftSkill: "",
+    draftLanguage: { language: "", level: "B2" }
+  };
+}
+
+function v40TemplateToLegacy(t) {
+  if (t === "modern") return "sidebar";
+  if (t === "executive") return "executive";
+  return "classic";
+}
+
+function legacyTemplateToV40(t) {
+  if (t === "sidebar") return "modern";
+  if (t === "executive") return "executive";
+  return "classic";
+}
+
+function v40SplitName(fullName) {
+  const parts = String(fullName || "").trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return { firstName: "", lastName: "" };
+  if (parts.length === 1) return { firstName: parts[0], lastName: "" };
+  return { firstName: parts[0], lastName: parts.slice(1).join(" ") };
+}
+
+function v40SplitLocation(location) {
+  const parts = String(location || "").split(",").map(x => x.trim()).filter(Boolean);
+  return { city: parts[0] || "", country: parts.slice(1).join(", ") || "" };
+}
+
+function v40TextToEntryArray(text, kind) {
+  const clean = String(text || "").trim();
+  if (!clean) return [];
+  if (kind === "education") return [{ school: "", degree: "", location: "", dates: "", description: clean }];
+  return [{ jobTitle: "", company: "", location: "", start: "", end: "", description: clean }];
+}
+
+function legacyToV40State(data) {
+  const base = v40DefaultState();
+  const fromSaved = data.v40State && typeof data.v40State === "object" ? data.v40State : null;
+  const name = v40SplitName(data.fullName);
+  const loc = v40SplitLocation(data.location);
+  const langs = parseLanguages(data.languages || "[]").map(l => ({ language: l.name, level: l.level === "NATIVE" ? "Native" : l.level }));
+
+  return {
+    ...base,
+    ...(fromSaved || {}),
+    selectedTemplate: legacyTemplateToV40(data.template || fromSaved?.selectedTemplate || "classic"),
+    personal: {
+      firstName: fromSaved?.personal?.firstName ?? name.firstName,
+      lastName: fromSaved?.personal?.lastName ?? name.lastName,
+      jobTitle: fromSaved?.personal?.jobTitle ?? (data.jobTitle || "")
+    },
+    contact: {
+      email: fromSaved?.contact?.email ?? (data.email || ""),
+      phone: fromSaved?.contact?.phone ?? (data.phone || ""),
+      city: fromSaved?.contact?.city ?? loc.city,
+      country: fromSaved?.contact?.country ?? loc.country,
+      linkedin: fromSaved?.contact?.linkedin ?? ""
+    },
+    summary: fromSaved?.summary ?? (data.profile || ""),
+    experience: fromSaved?.experience?.length ? fromSaved.experience : v40TextToEntryArray(data.experience, "experience"),
+    education: fromSaved?.education?.length ? fromSaved.education : v40TextToEntryArray(data.education, "education"),
+    skills: fromSaved?.skills?.length ? fromSaved.skills : splitLines(data.skills || data.machines || ""),
+    languages: fromSaved?.languages?.length ? fromSaved.languages : langs,
+    draftExperience: fromSaved?.draftExperience || {},
+    draftEducation: fromSaved?.draftEducation || {},
+    draftSkill: fromSaved?.draftSkill || "",
+    draftLanguage: fromSaved?.draftLanguage || { language: "", level: "B2" }
+  };
+}
+
+function v40ExperienceToText(items) {
+  return (items || []).map(e => {
+    const head = [e.jobTitle, e.company, e.location].filter(Boolean).join(" — ");
+    const dates = [e.start, e.end].filter(Boolean).join(" - ");
+    const body = e.description || "";
+    return [head, dates, body].filter(Boolean).join("\n");
+  }).filter(Boolean).join("\n\n");
+}
+
+function v40EducationToText(items) {
+  return (items || []).map(e => {
+    const head = [e.degree, e.school, e.location].filter(Boolean).join(" — ");
+    return [head, e.dates, e.description].filter(Boolean).join("\n");
+  }).filter(Boolean).join("\n\n");
+}
+
+function v40ToLegacyData() {
+  const existing = loadStored();
+  const first = v40State.personal.firstName.trim();
+  const last = v40State.personal.lastName.trim();
+  const fullName = [first, last].filter(Boolean).join(" ");
+  const location = [v40State.contact.city, v40State.contact.country].map(x => String(x || "").trim()).filter(Boolean).join(", ");
+  const languageRows = (v40State.languages || []).map(l => ({
+    name: String(l.language || "").trim(),
+    level: String(l.level || "").trim().toUpperCase()
+  })).filter(l => l.name && l.level);
+
+  return {
+    ...existing,
+    template: v40TemplateToLegacy(v40State.selectedTemplate),
+    fullName,
+    jobTitle: v40State.personal.jobTitle || "",
+    phone: v40State.contact.phone || "",
+    email: v40State.contact.email || "",
+    location,
+    profile: v40State.summary || "",
+    experience: v40ExperienceToText(v40State.experience),
+    education: v40EducationToText(v40State.education),
+    skills: (v40State.skills || []).join("\n"),
+    languages: JSON.stringify(languageRows),
+    v40State: JSON.parse(JSON.stringify(v40State))
+  };
+}
+
+function v40SyncLegacyDom(data) {
+  const map = {
+    template: data.template,
+    fullName: data.fullName,
+    jobTitle: data.jobTitle,
+    phone: data.phone,
+    email: data.email,
+    location: data.location,
+    profile: data.profile,
+    experience: data.experience,
+    education: data.education,
+    skills: data.skills,
+    languages: data.languages
+  };
+  Object.entries(map).forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = value || "";
+  });
+  updateTemplateChoice(data.template || "classic");
+  renderLanguageEditor(data.languages || "[]");
+}
+
+function v40CommitToLegacy() {
+  const data = v40ToLegacyData();
+  v40SyncLegacyDom(data);
+  saveRaw(data);
+  return data;
+}
+
+function v40Render() {
+  const lang = getLang();
+  const t = V40_I18N[lang] || V40_I18N.en;
+  const stepText = document.getElementById("v40StepText");
+  const stepsLeft = document.getElementById("v40StepsLeft");
+  const progress = document.getElementById("v40ProgressFill");
+  const title = document.getElementById("v40StepTitle");
+  const backBtn = document.getElementById("v40BackBtn");
+  const nextBtn = document.getElementById("v40NextBtn");
+  const pricePill = document.getElementById("v40PricePill");
+  const saved = document.getElementById("v40SavedText");
+
+  if (stepText) stepText.textContent = `Step ${v40Step} of 9`;
+  if (stepsLeft) stepsLeft.textContent = v40Step === 9 ? t.done : `${9 - v40Step} ${t.stepsLeft}`;
+  if (progress) progress.style.width = `${(v40Step / 9) * 100}%`;
+  if (title) title.textContent = V40_STEPS[v40Step - 1];
+  if (backBtn) backBtn.classList.toggle("hidden", v40Step === 1);
+  if (nextBtn) nextBtn.textContent = v40Step === 1 ? "Continue →" : v40Step === 9 ? "Done" : "Next →";
+  if (pricePill) pricePill.textContent = isUnlocked() ? "Unlocked" : "5€";
+  if (saved) saved.textContent = t.saved;
+
+  v40ClearError();
+  v40RenderStepContent();
+  v40CommitToLegacy();
+  v40RenderPreview();
+}
+
+function v40SetLanguage(lang) {
+  applyLanguage(lang);
+  document.querySelectorAll(".v40-lang-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.v40Lang === lang));
+  document.querySelectorAll("[data-v40-i18n]").forEach(el => {
+    const key = el.dataset.v40I18n;
+    if (V40_I18N[lang]?.[key]) el.textContent = V40_I18N[lang][key];
+  });
+  v40Render();
+}
+
+function v40RenderPreview() {
+  const target = document.getElementById("v40CvPreview");
+  if (!target) return;
+  const data = v40ToLegacyData();
+  const hasData = [data.fullName, data.jobTitle, data.email, data.phone, data.profile, data.experience, data.education, data.skills].some(x => String(x || "").trim()) || parseLanguages(data.languages).length;
+  document.getElementById("v40TemplateLabel").textContent = v40State.selectedTemplate[0].toUpperCase() + v40State.selectedTemplate.slice(1);
+  if (!hasData) {
+    target.className = "cv-page classic";
+    target.innerHTML = `<div class="v40-empty-preview">Your CV preview will appear here<br>as you type.</div>`;
+    return;
+  }
+  renderCv(target, data, { placeholders: false });
+}
+
+function v40RenderStepContent() {
+  const el = document.getElementById("v40StepContent");
+  if (!el) return;
+
+  if (v40Step === 1) {
+    el.innerHTML = `<div class="v40-template-grid">
+      ${v40TemplateCard("classic", "Classic", "Clean and simple CV for most jobs.", "")}
+      ${v40TemplateCard("modern", "Modern", "Modern side column layout.", "dark")}
+      ${v40TemplateCard("executive", "Executive", "Serious business style with more white space.", "")}
+    </div>`;
+    return;
+  }
+
+  if (v40Step === 2) {
+    el.innerHTML = `<div class="v40-form-grid">
+      <label>First name *<input value="${escAttr(v40State.personal.firstName)}" oninput="v40Update('personal.firstName', this.value)" placeholder="Ana"></label>
+      <label>Last name *<input value="${escAttr(v40State.personal.lastName)}" oninput="v40Update('personal.lastName', this.value)" placeholder="Petrović"></label>
+      <label>Job title<input value="${escAttr(v40State.personal.jobTitle)}" oninput="v40Update('personal.jobTitle', this.value)" placeholder="Senior Software Engineer"></label>
+    </div>`;
+    return;
+  }
+
+  if (v40Step === 3) {
+    el.innerHTML = `<div class="v40-form-grid">
+      <label>Email<input value="${escAttr(v40State.contact.email)}" oninput="v40Update('contact.email', this.value)" placeholder="ana@example.com"></label>
+      <label>Phone<input value="${escAttr(v40State.contact.phone)}" oninput="v40Update('contact.phone', this.value)" placeholder="+381 60 123 4567"></label>
+      <div class="v40-form-grid v40-two-col"><label>City<input value="${escAttr(v40State.contact.city)}" oninput="v40Update('contact.city', this.value)" placeholder="Belgrade"></label><label>Country<input value="${escAttr(v40State.contact.country)}" oninput="v40Update('contact.country', this.value)" placeholder="Serbia"></label></div>
+      <label>LinkedIn<input value="${escAttr(v40State.contact.linkedin)}" oninput="v40Update('contact.linkedin', this.value)" placeholder="linkedin.com/in/your-name"></label>
+    </div>`;
+    return;
+  }
+
+  if (v40Step === 4) {
+    el.innerHTML = `<label>Professional summary<textarea maxlength="500" oninput="v40Update('summary', this.value)" placeholder="Write 2–4 sentences about your experience, strengths and career goal.">${escHtml(v40State.summary)}</textarea></label>
+      <p class="v40-helper-text">Write 2–4 sentences about your experience, strengths and career goal.</p>
+      <button class="v40-ghost-btn" style="margin-top:10px" type="button" onclick="v40OpenRewrite('summary')">✨ Improve</button>`;
+    return;
+  }
+
+  if (v40Step === 5) {
+    const d = v40State.draftExperience || {};
+    el.innerHTML = `${v40RenderEntries(v40State.experience, "experience")}
+      <div class="v40-form-grid"><label>Job title<input value="${escAttr(d.jobTitle || "")}" oninput="v40UpdateDraft('experience','jobTitle',this.value)" placeholder="Software Engineer"></label>
+      <div class="v40-form-grid v40-two-col"><label>Company<input value="${escAttr(d.company || "")}" oninput="v40UpdateDraft('experience','company',this.value)" placeholder="Company"></label><label>Location<input value="${escAttr(d.location || "")}" oninput="v40UpdateDraft('experience','location',this.value)" placeholder="Berlin"></label></div>
+      <div class="v40-form-grid v40-two-col"><label>Start date<input value="${escAttr(d.start || "")}" oninput="v40UpdateDraft('experience','start',this.value)" placeholder="MM/YYYY"></label><label>End date / Present<input value="${escAttr(d.end || "")}" oninput="v40UpdateDraft('experience','end',this.value)" placeholder="Present"></label></div>
+      <label>Description<textarea oninput="v40UpdateDraft('experience','description',this.value)" placeholder="Describe your responsibilities and achievements.">${escHtml(d.description || "")}</textarea></label>
+      <button class="v40-ghost-btn" type="button" onclick="v40OpenRewrite('experience')">✨ Improve description</button><button class="v40-primary-btn" type="button" onclick="v40AddExperience()">+ Add another job</button></div>`;
+    return;
+  }
+
+  if (v40Step === 6) {
+    const d = v40State.draftEducation || {};
+    el.innerHTML = `${v40RenderEntries(v40State.education, "education")}
+      <div class="v40-form-grid"><label>School / University<input value="${escAttr(d.school || "")}" oninput="v40UpdateDraft('education','school',this.value)" placeholder="University of Belgrade"></label>
+      <label>Degree<input value="${escAttr(d.degree || "")}" oninput="v40UpdateDraft('education','degree',this.value)" placeholder="BSc in Computer Science"></label>
+      <div class="v40-form-grid v40-two-col"><label>Location<input value="${escAttr(d.location || "")}" oninput="v40UpdateDraft('education','location',this.value)" placeholder="Belgrade"></label><label>Dates<input value="${escAttr(d.dates || "")}" oninput="v40UpdateDraft('education','dates',this.value)" placeholder="2014 - 2018"></label></div>
+      <label>Description optional<textarea oninput="v40UpdateDraft('education','description',this.value)" placeholder="Optional details.">${escHtml(d.description || "")}</textarea></label>
+      <button class="v40-primary-btn" type="button" onclick="v40AddEducation()">+ Add education</button></div>`;
+    return;
+  }
+
+  if (v40Step === 7) {
+    el.innerHTML = `<div class="v40-chip-list">${(v40State.skills || []).map((s,i)=>`<span class="v40-chip">${escHtml(s)} <button type="button" onclick="v40RemoveSkill(${i})">×</button></span>`).join("")}</div>
+      <div class="v40-add-row"><label>Skill<input value="${escAttr(v40State.draftSkill || "")}" oninput="v40State.draftSkill=this.value;v40CommitAndPreview();" placeholder="Communication"></label><button class="v40-ghost-btn" type="button" onclick="v40AddSkill()">+ Add</button></div>
+      <button class="v40-ghost-btn" style="margin-top:10px" type="button" onclick="v40SuggestSkills()">✨ Suggest skills</button>`;
+    return;
+  }
+
+  if (v40Step === 8) {
+    el.innerHTML = `<div class="v40-chip-list">${(v40State.languages || []).map((l,i)=>`<span class="v40-chip">${escHtml(l.language)} (${escHtml(l.level)}) <button type="button" onclick="v40RemoveLanguage(${i})">×</button></span>`).join("")}</div>
+      <div class="v40-form-grid v40-two-col"><label>Language<input value="${escAttr(v40State.draftLanguage.language || "")}" oninput="v40State.draftLanguage.language=this.value;v40CommitAndPreview();" placeholder="English"></label><label>Level<select onchange="v40State.draftLanguage.level=this.value;v40CommitAndPreview();">${["A1","A2","B1","B2","C1","C2","Native"].map(level=>`<option ${v40State.draftLanguage.level===level?"selected":""}>${level}</option>`).join("")}</select></label></div>
+      <button class="v40-primary-btn" style="margin-top:10px" type="button" onclick="v40AddLanguage()">+ Add language</button>`;
+    return;
+  }
+
+  if (v40Step === 9) {
+    const score = v40AtsScore();
+    el.innerHTML = `<div class="v40-score-card"><div class="v40-helper-text">ATS Readiness Score</div><div class="v40-score-num">${score.score}/100</div><div class="v40-helper-text">${score.tips.join(" • ")}</div></div>
+      <div class="v40-jump-grid"><button type="button" onclick="v40Go(2)">Personal</button><button type="button" onclick="v40Go(3)">Contact</button><button type="button" onclick="v40Go(4)">Summary</button><button type="button" onclick="v40Go(5)">Experience</button><button type="button" onclick="v40Go(6)">Education</button><button type="button" onclick="v40Go(7)">Skills</button><button type="button" onclick="v40Go(8)">Languages</button></div>
+      <label>Template<select onchange="v40SelectTemplate(this.value)"><option value="classic" ${v40State.selectedTemplate==="classic"?"selected":""}>Classic</option><option value="modern" ${v40State.selectedTemplate==="modern"?"selected":""}>Modern</option><option value="executive" ${v40State.selectedTemplate==="executive"?"selected":""}>Executive</option></select></label>
+      <div class="v40-final-action">${isUnlocked()?`<button class="v40-download-btn" type="button" onclick="v40DownloadPdf()">Download PDF</button>`:`<button class="v40-paypal-btn" type="button" onclick="v40PayUnlock()">Unlock PDF Download – 5€</button>`}</div><p class="v40-helper-text">100% private – stored only on your device.</p>`;
+  }
+}
+
+function v40TemplateCard(id, name, desc, miniClass) {
+  return `<div class="v40-template-card ${v40State.selectedTemplate===id?"active":""}" onclick="v40SelectTemplate('${id}')"><div class="v40-mini-cv ${miniClass}"><div class="v40-mini-line blue short"></div><div class="v40-mini-line"></div><div class="v40-mini-line"></div><div class="v40-mini-line short"></div><div class="v40-mini-line"></div></div><div><div class="v40-template-name">${name}</div><div class="v40-template-desc">${desc}</div></div></div>`;
+}
+
+function v40Update(path, value) {
+  const parts = path.split(".");
+  if (parts.length === 1) v40State[parts[0]] = value;
+  else v40State[parts[0]][parts[1]] = value;
+  v40CommitAndPreview();
+}
+function v40UpdateDraft(type,key,value){ if(type==="experience") v40State.draftExperience[key]=value; if(type==="education") v40State.draftEducation[key]=value; v40CommitAndPreview(); }
+function v40CommitAndPreview(){ v40CommitToLegacy(); v40RenderPreview(); }
+function v40SelectTemplate(template){ v40State.selectedTemplate=template; v40Render(); }
+function v40Next(){ if(v40Step===2 && (!v40State.personal.firstName.trim() || !v40State.personal.lastName.trim())){ v40ShowError((V40_I18N[getLang()]||V40_I18N.en).firstLastError); return; } if(v40Step===5) v40SaveCurrentExperience(); if(v40Step===6) v40SaveCurrentEducation(); if(v40Step===8) v40SaveCurrentLanguage(); if(v40Step<9){ v40Step++; v40Render(); } }
+function v40Prev(){ if(v40Step>1){ if(v40Step===5) v40SaveCurrentExperience(); if(v40Step===6) v40SaveCurrentEducation(); if(v40Step===8) v40SaveCurrentLanguage(); v40Step--; v40Render(); } }
+function v40Go(step){ v40Step=step; v40Render(); }
+function v40ShowError(msg){ const box=document.getElementById("v40ErrorBox"); if(box){ box.textContent=msg; box.classList.remove("hidden"); } }
+function v40ClearError(){ const box=document.getElementById("v40ErrorBox"); if(box){ box.textContent=""; box.classList.add("hidden"); } }
+function v40AddExperience(){ v40SaveCurrentExperience(); v40Render(); }
+function v40SaveCurrentExperience(){ const d=v40State.draftExperience||{}; if(!Object.values(d).some(v=>String(v||"").trim())) return; v40State.experience.push({...d}); v40State.draftExperience={}; v40CommitToLegacy(); }
+function v40AddEducation(){ v40SaveCurrentEducation(); v40Render(); }
+function v40SaveCurrentEducation(){ const d=v40State.draftEducation||{}; if(!Object.values(d).some(v=>String(v||"").trim())) return; v40State.education.push({...d}); v40State.draftEducation={}; v40CommitToLegacy(); }
+function v40RenderEntries(items,type){ if(!items?.length) return ""; return `<div class="v40-entry-list">${items.map((item,i)=>`<div class="v40-entry-card"><div class="v40-entry-card-top"><div><strong>${escHtml(item.jobTitle||item.degree||item.school||"Entry")}</strong><small>${escHtml(item.company||item.school||"")}</small></div><div class="v40-entry-actions"><button class="v40-tiny-btn" type="button" onclick="v40EditEntry('${type}',${i})">Edit</button><button class="v40-tiny-btn danger" type="button" onclick="v40DeleteEntry('${type}',${i})">Delete</button></div></div></div>`).join("")}</div>`; }
+function v40EditEntry(type,index){ if(type==="experience"){ v40State.draftExperience={...v40State.experience[index]}; v40State.experience.splice(index,1); } if(type==="education"){ v40State.draftEducation={...v40State.education[index]}; v40State.education.splice(index,1); } v40Render(); }
+function v40DeleteEntry(type,index){ if(type==="experience") v40State.experience.splice(index,1); if(type==="education") v40State.education.splice(index,1); v40Render(); }
+function v40AddSkill(){ const skill=String(v40State.draftSkill||"").trim(); if(!skill) return; if(!v40State.skills.includes(skill)) v40State.skills.push(skill); v40State.draftSkill=""; v40Render(); }
+function v40RemoveSkill(i){ v40State.skills.splice(i,1); v40Render(); }
+function v40SuggestSkills(){ const job=String(v40State.personal.jobTitle||"").toLowerCase(); let suggestions=["Communication","Teamwork","Time Management","Problem Solving"]; if(job.includes("software")||job.includes("developer")) suggestions=["JavaScript","React","Git","REST APIs","Problem Solving"]; if(job.includes("driver")) suggestions=["Route Planning","Safe Driving","Vehicle Inspection","Time Management"]; if(job.includes("excavator")||job.includes("operator")) suggestions=["Excavator Operation","Site Preparation","Safety Procedures","Equipment Maintenance"]; suggestions.forEach(s=>{ if(!v40State.skills.includes(s)) v40State.skills.push(s); }); v40Render(); }
+function v40AddLanguage(){ v40SaveCurrentLanguage(); v40Render(); }
+function v40SaveCurrentLanguage(){ const lang=String(v40State.draftLanguage.language||"").trim(); const level=v40State.draftLanguage.level||"B2"; if(!lang||!level) return; v40State.languages.push({language:lang,level}); v40State.draftLanguage={language:"",level:"B2"}; v40CommitToLegacy(); }
+function v40RemoveLanguage(i){ v40State.languages.splice(i,1); v40Render(); }
+function v40OpenRewrite(target){ v40RewriteTarget=target; let original="",suggested=""; if(target==="summary"){ original=v40State.summary||""; suggested=v40SummarySuggestion(); } if(target==="experience"){ original=v40State.draftExperience.description||""; suggested=v40ExperienceSuggestion(original); } document.getElementById("v40OriginalText").textContent=original||"No text yet."; document.getElementById("v40SuggestedText").textContent=suggested; document.getElementById("v40RewriteModal").classList.remove("hidden"); }
+function v40CloseRewrite(){ document.getElementById("v40RewriteModal").classList.add("hidden"); v40RewriteTarget=null; }
+function v40UseImproved(){ const suggestion=document.getElementById("v40SuggestedText").textContent; if(v40RewriteTarget==="summary") v40State.summary=suggestion; if(v40RewriteTarget==="experience") v40State.draftExperience.description=suggestion; v40CloseRewrite(); v40Render(); }
+function v40SummarySuggestion(){ const role=v40State.personal.jobTitle||"professional"; const skills=v40State.skills.slice(0,3).join(", ")||"communication, teamwork and problem solving"; return `Motivated ${role} with practical experience and strong skills in ${skills}. Focused on delivering reliable results, learning quickly and contributing to professional teams with responsibility and attention to detail.`; }
+function v40ExperienceSuggestion(text){ const base=String(text||"").trim(); if(!base) return "Delivered reliable results in daily operations.\nCollaborated with team members to complete tasks on time.\nMaintained quality, safety and professional standards."; return base.split("\n").filter(Boolean).map(line=>{ const clean=line.replace(/^[-•]\s*/,"").trim(); return `Improved results by ${clean.charAt(0).toLowerCase()}${clean.slice(1)}.`; }).join("\n"); }
+function v40AtsScore(){ let score=20; const tips=[]; if(v40State.personal.firstName&&v40State.personal.lastName) score+=10; else tips.push("Add full name"); if(v40State.personal.jobTitle) score+=10; else tips.push("Add job title"); if(v40State.contact.email) score+=8; else tips.push("Add email"); if(v40State.contact.phone) score+=7; else tips.push("Add phone"); if(v40State.summary.length>80) score+=15; else tips.push("Add stronger summary"); if(v40State.experience.length) score+=15; else tips.push("Add work experience"); if(v40State.skills.length>=4) score+=10; else tips.push("Add more skills"); if(v40State.languages.length) score+=5; const combined=[v40State.summary,...v40State.experience.map(e=>e.description||"")].join(" "); if(/\d+|%/.test(combined)) score+=5; else tips.push("Consider adding measurable results"); return {score:Math.min(score,100),tips:tips.length?tips.slice(0,3):["Good structure","Strong keywords","Ready for PDF"]}; }
+async function v40DownloadPdf(){ v40CommitToLegacy(); try{ await downloadPdf(); }catch(err){ console.error(err); showToast(ui[getLang()].pdfError); } }
+function v40PayUnlock(){ v40CommitToLegacy(); openSupportModal(); }
+function v40FillDemo(){ const lang=getLang(); const current=loadStored(); const data={...current,...demoDataByLang[lang],appLanguage:lang,cvLanguage:lang,template:current.template||"classic",photo:current.photo||""}; saveRaw(data); setFormData(data); v40State=legacyToV40State(data); v40Render(); showToast(ui[lang].demoFilled); }
+function v40Clear(){ const lang=getLang(); if(!confirm(ui[lang].confirmClear)) return; const selectedTemplate=v40TemplateToLegacy(v40State.selectedTemplate||"classic"); localStorage.removeItem(STORAGE_KEY); const data=emptyData(); data.appLanguage=lang; data.cvLanguage=lang; data.template=selectedTemplate; saveRaw(data); setFormData(data); clearLanguageDraftInputs(); applyLanguage(lang); v40State=legacyToV40State(data); v40Step=1; v40Render(); showToast(ui[lang].dataCleared); }
+function escHtml(str){ return String(str||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+function escAttr(str){ return escHtml(str).replaceAll("\n"," "); }
+
+function initV40() {
+  const stored = loadStored();
+  v40State = legacyToV40State(stored);
+  document.getElementById("v40StartBtn")?.addEventListener("click", () => {
+    trackEvent("start_cv_click");
+    document.getElementById("v40Welcome")?.classList.add("hidden");
+    document.getElementById("v40Builder")?.classList.remove("hidden");
+    v40Render();
+  });
+  document.querySelectorAll(".v40-lang-btn").forEach(btn => btn.addEventListener("click", () => v40SetLanguage(btn.dataset.v40Lang)));
+  document.getElementById("v40BackBtn")?.addEventListener("click", v40Prev);
+  document.getElementById("v40NextBtn")?.addEventListener("click", v40Next);
+  document.getElementById("v40MenuBtn")?.addEventListener("click", () => document.getElementById("v40Menu")?.classList.toggle("hidden"));
+  document.getElementById("v40FillDemoBtn")?.addEventListener("click", v40FillDemo);
+  document.getElementById("v40ClearBtn")?.addEventListener("click", v40Clear);
+  document.getElementById("v40KeepOriginalBtn")?.addEventListener("click", v40CloseRewrite);
+  document.getElementById("v40UseImprovedBtn")?.addEventListener("click", v40UseImproved);
+  document.getElementById("v40RewriteModal")?.addEventListener("click", (e) => { if(e.target.id === "v40RewriteModal") v40CloseRewrite(); });
+  document.addEventListener("keydown", (e) => { if((e.ctrlKey||e.metaKey) && e.key === "Enter" && !document.getElementById("v40Builder")?.classList.contains("hidden")) v40Next(); });
+  v40SetLanguage(stored.appLanguage || stored.cvLanguage || "en");
+  v40RenderPreview();
+}
+
+document.addEventListener("DOMContentLoaded", initV40);
