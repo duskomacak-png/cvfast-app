@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v439-fixed-viewport-no-page-scroll-safe";
+const CACHE_NAME = "cvfast-v440-welcome-scroll-builder-fixed-safe";
 
 const APP_SHELL = [
   "/",

@@ -3953,3 +3953,50 @@ body.v40-active .v40-legal-under-app p{
     line-height:1.15 !important;
   }
 }
+
+
+/* V40.40: welcome page scrolls, builder page stays fixed.
+   This fixes V40.39 where body was fixed even on the first language/welcome page.
+   Safe layout-only change: no PayPal, PDF, unlock, data or menu logic touched. */
+html:not(.v40-builder-open),
+body.v40-active:not(.v40-builder-open){
+  height:auto !important;
+  max-height:none !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  overscroll-behavior:auto !important;
+}
+body.v40-active:not(.v40-builder-open){
+  position:static !important;
+  inset:auto !important;
+  min-height:100svh !important;
+}
+body.v40-active:not(.v40-builder-open) .v40-welcome{
+  min-height:100svh !important;
+  height:auto !important;
+  overflow:visible !important;
+  padding:22px !important;
+}
+html.v40-builder-open,
+body.v40-active.v40-builder-open{
+  width:100% !important;
+  height:100% !important;
+  max-height:100% !important;
+  overflow:hidden !important;
+  overscroll-behavior:none !important;
+}
+body.v40-active.v40-builder-open{
+  position:fixed !important;
+  inset:0 !important;
+  min-height:100svh !important;
+}
+body.v40-active.v40-builder-open .v40-stage{
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100svh !important;
+  min-height:100svh !important;
+  max-height:100svh !important;
+  overflow:hidden !important;
+  align-items:center !important;
+}

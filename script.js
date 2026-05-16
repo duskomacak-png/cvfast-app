@@ -1761,7 +1761,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=439").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=440").catch(() => {});
     });
   }
 
@@ -2947,14 +2947,22 @@ function v40CloseFullPreview(){
   document.getElementById("v40FullPreviewModal")?.classList.add("hidden");
 }
 
+function v40SetBuilderMode(isBuilder){
+  // V40.40: welcome/language page can scroll; builder is fixed to the viewport.
+  document.body?.classList.toggle("v40-builder-open", !!isBuilder);
+  document.documentElement?.classList.toggle("v40-builder-open", !!isBuilder);
+}
+
 async function v40DownloadPdf(){ v40CommitToLegacy(); try{ await downloadPdf(); }catch(err){ console.error(err); showToast(ui[getLang()].pdfError); } }
 function v40PayUnlock(){ v40CommitToLegacy(); openSupportModal(); }
 function v40GoHome(){
   // V40.36: menu Home returns to the welcome screen without deleting CV data or PDF unlock.
+  // V40.40: returning home also restores normal page scrolling for the language/welcome page.
   v40CommitToLegacy();
   document.getElementById("v40Menu")?.classList.add("hidden");
   document.getElementById("v40Builder")?.classList.add("hidden");
   document.getElementById("v40Welcome")?.classList.remove("hidden");
+  v40SetBuilderMode(false);
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -3146,10 +3154,12 @@ function v40Go(step){
 function initV40() {
   const stored = loadStored();
   v40State = legacyToV40State(stored);
+  v40SetBuilderMode(!document.getElementById("v40Builder")?.classList.contains("hidden"));
   document.getElementById("v40StartBtn")?.addEventListener("click", () => {
     trackEvent("start_cv_click");
     document.getElementById("v40Welcome")?.classList.add("hidden");
     document.getElementById("v40Builder")?.classList.remove("hidden");
+    v40SetBuilderMode(true);
     v40Render();
   });
   document.querySelectorAll(".v40-lang-btn").forEach(btn => btn.addEventListener("click", () => v40SetLanguage(btn.dataset.v40Lang)));
