@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v437-name-placeholder-lang-safe";
+const CACHE_NAME = "cvfast-v438-edit-saved-education-work-safe";
 
 const APP_SHELL = [
   "/",

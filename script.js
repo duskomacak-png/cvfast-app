@@ -1761,7 +1761,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=437").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=438").catch(() => {});
     });
   }
 
@@ -2518,7 +2518,7 @@ function v40RenderStepContent() {
 
   if (v40Step === 5) {
     const d = v40State.draftExperience || {};
-    const savedInfo = v40State.experience?.length ? `<div class="v40-mini-status">${escHtml(txt.savedJobs)}: ${v40State.experience.length}</div>` : ``;
+    const savedInfo = v40State.experience?.length ? `<div class="v40-mini-status">${escHtml(txt.savedJobs)}: ${v40State.experience.length}</div>${v40RenderEntries(v40State.experience, "experience")}` : ``;
     if (v40SubStep === 0) {
       el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote(txt.jobNote1)}
         <label>${escHtml(txt.jobTitle)}<input value="${escAttr(d.jobTitle || "")}" oninput="v40UpdateDraft('experience','jobTitle',this.value)" placeholder="${escAttr(txt.jobTitlePh)}"></label>
@@ -2542,7 +2542,7 @@ function v40RenderStepContent() {
 
   if (v40Step === 6) {
     const d = v40State.draftEducation || {};
-    const savedInfo = v40State.education?.length ? `<div class="v40-mini-status">${escHtml(txt.savedEducation)}: ${v40State.education.length}</div>` : ``;
+    const savedInfo = v40State.education?.length ? `<div class="v40-mini-status">${escHtml(txt.savedEducation)}: ${v40State.education.length}</div>${v40RenderEntries(v40State.education, "education")}` : ``;
     if (v40SubStep === 0) {
       el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote(txt.eduNote1)}
         <label>${escHtml(txt.school)}<input value="${escAttr(d.school || "")}" oninput="v40UpdateDraft('education','school',this.value)" placeholder="${escAttr(txt.schoolPh)}"></label>
@@ -2764,8 +2764,30 @@ function v40RenderEntries(items,type){
   const txt = v40Text();
   return `<div class="v40-entry-list">${items.map((item,i)=>`<div class="v40-entry-card"><div class="v40-entry-card-top"><div><strong>${escHtml(item.jobTitle||item.degree||item.school||txt.entry||"Entry")}</strong><small>${escHtml(item.company||item.school||"")}</small></div><div class="v40-entry-actions"><button class="v40-tiny-btn" type="button" onclick="v40EditEntry('${type}',${i})">${escHtml(txt.edit||"Edit")}</button><button class="v40-tiny-btn danger" type="button" onclick="v40DeleteEntry('${type}',${i})">${escHtml(txt.delete||"Delete")}</button></div></div></div>`).join("")}</div>`;
 }
-function v40EditEntry(type,index){ if(type==="experience"){ v40State.draftExperience={...v40State.experience[index]}; v40State.experience.splice(index,1); v40SubStep=0; } if(type==="education"){ v40State.draftEducation={...v40State.education[index]}; v40State.education.splice(index,1); v40SubStep=0; } v40Render(); }
-function v40DeleteEntry(type,index){ if(type==="experience") v40State.experience.splice(index,1); if(type==="education") v40State.education.splice(index,1); v40Render(); }
+function v40EditEntry(type,index){
+  // V40.38: saved work/education entries can be corrected safely.
+  // Editing moves the chosen saved card back into the form fields and removes it
+  // from saved list temporarily, so saving updates that entry instead of duplicating it.
+  if(type==="experience" && v40State.experience && v40State.experience[index]){
+    v40State.draftExperience={...v40State.experience[index]};
+    v40State.experience.splice(index,1);
+    v40Step=5; v40SubStep=0;
+  }
+  if(type==="education" && v40State.education && v40State.education[index]){
+    v40State.draftEducation={...v40State.education[index]};
+    v40State.education.splice(index,1);
+    v40Step=6; v40SubStep=0;
+  }
+  v40CommitAndPreview();
+  v40Render();
+  v40ScrollStepToTop();
+}
+function v40DeleteEntry(type,index){
+  if(type==="experience" && v40State.experience) v40State.experience.splice(index,1);
+  if(type==="education" && v40State.education) v40State.education.splice(index,1);
+  v40CommitAndPreview();
+  v40Render();
+}
 function v40AddSkill(){ v40SaveCurrentSkill(); v40Render(); }
 function v40RemoveSkill(i){ v40State.skills.splice(i,1); v40Render(); }
 function v40SuggestedSkillSets() {
