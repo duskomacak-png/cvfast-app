@@ -3812,3 +3812,39 @@ body.v40-active.v40-final-step .v40-small-btn.v40-download-final-btn{
     font-size:12px !important;
   }
 }
+
+
+/* V40.27: language polish + fixed Step 7 overflow.
+   Buttons must stay visible even when many skill chips exist. */
+body[data-app-lang="en"] .v40-cv-preview-wrap::after{content:"Click to enlarge" !important;}
+body[data-app-lang="de"] .v40-cv-preview-wrap::after{content:"Klicken zum Vergrößern" !important;}
+body[data-app-lang="sr"] .v40-cv-preview-wrap::after{content:"Klikni za uvećanje" !important;}
+
+.v40-input-sheet{
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+#v40StepContent{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow:auto !important;
+  overflow-x:hidden !important;
+  padding-right:3px !important;
+}
+.v40-chip-list{
+  max-height:128px;
+  overflow:auto;
+  padding-right:3px;
+}
+.v40-chip-list::-webkit-scrollbar,
+#v40StepContent::-webkit-scrollbar{width:4px;}
+.v40-chip-list::-webkit-scrollbar-thumb,
+#v40StepContent::-webkit-scrollbar-thumb{background:rgba(255,255,255,.24);border-radius:999px;}
+
+@media(min-width:521px) and (max-height:760px){
+  .v40-chip-list{max-height:96px;}
+}
+@media(max-width:520px){
+  .v40-chip-list{max-height:112px;}
+}

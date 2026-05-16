@@ -787,6 +787,7 @@ function applyLanguage(lang) {
   saveRaw(data);
 
   document.documentElement.lang = lang;
+  document.body?.setAttribute("data-app-lang", lang);
   const cvLang = $("#cvLanguage");
   if (cvLang) cvLang.value = lang;
   updateLanguageSelectLabels(lang);
@@ -1136,13 +1137,17 @@ function templateSampleData(template, lang = "en") {
     phone: "+49 151 000000",
     location: "Berlin, Germany",
     profile: lang === "de"
-      ? "Clean visual CV sample. Your own text appears here when you start typing."
-      : "Clean visual CV sample. Your own text appears here when you start typing.",
+      ? "Sauberes CV-Beispiel. Dein eigener Text erscheint hier, sobald du mit dem Schreiben beginnst."
+      : lang === "sr"
+        ? "Čist primer CV-a. Tvoj tekst će se pojaviti ovde čim počneš da pišeš."
+        : "Clean visual CV sample. Your own text appears here when you start typing.",
     experience: lang === "de"
-      ? "Daily operations\nField coordination\nQuality control"
-      : "Daily operations\nField coordination\nQuality control",
-    skills: "Teamwork\nSafety\nDocumentation",
-    machines: "Planning tools\nWork equipment",
+      ? "Tägliche Abläufe\nKoordination vor Ort\nQualitätskontrolle"
+      : lang === "sr"
+        ? "Svakodnevni rad\nKoordinacija na terenu\nKontrola kvaliteta"
+        : "Daily operations\nField coordination\nQuality control",
+    skills: lang === "de" ? "Teamarbeit\nSicherheit\nDokumentation" : lang === "sr" ? "Timski rad\nBezbednost\nDokumentacija" : "Teamwork\nSafety\nDocumentation",
+    machines: lang === "de" ? "Planungswerkzeuge\nArbeitsausrüstung" : lang === "sr" ? "Alati za planiranje\nRadna oprema" : "Planning tools\nWork equipment",
     languages: lang === "de" ? JSON.stringify([{ name: "Englisch", level: "B2" }, { name: "Deutsch", level: "A2" }]) : lang === "sr" ? JSON.stringify([{ name: "Engleski", level: "B2" }, { name: "Nemački", level: "A2" }]) : JSON.stringify([{ name: "English", level: "B2" }, { name: "German", level: "A2" }]),
     education: "Professional training",
     traits: "Reliable, precise and organized."
@@ -1153,7 +1158,8 @@ function renderLiveTemplateSample(target, template, lang) {
   const sample = templateSampleData(template, lang);
   renderCv(target, sample, { placeholders: false });
   target.classList.add("cv-live-template-sample");
-  target.insertAdjacentHTML("afterbegin", `<div class="cv-sample-ribbon">Visual sample only — start typing to replace it with your CV</div>`);
+  const ribbonText = lang === "de" ? "Nur visuelles Beispiel — beginne zu schreiben, um es durch deinen CV zu ersetzen" : lang === "sr" ? "Samo vizuelni primer — počni da pišeš da ga zameniš svojim CV-om" : "Visual sample only — start typing to replace it with your CV";
+  target.insertAdjacentHTML("afterbegin", `<div class="cv-sample-ribbon">${escHtml(ribbonText)}</div>`);
 }
 
 function refreshPreview() {
@@ -1601,6 +1607,7 @@ function init() {
       template: current.template || "classic",
       photo: current.photo || ""
     };
+    delete data.v40State;
     saveRaw(data);
     setFormData(data);
     refreshPreview();
@@ -1751,7 +1758,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=426").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=427").catch(() => {});
     });
   }
 
@@ -1788,7 +1795,16 @@ const V40_I18N = {
     original: "Original:",
     suggested: "Suggested improvement:",
     keepOriginal: "Keep original",
-    useImproved: "Use improved"
+    useImproved: "Use improved",
+    fillDemo: "Fill demo",
+    clearData: "Clear",
+    termsUse: "Terms of Use",
+    privacyPolicy: "Privacy Policy",
+    contact: "Contact",
+    contactSupport: "Contact support",
+    responsibility: "Use CVFast.app responsibly. You are responsible for the accuracy of the information you enter in your CV.",
+    fullPreviewTitle: "Live CV Preview",
+    closePreview: "Close ×"
   },
   de: {
     subtitle: "Erstelle in wenigen Minuten einen sauberen professionellen CV.",
@@ -1805,7 +1821,16 @@ const V40_I18N = {
     original: "Original:",
     suggested: "Verbesserter Vorschlag:",
     keepOriginal: "Original behalten",
-    useImproved: "Verbesserten Text nutzen"
+    useImproved: "Verbesserten Text nutzen",
+    fillDemo: "Demo ausfüllen",
+    clearData: "Löschen",
+    termsUse: "Nutzungsbedingungen",
+    privacyPolicy: "Datenschutz",
+    contact: "Kontakt",
+    contactSupport: "Support kontaktieren",
+    responsibility: "Nutze CVFast.app verantwortungsvoll. Du bist für die Richtigkeit der Angaben in deinem CV verantwortlich.",
+    fullPreviewTitle: "Live CV Vorschau",
+    closePreview: "Schließen ×"
   },
   sr: {
     subtitle: "Napravi čist profesionalni CV za nekoliko minuta.",
@@ -1822,7 +1847,16 @@ const V40_I18N = {
     original: "Original:",
     suggested: "Predlog poboljšanja:",
     keepOriginal: "Zadrži original",
-    useImproved: "Koristi poboljšan tekst"
+    useImproved: "Koristi poboljšan tekst",
+    fillDemo: "Popuni demo",
+    clearData: "Obriši",
+    termsUse: "Uslovi korišćenja",
+    privacyPolicy: "Politika privatnosti",
+    contact: "Kontakt",
+    contactSupport: "Kontakt podrška",
+    responsibility: "Koristi CVFast.app odgovorno. Ti si odgovoran za tačnost podataka koje unosiš u CV.",
+    fullPreviewTitle: "Live pregled CV-a",
+    closePreview: "Zatvori ×"
   }
 };
 
@@ -2120,12 +2154,38 @@ function v40Render() {
   document.querySelector(".v40-input-sheet")?.classList.toggle("v40-final-sheet", v40Step === 9);
   document.body.classList.toggle("v40-final-step", v40Step === 9);
   if (saved) saved.textContent = t.saved;
+  v40ApplyStaticLocalizedText(lang);
 
   v40ClearError();
   v40RenderStepContent();
   v40CommitToLegacy();
   v40RenderPreview();
   v40AttachFieldGuide();
+}
+
+
+function v40ApplyStaticLocalizedText(lang = getLang()) {
+  const t = V40_I18N[lang] || V40_I18N.en;
+  const setText = (selector, text) => {
+    const el = document.querySelector(selector);
+    if (el && text) el.textContent = text;
+  };
+  setText("#v40FillDemoBtn", t.fillDemo);
+  setText("#v40ClearBtn", t.clearData);
+  setText(".v40-full-preview-top strong", t.fullPreviewTitle);
+  setText("#v40FullPreviewClose", t.closePreview);
+
+  const welcomeLinks = document.querySelectorAll(".v40-footer-links a");
+  if (welcomeLinks[0]) welcomeLinks[0].textContent = t.termsUse;
+  if (welcomeLinks[1]) welcomeLinks[1].textContent = t.privacyPolicy;
+  if (welcomeLinks[2]) welcomeLinks[2].textContent = t.contact;
+
+  const appLinks = document.querySelectorAll(".v40-legal-under-app a");
+  if (appLinks[0]) appLinks[0].textContent = t.termsUse;
+  if (appLinks[1]) appLinks[1].textContent = t.privacyPolicy;
+  if (appLinks[2]) appLinks[2].textContent = t.contactSupport;
+  const p = document.querySelector(".v40-legal-under-app p");
+  if (p) p.textContent = t.responsibility;
 }
 
 function v40SetLanguage(lang) {
@@ -2145,6 +2205,7 @@ function v40SetLanguage(lang) {
     const el = document.getElementById(id);
     if (el && V40_I18N[lang]?.[key]) el.textContent = V40_I18N[lang][key];
   });
+  v40ApplyStaticLocalizedText(lang);
   v40Render();
 }
 
@@ -2547,10 +2608,8 @@ function v40EditEntry(type,index){ if(type==="experience"){ v40State.draftExperi
 function v40DeleteEntry(type,index){ if(type==="experience") v40State.experience.splice(index,1); if(type==="education") v40State.education.splice(index,1); v40Render(); }
 function v40AddSkill(){ const skill=String(v40State.draftSkill||"").trim(); if(!skill) return; if(!v40State.skills.includes(skill)) v40State.skills.push(skill); v40State.draftSkill=""; v40Render(); }
 function v40RemoveSkill(i){ v40State.skills.splice(i,1); v40Render(); }
-function v40SuggestSkills(){
-  const lang = getLang();
-  const job = String(v40State.personal.jobTitle || "").toLowerCase();
-  const sets = {
+function v40SuggestedSkillSets() {
+  return {
     en: {
       base: ["Communication", "Teamwork", "Time Management", "Problem Solving"],
       software: ["JavaScript", "React", "Git", "REST APIs", "Problem Solving"],
@@ -2570,12 +2629,40 @@ function v40SuggestSkills(){
       operator: ["Rad na bageru", "Priprema gradilišta", "Bezbednosne procedure", "Održavanje opreme"]
     }
   };
+}
+
+function v40BuiltInSkillSet() {
+  const sets = v40SuggestedSkillSets();
+  const known = [];
+  Object.values(sets).forEach(langSets => Object.values(langSets).forEach(arr => known.push(...arr)));
+  // Older demo/sample words that could remain in localStorage from previous versions.
+  known.push("Safety", "Documentation", "Planning", "Sicherheit", "Dokumentation", "Planung", "Bezbednost", "Dokumentacija", "Planiranje");
+  return new Set(known.map(x => String(x).toLowerCase().trim()));
+}
+
+function v40SuggestSkills(){
+  const lang = getLang();
+  const job = String(v40State.personal.jobTitle || "").toLowerCase();
+  const sets = v40SuggestedSkillSets();
   const dict = sets[lang] || sets.en;
   let suggestions = dict.base;
   if(job.includes("software") || job.includes("developer") || job.includes("program") || job.includes("entwickler")) suggestions = dict.software;
   if(job.includes("driver") || job.includes("voza") || job.includes("fahrer")) suggestions = dict.driver;
   if(job.includes("excavator") || job.includes("operator") || job.includes("bager") || job.includes("bagger")) suggestions = dict.operator;
-  suggestions.forEach(skill => { if(!v40State.skills.includes(skill)) v40State.skills.push(skill); });
+
+  const builtIn = v40BuiltInSkillSet();
+  const currentSuggestionSet = new Set(suggestions.map(x => String(x).toLowerCase().trim()));
+  // If older English/German/Serbian app suggestions are already present, clean them first.
+  // This prevents mixed tags like Communication + Komunikacija after the user changes language.
+  v40State.skills = (v40State.skills || []).filter(skill => {
+    const key = String(skill || "").toLowerCase().trim();
+    return !builtIn.has(key) || currentSuggestionSet.has(key);
+  });
+
+  suggestions.forEach(skill => {
+    const exists = v40State.skills.some(x => String(x).toLowerCase().trim() === String(skill).toLowerCase().trim());
+    if(!exists) v40State.skills.push(skill);
+  });
   v40Render();
 }
 function v40AddLanguage(){ v40SaveCurrentLanguage(); v40Render(); }
@@ -2680,7 +2767,7 @@ function v40CloseFullPreview(){
 
 async function v40DownloadPdf(){ v40CommitToLegacy(); try{ await downloadPdf(); }catch(err){ console.error(err); showToast(ui[getLang()].pdfError); } }
 function v40PayUnlock(){ v40CommitToLegacy(); openSupportModal(); }
-function v40FillDemo(){ const lang=getLang(); const current=loadStored(); const data={...current,...demoDataByLang[lang],appLanguage:lang,cvLanguage:lang,template:current.template||"classic",photo:current.photo||""}; saveRaw(data); setFormData(data); v40State=legacyToV40State(data); v40Render(); showToast(ui[lang].demoFilled); }
+function v40FillDemo(){ const lang=getLang(); const current=loadStored(); const data={...current,...demoDataByLang[lang],appLanguage:lang,cvLanguage:lang,template:current.template||"classic",photo:current.photo||""}; delete data.v40State; saveRaw(data); setFormData(data); v40State=legacyToV40State(data); v40Render(); showToast(ui[lang].demoFilled); }
 function v40Clear(){ const lang=getLang(); if(!confirm(ui[lang].confirmClear)) return; const selectedTemplate=v40TemplateToLegacy(v40State.selectedTemplate||"classic"); localStorage.removeItem(STORAGE_KEY); const data=emptyData(); data.appLanguage=lang; data.cvLanguage=lang; data.template=selectedTemplate; saveRaw(data); setFormData(data); clearLanguageDraftInputs(); applyLanguage(lang); v40State=legacyToV40State(data); v40Step=1; v40SubStep=0; v40Render(); showToast(ui[lang].dataCleared); }
 function escHtml(str){ return String(str||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
 function escAttr(str){ return escHtml(str).replaceAll("\n"," "); }
