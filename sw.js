@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v443-localized-underglow-safe";
+const CACHE_NAME = "cvfast-v444-active-class-underglow-safe";
 
 const APP_SHELL = [
   "/",
