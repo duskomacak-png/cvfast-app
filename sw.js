@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v440-welcome-scroll-builder-fixed-safe";
+const CACHE_NAME = "cvfast-v441-stronger-red-glow-safe";
 
 const APP_SHELL = [
   "/",
