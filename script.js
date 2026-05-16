@@ -1761,7 +1761,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=433").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=435").catch(() => {});
     });
   }
 
@@ -2131,6 +2131,14 @@ function v40ToLegacyData() {
     name: String(l.language || "").trim(),
     level: String(l.level || "").trim().toUpperCase()
   })).filter(l => l.name && l.level);
+
+  // V40.35: live preview must show every field while the user is typing.
+  // Skills, work and education already include drafts; language draft now does too.
+  const draftLangName = String(v40State.draftLanguage?.language || "").trim();
+  const draftLangLevel = String(v40State.draftLanguage?.level || "B2").trim().toUpperCase();
+  if (draftLangName && draftLangLevel && !languageRows.some(l => l.name.toLowerCase() === draftLangName.toLowerCase())) {
+    languageRows.push({ name: draftLangName, level: draftLangLevel });
+  }
 
   return {
     ...existing,
@@ -2920,6 +2928,186 @@ function v40FillDemo(){ const lang=getLang(); const current=loadStored(); const 
 function v40Clear(){ const lang=getLang(); if(!confirm(ui[lang].confirmClear)) return; const selectedTemplate=v40TemplateToLegacy(v40State.selectedTemplate||"classic"); localStorage.removeItem(STORAGE_KEY); const data=emptyData(); data.appLanguage=lang; data.cvLanguage=lang; data.template=selectedTemplate; saveRaw(data); setFormData(data); clearLanguageDraftInputs(); applyLanguage(lang); v40State=legacyToV40State(data); v40Step=1; v40SubStep=0; v40Render(); showToast(ui[lang].dataCleared); }
 function escHtml(str){ return String(str||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
 function escAttr(str){ return escHtml(str).replaceAll("\n"," "); }
+
+
+
+// V40.35 FINAL FLOW GUARD
+// Stronger protection for Back/Edit flow:
+// - going back to Work/Education opens the last saved block for editing instead of empty fields
+// - saving the same Work/Education block updates it instead of duplicating it
+// - old duplicate blocks from previous tests are merged by their main identity fields
+function v40PrimaryKey(entry, fields) {
+  const clean = v40CleanEntry(entry || {});
+  const raw = fields.map(field => clean[field] || "").join("|").toLowerCase().replace(/\s+/g, " ").trim();
+  return raw;
+}
+
+function v40MergeCleanEntries(oldEntry, newEntry) {
+  const out = { ...(oldEntry || {}) };
+  Object.entries(newEntry || {}).forEach(([key, value]) => {
+    const val = String(value || "").trim();
+    if (val) out[key] = val;
+  });
+  return v40CleanEntry(out);
+}
+
+function v40DedupeEntriesByPrimary(items, fields, primaryFields) {
+  const result = [];
+  const primaryIndex = new Map();
+  const fullIndex = new Map();
+  (items || []).forEach(item => {
+    const clean = v40CleanEntry(item || {});
+    if (!v40EntryHasValue(clean)) return;
+    const fullKey = v40EntryKey(clean, fields);
+    const primaryKey = v40PrimaryKey(clean, primaryFields || fields);
+    const usablePrimary = primaryKey && primaryKey.replace(/\|/g, "").trim().length > 0;
+
+    if (usablePrimary && primaryIndex.has(primaryKey)) {
+      const idx = primaryIndex.get(primaryKey);
+      result[idx] = v40MergeCleanEntries(result[idx], clean);
+      fullIndex.set(v40EntryKey(result[idx], fields), idx);
+      return;
+    }
+    if (!usablePrimary && fullIndex.has(fullKey)) return;
+
+    const idx = result.length;
+    result.push(clean);
+    if (usablePrimary) primaryIndex.set(primaryKey, idx);
+    fullIndex.set(fullKey, idx);
+  });
+  return result;
+}
+
+function v40PrimaryFieldsFor(fields) {
+  if ((fields || []).includes("jobTitle")) return ["jobTitle", "company"];
+  if ((fields || []).includes("school")) return ["school", "degree"];
+  return fields;
+}
+
+function v40NormalizeRepeatingEntries(items, fields) {
+  return v40DedupeEntriesByPrimary(items || [], fields, v40PrimaryFieldsFor(fields));
+}
+
+function v40MergeDraftEntry(items, draft, fields) {
+  return v40NormalizeRepeatingEntries([...(items || []), draft || {}], fields);
+}
+
+function v40ExperienceItemsForOutput() {
+  return v40MergeDraftEntry(v40State?.experience || [], v40State?.draftExperience || {}, ["jobTitle", "company", "location", "start", "end", "description"]);
+}
+
+function v40EducationItemsForOutput() {
+  return v40MergeDraftEntry(v40State?.education || [], v40State?.draftEducation || {}, ["school", "degree", "location", "dates", "description"]);
+}
+
+function v40SaveCurrentExperience(){
+  const d = v40CleanEntry(v40State.draftExperience || {});
+  if(!v40EntryHasValue(d)) return;
+  v40State.experience = v40NormalizeRepeatingEntries([...(v40State.experience || []), d], ["jobTitle", "company", "location", "start", "end", "description"]);
+  v40State.draftExperience = {};
+  v40CommitToLegacy();
+}
+
+function v40SaveCurrentEducation(){
+  const d = v40CleanEntry(v40State.draftEducation || {});
+  if(!v40EntryHasValue(d)) return;
+  v40State.education = v40NormalizeRepeatingEntries([...(v40State.education || []), d], ["school", "degree", "location", "dates", "description"]);
+  v40State.draftEducation = {};
+  v40CommitToLegacy();
+}
+
+function v40StateRepairRepeatingLists() {
+  if (!v40State) return;
+  v40State.experience = v40NormalizeRepeatingEntries(v40State.experience || [], ["jobTitle", "company", "location", "start", "end", "description"]);
+  v40State.education = v40NormalizeRepeatingEntries(v40State.education || [], ["school", "degree", "location", "dates", "description"]);
+  v40State.skills = Array.from(new Map((v40State.skills || [])
+    .map(s => String(s || "").trim())
+    .filter(Boolean)
+    .map(s => [s.toLowerCase(), s])).values());
+}
+
+function v40PrepareDraftForEdit(type) {
+  if (!v40State) return;
+  v40StateRepairRepeatingLists();
+  if (type === "experience") {
+    const draft = v40CleanEntry(v40State.draftExperience || {});
+    if (v40EntryHasValue(draft)) return;
+    const list = v40NormalizeRepeatingEntries(v40State.experience || [], ["jobTitle", "company", "location", "start", "end", "description"]);
+    if (!list.length) return;
+    v40State.draftExperience = { ...list[list.length - 1] };
+    v40State.experience = list.slice(0, -1);
+    v40CommitToLegacy();
+  }
+  if (type === "education") {
+    const draft = v40CleanEntry(v40State.draftEducation || {});
+    if (v40EntryHasValue(draft)) return;
+    const list = v40NormalizeRepeatingEntries(v40State.education || [], ["school", "degree", "location", "dates", "description"]);
+    if (!list.length) return;
+    v40State.draftEducation = { ...list[list.length - 1] };
+    v40State.education = list.slice(0, -1);
+    v40CommitToLegacy();
+  }
+}
+
+function v40EnterStepForEditing(step) {
+  if (step === 5) v40PrepareDraftForEdit("experience");
+  if (step === 6) v40PrepareDraftForEdit("education");
+}
+
+function v40Next(){
+  if(v40Step===9){
+    if(isUnlocked()) v40DownloadPdf();
+    else v40PayUnlock();
+    return;
+  }
+  if(v40Step===2 && (!v40State.personal.firstName.trim() || !v40State.personal.lastName.trim())){
+    v40ShowError((V40_I18N[getLang()]||V40_I18N.en).firstLastError);
+    v40ScrollStepToTop();
+    return;
+  }
+  const count = v40StepPagesCount(v40Step);
+  if (v40SubStep < count - 1) {
+    v40SubStep++;
+    v40Render();
+    v40ScrollStepToTop();
+    return;
+  }
+  if(v40Step===5) v40SaveCurrentExperience();
+  if(v40Step===6) v40SaveCurrentEducation();
+  if(v40Step===7) v40SaveCurrentSkill();
+  if(v40Step===8) v40SaveCurrentLanguage();
+  if(v40Step<9){
+    v40Step++;
+    v40SubStep=0;
+    v40Render();
+    v40ScrollStepToTop();
+  }
+}
+
+function v40Prev(){
+  v40CommitToLegacy();
+  if (v40SubStep > 0) {
+    v40SubStep--;
+    v40Render();
+    v40ScrollStepToTop();
+    return;
+  }
+  if(v40Step>1){
+    v40Step--;
+    v40SubStep = v40StepPagesCount(v40Step) - 1;
+    v40EnterStepForEditing(v40Step);
+    v40Render();
+    v40ScrollStepToTop();
+  }
+}
+
+function v40Go(step){
+  v40Step=step;
+  v40SubStep=0;
+  v40EnterStepForEditing(step);
+  v40Render();
+  v40ScrollStepToTop();
+}
 
 function initV40() {
   const stored = loadStored();

@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v433-back-edit-memory-skills-live-audit";
+const CACHE_NAME = "cvfast-v435-all-fields-live-preview-final-audit";
 
 const APP_SHELL = [
   "/",
