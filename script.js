@@ -729,6 +729,7 @@ function emptyData() {
     jobTitle: "",
     phone: "",
     email: "",
+    linkedin: "",
     location: "",
     photo: "",
     profile: "",
@@ -992,7 +993,7 @@ function renderCv(target, data, options = {}) {
 
   const hasName = Boolean(String(d.fullName || "").trim());
   const hasTitle = Boolean(String(d.jobTitle || "").trim());
-  const hasContact = Boolean(String(d.phone || d.email || d.location || "").trim());
+  const hasContact = Boolean(String(d.phone || d.email || d.location || d.linkedin || "").trim());
   const hasPhoto = Boolean(d.photo);
   const hasIdentity = hasName || hasTitle || hasContact || hasPhoto;
 
@@ -1005,6 +1006,7 @@ function renderCv(target, data, options = {}) {
       ${d.phone ? `<li>📞 ${esc(d.phone)}</li>` : ""}
       ${d.email ? `<li>✉️ ${esc(d.email)}</li>` : ""}
       ${d.location ? `<li>📍 ${esc(d.location)}</li>` : ""}
+      ${d.linkedin ? `<li>🔗 ${esc(d.linkedin)}</li>` : ""}
     </ul>
   ` : "";
 
@@ -1113,6 +1115,7 @@ function hasRealCvContent(data) {
     String(data.phone || "").trim() ||
     String(data.email || "").trim() ||
     String(data.location || "").trim() ||
+    String(data.linkedin || "").trim() ||
     String(data.profile || "").trim() ||
     String(data.experience || "").trim() ||
     String(data.machines || "").trim() ||
@@ -1758,7 +1761,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=428").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=429").catch(() => {});
     });
   }
 
@@ -2040,6 +2043,7 @@ function v40ToLegacyData() {
     jobTitle: v40State.personal.jobTitle || "",
     phone: v40State.contact.phone || "",
     email: v40State.contact.email || "",
+    linkedin: v40State.contact.linkedin || "",
     location,
     photo: v40State.personal.photo || existing.photo || "",
     profile: v40State.summary || "",
@@ -2058,6 +2062,7 @@ function v40SyncLegacyDom(data) {
     jobTitle: data.jobTitle,
     phone: data.phone,
     email: data.email,
+    linkedin: data.linkedin,
     location: data.location,
     profile: data.profile,
     experience: data.experience,
