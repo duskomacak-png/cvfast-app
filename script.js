@@ -1761,7 +1761,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=430").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=431").catch(() => {});
     });
   }
 
@@ -2025,6 +2025,23 @@ function v40EducationToText(items) {
   }).filter(Boolean).join("\n\n");
 }
 
+function v40SkillsForOutput() {
+  const list = (v40State.skills || []).map(s => String(s || "").trim()).filter(Boolean);
+  const draft = String(v40State.draftSkill || "").trim();
+  if (draft && !list.some(s => s.toLowerCase() === draft.toLowerCase())) list.push(draft);
+  return list;
+}
+
+function v40SaveCurrentSkill() {
+  const skill = String(v40State.draftSkill || "").trim();
+  if (!skill) return;
+  if (!v40State.skills.some(s => String(s || "").trim().toLowerCase() === skill.toLowerCase())) {
+    v40State.skills.push(skill);
+  }
+  v40State.draftSkill = "";
+  v40CommitToLegacy();
+}
+
 function v40ToLegacyData() {
   const existing = loadStored();
   const first = v40State.personal.firstName.trim();
@@ -2049,7 +2066,7 @@ function v40ToLegacyData() {
     profile: v40State.summary || "",
     experience: v40ExperienceToText(v40State.experience),
     education: v40EducationToText(v40State.education),
-    skills: (v40State.skills || []).join("\n"),
+    skills: v40SkillsForOutput().join("\n"),
     languages: JSON.stringify(languageRows),
     v40State: JSON.parse(JSON.stringify(v40State))
   };
@@ -2610,6 +2627,7 @@ function v40Next(){
   if (v40SubStep < count - 1) { v40SubStep++; v40Render(); v40ScrollStepToTop(); return; }
   if(v40Step===5) v40SaveCurrentExperience();
   if(v40Step===6) v40SaveCurrentEducation();
+  if(v40Step===7) v40SaveCurrentSkill();
   if(v40Step===8) v40SaveCurrentLanguage();
   if(v40Step<9){ v40Step++; v40SubStep=0; v40Render(); v40ScrollStepToTop(); }
 }
@@ -2618,6 +2636,7 @@ function v40Prev(){
   if(v40Step>1){
     if(v40Step===5) v40SaveCurrentExperience();
     if(v40Step===6) v40SaveCurrentEducation();
+    if(v40Step===7) v40SaveCurrentSkill();
     if(v40Step===8) v40SaveCurrentLanguage();
     v40Step--;
     v40SubStep = v40StepPagesCount(v40Step) - 1;
@@ -2639,7 +2658,7 @@ function v40RenderEntries(items,type){
 }
 function v40EditEntry(type,index){ if(type==="experience"){ v40State.draftExperience={...v40State.experience[index]}; v40State.experience.splice(index,1); v40SubStep=0; } if(type==="education"){ v40State.draftEducation={...v40State.education[index]}; v40State.education.splice(index,1); v40SubStep=0; } v40Render(); }
 function v40DeleteEntry(type,index){ if(type==="experience") v40State.experience.splice(index,1); if(type==="education") v40State.education.splice(index,1); v40Render(); }
-function v40AddSkill(){ const skill=String(v40State.draftSkill||"").trim(); if(!skill) return; if(!v40State.skills.includes(skill)) v40State.skills.push(skill); v40State.draftSkill=""; v40Render(); }
+function v40AddSkill(){ v40SaveCurrentSkill(); v40Render(); }
 function v40RemoveSkill(i){ v40State.skills.splice(i,1); v40Render(); }
 function v40SuggestedSkillSets() {
   return {
@@ -2763,7 +2782,7 @@ function v40AtsScore(){
   if(v40State.contact.phone) score += 7; else tips.push(txt.tipPhone);
   if(v40State.summary.length > 80) score += 15; else tips.push(txt.tipSummary);
   if(v40State.experience.length) score += 15; else tips.push(txt.tipExperience);
-  if(v40State.skills.length >= 4) score += 10; else tips.push(txt.tipSkills);
+  if(v40SkillsForOutput().length >= 4) score += 10; else tips.push(txt.tipSkills);
   if(v40State.languages.length) score += 5;
   const combined = [v40State.summary, ...v40State.experience.map(e => e.description || "")].join(" ");
   if(/\d+|%/.test(combined)) score += 5; else tips.push(txt.tipResults);

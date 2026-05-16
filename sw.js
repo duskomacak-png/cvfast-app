@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v430-payment-text-final-audit";
+const CACHE_NAME = "cvfast-v431-skills-live-preview-audit";
 
 const APP_SHELL = [
   "/",
