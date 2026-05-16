@@ -1761,7 +1761,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=435").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=437").catch(() => {});
     });
   }
 
@@ -1799,6 +1799,7 @@ const V40_I18N = {
     suggested: "Suggested improvement:",
     keepOriginal: "Keep original",
     useImproved: "Use improved",
+    home: "Home",
     fillDemo: "Fill demo",
     clearData: "Clear",
     termsUse: "Terms of Use",
@@ -1825,6 +1826,7 @@ const V40_I18N = {
     suggested: "Verbesserter Vorschlag:",
     keepOriginal: "Original behalten",
     useImproved: "Verbesserten Text nutzen",
+    home: "Startseite",
     fillDemo: "Demo ausfüllen",
     clearData: "Löschen",
     termsUse: "Nutzungsbedingungen",
@@ -1851,6 +1853,7 @@ const V40_I18N = {
     suggested: "Predlog poboljšanja:",
     keepOriginal: "Zadrži original",
     useImproved: "Koristi poboljšan tekst",
+    home: "Početna",
     fillDemo: "Popuni demo",
     clearData: "Obriši",
     termsUse: "Uslovi korišćenja",
@@ -1867,7 +1870,7 @@ const V40_TEXTS = {
   en: {
     continueBtn: "Continue →", nextBtn: "Next →", downloadPdf: "Download PDF", unlockPdf: "Unlock PDF 5€", part: "Part", stepLabel: "Step", backBtn: "‹ Back", edit: "Edit", delete: "Delete", entry: "Entry",
     templateIntroTitle: "Choose your CV design", templateIntroText: "Select one example below. You can change it later.", classic: "Classic", modern: "Modern", classicDesc: "Clean and simple CV for most jobs.", modernDesc: "Modern side column layout.",
-    firstNameNote: "First add your name. The app will guide you field by field.", firstName: "First name *", lastName: "Last name *",
+    firstNameNote: "First add your name. The app will guide you field by field.", firstName: "First name *", lastName: "Last name *", firstNamePh: "John", lastNamePh: "Smith",
     headlineNote: "Add the CV headline shown under your name.", headline: "Target position / CV headline", headlinePh: "Senior Software Engineer",
     photoNote: "Add a clear CV photo if you want. This is optional.", photo: "Photo", addPhoto: "Add CV photo", photoHelp: "Optional. Saved only in this browser.", choosePhoto: "Choose photo", removePhoto: "Remove photo",
     contactNote: "Add the main contact details first.", email: "Email", phone: "Phone", phonePh: "+44 7000 000000",
@@ -1885,7 +1888,7 @@ const V40_TEXTS = {
   de: {
     continueBtn: "Weiter →", nextBtn: "Weiter →", downloadPdf: "PDF herunterladen", unlockPdf: "PDF für 5€ freischalten", part: "Teil", stepLabel: "Schritt", backBtn: "‹ Zurück", edit: "Bearbeiten", delete: "Löschen", entry: "Eintrag",
     templateIntroTitle: "Wähle dein CV-Design", templateIntroText: "Wähle unten ein Beispiel. Du kannst es später ändern.", classic: "Klassisch", modern: "Modern", classicDesc: "Sauberer und einfacher CV für die meisten Jobs.", modernDesc: "Modernes Layout mit Seitenleiste.",
-    firstNameNote: "Gib zuerst deinen Namen ein. Die App führt dich Feld für Feld.", firstName: "Vorname *", lastName: "Nachname *",
+    firstNameNote: "Gib zuerst deinen Namen ein. Die App führt dich Feld für Feld.", firstName: "Vorname *", lastName: "Nachname *", firstNamePh: "Max", lastNamePh: "Müller",
     headlineNote: "Füge die Überschrift hinzu, die unter deinem Namen erscheint.", headline: "Zielposition / CV-Überschrift", headlinePh: "Softwareentwickler",
     photoNote: "Füge optional ein klares CV-Foto hinzu.", photo: "Foto", addPhoto: "CV-Foto hinzufügen", photoHelp: "Optional. Nur in diesem Browser gespeichert.", choosePhoto: "Foto auswählen", removePhoto: "Foto entfernen",
     contactNote: "Füge zuerst die wichtigsten Kontaktdaten hinzu.", email: "E-Mail", phone: "Telefon", phonePh: "+49 170 0000000",
@@ -1903,7 +1906,7 @@ const V40_TEXTS = {
   sr: {
     continueBtn: "Nastavi →", nextBtn: "Dalje →", downloadPdf: "Preuzmi PDF", unlockPdf: "Otključaj PDF 5€", part: "Deo", stepLabel: "Korak", backBtn: "‹ Nazad", edit: "Uredi", delete: "Obriši", entry: "Unos",
     templateIntroTitle: "Izaberi izgled CV-a", templateIntroText: "Izaberi jedan primer dole. Možeš ga promeniti kasnije.", classic: "Klasičan", modern: "Moderan", classicDesc: "Čist i jednostavan CV za većinu poslova.", modernDesc: "Moderan raspored sa bočnom kolonom.",
-    firstNameNote: "Prvo dodaj ime. Aplikacija te vodi polje po polje.", firstName: "Ime *", lastName: "Prezime *",
+    firstNameNote: "Prvo dodaj ime. Aplikacija te vodi polje po polje.", firstName: "Ime *", lastName: "Prezime *", firstNamePh: "Aleksandar", lastNamePh: "Petrović",
     headlineNote: "Dodaj naslov CV-a koji se prikazuje ispod imena.", headline: "Ciljana pozicija / naslov CV-a", headlinePh: "Rukovalac građevinskih mašina",
     photoNote: "Dodaj jasnu CV fotografiju ako želiš. Nije obavezno.", photo: "Fotografija", addPhoto: "Dodaj CV fotografiju", photoHelp: "Nije obavezno. Čuva se samo u ovom browseru.", choosePhoto: "Izaberi fotografiju", removePhoto: "Ukloni fotografiju",
     contactNote: "Prvo dodaj glavne kontakt podatke.", email: "Email", phone: "Telefon", phonePh: "+381 60 123 4567",
@@ -2279,8 +2282,8 @@ function v40ApplyStaticLocalizedText(lang = getLang()) {
     const el = document.querySelector(selector);
     if (el && text) el.textContent = text;
   };
+  setText("#v40HomeBtn", t.home);
   setText("#v40FillDemoBtn", t.fillDemo);
-  setText("#v40ClearBtn", t.clearData);
   setText(".v40-full-preview-top strong", t.fullPreviewTitle);
   setText("#v40FullPreviewClose", t.closePreview);
 
@@ -2462,8 +2465,8 @@ function v40RenderStepContent() {
     if (v40SubStep === 0) {
       el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
         ${v40SubNote(txt.firstNameNote)}
-        <label>${escHtml(txt.firstName)}<input value="${escAttr(v40State.personal.firstName)}" oninput="v40Update('personal.firstName', this.value)" placeholder="Ana"></label>
-        <label>${escHtml(txt.lastName)}<input value="${escAttr(v40State.personal.lastName)}" oninput="v40Update('personal.lastName', this.value)" placeholder="Petrović"></label>
+        <label>${escHtml(txt.firstName)}<input value="${escAttr(v40State.personal.firstName)}" oninput="v40Update('personal.firstName', this.value)" placeholder="${escAttr(txt.firstNamePh || 'John')}"></label>
+        <label>${escHtml(txt.lastName)}<input value="${escAttr(v40State.personal.lastName)}" oninput="v40Update('personal.lastName', this.value)" placeholder="${escAttr(txt.lastNamePh || 'Smith')}"></label>
       </div>`;
       return;
     }
@@ -2924,6 +2927,15 @@ function v40CloseFullPreview(){
 
 async function v40DownloadPdf(){ v40CommitToLegacy(); try{ await downloadPdf(); }catch(err){ console.error(err); showToast(ui[getLang()].pdfError); } }
 function v40PayUnlock(){ v40CommitToLegacy(); openSupportModal(); }
+function v40GoHome(){
+  // V40.36: menu Home returns to the welcome screen without deleting CV data or PDF unlock.
+  v40CommitToLegacy();
+  document.getElementById("v40Menu")?.classList.add("hidden");
+  document.getElementById("v40Builder")?.classList.add("hidden");
+  document.getElementById("v40Welcome")?.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 function v40FillDemo(){ const lang=getLang(); const current=loadStored(); const data={...current,...demoDataByLang[lang],appLanguage:lang,cvLanguage:lang,template:current.template||"classic",photo:current.photo||""}; delete data.v40State; saveRaw(data); setFormData(data); v40State=legacyToV40State(data); v40Render(); showToast(ui[lang].demoFilled); }
 function v40Clear(){ const lang=getLang(); if(!confirm(ui[lang].confirmClear)) return; const selectedTemplate=v40TemplateToLegacy(v40State.selectedTemplate||"classic"); localStorage.removeItem(STORAGE_KEY); const data=emptyData(); data.appLanguage=lang; data.cvLanguage=lang; data.template=selectedTemplate; saveRaw(data); setFormData(data); clearLanguageDraftInputs(); applyLanguage(lang); v40State=legacyToV40State(data); v40Step=1; v40SubStep=0; v40Render(); showToast(ui[lang].dataCleared); }
 function escHtml(str){ return String(str||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
@@ -3122,8 +3134,8 @@ function initV40() {
   document.getElementById("v40BackBtn")?.addEventListener("click", v40Prev);
   document.getElementById("v40NextBtn")?.addEventListener("click", v40Next);
   document.getElementById("v40MenuBtn")?.addEventListener("click", () => document.getElementById("v40Menu")?.classList.toggle("hidden"));
+  document.getElementById("v40HomeBtn")?.addEventListener("click", v40GoHome);
   document.getElementById("v40FillDemoBtn")?.addEventListener("click", v40FillDemo);
-  document.getElementById("v40ClearBtn")?.addEventListener("click", v40Clear);
   document.getElementById("v40KeepOriginalBtn")?.addEventListener("click", v40CloseRewrite);
   document.getElementById("v40UseImprovedBtn")?.addEventListener("click", v40UseImproved);
   document.getElementById("v40RewriteModal")?.addEventListener("click", (e) => { if(e.target.id === "v40RewriteModal") v40CloseRewrite(); });
