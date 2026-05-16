@@ -1761,7 +1761,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=438").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=439").catch(() => {});
     });
   }
 
