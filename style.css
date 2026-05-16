@@ -4002,26 +4002,38 @@ body.v40-active.v40-builder-open .v40-stage{
 }
 
 
-/* V40.41 SAFE VISUAL ONLY: stronger red ambient background glow */
+/* V40.42 SAFE VISUAL ONLY: red underglow below the phone + soft side haze */
 body.v40-active {
   background:
-    radial-gradient(circle at 50% 48%, rgba(239, 68, 68, 0.30), transparent 34%),
-    radial-gradient(circle at 28% 55%, rgba(220, 38, 38, 0.24), transparent 36%),
-    radial-gradient(circle at 74% 42%, rgba(185, 28, 28, 0.24), transparent 34%),
-    radial-gradient(circle at 20% 10%, rgba(59,130,246,.18), transparent 35%),
-    radial-gradient(circle at 80% 70%, rgba(139,92,246,.23), transparent 36%),
-    linear-gradient(135deg, #070914, #130f1a 48%, #1a0b13) !important;
+    radial-gradient(ellipse at 18% 52%, rgba(127, 29, 29, 0.16), transparent 34%),
+    radial-gradient(ellipse at 82% 50%, rgba(127, 29, 29, 0.16), transparent 34%),
+    radial-gradient(circle at 20% 10%, rgba(59,130,246,.14), transparent 30%),
+    radial-gradient(circle at 80% 70%, rgba(139,92,246,.18), transparent 32%),
+    linear-gradient(135deg, #070914, #120d16 48%, #160b12) !important;
 }
-body.v40-active .v40-stage::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
+body.v40-active .v40-stage{
+  position:relative;
+  isolation:isolate;
+}
+body.v40-active .v40-stage::before,
+body.v40-active .v40-stage::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+}
+body.v40-active .v40-stage::before{
   background:
-    radial-gradient(ellipse at center, rgba(239, 68, 68, 0.18), transparent 45%),
-    radial-gradient(ellipse at 50% 78%, rgba(127, 29, 29, 0.20), transparent 48%);
-  filter: blur(2px);
+    radial-gradient(ellipse 34% 12% at 50% 74%, rgba(239, 68, 68, 0.22), transparent 72%),
+    radial-gradient(ellipse 22% 10% at 50% 78%, rgba(255, 90, 90, 0.14), transparent 74%);
+  filter: blur(8px);
+}
+body.v40-active .v40-stage::after{
+  background:
+    radial-gradient(ellipse 20% 34% at 14% 50%, rgba(185, 28, 28, 0.12), transparent 72%),
+    radial-gradient(ellipse 20% 34% at 86% 50%, rgba(185, 28, 28, 0.12), transparent 72%);
+  filter: blur(18px);
 }
 body.v40-active .v40-stage > * {
   position: relative;
@@ -4031,6 +4043,33 @@ body.v40-active .v40-phone-frame {
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,.16),
     0 40px 110px rgba(0,0,0,.72),
-    0 0 98px rgba(239,68,68,.34),
-    0 0 140px rgba(185,28,28,.22) !important;
+    0 0 54px rgba(239,68,68,.20),
+    0 24px 110px rgba(185,28,28,.18) !important;
+}
+body.v40-active .v40-phone-frame::before{
+  left:4% !important;
+  right:4% !important;
+  bottom:-28px !important;
+  height:114px !important;
+  background:
+    radial-gradient(ellipse at center, rgba(255, 82, 82, .64) 0%, rgba(239, 68, 68, .34) 34%, rgba(239, 68, 68, .16) 52%, rgba(239, 68, 68, 0) 78%),
+    radial-gradient(ellipse at 18% 58%, rgba(239, 68, 68, .16) 0%, rgba(239, 68, 68, 0) 62%),
+    radial-gradient(ellipse at 82% 58%, rgba(239, 68, 68, .16) 0%, rgba(239, 68, 68, 0) 62%) !important;
+  filter: blur(24px) !important;
+}
+body.v40-active .v40-phone-frame::after{
+  border-color: rgba(239,68,68,.28) !important;
+  box-shadow: 0 0 26px rgba(239,68,68,.12) !important;
+}
+@media(max-width:520px){
+  body.v40-active .v40-phone-frame::before{
+    left:6% !important;
+    right:6% !important;
+    bottom:-18px !important;
+    height:82px !important;
+    filter: blur(20px) !important;
+  }
+  body.v40-active .v40-stage::before{
+    background:radial-gradient(ellipse 44% 10% at 50% 78%, rgba(239, 68, 68, 0.18), transparent 76%);
+  }
 }

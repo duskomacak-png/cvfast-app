@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v441-stronger-red-glow-safe";
+const CACHE_NAME = "cvfast-v442-underglow-side-haze-safe";
 
 const APP_SHELL = [
   "/",
