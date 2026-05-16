@@ -107,7 +107,7 @@ const ui = {
     languagesTitle: "5. Jezici",
     languageNameLabel: "Jezik",
     languageLevelLabel: "Nivo",
-    languageNamePlaceholder: "e.g. English",
+    languageNamePlaceholder: "npr. Engleski",
     addLanguage: "Dodaj jezik",
     removeLanguage: "Ukloni",
     languageLevelNote: "Koristi CEFR nivoe: A1, A2, B1, B2, C1, C2.",
@@ -744,9 +744,7 @@ function emptyData() {
 function loadStored() {
   try {
     const stored = { ...emptyData(), ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}) };
-    if (stored.appLanguage === "sr") stored.appLanguage = "en";
-    if (stored.cvLanguage === "sr") stored.cvLanguage = "en";
-    return stored;
+        return stored;
   } catch {
     return emptyData();
   }
@@ -767,8 +765,9 @@ function updateLanguageSelectLabels(lang) {
   if (!cvLanguage) return;
 
   const labels = {
-    en: { en: "English", de: "German" },
-    de: { en: "Englisch", de: "Deutsch" }
+    en: { en: "English", de: "German", sr: "Serbian" },
+    de: { en: "Englisch", de: "Deutsch", sr: "Serbisch" },
+    sr: { en: "Engleski", de: "Nemački", sr: "Srpski" }
   };
 
   [...cvLanguage.options].forEach((option) => {
@@ -780,7 +779,7 @@ function updateLanguageSelectLabels(lang) {
 
 
 function applyLanguage(lang) {
-  if (lang === "sr" || !ui[lang]) lang = "en";
+  if (!ui[lang]) lang = "en";
 
   const data = loadStored();
   data.appLanguage = lang;
@@ -844,8 +843,6 @@ function getData(options = {}) {
   data.languages = JSON.stringify(languageRows);
 
   data.appLanguage = stored.appLanguage || data.cvLanguage || "en";
-  if (data.appLanguage === "sr") data.appLanguage = "en";
-  if (data.cvLanguage === "sr") data.cvLanguage = "en";
   data.photo = stored.photo || "";
   return data;
 }
@@ -984,7 +981,7 @@ function updateTemplateChoice(template) {
 function renderCv(target, data, options = {}) {
   const usePlaceholders = Boolean(options.placeholders);
   const d = usePlaceholders ? withPlaceholders(data) : data;
-  const lang = cvLabels[d.cvLanguage] && d.cvLanguage !== "sr" ? d.cvLanguage : "en";
+  const lang = cvLabels[d.cvLanguage] ? d.cvLanguage : "en";
   const L = cvLabels[lang];
 
   const machineItems = splitLines(d.machines);
@@ -1130,11 +1127,11 @@ function hasRealCvContent(data) {
 function templateSampleData(template, lang = "en") {
   return {
     ...emptyData(),
-    appLanguage: lang === "de" ? "de" : "en",
-    cvLanguage: lang === "de" ? "de" : "en",
+    appLanguage: ["en","de","sr"].includes(lang) ? lang : "en",
+    cvLanguage: ["en","de","sr"].includes(lang) ? lang : "en",
     template: template || "classic",
     fullName: "Alex Miller",
-    jobTitle: lang === "de" ? "Operations Specialist" : "Operations Specialist",
+    jobTitle: lang === "de" ? "Operations Specialist" : lang === "sr" ? "Specijalista operacija" : "Operations Specialist",
     email: "alex@example.com",
     phone: "+49 151 000000",
     location: "Berlin, Germany",
@@ -1146,7 +1143,7 @@ function templateSampleData(template, lang = "en") {
       : "Daily operations\nField coordination\nQuality control",
     skills: "Teamwork\nSafety\nDocumentation",
     machines: "Planning tools\nWork equipment",
-    languages: JSON.stringify([{ name: "English", level: "B2" }, { name: "German", level: "A2" }]),
+    languages: lang === "de" ? JSON.stringify([{ name: "Englisch", level: "B2" }, { name: "Deutsch", level: "A2" }]) : lang === "sr" ? JSON.stringify([{ name: "Engleski", level: "B2" }, { name: "Nemački", level: "A2" }]) : JSON.stringify([{ name: "English", level: "B2" }, { name: "German", level: "A2" }]),
     education: "Professional training",
     traits: "Reliable, precise and organized."
   };
@@ -1179,7 +1176,7 @@ function refreshPreview() {
 
 function openPreviewModal(title = "") {
   const data = getData({ includeLanguageDraft: true });
-  const lang = cvLabels[data.cvLanguage] && data.cvLanguage !== "sr" ? data.cvLanguage : "en";
+  const lang = cvLabels[data.cvLanguage] ? data.cvLanguage : "en";
   $("#previewModalTitle").textContent = title || cvLabels[lang].previewTitle;
   renderCv($("#modalCvPreview"), data, { placeholders: false });
   $("#previewModal").classList.remove("hidden");
@@ -1685,8 +1682,6 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
         }
       };
       const currentData = getData({ includeLanguageDraft: true });
-      currentData.cvLanguage = currentData.cvLanguage === "sr" ? "en" : currentData.cvLanguage;
-      currentData.appLanguage = currentData.appLanguage === "sr" ? "en" : currentData.appLanguage;
       currentData.template = $("#template")?.value || currentData.template || "classic";
 
       // V39: if the user has already started filling the CV, Example must show
@@ -1756,7 +1751,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=422").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=425").catch(() => {});
     });
   }
 
@@ -1770,17 +1765,12 @@ document.addEventListener("DOMContentLoaded", init);
    V40 PHONE WIZARD INTEGRATION
    Uses legacy storage/PDF/PayPal functions.
    ========================= */
-const V40_STEPS = [
-  "Choose Template",
-  "Personal Details",
-  "Contact Details",
-  "Profile Summary",
-  "Work Experience",
-  "Education",
-  "Skills",
-  "Languages",
-  "Final Preview"
-];
+const V40_STEPS_BY_LANG = {
+  en: ["Choose Template", "Personal Details", "Contact Details", "Profile Summary", "Work Experience", "Education", "Skills", "Languages", "Final Preview"],
+  de: ["Vorlage wählen", "Persönliche Daten", "Kontaktdaten", "Profilzusammenfassung", "Berufserfahrung", "Ausbildung", "Fähigkeiten", "Sprachen", "Finale Vorschau"],
+  sr: ["Izbor šablona", "Lični podaci", "Kontakt podaci", "Profesionalni profil", "Radno iskustvo", "Obrazovanje", "Veštine", "Jezici", "Završni pregled"]
+};
+const V40_STEPS = V40_STEPS_BY_LANG.en;
 
 const V40_I18N = {
   en: {
@@ -1789,10 +1779,16 @@ const V40_I18N = {
     livePreview: "Live CV Preview",
     saved: "All changes saved locally ✓",
     stepsLeft: "steps left",
+    screensLeft: "screens left",
     done: "Done!",
     firstLastError: "Please enter first name and last name before continuing.",
     installApp: "⬇️ Install app",
-    shareApp: "🔗 Share app"
+    shareApp: "🔗 Share app",
+    noTextYet: "No text yet.",
+    original: "Original:",
+    suggested: "Suggested improvement:",
+    keepOriginal: "Keep original",
+    useImproved: "Use improved"
   },
   de: {
     subtitle: "Erstelle in wenigen Minuten einen sauberen professionellen CV.",
@@ -1800,12 +1796,94 @@ const V40_I18N = {
     livePreview: "Live CV Vorschau",
     saved: "Alle Änderungen lokal gespeichert ✓",
     stepsLeft: "Schritte übrig",
+    screensLeft: "Ansichten übrig",
     done: "Fertig!",
     firstLastError: "Bitte Vorname und Nachname eingeben.",
     installApp: "⬇️ App installieren",
-    shareApp: "🔗 App teilen"
+    shareApp: "🔗 App teilen",
+    noTextYet: "Noch kein Text.",
+    original: "Original:",
+    suggested: "Verbesserter Vorschlag:",
+    keepOriginal: "Original behalten",
+    useImproved: "Verbesserten Text nutzen"
+  },
+  sr: {
+    subtitle: "Napravi čist profesionalni CV za nekoliko minuta.",
+    start: "Počni →",
+    livePreview: "Live pregled CV-a",
+    saved: "Sve izmene su sačuvane lokalno ✓",
+    stepsLeft: "ekrana do kraja",
+    screensLeft: "ekrana do kraja",
+    done: "Gotovo!",
+    firstLastError: "Unesite ime i prezime pre nastavka.",
+    installApp: "⬇️ Preuzmi app",
+    shareApp: "🔗 Podeli app",
+    noTextYet: "Još nema teksta.",
+    original: "Original:",
+    suggested: "Predlog poboljšanja:",
+    keepOriginal: "Zadrži original",
+    useImproved: "Koristi poboljšan tekst"
   }
 };
+
+const V40_TEXTS = {
+  en: {
+    continueBtn: "Continue →", nextBtn: "Next →", downloadPdf: "Download PDF", unlockPdf: "Unlock PDF 5€", part: "Part",
+    templateIntroTitle: "Choose your CV design", templateIntroText: "Select one example below. You can change it later.", classic: "Classic", modern: "Modern", classicDesc: "Clean and simple CV for most jobs.", modernDesc: "Modern side column layout.",
+    firstNameNote: "First add your name. The app will guide you field by field.", firstName: "First name *", lastName: "Last name *",
+    headlineNote: "Add the CV headline shown under your name.", headline: "Target position / CV headline", headlinePh: "Senior Software Engineer",
+    photoNote: "Add a clear CV photo if you want. This is optional.", photo: "Photo", addPhoto: "Add CV photo", photoHelp: "Optional. Saved only in this browser.", choosePhoto: "Choose photo", removePhoto: "Remove photo",
+    contactNote: "Add the main contact details first.", email: "Email", phone: "Phone", phonePh: "+44 7000 000000",
+    locationNote: "Now add location and an optional profile link.", city: "City", cityPh: "London", country: "Country", countryPh: "United Kingdom",
+    summary: "Professional summary", summaryPh: "Write 2–4 sentences about your experience, strengths and career goal.", summaryHelp: "Write 2–4 sentences about your experience, strengths and career goal.", improve: "✨ Improve",
+    savedJobs: "Saved jobs", jobNote1: "Add the job title and company.", jobTitle: "Job title in this job", jobTitlePh: "Software Engineer", company: "Company", companyPh: "Company",
+    jobNote2: "Add where and when you worked.", location: "Location", locationPh: "London", startDate: "Start date", endPresent: "End / Present", present: "Present",
+    jobNote3: "Add a short description, then save this job if needed.", description: "Description", descriptionPh: "Describe your responsibilities and achievements.", saveJob: "+ Save job",
+    savedEducation: "Saved education", eduNote1: "Add school and degree first.", school: "School / University", schoolPh: "University of London", degree: "Degree", degreePh: "BSc in Computer Science",
+    eduNote2: "Add location and dates.", dates: "Dates", eduNote3: "Optional: add a short note, then save education.", descriptionOptional: "Description optional", optionalDetails: "Optional details.", saveEducation: "+ Save education",
+    skill: "Skill", skillPh: "Communication", add: "+ Add", suggestSkills: "✨ Suggest skills",
+    language: "Language", languagePh: "English", level: "Level", native: "Native", addLanguage: "+ Add language",
+    atsScore: "ATS Readiness Score", ready: "Your CV is ready for PDF.", template: "Template", pdfUnlocked: "PDF download is unlocked.", why5: "Why 5€? It unlocks PDF downloads in this browser.", unlockedHelp: "Edit your CV and press Download PDF below whenever you need a new version.", unlockHelp: "This is not only one CV. After unlocking, edit and download updated PDFs on this same device/browser until browser data is cleared.", editPersonal: "Edit personal", editContact: "Edit contact", editWork: "Edit work"
+  },
+  de: {
+    continueBtn: "Weiter →", nextBtn: "Weiter →", downloadPdf: "PDF herunterladen", unlockPdf: "PDF für 5€ freischalten", part: "Teil",
+    templateIntroTitle: "Wähle dein CV-Design", templateIntroText: "Wähle unten ein Beispiel. Du kannst es später ändern.", classic: "Klassisch", modern: "Modern", classicDesc: "Sauberer und einfacher CV für die meisten Jobs.", modernDesc: "Modernes Layout mit Seitenleiste.",
+    firstNameNote: "Gib zuerst deinen Namen ein. Die App führt dich Feld für Feld.", firstName: "Vorname *", lastName: "Nachname *",
+    headlineNote: "Füge die Überschrift hinzu, die unter deinem Namen erscheint.", headline: "Zielposition / CV-Überschrift", headlinePh: "Senior Software Engineer",
+    photoNote: "Füge optional ein klares CV-Foto hinzu.", photo: "Foto", addPhoto: "CV-Foto hinzufügen", photoHelp: "Optional. Nur in diesem Browser gespeichert.", choosePhoto: "Foto auswählen", removePhoto: "Foto entfernen",
+    contactNote: "Füge zuerst die wichtigsten Kontaktdaten hinzu.", email: "E-Mail", phone: "Telefon", phonePh: "+49 170 0000000",
+    locationNote: "Füge jetzt Ort und optional einen Profil-Link hinzu.", city: "Stadt", cityPh: "Berlin", country: "Land", countryPh: "Deutschland",
+    summary: "Profilzusammenfassung", summaryPh: "Schreibe 2–4 Sätze über Erfahrung, Stärken und Karriereziel.", summaryHelp: "Schreibe 2–4 Sätze über Erfahrung, Stärken und Karriereziel.", improve: "✨ Verbessern",
+    savedJobs: "Gespeicherte Jobs", jobNote1: "Füge Jobtitel und Firma hinzu.", jobTitle: "Jobtitel in dieser Stelle", jobTitlePh: "Software Engineer", company: "Firma", companyPh: "Firma",
+    jobNote2: "Füge Ort und Zeitraum hinzu.", location: "Ort", locationPh: "Berlin", startDate: "Startdatum", endPresent: "Ende / Heute", present: "Heute",
+    jobNote3: "Füge eine kurze Beschreibung hinzu und speichere die Stelle bei Bedarf.", description: "Beschreibung", descriptionPh: "Beschreibe Aufgaben und Erfolge.", saveJob: "+ Stelle speichern",
+    savedEducation: "Gespeicherte Ausbildung", eduNote1: "Füge zuerst Schule/Uni und Abschluss hinzu.", school: "Schule / Universität", schoolPh: "Universität Berlin", degree: "Abschluss", degreePh: "BSc Informatik",
+    eduNote2: "Füge Ort und Zeitraum hinzu.", dates: "Zeitraum", eduNote3: "Optional: Füge eine kurze Notiz hinzu und speichere die Ausbildung.", descriptionOptional: "Beschreibung optional", optionalDetails: "Optionale Details.", saveEducation: "+ Ausbildung speichern",
+    skill: "Fähigkeit", skillPh: "Kommunikation", add: "+ Hinzufügen", suggestSkills: "✨ Fähigkeiten vorschlagen",
+    language: "Sprache", languagePh: "Deutsch", level: "Niveau", native: "Muttersprache", addLanguage: "+ Sprache hinzufügen",
+    atsScore: "ATS-Bereitschaft", ready: "Dein CV ist bereit für PDF.", template: "Vorlage", pdfUnlocked: "PDF-Download ist freigeschaltet.", why5: "Warum 5€? Damit wird der PDF-Download in diesem Browser freigeschaltet.", unlockedHelp: "Bearbeite deinen CV und lade bei Bedarf jederzeit ein neues PDF herunter.", unlockHelp: "Das ist nicht nur ein CV. Nach der Freischaltung kannst du auf diesem Gerät/Browser weiter bearbeiten und neue PDFs herunterladen, bis Browserdaten gelöscht werden.", editPersonal: "Persönliches bearbeiten", editContact: "Kontakt bearbeiten", editWork: "Beruf bearbeiten"
+  },
+  sr: {
+    continueBtn: "Nastavi →", nextBtn: "Dalje →", downloadPdf: "Preuzmi PDF", unlockPdf: "Otključaj PDF 5€", part: "Deo",
+    templateIntroTitle: "Izaberi izgled CV-a", templateIntroText: "Izaberi jedan primer dole. Možeš ga promeniti kasnije.", classic: "Klasičan", modern: "Moderan", classicDesc: "Čist i jednostavan CV za većinu poslova.", modernDesc: "Moderan raspored sa bočnom kolonom.",
+    firstNameNote: "Prvo dodaj ime. Aplikacija te vodi polje po polje.", firstName: "Ime *", lastName: "Prezime *",
+    headlineNote: "Dodaj naslov CV-a koji se prikazuje ispod imena.", headline: "Ciljana pozicija / naslov CV-a", headlinePh: "Senior Software Engineer",
+    photoNote: "Dodaj jasnu CV fotografiju ako želiš. Nije obavezno.", photo: "Fotografija", addPhoto: "Dodaj CV fotografiju", photoHelp: "Nije obavezno. Čuva se samo u ovom browseru.", choosePhoto: "Izaberi fotografiju", removePhoto: "Ukloni fotografiju",
+    contactNote: "Prvo dodaj glavne kontakt podatke.", email: "Email", phone: "Telefon", phonePh: "+381 60 123 4567",
+    locationNote: "Sada dodaj grad, državu i opcioni profil link.", city: "Grad", cityPh: "Beograd", country: "Država", countryPh: "Srbija",
+    summary: "Profesionalni profil", summaryPh: "Napiši 2–4 rečenice o iskustvu, veštinama i cilju karijere.", summaryHelp: "Napiši 2–4 rečenice o iskustvu, veštinama i cilju karijere.", improve: "✨ Poboljšaj",
+    savedJobs: "Sačuvani poslovi", jobNote1: "Dodaj naziv posla i firmu.", jobTitle: "Naziv posla", jobTitlePh: "Software Engineer", company: "Firma", companyPh: "Firma",
+    jobNote2: "Dodaj gde i kada si radio.", location: "Lokacija", locationPh: "Beograd", startDate: "Početak", endPresent: "Kraj / trenutno", present: "Trenutno",
+    jobNote3: "Dodaj kratak opis, zatim sačuvaj posao ako treba.", description: "Opis", descriptionPh: "Opiši zaduženja i rezultate.", saveJob: "+ Sačuvaj posao",
+    savedEducation: "Sačuvano obrazovanje", eduNote1: "Prvo dodaj školu/fakultet i smer.", school: "Škola / fakultet", schoolPh: "Univerzitet u Beogradu", degree: "Smer / zvanje", degreePh: "BSc računarstvo",
+    eduNote2: "Dodaj mesto i datume.", dates: "Datumi", eduNote3: "Opcionalno: dodaj kratku napomenu, zatim sačuvaj obrazovanje.", descriptionOptional: "Opis opcionalno", optionalDetails: "Opcioni detalji.", saveEducation: "+ Sačuvaj obrazovanje",
+    skill: "Veština", skillPh: "Komunikacija", add: "+ Dodaj", suggestSkills: "✨ Predloži veštine",
+    language: "Jezik", languagePh: "Srpski", level: "Nivo", native: "Maternji", addLanguage: "+ Dodaj jezik",
+    atsScore: "ATS spremnost", ready: "Tvoj CV je spreman za PDF.", template: "Šablon", pdfUnlocked: "PDF preuzimanje je otključano.", why5: "Zašto 5€? Otključava PDF preuzimanje u ovom browseru.", unlockedHelp: "Uredi CV i pritisni Preuzmi PDF kad god ti treba nova verzija.", unlockHelp: "Ovo nije samo jedan CV. Posle otključavanja možeš uređivati i preuzimati nove PDF verzije na istom uređaju/browseru dok se ne obrišu podaci browsera.", editPersonal: "Uredi lične podatke", editContact: "Uredi kontakt", editWork: "Uredi posao"
+  }
+};
+function v40Text(){ return V40_TEXTS[getLang()] || V40_TEXTS.en; }
+
 
 let v40Step = 1;
 let v40SubStep = 0;
@@ -1974,6 +2052,22 @@ function v40StepPagesCount(step) {
   return pages[step] || 1;
 }
 
+function v40TotalScreens() {
+  let total = 0;
+  for (let step = 1; step <= 9; step++) total += v40StepPagesCount(step);
+  return total;
+}
+
+function v40CurrentScreenIndex() {
+  let index = 0;
+  for (let step = 1; step < v40Step; step++) index += v40StepPagesCount(step);
+  return index + v40SubStep + 1;
+}
+
+function v40ClampProgressPercent(value) {
+  return Math.max(0, Math.min(100, value));
+}
+
 function v40ClampSubStep() {
   const count = v40StepPagesCount(v40Step);
   if (v40SubStep < 0) v40SubStep = 0;
@@ -1982,7 +2076,8 @@ function v40ClampSubStep() {
 
 function v40StepPartLabel() {
   const count = v40StepPagesCount(v40Step);
-  return count > 1 ? ` · Part ${v40SubStep + 1}/${count}` : "";
+  const txt = v40Text();
+  return count > 1 ? ` · ${txt.part} ${v40SubStep + 1}/${count}` : "";
 }
 
 function v40SubNote(text) {
@@ -2001,14 +2096,21 @@ function v40Render() {
   const pricePill = document.getElementById("v40PricePill");
   const saved = document.getElementById("v40SavedText");
 
-  if (stepText) stepText.textContent = `Step ${v40Step} of 9`;
-  if (stepsLeft) stepsLeft.textContent = v40Step === 9 ? t.done : `${9 - v40Step} ${t.stepsLeft}`;
-  if (progress) progress.style.width = `${(v40Step / 9) * 100}%`;
   v40ClampSubStep();
-  if (title) title.textContent = `${V40_STEPS[v40Step - 1]}${v40StepPartLabel()}`;
+  const totalScreens = v40TotalScreens();
+  const currentScreen = v40CurrentScreenIndex();
+  const screensLeft = Math.max(0, totalScreens - currentScreen);
+  const screensLeftLabel = t.screensLeft || t.stepsLeft || "screens left";
+
+  if (stepText) stepText.textContent = `Step ${v40Step}/9 · ${currentScreen}/${totalScreens}`;
+  if (stepsLeft) stepsLeft.textContent = screensLeft === 0 ? t.done : `${screensLeft} ${screensLeftLabel}`;
+  if (progress) progress.style.width = `${v40ClampProgressPercent((currentScreen / totalScreens) * 100)}%`;
+  const stepNames = V40_STEPS_BY_LANG[lang] || V40_STEPS_BY_LANG.en;
+  if (title) title.textContent = `${stepNames[v40Step - 1]}${v40StepPartLabel()}`;
   if (backBtn) backBtn.classList.toggle("hidden", v40Step === 1);
   if (nextBtn) {
-    nextBtn.textContent = v40Step === 1 ? "Continue →" : v40Step === 9 ? (isUnlocked() ? "Download PDF" : "Unlock PDF 5€") : "Next →";
+    const vt = v40Text();
+    nextBtn.textContent = v40Step === 1 ? vt.continueBtn : v40Step === 9 ? (isUnlocked() ? vt.downloadPdf : vt.unlockPdf) : vt.nextBtn;
     nextBtn.classList.toggle("v40-download-final-btn", v40Step === 9);
   }
   if (pricePill) {
@@ -2016,7 +2118,7 @@ function v40Render() {
     pricePill.classList.add("hidden");
   }
   document.querySelector(".v40-input-sheet")?.classList.toggle("v40-final-sheet", v40Step === 9);
-  document.querySelector(".v40-phone-frame")?.classList.toggle("v40-final-phone", v40Step === 9);
+  document.body.classList.toggle("v40-final-step", v40Step === 9);
   if (saved) saved.textContent = t.saved;
 
   v40ClearError();
@@ -2032,6 +2134,16 @@ function v40SetLanguage(lang) {
   document.querySelectorAll("[data-v40-i18n]").forEach(el => {
     const key = el.dataset.v40I18n;
     if (V40_I18N[lang]?.[key]) el.textContent = V40_I18N[lang][key];
+  });
+  const modalLabels = [
+    ["v40OriginalLabel", "original"],
+    ["v40SuggestedLabel", "suggested"],
+    ["v40KeepOriginalBtn", "keepOriginal"],
+    ["v40UseImprovedBtn", "useImproved"]
+  ];
+  modalLabels.forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el && V40_I18N[lang]?.[key]) el.textContent = V40_I18N[lang][key];
   });
   v40Render();
 }
@@ -2105,15 +2217,16 @@ function v40RenderPreview() {
 function v40RenderStepContent() {
   const el = document.getElementById("v40StepContent");
   if (!el) return;
+  const txt = v40Text();
 
   if (v40Step === 1) {
     el.innerHTML = `<div class="v40-template-instruction">
-      <strong>Choose your CV design</strong>
-      <span>Select one example below. You can change it later.</span>
+      <strong>${escHtml(txt.templateIntroTitle)}</strong>
+      <span>${escHtml(txt.templateIntroText)}</span>
     </div>
     <div class="v40-template-grid">
-      ${v40TemplateCard("classic", "Classic", "Clean and simple CV for most jobs.")}
-      ${v40TemplateCard("modern", "Modern", "Modern side column layout.")}
+      ${v40TemplateCard("classic", txt.classic, txt.classicDesc)}
+      ${v40TemplateCard("modern", txt.modern, txt.modernDesc)}
     </div>`;
     return;
   }
@@ -2121,28 +2234,28 @@ function v40RenderStepContent() {
   if (v40Step === 2) {
     if (v40SubStep === 0) {
       el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
-        ${v40SubNote("First add your name. The app will guide you field by field.")}
-        <label>First name *<input value="${escAttr(v40State.personal.firstName)}" oninput="v40Update('personal.firstName', this.value)" placeholder="Ana"></label>
-        <label>Last name *<input value="${escAttr(v40State.personal.lastName)}" oninput="v40Update('personal.lastName', this.value)" placeholder="Petrović"></label>
+        ${v40SubNote(txt.firstNameNote)}
+        <label>${escHtml(txt.firstName)}<input value="${escAttr(v40State.personal.firstName)}" oninput="v40Update('personal.firstName', this.value)" placeholder="Ana"></label>
+        <label>${escHtml(txt.lastName)}<input value="${escAttr(v40State.personal.lastName)}" oninput="v40Update('personal.lastName', this.value)" placeholder="Petrović"></label>
       </div>`;
       return;
     }
     if (v40SubStep === 1) {
       el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
-        ${v40SubNote("Add the CV headline shown under your name.")}
-        <label>Target position / CV headline<input value="${escAttr(v40State.personal.jobTitle)}" oninput="v40Update('personal.jobTitle', this.value)" placeholder="Senior Software Engineer"></label>
+        ${v40SubNote(txt.headlineNote)}
+        <label>${escHtml(txt.headline)}<input value="${escAttr(v40State.personal.jobTitle)}" oninput="v40Update('personal.jobTitle', this.value)" placeholder="${escAttr(txt.headlinePh)}"></label>
       </div>`;
       return;
     }
     el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
-      ${v40SubNote("Add a clear CV photo if you want. This is optional.")}
+      ${v40SubNote(txt.photoNote)}
       <div class="v40-photo-box v40-photo-box-compact v40-photo-only">
-        <div class="v40-photo-preview">${v40State.personal.photo ? `<img src="${escAttr(v40State.personal.photo)}" alt="CV photo preview">` : `<span>Photo</span>`}</div>
+        <div class="v40-photo-preview">${v40State.personal.photo ? `<img src="${escAttr(v40State.personal.photo)}" alt="CV photo preview">` : `<span>${escHtml(txt.photo)}</span>`}</div>
         <div class="v40-photo-copy">
-          <strong>Add CV photo</strong>
-          <span>Optional. Saved only in this browser.</span>
-          <label class="v40-file-btn">Choose photo<input accept="image/*" type="file" onchange="v40HandlePhotoUpload(this)"></label>
-          ${v40State.personal.photo ? `<button class="v40-remove-photo" type="button" onclick="v40RemovePhoto()">Remove photo</button>` : ``}
+          <strong>${escHtml(txt.addPhoto)}</strong>
+          <span>${escHtml(txt.photoHelp)}</span>
+          <label class="v40-file-btn">${escHtml(txt.choosePhoto)}<input accept="image/*" type="file" onchange="v40HandlePhotoUpload(this)"></label>
+          ${v40State.personal.photo ? `<button class="v40-remove-photo" type="button" onclick="v40RemovePhoto()">${escHtml(txt.removePhoto)}</button>` : ``}
         </div>
       </div>
     </div>`;
@@ -2152,106 +2265,107 @@ function v40RenderStepContent() {
   if (v40Step === 3) {
     if (v40SubStep === 0) {
       el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
-        ${v40SubNote("Add the main contact details first.")}
-        <label>Email<input value="${escAttr(v40State.contact.email)}" oninput="v40Update('contact.email', this.value)" placeholder="ana@example.com"></label>
-        <label>Phone<input value="${escAttr(v40State.contact.phone)}" oninput="v40Update('contact.phone', this.value)" placeholder="+381 60 123 4567"></label>
+        ${v40SubNote(txt.contactNote)}
+        <label>${escHtml(txt.email)}<input value="${escAttr(v40State.contact.email)}" oninput="v40Update('contact.email', this.value)" placeholder="ana@example.com"></label>
+        <label>${escHtml(txt.phone)}<input value="${escAttr(v40State.contact.phone)}" oninput="v40Update('contact.phone', this.value)" placeholder="${escAttr(txt.phonePh)}"></label>
       </div>`;
       return;
     }
     el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">
-      ${v40SubNote("Now add location and an optional profile link.")}
-      <div class="v40-form-grid v40-two-col"><label>City<input value="${escAttr(v40State.contact.city)}" oninput="v40Update('contact.city', this.value)" placeholder="Belgrade"></label><label>Country<input value="${escAttr(v40State.contact.country)}" oninput="v40Update('contact.country', this.value)" placeholder="Serbia"></label></div>
+      ${v40SubNote(txt.locationNote)}
+      <div class="v40-form-grid v40-two-col"><label>${escHtml(txt.city)}<input value="${escAttr(v40State.contact.city)}" oninput="v40Update('contact.city', this.value)" placeholder="${escAttr(txt.cityPh)}"></label><label>${escHtml(txt.country)}<input value="${escAttr(v40State.contact.country)}" oninput="v40Update('contact.country', this.value)" placeholder="${escAttr(txt.countryPh)}"></label></div>
       <label>LinkedIn<input value="${escAttr(v40State.contact.linkedin)}" oninput="v40Update('contact.linkedin', this.value)" placeholder="linkedin.com/in/your-name"></label>
     </div>`;
     return;
   }
 
   if (v40Step === 4) {
-    el.innerHTML = `<label>Professional summary<textarea maxlength="500" oninput="v40Update('summary', this.value)" placeholder="Write 2–4 sentences about your experience, strengths and career goal.">${escHtml(v40State.summary)}</textarea></label>
-      <p class="v40-helper-text">Write 2–4 sentences about your experience, strengths and career goal.</p>
-      <button class="v40-ghost-btn" style="margin-top:10px" type="button" onclick="v40OpenRewrite('summary')">✨ Improve</button>`;
+    el.innerHTML = `<label>${escHtml(txt.summary)}<textarea maxlength="500" oninput="v40Update('summary', this.value)" placeholder="${escAttr(txt.summaryPh)}">${escHtml(v40State.summary)}</textarea></label>
+      <p class="v40-helper-text">${escHtml(txt.summaryHelp)}</p>
+      <button class="v40-ghost-btn" style="margin-top:10px" type="button" onclick="v40OpenRewrite('summary')">${escHtml(txt.improve)}</button>`;
     return;
   }
 
   if (v40Step === 5) {
     const d = v40State.draftExperience || {};
-    const savedInfo = v40State.experience?.length ? `<div class="v40-mini-status">Saved jobs: ${v40State.experience.length}</div>` : ``;
+    const savedInfo = v40State.experience?.length ? `<div class="v40-mini-status">${escHtml(txt.savedJobs)}: ${v40State.experience.length}</div>` : ``;
     if (v40SubStep === 0) {
-      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Add the job title and company.")}
-        <label>Job title in this job<input value="${escAttr(d.jobTitle || "")}" oninput="v40UpdateDraft('experience','jobTitle',this.value)" placeholder="Software Engineer"></label>
-        <label>Company<input value="${escAttr(d.company || "")}" oninput="v40UpdateDraft('experience','company',this.value)" placeholder="Company"></label>
+      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote(txt.jobNote1)}
+        <label>${escHtml(txt.jobTitle)}<input value="${escAttr(d.jobTitle || "")}" oninput="v40UpdateDraft('experience','jobTitle',this.value)" placeholder="${escAttr(txt.jobTitlePh)}"></label>
+        <label>${escHtml(txt.company)}<input value="${escAttr(d.company || "")}" oninput="v40UpdateDraft('experience','company',this.value)" placeholder="${escAttr(txt.companyPh)}"></label>
       </div>`;
       return;
     }
     if (v40SubStep === 1) {
-      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Add where and when you worked.")}
-        <label>Location<input value="${escAttr(d.location || "")}" oninput="v40UpdateDraft('experience','location',this.value)" placeholder="Berlin"></label>
-        <div class="v40-form-grid v40-two-col"><label>Start date<input value="${escAttr(d.start || "")}" oninput="v40UpdateDraft('experience','start',this.value)" placeholder="MM/YYYY"></label><label>End / Present<input value="${escAttr(d.end || "")}" oninput="v40UpdateDraft('experience','end',this.value)" placeholder="Present"></label></div>
+      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote(txt.jobNote2)}
+        <label>${escHtml(txt.location)}<input value="${escAttr(d.location || "")}" oninput="v40UpdateDraft('experience','location',this.value)" placeholder="${escAttr(txt.locationPh)}"></label>
+        <div class="v40-form-grid v40-two-col"><label>${escHtml(txt.startDate)}<input value="${escAttr(d.start || "")}" oninput="v40UpdateDraft('experience','start',this.value)" placeholder="MM/YYYY"></label><label>${escHtml(txt.endPresent)}<input value="${escAttr(d.end || "")}" oninput="v40UpdateDraft('experience','end',this.value)" placeholder="${escAttr(txt.present)}"></label></div>
       </div>`;
       return;
     }
-    el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Add a short description, then save this job if needed.")}
-      <label>Description<textarea class="v40-compact-textarea" oninput="v40UpdateDraft('experience','description',this.value)" placeholder="Describe your responsibilities and achievements.">${escHtml(d.description || "")}</textarea></label>
-      <div class="v40-action-row"><button class="v40-ghost-btn" type="button" onclick="v40OpenRewrite('experience')">✨ Improve</button><button class="v40-primary-btn" type="button" onclick="v40AddExperience()">+ Save job</button></div>
+    el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote(txt.jobNote3)}
+      <label>${escHtml(txt.description)}<textarea class="v40-compact-textarea" oninput="v40UpdateDraft('experience','description',this.value)" placeholder="${escAttr(txt.descriptionPh)}">${escHtml(d.description || "")}</textarea></label>
+      <div class="v40-action-row"><button class="v40-ghost-btn" type="button" onclick="v40OpenRewrite('experience')">${escHtml(txt.improve)}</button><button class="v40-primary-btn" type="button" onclick="v40AddExperience()">${escHtml(txt.saveJob)}</button></div>
     </div>`;
     return;
   }
 
   if (v40Step === 6) {
     const d = v40State.draftEducation || {};
-    const savedInfo = v40State.education?.length ? `<div class="v40-mini-status">Saved education: ${v40State.education.length}</div>` : ``;
+    const savedInfo = v40State.education?.length ? `<div class="v40-mini-status">${escHtml(txt.savedEducation)}: ${v40State.education.length}</div>` : ``;
     if (v40SubStep === 0) {
-      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Add school and degree first.")}
-        <label>School / University<input value="${escAttr(d.school || "")}" oninput="v40UpdateDraft('education','school',this.value)" placeholder="University of Belgrade"></label>
-        <label>Degree<input value="${escAttr(d.degree || "")}" oninput="v40UpdateDraft('education','degree',this.value)" placeholder="BSc in Computer Science"></label>
+      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote(txt.eduNote1)}
+        <label>${escHtml(txt.school)}<input value="${escAttr(d.school || "")}" oninput="v40UpdateDraft('education','school',this.value)" placeholder="${escAttr(txt.schoolPh)}"></label>
+        <label>${escHtml(txt.degree)}<input value="${escAttr(d.degree || "")}" oninput="v40UpdateDraft('education','degree',this.value)" placeholder="${escAttr(txt.degreePh)}"></label>
       </div>`;
       return;
     }
     if (v40SubStep === 1) {
-      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Add location and dates.")}
-        <label>Location<input value="${escAttr(d.location || "")}" oninput="v40UpdateDraft('education','location',this.value)" placeholder="Belgrade"></label>
-        <label>Dates<input value="${escAttr(d.dates || "")}" oninput="v40UpdateDraft('education','dates',this.value)" placeholder="2014 - 2018"></label>
+      el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote(txt.eduNote2)}
+        <label>${escHtml(txt.location)}<input value="${escAttr(d.location || "")}" oninput="v40UpdateDraft('education','location',this.value)" placeholder="${escAttr(txt.locationPh)}"></label>
+        <label>${escHtml(txt.dates)}<input value="${escAttr(d.dates || "")}" oninput="v40UpdateDraft('education','dates',this.value)" placeholder="2014 - 2018"></label>
       </div>`;
       return;
     }
-    el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote("Optional: add a short note, then save education.")}
-      <label>Description optional<textarea class="v40-compact-textarea" oninput="v40UpdateDraft('education','description',this.value)" placeholder="Optional details.">${escHtml(d.description || "")}</textarea></label>
-      <button class="v40-primary-btn" type="button" onclick="v40AddEducation()">+ Save education</button>
+    el.innerHTML = `<div class="v40-form-grid v40-no-scroll-page">${savedInfo}${v40SubNote(txt.eduNote3)}
+      <label>${escHtml(txt.descriptionOptional)}<textarea class="v40-compact-textarea" oninput="v40UpdateDraft('education','description',this.value)" placeholder="${escAttr(txt.optionalDetails)}">${escHtml(d.description || "")}</textarea></label>
+      <button class="v40-primary-btn" type="button" onclick="v40AddEducation()">${escHtml(txt.saveEducation)}</button>
     </div>`;
     return;
   }
 
   if (v40Step === 7) {
     el.innerHTML = `<div class="v40-chip-list">${(v40State.skills || []).map((s,i)=>`<span class="v40-chip">${escHtml(s)} <button type="button" onclick="v40RemoveSkill(${i})">×</button></span>`).join("")}</div>
-      <div class="v40-add-row"><label>Skill<input value="${escAttr(v40State.draftSkill || "")}" oninput="v40State.draftSkill=this.value;v40CommitAndPreview();" placeholder="Communication"></label><button class="v40-ghost-btn" type="button" onclick="v40AddSkill()">+ Add</button></div>
-      <button class="v40-ghost-btn" style="margin-top:10px" type="button" onclick="v40SuggestSkills()">✨ Suggest skills</button>`;
+      <div class="v40-add-row"><label>${escHtml(txt.skill)}<input value="${escAttr(v40State.draftSkill || "")}" oninput="v40State.draftSkill=this.value;v40CommitAndPreview();" placeholder="${escAttr(txt.skillPh)}"></label><button class="v40-ghost-btn" type="button" onclick="v40AddSkill()">${escHtml(txt.add)}</button></div>
+      <button class="v40-ghost-btn" style="margin-top:10px" type="button" onclick="v40SuggestSkills()">${escHtml(txt.suggestSkills)}</button>`;
     return;
   }
 
   if (v40Step === 8) {
     el.innerHTML = `<div class="v40-chip-list">${(v40State.languages || []).map((l,i)=>`<span class="v40-chip">${escHtml(l.language)} (${escHtml(l.level)}) <button type="button" onclick="v40RemoveLanguage(${i})">×</button></span>`).join("")}</div>
-      <div class="v40-form-grid v40-two-col"><label>Language<input value="${escAttr(v40State.draftLanguage.language || "")}" oninput="v40State.draftLanguage.language=this.value;v40CommitAndPreview();" placeholder="English"></label><label>Level<select onchange="v40State.draftLanguage.level=this.value;v40CommitAndPreview();">${["A1","A2","B1","B2","C1","C2","Native"].map(level=>`<option ${v40State.draftLanguage.level===level?"selected":""}>${level}</option>`).join("")}</select></label></div>
-      <button class="v40-primary-btn" style="margin-top:10px" type="button" onclick="v40AddLanguage()">+ Add language</button>`;
+      <div class="v40-form-grid v40-two-col"><label>${escHtml(txt.language)}<input value="${escAttr(v40State.draftLanguage.language || "")}" oninput="v40State.draftLanguage.language=this.value;v40CommitAndPreview();" placeholder="${escAttr(txt.languagePh)}"></label><label>${escHtml(txt.level)}<select onchange="v40State.draftLanguage.level=this.value;v40CommitAndPreview();">${["A1","A2","B1","B2","C1","C2","Native"].map(level=>`<option value="${level}" ${v40State.draftLanguage.level===level?"selected":""}>${level === "Native" ? txt.native : level}</option>`).join("")}</select></label></div>
+      <button class="v40-primary-btn" style="margin-top:10px" type="button" onclick="v40AddLanguage()">${escHtml(txt.addLanguage)}</button>`;
     return;
   }
 
   if (v40Step === 9) {
     const score = v40AtsScore();
     const unlocked = isUnlocked();
-    const tips = score.tips && score.tips.length ? score.tips.slice(0, 2).join(" • ") : "Your CV is ready for PDF.";
+    const tips = score.tips && score.tips.length ? score.tips.slice(0, 2).join(" • ") : txt.ready;
     el.innerHTML = `<div class="v40-final-compact">
       <div class="v40-score-card v40-score-card-compact">
         <div>
-          <div class="v40-helper-text">ATS Readiness Score</div>
+          <div class="v40-helper-text">${escHtml(txt.atsScore)}</div>
           <div class="v40-score-num">${score.score}/100</div>
         </div>
-        <div class="v40-helper-text">${tips}</div>
+        <div class="v40-helper-text">${escHtml(tips)}</div>
       </div>
-      <label>Template<select onchange="v40SelectTemplate(this.value)"><option value="classic" ${v40State.selectedTemplate==="classic"?"selected":""}>Classic</option><option value="modern" ${v40State.selectedTemplate==="modern"?"selected":""}>Modern</option></select></label>
+      <label>${escHtml(txt.template)}<select onchange="v40SelectTemplate(this.value)"><option value="classic" ${v40State.selectedTemplate==="classic"?"selected":""}>${escHtml(txt.classic)}</option><option value="modern" ${v40State.selectedTemplate==="modern"?"selected":""}>${escHtml(txt.modern)}</option></select></label>
       <div class="v40-unlock-info v40-unlock-info-compact">
-        <strong>${unlocked ? "PDF download is unlocked." : "Why 5€? It unlocks PDF downloads in this browser."}</strong>
-        <span>${unlocked ? "Edit your CV and press Download PDF below whenever you need a new version." : "Not only one CV. Edit and download updated PDFs on this same browser until browser data is cleared."}</span>
+        <strong>${escHtml(unlocked ? txt.pdfUnlocked : txt.why5)}</strong>
+        <span>${escHtml(unlocked ? txt.unlockedHelp : txt.unlockHelp)}</span>
       </div>
+      <div class="v40-jump-grid v40-jump-grid-compact"><button type="button" onclick="v40Go(2)">${escHtml(txt.editPersonal)}</button><button type="button" onclick="v40Go(3)">${escHtml(txt.editContact)}</button><button type="button" onclick="v40Go(5)">${escHtml(txt.editWork)}</button></div>
     </div>`;
   }
 }
@@ -2388,11 +2502,58 @@ function v40SuggestSkills(){ const job=String(v40State.personal.jobTitle||"").to
 function v40AddLanguage(){ v40SaveCurrentLanguage(); v40Render(); }
 function v40SaveCurrentLanguage(){ const lang=String(v40State.draftLanguage.language||"").trim(); const level=v40State.draftLanguage.level||"B2"; if(!lang||!level) return; v40State.languages.push({language:lang,level}); v40State.draftLanguage={language:"",level:"B2"}; v40CommitToLegacy(); }
 function v40RemoveLanguage(i){ v40State.languages.splice(i,1); v40Render(); }
-function v40OpenRewrite(target){ v40RewriteTarget=target; let original="",suggested=""; if(target==="summary"){ original=v40State.summary||""; suggested=v40SummarySuggestion(); } if(target==="experience"){ original=v40State.draftExperience.description||""; suggested=v40ExperienceSuggestion(original); } document.getElementById("v40OriginalText").textContent=original||"No text yet."; document.getElementById("v40SuggestedText").textContent=suggested; document.getElementById("v40RewriteModal").classList.remove("hidden"); }
+function v40OpenRewrite(target){
+  const lang=getLang();
+  const t=V40_I18N[lang]||V40_I18N.en;
+  v40RewriteTarget=target;
+  let original="",suggested="";
+  if(target==="summary"){
+    original=v40State.summary||"";
+    suggested=v40SummarySuggestion(lang);
+  }
+  if(target==="experience"){
+    original=v40State.draftExperience.description||"";
+    suggested=v40ExperienceSuggestion(original, lang);
+  }
+  document.getElementById("v40OriginalText").textContent=original||t.noTextYet||"No text yet.";
+  document.getElementById("v40SuggestedText").textContent=suggested;
+  document.getElementById("v40RewriteModal").classList.remove("hidden");
+}
 function v40CloseRewrite(){ document.getElementById("v40RewriteModal").classList.add("hidden"); v40RewriteTarget=null; }
 function v40UseImproved(){ const suggestion=document.getElementById("v40SuggestedText").textContent; if(v40RewriteTarget==="summary") v40State.summary=suggestion; if(v40RewriteTarget==="experience") v40State.draftExperience.description=suggestion; v40CloseRewrite(); v40Render(); }
-function v40SummarySuggestion(){ const role=v40State.personal.jobTitle||"professional"; const skills=v40State.skills.slice(0,3).join(", ")||"communication, teamwork and problem solving"; return `Motivated ${role} with practical experience and strong skills in ${skills}. Focused on delivering reliable results, learning quickly and contributing to professional teams with responsibility and attention to detail.`; }
-function v40ExperienceSuggestion(text){ const base=String(text||"").trim(); if(!base) return "Delivered reliable results in daily operations.\nCollaborated with team members to complete tasks on time.\nMaintained quality, safety and professional standards."; return base.split("\n").filter(Boolean).map(line=>{ const clean=line.replace(/^[-•]\s*/,"").trim(); return `Improved results by ${clean.charAt(0).toLowerCase()}${clean.slice(1)}.`; }).join("\n"); }
+function v40SummarySuggestion(lang=getLang()){
+  const role=String(v40State.personal.jobTitle||"").trim();
+  const skills=v40State.skills.slice(0,3).filter(Boolean).join(", ");
+  if(lang==="de"){
+    const r=role||"Fachkraft";
+    const s=skills||"Kommunikation, Teamarbeit und Problemlösung";
+    return `Motivierte/r ${r} mit praktischer Erfahrung und starken Fähigkeiten in ${s}. Fokussiert auf zuverlässige Ergebnisse, schnelles Lernen und eine verantwortungsvolle Zusammenarbeit im professionellen Team.`;
+  }
+  if(lang==="sr"){
+    const r=role||"profesionalac";
+    const s=skills||"komunikaciji, timskom radu i rešavanju problema";
+    return `Motivisan/a ${r} sa praktičnim iskustvom i izraženim veštinama u ${s}. Usmeren/a na pouzdane rezultate, brzo učenje i odgovoran doprinos profesionalnom timu.`;
+  }
+  const r=role||"professional";
+  const s=skills||"communication, teamwork and problem solving";
+  return `Motivated ${r} with practical experience and strong skills in ${s}. Focused on delivering reliable results, learning quickly and contributing to professional teams with responsibility and attention to detail.`;
+}
+function v40ExperienceSuggestion(text, lang=getLang()){
+  const base=String(text||"").trim();
+  if(!base){
+    if(lang==="de") return "Erzielte zuverlässige Ergebnisse im täglichen Arbeitsablauf.\nArbeitete mit Teammitgliedern zusammen, um Aufgaben pünktlich abzuschließen.\nHielt Qualitäts-, Sicherheits- und professionelle Standards ein.";
+    if(lang==="sr") return "Postizao/la pouzdane rezultate u svakodnevnom radu.\nSarađivao/la sa članovima tima kako bi zadaci bili završeni na vreme.\nPoštovao/la standarde kvaliteta, bezbednosti i profesionalnog rada.";
+    return "Delivered reliable results in daily operations.\nCollaborated with team members to complete tasks on time.\nMaintained quality, safety and professional standards.";
+  }
+  return base.split("\n").filter(Boolean).map(line=>{
+    const clean=line.replace(/^[-•]\s*/,"").trim();
+    if(!clean) return "";
+    const lower=clean.charAt(0).toLowerCase()+clean.slice(1);
+    if(lang==="de") return `Verbesserte Ergebnisse durch ${lower}.`;
+    if(lang==="sr") return `Unapredio/la rezultate kroz ${lower}.`;
+    return `Improved results by ${lower}.`;
+  }).filter(Boolean).join("\n");
+}
 function v40AtsScore(){ let score=20; const tips=[]; if(v40State.personal.firstName&&v40State.personal.lastName) score+=10; else tips.push("Add full name"); if(v40State.personal.jobTitle) score+=10; else tips.push("Add job title"); if(v40State.contact.email) score+=8; else tips.push("Add email"); if(v40State.contact.phone) score+=7; else tips.push("Add phone"); if(v40State.summary.length>80) score+=15; else tips.push("Add stronger summary"); if(v40State.experience.length) score+=15; else tips.push("Add work experience"); if(v40State.skills.length>=4) score+=10; else tips.push("Add more skills"); if(v40State.languages.length) score+=5; const combined=[v40State.summary,...v40State.experience.map(e=>e.description||"")].join(" "); if(/\d+|%/.test(combined)) score+=5; else tips.push("Consider adding measurable results"); return {score:Math.min(score,100),tips:tips.length?tips.slice(0,3):["Good structure","Strong keywords","Ready for PDF"]}; }
 
 function v40FitPreview(){

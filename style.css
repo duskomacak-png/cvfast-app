@@ -3746,86 +3746,69 @@ body.v40-active .app > footer { display:none !important; }
 }
 
 
-/* V40.22: real laptop final fix.
-   Root cause: #v40StepContent could not shrink, so it pushed Back/Unlock below the phone frame.
-   Fix: final content may shrink/clip minor text, and the bottom action row always remains visible. */
-.v40-final-sheet{
-  display:flex !important;
-  flex-direction:column !important;
-  overflow:hidden !important;
+/* V40.22: REAL laptop final-button fix.
+   Problem was not PayPal/PDF logic. On laptop-height screens the final action
+   stayed inside the glass card but the preview + compact final card could take
+   enough vertical space that the bottom action was clipped. When JS marks body
+   as v40-final-step, we intentionally reserve space for Back + Unlock/Download. */
+body.v40-active.v40-final-step .v40-cv-preview-wrap{
+  flex:0 0 clamp(115px, 18dvh, 175px) !important;
+  min-height:115px !important;
+  padding:7px !important;
 }
-.v40-final-sheet #v40StepContent{
-  flex:0 1 auto !important;
+body.v40-active.v40-final-step .v40-input-sheet{
+  flex:1 1 auto !important;
   min-height:0 !important;
+  padding:9px !important;
   overflow:hidden !important;
 }
-.v40-final-sheet .v40-final-compact{
+body.v40-active.v40-final-step #v40StepContent{
+  flex:0 0 auto !important;
+  overflow:visible !important;
+  min-height:0 !important;
+}
+body.v40-active.v40-final-step .v40-final-compact{
   gap:6px !important;
 }
-.v40-final-sheet .v40-step-nav-bottom{
+body.v40-active.v40-final-step .v40-step-nav-bottom{
   flex:0 0 auto !important;
+  display:grid !important;
+  grid-template-columns:.72fr 1.28fr !important;
+  gap:8px !important;
   margin-top:7px !important;
   padding-top:7px !important;
-  display:grid !important;
-  grid-template-columns:.82fr 1.18fr !important;
+  position:relative !important;
+  z-index:60 !important;
 }
-.v40-final-sheet .v40-step-nav-bottom .v40-small-btn{
-  min-height:38px !important;
+body.v40-active.v40-final-step .v40-step-nav-bottom .v40-small-btn{
+  min-height:40px !important;
+  padding:8px 10px !important;
+  border-radius:13px !important;
+  font-size:12.5px !important;
+  line-height:1.1 !important;
 }
-.v40-final-sheet .v40-saved{
-  display:none !important;
+body.v40-active.v40-final-step .v40-small-btn.v40-download-final-btn{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  background:linear-gradient(135deg,#16a34a,#22c55e) !important;
+  border-color:rgba(134,239,172,.75) !important;
+  color:#fff !important;
 }
-.v40-final-sheet .v40-jump-grid-compact{
-  display:none !important;
-}
-.v40-final-sheet .v40-unlock-info-compact{
-  padding:8px 9px !important;
-}
-.v40-final-sheet .v40-unlock-info-compact strong{
-  font-size:11.5px !important;
-  line-height:1.15 !important;
-}
-.v40-final-sheet .v40-unlock-info-compact span{
-  font-size:10px !important;
-  line-height:1.14 !important;
-}
-.v40-final-sheet .v40-score-card-compact{
-  padding:8px 9px !important;
-  grid-template-columns:82px 1fr !important;
-  gap:8px !important;
-}
-.v40-final-sheet .v40-score-card-compact .v40-score-num{
-  font-size:20px !important;
-}
-.v40-final-sheet label{
-  gap:3px !important;
-}
-.v40-final-sheet select{
-  min-height:36px !important;
-  padding:7px 9px !important;
-}
-@media(min-width:521px){
-  .v40-final-phone .v40-cv-preview-wrap{
-    flex-basis:clamp(105px, 17dvh, 155px) !important;
-    min-height:105px !important;
-    padding:7px !important;
+@media(min-width:521px) and (max-height:760px){
+  body.v40-active.v40-final-step .v40-cv-preview-wrap{
+    flex-basis:95px !important;
+    min-height:95px !important;
   }
-  .v40-final-phone .v40-phone-screen{
-    gap:6px !important;
-  }
-  .v40-final-phone .v40-input-sheet{
-    padding:8px !important;
-  }
-}
-@media(min-width:521px) and (max-height:820px){
-  .v40-final-sheet .v40-score-card-compact{
+  body.v40-active.v40-final-step .v40-score-card-compact{
     display:none !important;
   }
-  .v40-final-sheet .v40-unlock-info-compact span{
+  body.v40-active.v40-final-step .v40-unlock-info-compact span,
+  body.v40-active.v40-final-step .v40-jump-grid-compact{
     display:none !important;
   }
-  .v40-final-phone .v40-cv-preview-wrap{
-    flex-basis:clamp(90px, 15dvh, 130px) !important;
-    min-height:90px !important;
+  body.v40-active.v40-final-step .v40-step-nav-bottom .v40-small-btn{
+    min-height:38px !important;
+    font-size:12px !important;
   }
 }
