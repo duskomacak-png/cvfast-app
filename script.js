@@ -1751,7 +1751,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=425").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=426").catch(() => {});
     });
   }
 
@@ -1828,7 +1828,7 @@ const V40_I18N = {
 
 const V40_TEXTS = {
   en: {
-    continueBtn: "Continue →", nextBtn: "Next →", downloadPdf: "Download PDF", unlockPdf: "Unlock PDF 5€", part: "Part",
+    continueBtn: "Continue →", nextBtn: "Next →", downloadPdf: "Download PDF", unlockPdf: "Unlock PDF 5€", part: "Part", stepLabel: "Step", backBtn: "‹ Back", edit: "Edit", delete: "Delete", entry: "Entry",
     templateIntroTitle: "Choose your CV design", templateIntroText: "Select one example below. You can change it later.", classic: "Classic", modern: "Modern", classicDesc: "Clean and simple CV for most jobs.", modernDesc: "Modern side column layout.",
     firstNameNote: "First add your name. The app will guide you field by field.", firstName: "First name *", lastName: "Last name *",
     headlineNote: "Add the CV headline shown under your name.", headline: "Target position / CV headline", headlinePh: "Senior Software Engineer",
@@ -1843,10 +1843,10 @@ const V40_TEXTS = {
     eduNote2: "Add location and dates.", dates: "Dates", eduNote3: "Optional: add a short note, then save education.", descriptionOptional: "Description optional", optionalDetails: "Optional details.", saveEducation: "+ Save education",
     skill: "Skill", skillPh: "Communication", add: "+ Add", suggestSkills: "✨ Suggest skills",
     language: "Language", languagePh: "English", level: "Level", native: "Native", addLanguage: "+ Add language",
-    atsScore: "ATS Readiness Score", ready: "Your CV is ready for PDF.", template: "Template", pdfUnlocked: "PDF download is unlocked.", why5: "Why 5€? It unlocks PDF downloads in this browser.", unlockedHelp: "Edit your CV and press Download PDF below whenever you need a new version.", unlockHelp: "This is not only one CV. After unlocking, edit and download updated PDFs on this same device/browser until browser data is cleared.", editPersonal: "Edit personal", editContact: "Edit contact", editWork: "Edit work"
+    atsScore: "ATS Readiness Score", ready: "Your CV is ready for PDF.", template: "Template", pdfUnlocked: "PDF download is unlocked.", why5: "Why 5€? It unlocks PDF downloads in this browser.", unlockedHelp: "Edit your CV and press Download PDF below whenever you need a new version.", unlockHelp: "This is not only one CV. After unlocking, edit and download updated PDFs on this same device/browser until browser data is cleared.", editPersonal: "Edit personal", editContact: "Edit contact", editWork: "Edit work", tipFullName: "Add full name", tipJobTitle: "Add job title", tipEmail: "Add email", tipPhone: "Add phone", tipSummary: "Add stronger summary", tipExperience: "Add work experience", tipSkills: "Add more skills", tipResults: "Consider adding measurable results", goodStructure: "Good structure", strongKeywords: "Strong keywords", readyPdf: "Ready for PDF"
   },
   de: {
-    continueBtn: "Weiter →", nextBtn: "Weiter →", downloadPdf: "PDF herunterladen", unlockPdf: "PDF für 5€ freischalten", part: "Teil",
+    continueBtn: "Weiter →", nextBtn: "Weiter →", downloadPdf: "PDF herunterladen", unlockPdf: "PDF für 5€ freischalten", part: "Teil", stepLabel: "Schritt", backBtn: "‹ Zurück", edit: "Bearbeiten", delete: "Löschen", entry: "Eintrag",
     templateIntroTitle: "Wähle dein CV-Design", templateIntroText: "Wähle unten ein Beispiel. Du kannst es später ändern.", classic: "Klassisch", modern: "Modern", classicDesc: "Sauberer und einfacher CV für die meisten Jobs.", modernDesc: "Modernes Layout mit Seitenleiste.",
     firstNameNote: "Gib zuerst deinen Namen ein. Die App führt dich Feld für Feld.", firstName: "Vorname *", lastName: "Nachname *",
     headlineNote: "Füge die Überschrift hinzu, die unter deinem Namen erscheint.", headline: "Zielposition / CV-Überschrift", headlinePh: "Senior Software Engineer",
@@ -1861,10 +1861,10 @@ const V40_TEXTS = {
     eduNote2: "Füge Ort und Zeitraum hinzu.", dates: "Zeitraum", eduNote3: "Optional: Füge eine kurze Notiz hinzu und speichere die Ausbildung.", descriptionOptional: "Beschreibung optional", optionalDetails: "Optionale Details.", saveEducation: "+ Ausbildung speichern",
     skill: "Fähigkeit", skillPh: "Kommunikation", add: "+ Hinzufügen", suggestSkills: "✨ Fähigkeiten vorschlagen",
     language: "Sprache", languagePh: "Deutsch", level: "Niveau", native: "Muttersprache", addLanguage: "+ Sprache hinzufügen",
-    atsScore: "ATS-Bereitschaft", ready: "Dein CV ist bereit für PDF.", template: "Vorlage", pdfUnlocked: "PDF-Download ist freigeschaltet.", why5: "Warum 5€? Damit wird der PDF-Download in diesem Browser freigeschaltet.", unlockedHelp: "Bearbeite deinen CV und lade bei Bedarf jederzeit ein neues PDF herunter.", unlockHelp: "Das ist nicht nur ein CV. Nach der Freischaltung kannst du auf diesem Gerät/Browser weiter bearbeiten und neue PDFs herunterladen, bis Browserdaten gelöscht werden.", editPersonal: "Persönliches bearbeiten", editContact: "Kontakt bearbeiten", editWork: "Beruf bearbeiten"
+    atsScore: "ATS-Bereitschaft", ready: "Dein CV ist bereit für PDF.", template: "Vorlage", pdfUnlocked: "PDF-Download ist freigeschaltet.", why5: "Warum 5€? Damit wird der PDF-Download in diesem Browser freigeschaltet.", unlockedHelp: "Bearbeite deinen CV und lade bei Bedarf jederzeit ein neues PDF herunter.", unlockHelp: "Das ist nicht nur ein CV. Nach der Freischaltung kannst du auf diesem Gerät/Browser weiter bearbeiten und neue PDFs herunterladen, bis Browserdaten gelöscht werden.", editPersonal: "Persönliches bearbeiten", editContact: "Kontakt bearbeiten", editWork: "Beruf bearbeiten", tipFullName: "Vollständigen Namen hinzufügen", tipJobTitle: "Jobtitel hinzufügen", tipEmail: "E-Mail hinzufügen", tipPhone: "Telefon hinzufügen", tipSummary: "Profil stärken", tipExperience: "Berufserfahrung hinzufügen", tipSkills: "Mehr Fähigkeiten hinzufügen", tipResults: "Messbare Ergebnisse ergänzen", goodStructure: "Gute Struktur", strongKeywords: "Starke Schlüsselwörter", readyPdf: "Bereit für PDF"
   },
   sr: {
-    continueBtn: "Nastavi →", nextBtn: "Dalje →", downloadPdf: "Preuzmi PDF", unlockPdf: "Otključaj PDF 5€", part: "Deo",
+    continueBtn: "Nastavi →", nextBtn: "Dalje →", downloadPdf: "Preuzmi PDF", unlockPdf: "Otključaj PDF 5€", part: "Deo", stepLabel: "Korak", backBtn: "‹ Nazad", edit: "Uredi", delete: "Obriši", entry: "Unos",
     templateIntroTitle: "Izaberi izgled CV-a", templateIntroText: "Izaberi jedan primer dole. Možeš ga promeniti kasnije.", classic: "Klasičan", modern: "Moderan", classicDesc: "Čist i jednostavan CV za većinu poslova.", modernDesc: "Moderan raspored sa bočnom kolonom.",
     firstNameNote: "Prvo dodaj ime. Aplikacija te vodi polje po polje.", firstName: "Ime *", lastName: "Prezime *",
     headlineNote: "Dodaj naslov CV-a koji se prikazuje ispod imena.", headline: "Ciljana pozicija / naslov CV-a", headlinePh: "Senior Software Engineer",
@@ -1879,7 +1879,7 @@ const V40_TEXTS = {
     eduNote2: "Dodaj mesto i datume.", dates: "Datumi", eduNote3: "Opcionalno: dodaj kratku napomenu, zatim sačuvaj obrazovanje.", descriptionOptional: "Opis opcionalno", optionalDetails: "Opcioni detalji.", saveEducation: "+ Sačuvaj obrazovanje",
     skill: "Veština", skillPh: "Komunikacija", add: "+ Dodaj", suggestSkills: "✨ Predloži veštine",
     language: "Jezik", languagePh: "Srpski", level: "Nivo", native: "Maternji", addLanguage: "+ Dodaj jezik",
-    atsScore: "ATS spremnost", ready: "Tvoj CV je spreman za PDF.", template: "Šablon", pdfUnlocked: "PDF preuzimanje je otključano.", why5: "Zašto 5€? Otključava PDF preuzimanje u ovom browseru.", unlockedHelp: "Uredi CV i pritisni Preuzmi PDF kad god ti treba nova verzija.", unlockHelp: "Ovo nije samo jedan CV. Posle otključavanja možeš uređivati i preuzimati nove PDF verzije na istom uređaju/browseru dok se ne obrišu podaci browsera.", editPersonal: "Uredi lične podatke", editContact: "Uredi kontakt", editWork: "Uredi posao"
+    atsScore: "ATS spremnost", ready: "Tvoj CV je spreman za PDF.", template: "Šablon", pdfUnlocked: "PDF preuzimanje je otključano.", why5: "Zašto 5€? Otključava PDF preuzimanje u ovom browseru.", unlockedHelp: "Uredi CV i pritisni Preuzmi PDF kad god ti treba nova verzija.", unlockHelp: "Ovo nije samo jedan CV. Posle otključavanja možeš uređivati i preuzimati nove PDF verzije na istom uređaju/browseru dok se ne obrišu podaci browsera.", editPersonal: "Uredi lične podatke", editContact: "Uredi kontakt", editWork: "Uredi posao", tipFullName: "Dodaj ime i prezime", tipJobTitle: "Dodaj naziv pozicije", tipEmail: "Dodaj email", tipPhone: "Dodaj telefon", tipSummary: "Dodaj jači profil", tipExperience: "Dodaj radno iskustvo", tipSkills: "Dodaj više veština", tipResults: "Dodaj merljive rezultate", goodStructure: "Dobra struktura", strongKeywords: "Dobre ključne reči", readyPdf: "Spremno za PDF"
   }
 };
 function v40Text(){ return V40_TEXTS[getLang()] || V40_TEXTS.en; }
@@ -2102,12 +2102,12 @@ function v40Render() {
   const screensLeft = Math.max(0, totalScreens - currentScreen);
   const screensLeftLabel = t.screensLeft || t.stepsLeft || "screens left";
 
-  if (stepText) stepText.textContent = `Step ${v40Step}/9 · ${currentScreen}/${totalScreens}`;
+  if (stepText) stepText.textContent = `${(v40Text().stepLabel || "Step")} ${v40Step}/9 · ${currentScreen}/${totalScreens}`;
   if (stepsLeft) stepsLeft.textContent = screensLeft === 0 ? t.done : `${screensLeft} ${screensLeftLabel}`;
   if (progress) progress.style.width = `${v40ClampProgressPercent((currentScreen / totalScreens) * 100)}%`;
   const stepNames = V40_STEPS_BY_LANG[lang] || V40_STEPS_BY_LANG.en;
   if (title) title.textContent = `${stepNames[v40Step - 1]}${v40StepPartLabel()}`;
-  if (backBtn) backBtn.classList.toggle("hidden", v40Step === 1);
+  if (backBtn) { backBtn.textContent = v40Text().backBtn || "‹ Back"; backBtn.classList.toggle("hidden", v40Step === 1); }
   if (nextBtn) {
     const vt = v40Text();
     nextBtn.textContent = v40Step === 1 ? vt.continueBtn : v40Step === 9 ? (isUnlocked() ? vt.downloadPdf : vt.unlockPdf) : vt.nextBtn;
@@ -2149,21 +2149,55 @@ function v40SetLanguage(lang) {
 }
 
 function v40PreviewSampleData() {
+  const lang = getLang();
+  const samples = {
+    en: {
+      fullName: "Alex Miller",
+      jobTitle: "Operations Specialist",
+      location: "Berlin, Germany",
+      profile: "Reliable professional with practical field experience, strong attention to detail and a clear, professional CV layout.",
+      experience: "Operations Specialist — Sample Company\n2021 - Present\nDaily operations, planning and quality support.",
+      education: "Technical Course — Berlin\n2020\nProfessional training and certification.",
+      skills: "Planning\nTeamwork\nDocumentation",
+      languages: [{ name: "English", level: "B2" }, { name: "German", level: "A2" }]
+    },
+    de: {
+      fullName: "Alex Miller",
+      jobTitle: "Operations-Spezialist",
+      location: "Berlin, Deutschland",
+      profile: "Zuverlässige Fachkraft mit praktischer Erfahrung, hoher Genauigkeit und einem klaren, professionellen CV-Aufbau.",
+      experience: "Operations-Spezialist — Beispiel Firma\n2021 - Heute\nTägliche Abläufe, Planung und Qualitätsunterstützung.",
+      education: "Technischer Kurs — Berlin\n2020\nBerufliche Weiterbildung und Zertifikat.",
+      skills: "Planung\nTeamarbeit\nDokumentation",
+      languages: [{ name: "Deutsch", level: "B2" }, { name: "Englisch", level: "A2" }]
+    },
+    sr: {
+      fullName: "Aleksandar Petrović",
+      jobTitle: "Operativni radnik",
+      location: "Beograd, Srbija",
+      profile: "Pouzdan profesionalac sa praktičnim iskustvom, pažnjom na detalje i jasnim profesionalnim CV prikazom.",
+      experience: "Operativni radnik — Primer firma\n2021 - Trenutno\nSvakodnevni rad, planiranje i podrška kvalitetu.",
+      education: "Stručni kurs — Beograd\n2020\nProfesionalna obuka i sertifikat.",
+      skills: "Planiranje\nTimski rad\nDokumentacija",
+      languages: [{ name: "Srpski", level: "Native" }, { name: "Nemački", level: "A2" }]
+    }
+  };
+  const sample = samples[lang] || samples.en;
   return {
     ...emptyData(),
-    appLanguage: getLang(),
-    cvLanguage: getLang(),
+    appLanguage: lang,
+    cvLanguage: lang,
     template: v40TemplateToLegacy(v40State?.selectedTemplate || "classic"),
-    fullName: "Alex Miller",
-    jobTitle: "Operations Specialist",
-    phone: "+49 151 000000",
+    fullName: sample.fullName,
+    jobTitle: sample.jobTitle,
+    phone: lang === "sr" ? "+381 60 000000" : "+49 151 000000",
     email: "alex@example.com",
-    location: "Berlin, Germany",
-    profile: "Reliable professional with practical field experience, strong attention to detail and a clear, professional CV layout.",
-    experience: "Operations Specialist — Sample Company\n2021 - Present\nDaily operations, planning and quality support.",
-    education: "Technical Course — Berlin\n2020\nProfessional training and certification.",
-    skills: "Planning\nTeamwork\nDocumentation",
-    languages: JSON.stringify([{ name: "English", level: "B2" }, { name: "German", level: "A2" }]),
+    location: sample.location,
+    profile: sample.profile,
+    experience: sample.experience,
+    education: sample.education,
+    skills: sample.skills,
+    languages: JSON.stringify(sample.languages),
     photo: ""
   };
 }
@@ -2208,7 +2242,8 @@ function v40RenderPreview() {
   const target = document.getElementById("v40CvPreview");
   if (!target) return;
   const payload = v40PreviewPayload();
-  document.getElementById("v40TemplateLabel").textContent = v40State.selectedTemplate === "modern" ? "Modern" : "Classic";
+  const tplTxt = v40Text();
+  document.getElementById("v40TemplateLabel").textContent = v40State.selectedTemplate === "modern" ? tplTxt.modern : tplTxt.classic;
   renderCv(target, payload.data, { placeholders: false });
   target.classList.toggle("v40-preview-sample", !payload.hasData);
   v40FitPreview();
@@ -2435,6 +2470,16 @@ function v40AttachFieldGuide() {
     .filter((field) => field.offsetParent !== null && !field.readOnly);
 
   fields.forEach((field, index) => {
+    field.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      const nextField = fields[index + 1];
+      if (nextField) {
+        try { nextField.focus({ preventScroll: true }); } catch (err) { nextField.focus(); }
+      } else {
+        v40Next();
+      }
+    });
     field.addEventListener("blur", () => {
       const value = String(field.value || "").trim();
       if (!value) return;
@@ -2493,12 +2538,46 @@ function v40AddExperience(){ v40SaveCurrentExperience(); v40SubStep=0; v40Render
 function v40SaveCurrentExperience(){ const d=v40State.draftExperience||{}; if(!Object.values(d).some(v=>String(v||"").trim())) return; v40State.experience.push({...d}); v40State.draftExperience={}; v40CommitToLegacy(); }
 function v40AddEducation(){ v40SaveCurrentEducation(); v40SubStep=0; v40Render(); }
 function v40SaveCurrentEducation(){ const d=v40State.draftEducation||{}; if(!Object.values(d).some(v=>String(v||"").trim())) return; v40State.education.push({...d}); v40State.draftEducation={}; v40CommitToLegacy(); }
-function v40RenderEntries(items,type){ if(!items?.length) return ""; return `<div class="v40-entry-list">${items.map((item,i)=>`<div class="v40-entry-card"><div class="v40-entry-card-top"><div><strong>${escHtml(item.jobTitle||item.degree||item.school||"Entry")}</strong><small>${escHtml(item.company||item.school||"")}</small></div><div class="v40-entry-actions"><button class="v40-tiny-btn" type="button" onclick="v40EditEntry('${type}',${i})">Edit</button><button class="v40-tiny-btn danger" type="button" onclick="v40DeleteEntry('${type}',${i})">Delete</button></div></div></div>`).join("")}</div>`; }
+function v40RenderEntries(items,type){
+  if(!items?.length) return "";
+  const txt = v40Text();
+  return `<div class="v40-entry-list">${items.map((item,i)=>`<div class="v40-entry-card"><div class="v40-entry-card-top"><div><strong>${escHtml(item.jobTitle||item.degree||item.school||txt.entry||"Entry")}</strong><small>${escHtml(item.company||item.school||"")}</small></div><div class="v40-entry-actions"><button class="v40-tiny-btn" type="button" onclick="v40EditEntry('${type}',${i})">${escHtml(txt.edit||"Edit")}</button><button class="v40-tiny-btn danger" type="button" onclick="v40DeleteEntry('${type}',${i})">${escHtml(txt.delete||"Delete")}</button></div></div></div>`).join("")}</div>`;
+}
 function v40EditEntry(type,index){ if(type==="experience"){ v40State.draftExperience={...v40State.experience[index]}; v40State.experience.splice(index,1); v40SubStep=0; } if(type==="education"){ v40State.draftEducation={...v40State.education[index]}; v40State.education.splice(index,1); v40SubStep=0; } v40Render(); }
 function v40DeleteEntry(type,index){ if(type==="experience") v40State.experience.splice(index,1); if(type==="education") v40State.education.splice(index,1); v40Render(); }
 function v40AddSkill(){ const skill=String(v40State.draftSkill||"").trim(); if(!skill) return; if(!v40State.skills.includes(skill)) v40State.skills.push(skill); v40State.draftSkill=""; v40Render(); }
 function v40RemoveSkill(i){ v40State.skills.splice(i,1); v40Render(); }
-function v40SuggestSkills(){ const job=String(v40State.personal.jobTitle||"").toLowerCase(); let suggestions=["Communication","Teamwork","Time Management","Problem Solving"]; if(job.includes("software")||job.includes("developer")) suggestions=["JavaScript","React","Git","REST APIs","Problem Solving"]; if(job.includes("driver")) suggestions=["Route Planning","Safe Driving","Vehicle Inspection","Time Management"]; if(job.includes("excavator")||job.includes("operator")) suggestions=["Excavator Operation","Site Preparation","Safety Procedures","Equipment Maintenance"]; suggestions.forEach(s=>{ if(!v40State.skills.includes(s)) v40State.skills.push(s); }); v40Render(); }
+function v40SuggestSkills(){
+  const lang = getLang();
+  const job = String(v40State.personal.jobTitle || "").toLowerCase();
+  const sets = {
+    en: {
+      base: ["Communication", "Teamwork", "Time Management", "Problem Solving"],
+      software: ["JavaScript", "React", "Git", "REST APIs", "Problem Solving"],
+      driver: ["Route Planning", "Safe Driving", "Vehicle Inspection", "Time Management"],
+      operator: ["Excavator Operation", "Site Preparation", "Safety Procedures", "Equipment Maintenance"]
+    },
+    de: {
+      base: ["Kommunikation", "Teamarbeit", "Zeitmanagement", "Problemlösung"],
+      software: ["JavaScript", "React", "Git", "REST APIs", "Problemlösung"],
+      driver: ["Routenplanung", "Sicheres Fahren", "Fahrzeugkontrolle", "Zeitmanagement"],
+      operator: ["Baggerbedienung", "Baustellenvorbereitung", "Sicherheitsverfahren", "Maschinenwartung"]
+    },
+    sr: {
+      base: ["Komunikacija", "Timski rad", "Upravljanje vremenom", "Rešavanje problema"],
+      software: ["JavaScript", "React", "Git", "REST API", "Rešavanje problema"],
+      driver: ["Planiranje ruta", "Bezbedna vožnja", "Kontrola vozila", "Upravljanje vremenom"],
+      operator: ["Rad na bageru", "Priprema gradilišta", "Bezbednosne procedure", "Održavanje opreme"]
+    }
+  };
+  const dict = sets[lang] || sets.en;
+  let suggestions = dict.base;
+  if(job.includes("software") || job.includes("developer") || job.includes("program") || job.includes("entwickler")) suggestions = dict.software;
+  if(job.includes("driver") || job.includes("voza") || job.includes("fahrer")) suggestions = dict.driver;
+  if(job.includes("excavator") || job.includes("operator") || job.includes("bager") || job.includes("bagger")) suggestions = dict.operator;
+  suggestions.forEach(skill => { if(!v40State.skills.includes(skill)) v40State.skills.push(skill); });
+  v40Render();
+}
 function v40AddLanguage(){ v40SaveCurrentLanguage(); v40Render(); }
 function v40SaveCurrentLanguage(){ const lang=String(v40State.draftLanguage.language||"").trim(); const level=v40State.draftLanguage.level||"B2"; if(!lang||!level) return; v40State.languages.push({language:lang,level}); v40State.draftLanguage={language:"",level:"B2"}; v40CommitToLegacy(); }
 function v40RemoveLanguage(i){ v40State.languages.splice(i,1); v40Render(); }
@@ -2554,7 +2633,22 @@ function v40ExperienceSuggestion(text, lang=getLang()){
     return `Improved results by ${lower}.`;
   }).filter(Boolean).join("\n");
 }
-function v40AtsScore(){ let score=20; const tips=[]; if(v40State.personal.firstName&&v40State.personal.lastName) score+=10; else tips.push("Add full name"); if(v40State.personal.jobTitle) score+=10; else tips.push("Add job title"); if(v40State.contact.email) score+=8; else tips.push("Add email"); if(v40State.contact.phone) score+=7; else tips.push("Add phone"); if(v40State.summary.length>80) score+=15; else tips.push("Add stronger summary"); if(v40State.experience.length) score+=15; else tips.push("Add work experience"); if(v40State.skills.length>=4) score+=10; else tips.push("Add more skills"); if(v40State.languages.length) score+=5; const combined=[v40State.summary,...v40State.experience.map(e=>e.description||"")].join(" "); if(/\d+|%/.test(combined)) score+=5; else tips.push("Consider adding measurable results"); return {score:Math.min(score,100),tips:tips.length?tips.slice(0,3):["Good structure","Strong keywords","Ready for PDF"]}; }
+function v40AtsScore(){
+  const txt = v40Text();
+  let score = 20;
+  const tips = [];
+  if(v40State.personal.firstName && v40State.personal.lastName) score += 10; else tips.push(txt.tipFullName);
+  if(v40State.personal.jobTitle) score += 10; else tips.push(txt.tipJobTitle);
+  if(v40State.contact.email) score += 8; else tips.push(txt.tipEmail);
+  if(v40State.contact.phone) score += 7; else tips.push(txt.tipPhone);
+  if(v40State.summary.length > 80) score += 15; else tips.push(txt.tipSummary);
+  if(v40State.experience.length) score += 15; else tips.push(txt.tipExperience);
+  if(v40State.skills.length >= 4) score += 10; else tips.push(txt.tipSkills);
+  if(v40State.languages.length) score += 5;
+  const combined = [v40State.summary, ...v40State.experience.map(e => e.description || "")].join(" ");
+  if(/\d+|%/.test(combined)) score += 5; else tips.push(txt.tipResults);
+  return { score: Math.min(score,100), tips: tips.length ? tips.slice(0,3) : [txt.goodStructure, txt.strongKeywords, txt.readyPdf] };
+}
 
 function v40FitPreview(){
   const wrap=document.querySelector(".v40-cv-preview-wrap");
