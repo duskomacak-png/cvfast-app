@@ -3741,7 +3741,9 @@ body.v40-active .app > footer { display:none !important; }
     display:none !important;
   }
   .v40-final-sheet .v40-unlock-info-compact span{
-    display:none !important;
+    display:block !important;
+    font-size:8.8px !important;
+    line-height:1.15 !important;
   }
 }
 
@@ -3803,9 +3805,13 @@ body.v40-active.v40-final-step .v40-small-btn.v40-download-final-btn{
   body.v40-active.v40-final-step .v40-score-card-compact{
     display:none !important;
   }
-  body.v40-active.v40-final-step .v40-unlock-info-compact span,
   body.v40-active.v40-final-step .v40-jump-grid-compact{
     display:none !important;
+  }
+  body.v40-active.v40-final-step .v40-unlock-info-compact span{
+    display:block !important;
+    font-size:9.8px !important;
+    line-height:1.25 !important;
   }
   body.v40-active.v40-final-step .v40-step-nav-bottom .v40-small-btn{
     min-height:38px !important;
