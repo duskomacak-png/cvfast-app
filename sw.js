@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v431-skills-live-preview-audit";
+const CACHE_NAME = "cvfast-v432-education-dedupe-live-audit";
 
 const APP_SHELL = [
   "/",

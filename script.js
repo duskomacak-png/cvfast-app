@@ -1761,7 +1761,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=431").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=432").catch(() => {});
     });
   }
 
@@ -2009,6 +2009,49 @@ function legacyToV40State(data) {
   };
 }
 
+function v40CleanEntry(entry) {
+  const clean = {};
+  Object.entries(entry || {}).forEach(([key, value]) => {
+    clean[key] = String(value || "").trim();
+  });
+  return clean;
+}
+
+function v40EntryHasValue(entry) {
+  return Object.values(entry || {}).some(value => String(value || "").trim());
+}
+
+function v40EntryKey(entry, fields) {
+  const clean = v40CleanEntry(entry);
+  return fields.map(field => (clean[field] || "").toLowerCase().replace(/\s+/g, " ")).join("|");
+}
+
+function v40DedupeEntries(items, fields) {
+  const seen = new Set();
+  const result = [];
+  (items || []).forEach(item => {
+    const clean = v40CleanEntry(item);
+    if (!v40EntryHasValue(clean)) return;
+    const key = v40EntryKey(clean, fields);
+    if (seen.has(key)) return;
+    seen.add(key);
+    result.push(clean);
+  });
+  return result;
+}
+
+function v40MergeDraftEntry(items, draft, fields) {
+  return v40DedupeEntries([...(items || []), draft || {}], fields);
+}
+
+function v40ExperienceItemsForOutput() {
+  return v40MergeDraftEntry(v40State?.experience || [], v40State?.draftExperience || {}, ["jobTitle", "company", "location", "start", "end", "description"]);
+}
+
+function v40EducationItemsForOutput() {
+  return v40MergeDraftEntry(v40State?.education || [], v40State?.draftEducation || {}, ["school", "degree", "location", "dates", "description"]);
+}
+
 function v40ExperienceToText(items) {
   return (items || []).map(e => {
     const head = [e.jobTitle, e.company, e.location].filter(Boolean).join(" — ");
@@ -2043,6 +2086,10 @@ function v40SaveCurrentSkill() {
 }
 
 function v40ToLegacyData() {
+  if (v40State) {
+    v40State.experience = v40DedupeEntries(v40State.experience || [], ["jobTitle", "company", "location", "start", "end", "description"]);
+    v40State.education = v40DedupeEntries(v40State.education || [], ["school", "degree", "location", "dates", "description"]);
+  }
   const existing = loadStored();
   const first = v40State.personal.firstName.trim();
   const last = v40State.personal.lastName.trim();
@@ -2064,8 +2111,8 @@ function v40ToLegacyData() {
     location,
     photo: v40State.personal.photo || existing.photo || "",
     profile: v40State.summary || "",
-    experience: v40ExperienceToText(v40State.experience),
-    education: v40EducationToText(v40State.education),
+    experience: v40ExperienceToText(v40ExperienceItemsForOutput()),
+    education: v40EducationToText(v40EducationItemsForOutput()),
     skills: v40SkillsForOutput().join("\n"),
     languages: JSON.stringify(languageRows),
     v40State: JSON.parse(JSON.stringify(v40State))
@@ -2648,9 +2695,21 @@ function v40Go(step){ v40Step=step; v40SubStep=0; v40Render(); v40ScrollStepToTo
 function v40ShowError(msg){ const box=document.getElementById("v40ErrorBox"); if(box){ box.textContent=msg; box.classList.remove("hidden"); } }
 function v40ClearError(){ const box=document.getElementById("v40ErrorBox"); if(box){ box.textContent=""; box.classList.add("hidden"); } }
 function v40AddExperience(){ v40SaveCurrentExperience(); v40SubStep=0; v40Render(); }
-function v40SaveCurrentExperience(){ const d=v40State.draftExperience||{}; if(!Object.values(d).some(v=>String(v||"").trim())) return; v40State.experience.push({...d}); v40State.draftExperience={}; v40CommitToLegacy(); }
+function v40SaveCurrentExperience(){
+  const d = v40CleanEntry(v40State.draftExperience || {});
+  if(!v40EntryHasValue(d)) return;
+  v40State.experience = v40DedupeEntries([...(v40State.experience || []), d], ["jobTitle", "company", "location", "start", "end", "description"]);
+  v40State.draftExperience = {};
+  v40CommitToLegacy();
+}
 function v40AddEducation(){ v40SaveCurrentEducation(); v40SubStep=0; v40Render(); }
-function v40SaveCurrentEducation(){ const d=v40State.draftEducation||{}; if(!Object.values(d).some(v=>String(v||"").trim())) return; v40State.education.push({...d}); v40State.draftEducation={}; v40CommitToLegacy(); }
+function v40SaveCurrentEducation(){
+  const d = v40CleanEntry(v40State.draftEducation || {});
+  if(!v40EntryHasValue(d)) return;
+  v40State.education = v40DedupeEntries([...(v40State.education || []), d], ["school", "degree", "location", "dates", "description"]);
+  v40State.draftEducation = {};
+  v40CommitToLegacy();
+}
 function v40RenderEntries(items,type){
   if(!items?.length) return "";
   const txt = v40Text();
@@ -2781,7 +2840,7 @@ function v40AtsScore(){
   if(v40State.contact.email) score += 8; else tips.push(txt.tipEmail);
   if(v40State.contact.phone) score += 7; else tips.push(txt.tipPhone);
   if(v40State.summary.length > 80) score += 15; else tips.push(txt.tipSummary);
-  if(v40State.experience.length) score += 15; else tips.push(txt.tipExperience);
+  if(v40ExperienceItemsForOutput().length) score += 15; else tips.push(txt.tipExperience);
   if(v40SkillsForOutput().length >= 4) score += 10; else tips.push(txt.tipSkills);
   if(v40State.languages.length) score += 5;
   const combined = [v40State.summary, ...v40State.experience.map(e => e.description || "")].join(" ");
