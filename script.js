@@ -1761,7 +1761,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=444").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=443").catch(() => {});
     });
   }
 
@@ -2948,8 +2948,7 @@ function v40CloseFullPreview(){
 }
 
 function v40SetBuilderMode(isBuilder){
-  // V40.44: builder is fixed to viewport and activates localized red underglow safely.
-  document.body?.classList.toggle("v40-active", !!isBuilder);
+  // V40.40: welcome/language page can scroll; builder is fixed to the viewport.
   document.body?.classList.toggle("v40-builder-open", !!isBuilder);
   document.documentElement?.classList.toggle("v40-builder-open", !!isBuilder);
 }
