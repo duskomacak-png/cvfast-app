@@ -1050,9 +1050,9 @@ function renderCv(target, data, options = {}) {
       ${photoHtml}
       ${nameTitleHtml}
       ${contactHtml}
+      ${section(L.skills, tagsHtml(skillItems))}
       ${section(L.languages, listHtml(languageItems))}
       ${section(L.machines, listHtml(machineItems))}
-      ${section(L.skills, tagsHtml(skillItems))}
       ${section(L.education, paragraphHtml(d.education))}
     `.trim();
 
@@ -1761,7 +1761,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=432").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=433").catch(() => {});
     });
   }
 
@@ -2040,6 +2040,38 @@ function v40DedupeEntries(items, fields) {
   return result;
 }
 
+function v40NormalizeRepeatingEntries(items, fields) {
+  // V40.33: protect the CV from duplicate blocks caused by Back/Next testing.
+  // The wizard has one active draft plus saved entries. A saved entry must never be
+  // duplicated when the user goes back to correct text.
+  return v40DedupeEntries(items || [], fields);
+}
+
+function v40PrepareDraftForEdit(type) {
+  // When a user goes BACK into Work/Education, show the last saved entry in fields
+  // instead of empty placeholders. This lets them correct the same entry and avoids
+  // creating a second identical block in the live CV preview.
+  if (!v40State) return;
+  if (type === "experience") {
+    const draft = v40CleanEntry(v40State.draftExperience || {});
+    if (v40EntryHasValue(draft)) return;
+    const list = v40NormalizeRepeatingEntries(v40State.experience || [], ["jobTitle", "company", "location", "start", "end", "description"]);
+    if (!list.length) return;
+    v40State.draftExperience = { ...list[list.length - 1] };
+    v40State.experience = list.slice(0, -1);
+    v40CommitToLegacy();
+  }
+  if (type === "education") {
+    const draft = v40CleanEntry(v40State.draftEducation || {});
+    if (v40EntryHasValue(draft)) return;
+    const list = v40NormalizeRepeatingEntries(v40State.education || [], ["school", "degree", "location", "dates", "description"]);
+    if (!list.length) return;
+    v40State.draftEducation = { ...list[list.length - 1] };
+    v40State.education = list.slice(0, -1);
+    v40CommitToLegacy();
+  }
+}
+
 function v40MergeDraftEntry(items, draft, fields) {
   return v40DedupeEntries([...(items || []), draft || {}], fields);
 }
@@ -2087,8 +2119,8 @@ function v40SaveCurrentSkill() {
 
 function v40ToLegacyData() {
   if (v40State) {
-    v40State.experience = v40DedupeEntries(v40State.experience || [], ["jobTitle", "company", "location", "start", "end", "description"]);
-    v40State.education = v40DedupeEntries(v40State.education || [], ["school", "degree", "location", "dates", "description"]);
+    v40State.experience = v40NormalizeRepeatingEntries(v40State.experience || [], ["jobTitle", "company", "location", "start", "end", "description"]);
+    v40State.education = v40NormalizeRepeatingEntries(v40State.education || [], ["school", "degree", "location", "dates", "description"]);
   }
   const existing = loadStored();
   const first = v40State.personal.firstName.trim();
@@ -2679,14 +2711,20 @@ function v40Next(){
   if(v40Step<9){ v40Step++; v40SubStep=0; v40Render(); v40ScrollStepToTop(); }
 }
 function v40Prev(){
-  if (v40SubStep > 0) { v40SubStep--; v40Render(); v40ScrollStepToTop(); return; }
+  // V40.33: Back must be an edit/navigation action, not a hidden "save again" action.
+  // Saving while going back caused empty fields and duplicate live-preview blocks.
+  v40CommitToLegacy();
+  if (v40SubStep > 0) {
+    v40SubStep--;
+    v40Render();
+    v40ScrollStepToTop();
+    return;
+  }
   if(v40Step>1){
-    if(v40Step===5) v40SaveCurrentExperience();
-    if(v40Step===6) v40SaveCurrentEducation();
-    if(v40Step===7) v40SaveCurrentSkill();
-    if(v40Step===8) v40SaveCurrentLanguage();
     v40Step--;
     v40SubStep = v40StepPagesCount(v40Step) - 1;
+    if (v40Step === 5) v40PrepareDraftForEdit("experience");
+    if (v40Step === 6) v40PrepareDraftForEdit("education");
     v40Render();
     v40ScrollStepToTop();
   }
