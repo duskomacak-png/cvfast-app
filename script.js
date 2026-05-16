@@ -1132,7 +1132,7 @@ function templateSampleData(template, lang = "en") {
     cvLanguage: ["en","de","sr"].includes(lang) ? lang : "en",
     template: template || "classic",
     fullName: "Alex Miller",
-    jobTitle: lang === "de" ? "Operations Specialist" : lang === "sr" ? "Specijalista operacija" : "Operations Specialist",
+    jobTitle: lang === "de" ? "Operations-Spezialist" : lang === "sr" ? "Operativni radnik" : "Operations Specialist",
     email: "alex@example.com",
     phone: "+49 151 000000",
     location: "Berlin, Germany",
@@ -1758,7 +1758,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=427").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=428").catch(() => {});
     });
   }
 
@@ -1883,15 +1883,15 @@ const V40_TEXTS = {
     continueBtn: "Weiter →", nextBtn: "Weiter →", downloadPdf: "PDF herunterladen", unlockPdf: "PDF für 5€ freischalten", part: "Teil", stepLabel: "Schritt", backBtn: "‹ Zurück", edit: "Bearbeiten", delete: "Löschen", entry: "Eintrag",
     templateIntroTitle: "Wähle dein CV-Design", templateIntroText: "Wähle unten ein Beispiel. Du kannst es später ändern.", classic: "Klassisch", modern: "Modern", classicDesc: "Sauberer und einfacher CV für die meisten Jobs.", modernDesc: "Modernes Layout mit Seitenleiste.",
     firstNameNote: "Gib zuerst deinen Namen ein. Die App führt dich Feld für Feld.", firstName: "Vorname *", lastName: "Nachname *",
-    headlineNote: "Füge die Überschrift hinzu, die unter deinem Namen erscheint.", headline: "Zielposition / CV-Überschrift", headlinePh: "Senior Software Engineer",
+    headlineNote: "Füge die Überschrift hinzu, die unter deinem Namen erscheint.", headline: "Zielposition / CV-Überschrift", headlinePh: "Softwareentwickler",
     photoNote: "Füge optional ein klares CV-Foto hinzu.", photo: "Foto", addPhoto: "CV-Foto hinzufügen", photoHelp: "Optional. Nur in diesem Browser gespeichert.", choosePhoto: "Foto auswählen", removePhoto: "Foto entfernen",
     contactNote: "Füge zuerst die wichtigsten Kontaktdaten hinzu.", email: "E-Mail", phone: "Telefon", phonePh: "+49 170 0000000",
     locationNote: "Füge jetzt Ort und optional einen Profil-Link hinzu.", city: "Stadt", cityPh: "Berlin", country: "Land", countryPh: "Deutschland",
     summary: "Profilzusammenfassung", summaryPh: "Schreibe 2–4 Sätze über Erfahrung, Stärken und Karriereziel.", summaryHelp: "Schreibe 2–4 Sätze über Erfahrung, Stärken und Karriereziel.", improve: "✨ Verbessern",
-    savedJobs: "Gespeicherte Jobs", jobNote1: "Füge Jobtitel und Firma hinzu.", jobTitle: "Jobtitel in dieser Stelle", jobTitlePh: "Software Engineer", company: "Firma", companyPh: "Firma",
+    savedJobs: "Gespeicherte Jobs", jobNote1: "Füge Jobtitel und Firma hinzu.", jobTitle: "Jobtitel in dieser Stelle", jobTitlePh: "Softwareentwickler", company: "Firma", companyPh: "Firma",
     jobNote2: "Füge Ort und Zeitraum hinzu.", location: "Ort", locationPh: "Berlin", startDate: "Startdatum", endPresent: "Ende / Heute", present: "Heute",
     jobNote3: "Füge eine kurze Beschreibung hinzu und speichere die Stelle bei Bedarf.", description: "Beschreibung", descriptionPh: "Beschreibe Aufgaben und Erfolge.", saveJob: "+ Stelle speichern",
-    savedEducation: "Gespeicherte Ausbildung", eduNote1: "Füge zuerst Schule/Uni und Abschluss hinzu.", school: "Schule / Universität", schoolPh: "Universität Berlin", degree: "Abschluss", degreePh: "BSc Informatik",
+    savedEducation: "Gespeicherte Ausbildung", eduNote1: "Füge zuerst Schule/Uni und Abschluss hinzu.", school: "Schule / Universität", schoolPh: "Universität Berlin", degree: "Abschluss", degreePh: "Bachelor Informatik",
     eduNote2: "Füge Ort und Zeitraum hinzu.", dates: "Zeitraum", eduNote3: "Optional: Füge eine kurze Notiz hinzu und speichere die Ausbildung.", descriptionOptional: "Beschreibung optional", optionalDetails: "Optionale Details.", saveEducation: "+ Ausbildung speichern",
     skill: "Fähigkeit", skillPh: "Kommunikation", add: "+ Hinzufügen", suggestSkills: "✨ Fähigkeiten vorschlagen",
     language: "Sprache", languagePh: "Deutsch", level: "Niveau", native: "Muttersprache", addLanguage: "+ Sprache hinzufügen",
@@ -1901,15 +1901,15 @@ const V40_TEXTS = {
     continueBtn: "Nastavi →", nextBtn: "Dalje →", downloadPdf: "Preuzmi PDF", unlockPdf: "Otključaj PDF 5€", part: "Deo", stepLabel: "Korak", backBtn: "‹ Nazad", edit: "Uredi", delete: "Obriši", entry: "Unos",
     templateIntroTitle: "Izaberi izgled CV-a", templateIntroText: "Izaberi jedan primer dole. Možeš ga promeniti kasnije.", classic: "Klasičan", modern: "Moderan", classicDesc: "Čist i jednostavan CV za većinu poslova.", modernDesc: "Moderan raspored sa bočnom kolonom.",
     firstNameNote: "Prvo dodaj ime. Aplikacija te vodi polje po polje.", firstName: "Ime *", lastName: "Prezime *",
-    headlineNote: "Dodaj naslov CV-a koji se prikazuje ispod imena.", headline: "Ciljana pozicija / naslov CV-a", headlinePh: "Senior Software Engineer",
+    headlineNote: "Dodaj naslov CV-a koji se prikazuje ispod imena.", headline: "Ciljana pozicija / naslov CV-a", headlinePh: "Rukovalac građevinskih mašina",
     photoNote: "Dodaj jasnu CV fotografiju ako želiš. Nije obavezno.", photo: "Fotografija", addPhoto: "Dodaj CV fotografiju", photoHelp: "Nije obavezno. Čuva se samo u ovom browseru.", choosePhoto: "Izaberi fotografiju", removePhoto: "Ukloni fotografiju",
     contactNote: "Prvo dodaj glavne kontakt podatke.", email: "Email", phone: "Telefon", phonePh: "+381 60 123 4567",
     locationNote: "Sada dodaj grad, državu i opcioni profil link.", city: "Grad", cityPh: "Beograd", country: "Država", countryPh: "Srbija",
     summary: "Profesionalni profil", summaryPh: "Napiši 2–4 rečenice o iskustvu, veštinama i cilju karijere.", summaryHelp: "Napiši 2–4 rečenice o iskustvu, veštinama i cilju karijere.", improve: "✨ Poboljšaj",
-    savedJobs: "Sačuvani poslovi", jobNote1: "Dodaj naziv posla i firmu.", jobTitle: "Naziv posla", jobTitlePh: "Software Engineer", company: "Firma", companyPh: "Firma",
+    savedJobs: "Sačuvani poslovi", jobNote1: "Dodaj naziv posla i firmu.", jobTitle: "Naziv posla", jobTitlePh: "Rukovalac građevinskih mašina", company: "Firma", companyPh: "Firma",
     jobNote2: "Dodaj gde i kada si radio.", location: "Lokacija", locationPh: "Beograd", startDate: "Početak", endPresent: "Kraj / trenutno", present: "Trenutno",
     jobNote3: "Dodaj kratak opis, zatim sačuvaj posao ako treba.", description: "Opis", descriptionPh: "Opiši zaduženja i rezultate.", saveJob: "+ Sačuvaj posao",
-    savedEducation: "Sačuvano obrazovanje", eduNote1: "Prvo dodaj školu/fakultet i smer.", school: "Škola / fakultet", schoolPh: "Univerzitet u Beogradu", degree: "Smer / zvanje", degreePh: "BSc računarstvo",
+    savedEducation: "Sačuvano obrazovanje", eduNote1: "Prvo dodaj školu/fakultet i smer.", school: "Škola / fakultet", schoolPh: "Univerzitet u Beogradu", degree: "Smer / zvanje", degreePh: "Tehničar / diplomirani ekonomista / kurs",
     eduNote2: "Dodaj mesto i datume.", dates: "Datumi", eduNote3: "Opcionalno: dodaj kratku napomenu, zatim sačuvaj obrazovanje.", descriptionOptional: "Opis opcionalno", optionalDetails: "Opcioni detalji.", saveEducation: "+ Sačuvaj obrazovanje",
     skill: "Veština", skillPh: "Komunikacija", add: "+ Dodaj", suggestSkills: "✨ Predloži veštine",
     language: "Jezik", languagePh: "Srpski", level: "Nivo", native: "Maternji", addLanguage: "+ Dodaj jezik",
@@ -2188,8 +2188,30 @@ function v40ApplyStaticLocalizedText(lang = getLang()) {
   if (p) p.textContent = t.responsibility;
 }
 
+function v40TranslateOldPlaceholderValues(lang) {
+  if (!v40State) return;
+  const map = {
+    en: { headline: "Senior Software Engineer", job: "Software Engineer", city: "London", country: "United Kingdom" },
+    de: { headline: "Softwareentwickler", job: "Softwareentwickler", city: "Berlin", country: "Deutschland" },
+    sr: { headline: "Rukovalac građevinskih mašina", job: "Rukovalac građevinskih mašina", city: "Beograd", country: "Srbija" }
+  };
+  const knownHeadlines = new Set(Object.values(map).map(x => x.headline).concat(["Senior Software Engineer", "Software Engineer", "Heavy Equipment Operator", "Baumaschinenführer"]).map(x => x.toLowerCase()));
+  const knownJobs = new Set(Object.values(map).map(x => x.job).concat(["Senior Software Engineer", "Software Engineer", "Heavy Equipment Operator", "Baumaschinenführer"]).map(x => x.toLowerCase()));
+  const knownCities = new Set(Object.values(map).map(x => x.city).concat(["City", "Stadt"]).map(x => x.toLowerCase()));
+  const knownCountries = new Set(Object.values(map).map(x => x.country).concat(["Country", "Land"]).map(x => x.toLowerCase()));
+  const target = map[lang] || map.en;
+  const p = v40State.personal || {};
+  const c = v40State.contact || {};
+  if (p.jobTitle && knownHeadlines.has(String(p.jobTitle).trim().toLowerCase())) p.jobTitle = target.headline;
+  const d = v40State.draftExperience || {};
+  if (d.jobTitle && knownJobs.has(String(d.jobTitle).trim().toLowerCase())) d.jobTitle = target.job;
+  if (c.city && knownCities.has(String(c.city).trim().toLowerCase())) c.city = target.city;
+  if (c.country && knownCountries.has(String(c.country).trim().toLowerCase())) c.country = target.country;
+}
+
 function v40SetLanguage(lang) {
   applyLanguage(lang);
+  v40TranslateOldPlaceholderValues(lang);
   document.querySelectorAll(".v40-lang-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.v40Lang === lang));
   document.querySelectorAll("[data-v40-i18n]").forEach(el => {
     const key = el.dataset.v40I18n;
@@ -2468,9 +2490,15 @@ function v40RenderStepContent() {
 
 function v40TemplateCard(id, name, desc) {
   const isModern = id === "modern";
+  const lang = getLang();
+  const sample = {
+    en: { initials: "AM", name: "Alex Miller", title: "Operations Specialist" },
+    de: { initials: "MM", name: "Max Mustermann", title: "Operations-Spezialist" },
+    sr: { initials: "AP", name: "Aleksandar Petrović", title: "Operativni radnik" }
+  }[lang] || { initials: "AM", name: "Alex Miller", title: "Operations Specialist" };
   const preview = isModern
-    ? `<div class="v40-template-preview v40-template-preview-modern"><div class="v40-template-side"><div class="v40-template-avatar">AM</div><span></span><span></span><span class="short"></span><div class="v40-template-side-title"></div><span></span><span class="short"></span></div><div class="v40-template-main"><div class="v40-template-head"><b>Alex Miller</b><small>Operations Specialist</small></div><div class="v40-template-line blue long"></div><div class="v40-template-line"></div><div class="v40-template-line"></div><div class="v40-template-line short"></div><div class="v40-template-line"></div></div></div>`
-    : `<div class="v40-template-preview v40-template-preview-classic"><div class="v40-template-head"><b>Alex Miller</b><small>Operations Specialist</small></div><div class="v40-template-line blue long"></div><div class="v40-template-line"></div><div class="v40-template-line"></div><div class="v40-template-line short"></div><div class="v40-template-line"></div><div class="v40-template-chip-row"><i></i><i></i><i></i></div></div>`;
+    ? `<div class="v40-template-preview v40-template-preview-modern"><div class="v40-template-side"><div class="v40-template-avatar">${escHtml(sample.initials)}</div><span></span><span></span><span class="short"></span><div class="v40-template-side-title"></div><span></span><span class="short"></span></div><div class="v40-template-main"><div class="v40-template-head"><b>${escHtml(sample.name)}</b><small>${escHtml(sample.title)}</small></div><div class="v40-template-line blue long"></div><div class="v40-template-line"></div><div class="v40-template-line"></div><div class="v40-template-line short"></div><div class="v40-template-line"></div></div></div>`
+    : `<div class="v40-template-preview v40-template-preview-classic"><div class="v40-template-head"><b>${escHtml(sample.name)}</b><small>${escHtml(sample.title)}</small></div><div class="v40-template-line blue long"></div><div class="v40-template-line"></div><div class="v40-template-line"></div><div class="v40-template-line short"></div><div class="v40-template-line"></div><div class="v40-template-chip-row"><i></i><i></i><i></i></div></div>`;
   return `<div class="v40-template-card ${v40State.selectedTemplate===id?"active":""}" onclick="v40SelectTemplate('${id}')">${preview}<div><div class="v40-template-name">${name}</div><div class="v40-template-desc">${desc}</div></div></div>`;
 }
 
