@@ -4000,3 +4000,108 @@ body.v40-active.v40-builder-open .v40-stage{
   overflow:hidden !important;
   align-items:center !important;
 }
+
+
+/* V40.41: mobile final-step PayPal visibility fix.
+   Problem: on small phones the Install/Share/footer area consumed vertical space,
+   so the final Unlock/Download button could sit below the visible area.
+   Safe CSS-only change: no PayPal URL, unlock key, PDF, PWA, language or data logic touched. */
+@media(max-width:520px){
+  body.v40-active.v40-builder-open.v40-final-step .v40-app-actions,
+  body.v40-active.v40-builder-open.v40-final-step .v40-legal-under-app{
+    display:none !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-device-stack{
+    grid-template-rows:minmax(0,1fr) !important;
+    height:100svh !important;
+    min-height:100svh !important;
+    max-height:100svh !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-phone-frame{
+    height:100svh !important;
+    min-height:0 !important;
+    max-height:100svh !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-phone-screen{
+    gap:8px !important;
+    padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px)) !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-topbar{
+    height:40px !important;
+    padding-top:0 !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-preview-label{
+    font-size:11px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-cv-preview-wrap{
+    flex:0 0 86px !important;
+    min-height:86px !important;
+    padding:6px !important;
+    border-radius:18px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-input-sheet{
+    flex:1 1 auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    padding:9px !important;
+    overflow:hidden !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step #v40StepContent{
+    flex:1 1 auto !important;
+    min-height:0 !important;
+    overflow:auto !important;
+    overflow-x:hidden !important;
+    padding-bottom:8px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-progress-row{
+    font-size:12px !important;
+    margin-bottom:6px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-progress-track{
+    height:6px !important;
+    margin-bottom:8px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-sheet-head{
+    margin-bottom:8px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-sheet-title{
+    font-size:18px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-final-compact{
+    gap:6px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-score-card-compact{
+    grid-template-columns:78px 1fr !important;
+    gap:8px !important;
+    padding:8px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-score-card-compact .v40-score-num{
+    font-size:21px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-unlock-info-compact{
+    padding:8px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-unlock-info-compact strong{
+    font-size:12px !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-unlock-info-compact span{
+    font-size:10px !important;
+    line-height:1.2 !important;
+    display:-webkit-box !important;
+    -webkit-line-clamp:3 !important;
+    -webkit-box-orient:vertical !important;
+    overflow:hidden !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-jump-grid-compact{
+    display:none !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-step-nav-bottom{
+    margin-top:6px !important;
+    padding-top:6px !important;
+    grid-template-columns:.72fr 1.28fr !important;
+  }
+  body.v40-active.v40-builder-open.v40-final-step .v40-step-nav-bottom .v40-small-btn{
+    min-height:42px !important;
+    font-size:13px !important;
+  }
+}
