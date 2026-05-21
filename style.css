@@ -5403,3 +5403,35 @@ body.v40-active.v40-builder-open.v40-final-step .v40-one-unlock-btn{
     overflow-x:hidden !important;
   }
 }
+
+
+/* V40.28 / v467: live CV preview word-wrap fix.
+   Long words/emails/random typed text must not push the CV wider than the preview panel. */
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap *{
+  box-sizing:border-box !important;
+}
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page *{
+  max-width:100% !important;
+}
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-text,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-list,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-list li,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-contact,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-contact li,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-section,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap p,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap div,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap span{
+  overflow-wrap:anywhere !important;
+  word-break:break-word !important;
+}
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-main{
+  overflow:hidden !important;
+}
+html body.v40-active.v40-builder-open .v40-input-sheet textarea,
+html body.v40-active.v40-builder-open .v40-input-sheet input{
+  overflow-wrap:anywhere !important;
+  word-break:break-word !important;
+}

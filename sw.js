@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v466-live-preview-vertical-scroll";
+const CACHE_NAME = "cvfast-v467-live-preview-word-wrap";
 
 const APP_SHELL = [
   "/",
