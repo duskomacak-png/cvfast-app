@@ -4737,3 +4737,93 @@ body.v40-active.v40-builder-open.v40-final-step .v40-one-unlock-btn{
     padding: 12px !important;
   }
 }
+
+
+/* V40.20: desktop/laptop split layout only.
+   Left = form steps, right = live CV preview. Mobile remains unchanged. */
+@media (min-width: 900px){
+  body.v40-active .v40-stage{
+    align-items:center !important;
+    justify-content:center !important;
+    padding:18px 28px 24px !important;
+  }
+  body.v40-active .v40-device-stack{
+    width:min(1040px, calc(100vw - 70px)) !important;
+    max-width:1040px !important;
+    gap:12px !important;
+  }
+  body.v40-active .v40-phone-frame{
+    width:100% !important;
+    height:min(760px, calc(100dvh - 118px)) !important;
+    min-height:620px !important;
+    border-width:8px !important;
+    border-radius:42px !important;
+  }
+  body.v40-active .v40-phone-screen{
+    display:grid !important;
+    grid-template-columns:minmax(350px, .92fr) minmax(430px, 1.08fr) !important;
+    grid-template-rows:46px auto minmax(0, 1fr) !important;
+    grid-template-areas:
+      "top top"
+      "form label"
+      "form preview" !important;
+    column-gap:16px !important;
+    row-gap:8px !important;
+    padding:18px 18px 14px !important;
+    overflow:hidden !important;
+  }
+  body.v40-active .v40-topbar{
+    grid-area:top !important;
+    height:46px !important;
+    min-height:46px !important;
+  }
+  body.v40-active .v40-preview-label{
+    grid-area:label !important;
+    min-height:20px !important;
+    align-self:end !important;
+  }
+  body.v40-active .v40-cv-preview-wrap{
+    grid-area:preview !important;
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    flex:auto !important;
+    padding:14px !important;
+    overflow:auto !important;
+    border-radius:24px !important;
+  }
+  body.v40-active .v40-input-sheet{
+    grid-area:form !important;
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    max-height:none !important;
+    overflow:auto !important;
+    padding:15px !important;
+    border-radius:28px !important;
+  }
+  body.v40-active .v40-cv-preview-wrap .cv-page{
+    width:100% !important;
+    min-height:100% !important;
+  }
+  body.v40-active .v40-template-grid{
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+  }
+  body.v40-active .v40-app-actions,
+  body.v40-active .v40-legal-under-app{
+    width:min(1040px, calc(100vw - 70px)) !important;
+    max-width:1040px !important;
+  }
+}
+
+/* Medium laptops/tablets: keep split, but slightly narrower. */
+@media (min-width: 700px) and (max-width: 899px){
+  body.v40-active .v40-device-stack{
+    width:min(760px, calc(100vw - 34px)) !important;
+    max-width:760px !important;
+  }
+  body.v40-active .v40-phone-frame{
+    width:100% !important;
+  }
+}
