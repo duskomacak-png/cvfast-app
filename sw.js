@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v462-monitor-fit";
+const CACHE_NAME = "cvfast-v463-builder-only-monitor";
 
 const APP_SHELL = [
   "/",
