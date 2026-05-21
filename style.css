@@ -4127,6 +4127,16 @@ body.v40-active.v40-builder-open .v40-stage{
   --cv-tag-text: #111827;
 }
 
+.cv-page.softgray {
+  --cv-accent: #9aa0a6;
+  --cv-title: #4b5563;
+  --cv-icon-bg: #ffffff;
+  --cv-icon-border: #d1d5db;
+  --cv-tag-bg: #ffffff;
+  --cv-tag-border: #d1d5db;
+  --cv-tag-text: #374151;
+}
+
 .cv-page.softgreen {
   --cv-accent: #4f8f74;
   --cv-title: #2f6f5b;
@@ -4240,6 +4250,8 @@ body.v40-active.v40-builder-open .v40-stage{
 
 .v40-template-preview-mono .blue,
 .v40-template-preview-mono .v40-template-line.blue { background:#111827 !important; }
+.v40-template-preview-softgray .blue,
+.v40-template-preview-softgray .v40-template-line.blue { background:#9aa0a6 !important; }
 .v40-template-preview-softgreen .blue,
 .v40-template-preview-softgreen .v40-template-line.blue { background:#4f8f74 !important; }
 .v40-template-preview-softpink .blue,
@@ -4249,6 +4261,7 @@ body.v40-active.v40-builder-open .v40-stage{
 .v40-template-preview-beige .blue,
 .v40-template-preview-beige .v40-template-line.blue { background:#a57a45 !important; }
 .v40-template-preview-mono { background:#fff !important; }
+.v40-template-preview-softgray { background:linear-gradient(180deg,#ffffff,#f3f4f6) !important; }
 .v40-template-preview-softgreen { background:linear-gradient(180deg,#fbfffd,#edf7f2) !important; }
 .v40-template-preview-softpink { background:linear-gradient(180deg,#fffafd,#fff1f5) !important; }
 .v40-template-preview-softblue { background:linear-gradient(180deg,#fbfdff,#eef5ff) !important; }
@@ -4278,6 +4291,59 @@ body.v40-active.v40-builder-open .v40-stage{
 .cv-page.mono:not(.sidebar) .cv-photo,
 .cv-page.mono:not(.sidebar) .cv-photo-placeholder {
   background:#fff !important;
+}
+
+
+.cv-page.sidebar.softgray {
+  --cv-accent:#9aa0a6;
+  --cv-title:#4b5563;
+  --cv-icon-bg:#ffffff;
+  --cv-icon-border:#d1d5db;
+  --cv-tag-bg:#ffffff;
+  --cv-tag-border:#d1d5db;
+  --cv-tag-text:#374151;
+}
+.cv-page.sidebar.softgray .cv-side {
+  background:linear-gradient(180deg,#f7f7f7 0%,#ececec 100%) !important;
+}
+.cv-page.sidebar.softgray .cv-divider,
+.cv-page.sidebar.softgray .cv-section-title::after {
+  background:#d1d5db !important;
+}
+.cv-page.sidebar.softgray .cv-main {
+  background:#ffffff !important;
+}
+.cv-page.sidebar.softgray .cv-main .cv-section-title h2,
+.cv-page.sidebar.softgray .cv-main .cv-section-icon {
+  color:#4b5563 !important;
+}
+.cv-page.sidebar.softgray .cv-photo,
+.cv-page.sidebar.softgray .cv-photo-placeholder {
+  background:#ffffff !important;
+  color:#374151 !important;
+  border-color:#d1d5db !important;
+  box-shadow:none;
+}
+.cv-page.sidebar.softgray .cv-side .cv-name,
+.cv-page.sidebar.softgray .cv-side .cv-title,
+.cv-page.sidebar.softgray .cv-side .cv-list,
+.cv-page.sidebar.softgray .cv-side .cv-text,
+.cv-page.sidebar.softgray .cv-side .cv-contact,
+.cv-page.sidebar.softgray .cv-side .cv-section-title h2 {
+  color:#374151 !important;
+}
+.cv-page.sidebar.softgray .cv-side .cv-section-icon {
+  color:#6b7280 !important;
+  background:#ffffff !important;
+  border-color:#d1d5db !important;
+}
+.cv-page.sidebar.softgray .cv-side .cv-contact-icon {
+  color:#6b7280 !important;
+}
+.cv-page.sidebar.softgray .cv-side .cv-tags span {
+  color:#374151 !important;
+  background:#ffffff !important;
+  border-color:#d1d5db !important;
 }
 
 .cv-page.sidebar.softgreen {
@@ -4354,6 +4420,12 @@ body.v40-active.v40-builder-open .v40-stage{
   color:#fff !important;
 }
 
+.v40-template-preview-softgray .v40-template-side { background:linear-gradient(180deg,#f7f7f7,#ececec) !important; }
+.v40-template-preview-softgray .v40-template-head b,
+.v40-template-preview-softgray .v40-template-head small { color:#374151 !important; }
+.v40-template-preview-softgray .v40-template-side span,
+.v40-template-preview-softgray .v40-template-side .v40-template-side-title { background:#d1d5db !important; }
+.v40-template-preview-softgray .v40-template-avatar { background:#ffffff !important; color:#6b7280 !important; border:1px solid #d1d5db !important; }
 .v40-template-preview-softgreen .v40-template-side { background:linear-gradient(180deg,#2f6f5b,#1f4f41) !important; }
 .v40-template-preview-softpink .v40-template-side { background:linear-gradient(180deg,#b96b83,#87475b) !important; }
 .v40-template-preview-mono .v40-template-head b,

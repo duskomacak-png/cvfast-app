@@ -727,7 +727,7 @@ function emptyData() {
   return {
     appLanguage: "en",
     cvLanguage: "en",
-    template: "classic",
+    template: "softgray",
     fullName: "",
     jobTitle: "",
     phone: "",
@@ -1069,7 +1069,7 @@ function renderCv(target, data, options = {}) {
   ].some(Boolean);
 
   const selectedTemplate = d.template || "classic";
-  const sidebarTemplates = ["sidebar", "softgreen", "softpink"];
+  const sidebarTemplates = ["sidebar", "softgray", "softgreen", "softpink"];
   const useSidebarLayout = sidebarTemplates.includes(selectedTemplate);
 
   const templateClassName = selectedTemplate === "sidebar" ? "sidebar" : selectedTemplate;
@@ -1932,7 +1932,7 @@ const V40_TEXTS = {
   en: {
     continueBtn: "Continue →", nextBtn: "Next →", downloadPdf: "Download PDF",
     downloadPng: "Download PNG", unlockPdf: "Unlock PDF 5€", part: "Part", stepLabel: "Step", backBtn: "‹ Back", edit: "Edit", delete: "Delete", entry: "Entry",
-    templateIntroTitle: "Choose your CV design", templateIntroText: "Select one example below. You can change it later.", classic: "Classic", modern: "Modern", classicDesc: "Clean and simple CV for most jobs.", modernDesc: "Modern side column layout.", mono: "Mono Icons", monoDesc: "Best for black and white printers: clean, light and icon-based.", softgreen: "Excel Green", softgreenDesc: "Modern green sidebar, made for email and color printing.", softpink: "Soft Pink", softpinkDesc: "Modern pink sidebar, made for email and color printing.", softblue: "Soft Blue", softblueDesc: "Calm blue business CV.", beige: "Warm Beige", beigeDesc: "Warm elegant CV for email and print.", downloadPng: "Download PNG", unlockDownloads: "Unlock downloads 5€",
+    templateIntroTitle: "Choose your CV design", templateIntroText: "Select one example below. You can change it later.", classic: "Classic", modern: "Modern", classicDesc: "Clean and simple CV for most jobs.", modernDesc: "Modern side column layout.", softgray: "Soft Gray", softgrayDesc: "Light gray elegant layout, ideal for print and email.", mono: "Mono Icons", monoDesc: "Best for black and white printers: clean, light and icon-based.", softgreen: "Excel Green", softgreenDesc: "Modern green sidebar, made for email and color printing.", softpink: "Soft Pink", softpinkDesc: "Modern pink sidebar, made for email and color printing.", softblue: "Soft Blue", softblueDesc: "Calm blue business CV.", beige: "Warm Beige", beigeDesc: "Warm elegant CV for email and print.", downloadPng: "Download PNG", unlockDownloads: "Unlock downloads 5€",
     firstNameNote: "First add your name. The app will guide you field by field.", firstName: "First name *", lastName: "Last name *", firstNamePh: "John", lastNamePh: "Smith",
     headlineNote: "Add the CV headline shown under your name.", headline: "Target position / CV headline", headlinePh: "Senior Software Engineer",
     photoNote: "Add a clear CV photo if you want. This is optional.", photo: "Photo", addPhoto: "Add CV photo", photoHelp: "Optional. Saved only in this browser.", choosePhoto: "Choose photo", removePhoto: "Remove photo",
@@ -1951,7 +1951,7 @@ const V40_TEXTS = {
   de: {
     continueBtn: "Weiter →", nextBtn: "Weiter →", downloadPdf: "PDF herunterladen",
     downloadPng: "PNG herunterladen", unlockPdf: "PDF für 5€ freischalten", part: "Teil", stepLabel: "Schritt", backBtn: "‹ Zurück", edit: "Bearbeiten", delete: "Löschen", entry: "Eintrag",
-    templateIntroTitle: "Wähle dein CV-Design", templateIntroText: "Wähle unten ein Beispiel. Du kannst es später ändern.", classic: "Klassisch", modern: "Modern", classicDesc: "Sauberer und einfacher CV für die meisten Jobs.", modernDesc: "Modernes Layout mit Seitenleiste.", mono: "Mono Icons", monoDesc: "Am besten für Schwarzweißdrucker: sauber, leicht und mit Icons.", softgreen: "Excel Green", softgreenDesc: "Moderne grüne Seitenleiste für E-Mail und Farbdruck.", softpink: "Soft Pink", softpinkDesc: "Moderne rosa Seitenleiste für E-Mail und Farbdruck.", softblue: "Soft Blue", softblueDesc: "Ruhiger blauer Business-CV.", beige: "Warm Beige", beigeDesc: "Warmer eleganter CV für E-Mail und Druck.", downloadPng: "PNG herunterladen", unlockDownloads: "Downloads 5€ freischalten",
+    templateIntroTitle: "Wähle dein CV-Design", templateIntroText: "Wähle unten ein Beispiel. Du kannst es später ändern.", classic: "Klassisch", modern: "Modern", classicDesc: "Sauberer und einfacher CV für die meisten Jobs.", modernDesc: "Modernes Layout mit Seitenleiste.", softgray: "Soft Grau", softgrayDesc: "Hellgraues elegantes Layout, ideal für Druck und E-Mail.", mono: "Mono Icons", monoDesc: "Am besten für Schwarzweißdrucker: sauber, leicht und mit Icons.", softgreen: "Excel Green", softgreenDesc: "Moderne grüne Seitenleiste für E-Mail und Farbdruck.", softpink: "Soft Pink", softpinkDesc: "Moderne rosa Seitenleiste für E-Mail und Farbdruck.", softblue: "Soft Blue", softblueDesc: "Ruhiger blauer Business-CV.", beige: "Warm Beige", beigeDesc: "Warmer eleganter CV für E-Mail und Druck.", downloadPng: "PNG herunterladen", unlockDownloads: "Downloads 5€ freischalten",
     firstNameNote: "Gib zuerst deinen Namen ein. Die App führt dich Feld für Feld.", firstName: "Vorname *", lastName: "Nachname *", firstNamePh: "Max", lastNamePh: "Müller",
     headlineNote: "Füge die Überschrift hinzu, die unter deinem Namen erscheint.", headline: "Zielposition / CV-Überschrift", headlinePh: "Softwareentwickler",
     photoNote: "Füge optional ein klares CV-Foto hinzu.", photo: "Foto", addPhoto: "CV-Foto hinzufügen", photoHelp: "Optional. Nur in diesem Browser gespeichert.", choosePhoto: "Foto auswählen", removePhoto: "Foto entfernen",
@@ -1970,7 +1970,7 @@ const V40_TEXTS = {
   sr: {
     continueBtn: "Nastavi →", nextBtn: "Dalje →", downloadPdf: "Preuzmi PDF",
     downloadPng: "Preuzmi PNG", unlockPdf: "Otključaj PDF 5€", part: "Deo", stepLabel: "Korak", backBtn: "‹ Nazad", edit: "Uredi", delete: "Obriši", entry: "Unos",
-    templateIntroTitle: "Izaberi izgled CV-a", templateIntroText: "Izaberi jedan primer dole. Možeš ga promeniti kasnije.", classic: "Klasičan", modern: "Moderan", classicDesc: "Čist i jednostavan CV za većinu poslova.", modernDesc: "Moderan raspored sa bočnom kolonom.", mono: "Mono ikonice", monoDesc: "Najbolji za crno-beli štampač: čist, lagan i sa ikonicama.", softgreen: "Excel Green", softgreenDesc: "Moderni zeleni sidebar za email i štampu u boji.", softpink: "Soft Pink", softpinkDesc: "Moderni roze sidebar za email i štampu u boji.", softblue: "Soft Blue", softblueDesc: "Mirni plavi poslovni CV.", beige: "Warm Beige", beigeDesc: "Topao elegantan CV za email i štampu.", downloadPng: "Preuzmi PNG", unlockDownloads: "Otključaj preuzimanja 5€",
+    templateIntroTitle: "Izaberi izgled CV-a", templateIntroText: "Izaberi jedan primer dole. Možeš ga promeniti kasnije.", classic: "Klasičan", modern: "Moderan", classicDesc: "Čist i jednostavan CV za većinu poslova.", modernDesc: "Moderan raspored sa bočnom kolonom.", softgray: "Soft Gray", softgrayDesc: "Blago sivi elegantni šablon, idealan za štampu i email.", mono: "Mono ikonice", monoDesc: "Najbolji za crno-beli štampač: čist, lagan i sa ikonicama.", softgreen: "Excel Green", softgreenDesc: "Moderni zeleni sidebar za email i štampu u boji.", softpink: "Soft Pink", softpinkDesc: "Moderni roze sidebar za email i štampu u boji.", softblue: "Soft Blue", softblueDesc: "Mirni plavi poslovni CV.", beige: "Warm Beige", beigeDesc: "Topao elegantan CV za email i štampu.", downloadPng: "Preuzmi PNG", unlockDownloads: "Otključaj preuzimanja 5€",
     firstNameNote: "Prvo dodaj ime. Aplikacija te vodi polje po polje.", firstName: "Ime *", lastName: "Prezime *", firstNamePh: "Aleksandar", lastNamePh: "Petrović",
     headlineNote: "Dodaj naslov CV-a koji se prikazuje ispod imena.", headline: "Ciljana pozicija / naslov CV-a", headlinePh: "Rukovalac građevinskih mašina",
     photoNote: "Dodaj jasnu CV fotografiju ako želiš. Nije obavezno.", photo: "Fotografija", addPhoto: "Dodaj CV fotografiju", photoHelp: "Nije obavezno. Čuva se samo u ovom browseru.", choosePhoto: "Izaberi fotografiju", removePhoto: "Ukloni fotografiju",
@@ -2014,13 +2014,13 @@ function v40DefaultState() {
 
 function v40TemplateToLegacy(t) {
   if (t === "modern") return "sidebar";
-  if (["mono", "softgreen", "softpink", "softblue", "beige"].includes(t)) return t;
+  if (["mono", "softgray", "softgreen", "softpink", "softblue", "beige"].includes(t)) return t;
   return "classic";
 }
 
 function legacyTemplateToV40(t) {
   if (t === "sidebar") return "modern";
-  if (["mono", "softgreen", "softpink", "softblue", "beige"].includes(t)) return t;
+  if (["mono", "softgray", "softgreen", "softpink", "softblue", "beige"].includes(t)) return t;
   return "classic";
 }
 
@@ -2673,6 +2673,7 @@ function v40RenderStepContent() {
 
 function v40TemplateOptions() {
   return [
+    { id: "softgray", nameKey: "softgray", descKey: "softgrayDesc" },
     { id: "mono", nameKey: "mono", descKey: "monoDesc" },
     { id: "softgreen", nameKey: "softgreen", descKey: "softgreenDesc" },
     { id: "softpink", nameKey: "softpink", descKey: "softpinkDesc" },
@@ -2684,7 +2685,7 @@ function v40TemplateOptions() {
 }
 
 function v40TemplateCard(id, name, desc) {
-  const isModern = ["modern", "softgreen", "softpink"].includes(id);
+  const isModern = ["modern", "softgray", "softgreen", "softpink"].includes(id);
   const swatchClass = `v40-template-preview-${id}`;
   const lang = getLang();
   const sample = {
