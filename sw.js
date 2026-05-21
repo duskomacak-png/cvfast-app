@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v460-red-around-glow";
+const CACHE_NAME = "cvfast-v461-laptop-readable";
 
 const APP_SHELL = [
   "/",
