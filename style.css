@@ -4253,3 +4253,108 @@ body.v40-active.v40-builder-open .v40-stage{
 .v40-template-preview-softpink { background:linear-gradient(180deg,#fffafd,#fff1f5) !important; }
 .v40-template-preview-softblue { background:linear-gradient(180deg,#fbfdff,#eef5ff) !important; }
 .v40-template-preview-beige { background:linear-gradient(180deg,#fffdf8,#fbf4e8) !important; }
+
+/* CVFAST v4.51 — final template direction
+   Mono = best for black/white printers.
+   Excel Green + Soft Pink = same premium sidebar layout for email and color print. */
+.cv-page.mono:not(.sidebar) {
+  background:#fff !important;
+}
+.cv-page.mono:not(.sidebar) .cv-inner {
+  padding:54px 58px 44px !important;
+}
+.cv-page.mono:not(.sidebar) .cv-section-title h2 {
+  color:#111827 !important;
+}
+.cv-page.mono:not(.sidebar) .cv-section-icon {
+  background:#fff !important;
+  border-color:#9ca3af !important;
+  color:#111827 !important;
+}
+.cv-page.mono:not(.sidebar) .cv-tags span {
+  background:#fff !important;
+  border-color:#9ca3af !important;
+}
+.cv-page.mono:not(.sidebar) .cv-photo,
+.cv-page.mono:not(.sidebar) .cv-photo-placeholder {
+  background:#fff !important;
+}
+
+.cv-page.sidebar.softgreen {
+  --cv-accent:#4f8f74;
+  --cv-title:#d8f3e4;
+  --cv-icon-bg:rgba(255,255,255,.12);
+  --cv-icon-border:rgba(255,255,255,.28);
+  --cv-tag-bg:rgba(255,255,255,.13);
+  --cv-tag-border:rgba(255,255,255,.24);
+  --cv-tag-text:#f2fff8;
+}
+.cv-page.sidebar.softgreen .cv-side {
+  background:linear-gradient(180deg,#2f6f5b 0%,#1f4f41 100%) !important;
+}
+.cv-page.sidebar.softgreen .cv-divider,
+.cv-page.sidebar.softgreen .cv-section-title::after {
+  background:#78d0a2 !important;
+}
+.cv-page.sidebar.softgreen .cv-main {
+  background:linear-gradient(180deg,#ffffff 0%,#fbfffd 100%) !important;
+}
+.cv-page.sidebar.softgreen .cv-main .cv-section-title h2,
+.cv-page.sidebar.softgreen .cv-main .cv-section-icon {
+  color:#2f6f5b !important;
+}
+
+.cv-page.sidebar.softpink {
+  --cv-accent:#b96b83;
+  --cv-title:#ffe4ec;
+  --cv-icon-bg:rgba(255,255,255,.12);
+  --cv-icon-border:rgba(255,255,255,.28);
+  --cv-tag-bg:rgba(255,255,255,.13);
+  --cv-tag-border:rgba(255,255,255,.24);
+  --cv-tag-text:#fff5f8;
+}
+.cv-page.sidebar.softpink .cv-side {
+  background:linear-gradient(180deg,#b96b83 0%,#87475b 100%) !important;
+}
+.cv-page.sidebar.softpink .cv-divider,
+.cv-page.sidebar.softpink .cv-section-title::after {
+  background:#f3b6c8 !important;
+}
+.cv-page.sidebar.softpink .cv-main {
+  background:linear-gradient(180deg,#ffffff 0%,#fffafd 100%) !important;
+}
+.cv-page.sidebar.softpink .cv-main .cv-section-title h2,
+.cv-page.sidebar.softpink .cv-main .cv-section-icon {
+  color:#9b4f66 !important;
+}
+
+.cv-page.sidebar.softgreen .cv-photo,
+.cv-page.sidebar.softgreen .cv-photo-placeholder,
+.cv-page.sidebar.softpink .cv-photo,
+.cv-page.sidebar.softpink .cv-photo-placeholder {
+  background:rgba(255,255,255,.90) !important;
+  color:#233047 !important;
+  border-color:rgba(255,255,255,.90) !important;
+  box-shadow:0 10px 24px rgba(15,23,42,.16);
+}
+.cv-page.sidebar.softgreen .cv-side .cv-section-icon,
+.cv-page.sidebar.softpink .cv-side .cv-section-icon {
+  color:#fff !important;
+}
+.cv-page.sidebar.softgreen .cv-side .cv-list,
+.cv-page.sidebar.softgreen .cv-side .cv-text,
+.cv-page.sidebar.softgreen .cv-side .cv-contact,
+.cv-page.sidebar.softpink .cv-side .cv-list,
+.cv-page.sidebar.softpink .cv-side .cv-text,
+.cv-page.sidebar.softpink .cv-side .cv-contact {
+  color:rgba(255,255,255,.90) !important;
+}
+.cv-page.sidebar.softgreen .cv-side .cv-tags span,
+.cv-page.sidebar.softpink .cv-side .cv-tags span {
+  color:#fff !important;
+}
+
+.v40-template-preview-softgreen .v40-template-side { background:linear-gradient(180deg,#2f6f5b,#1f4f41) !important; }
+.v40-template-preview-softpink .v40-template-side { background:linear-gradient(180deg,#b96b83,#87475b) !important; }
+.v40-template-preview-mono .v40-template-head b,
+.v40-template-preview-mono .v40-template-head small { color:#111827 !important; }
