@@ -4896,3 +4896,63 @@ body.v40-active.v40-builder-open.v40-final-step .v40-one-unlock-btn{
     display:none !important;
   }
 }
+
+
+/* V40.22: full red glow all around the desktop/laptop app area.
+   Previous glow was too centered/pink. This one wraps the whole split layout. */
+@media (min-width: 700px){
+  body.v40-active .v40-stage{
+    overflow:visible !important;
+  }
+  body.v40-active .v40-device-stack{
+    position:relative !important;
+    isolation:isolate !important;
+    overflow:visible !important;
+  }
+  body.v40-active .v40-device-stack::before{
+    content:"";
+    position:absolute;
+    inset:-84px -88px -96px -88px;
+    border-radius:72px;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(239,68,68,.18) 0%, rgba(239,68,68,.10) 20%, rgba(239,68,68,.04) 38%, rgba(239,68,68,0) 62%),
+      radial-gradient(circle at 50% 0%, rgba(239,68,68,.28) 0%, rgba(239,68,68,.16) 18%, rgba(239,68,68,.06) 34%, rgba(239,68,68,0) 52%),
+      radial-gradient(circle at 100% 50%, rgba(239,68,68,.28) 0%, rgba(239,68,68,.16) 18%, rgba(239,68,68,.06) 34%, rgba(239,68,68,0) 52%),
+      radial-gradient(circle at 50% 100%, rgba(239,68,68,.32) 0%, rgba(239,68,68,.18) 20%, rgba(239,68,68,.07) 36%, rgba(239,68,68,0) 56%),
+      radial-gradient(circle at 0% 50%, rgba(239,68,68,.28) 0%, rgba(239,68,68,.16) 18%, rgba(239,68,68,.06) 34%, rgba(239,68,68,0) 52%),
+      radial-gradient(circle at 18% 16%, rgba(248,113,113,.22) 0%, rgba(248,113,113,.10) 20%, rgba(248,113,113,0) 42%),
+      radial-gradient(circle at 82% 16%, rgba(248,113,113,.22) 0%, rgba(248,113,113,.10) 20%, rgba(248,113,113,0) 42%),
+      radial-gradient(circle at 82% 84%, rgba(248,113,113,.24) 0%, rgba(248,113,113,.11) 22%, rgba(248,113,113,0) 44%),
+      radial-gradient(circle at 18% 84%, rgba(248,113,113,.24) 0%, rgba(248,113,113,.11) 22%, rgba(248,113,113,0) 44%);
+    filter:blur(34px);
+    opacity:1;
+    pointer-events:none;
+    z-index:0;
+  }
+  body.v40-active .v40-device-stack::after{
+    content:"";
+    position:absolute;
+    inset:-22px -24px -24px -24px;
+    border-radius:44px;
+    border:1px solid rgba(248,113,113,.20);
+    box-shadow:
+      0 0 34px rgba(239,68,68,.16),
+      0 0 78px rgba(239,68,68,.14),
+      0 0 148px rgba(239,68,68,.10);
+    filter:blur(8px);
+    pointer-events:none;
+    z-index:0;
+  }
+  body.v40-active .v40-phone-frame,
+  body.v40-active .v40-app-actions,
+  body.v40-active .v40-legal-under-app{
+    position:relative !important;
+    z-index:1 !important;
+  }
+}
+@media (max-width: 699px){
+  body.v40-active .v40-device-stack::before,
+  body.v40-active .v40-device-stack::after{
+    display:none !important;
+  }
+}
