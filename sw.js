@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v463-builder-only-monitor";
+const CACHE_NAME = "cvfast-v464-welcome-preview-scroll-fix";
 
 const APP_SHELL = [
   "/",

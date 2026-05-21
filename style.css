@@ -5305,3 +5305,54 @@ body.v40-active.v40-builder-open.v40-final-step .v40-one-unlock-btn{
     max-width:460px !important;
   }
 }
+
+
+/* V40.26 / v464: precise welcome safety + live preview scroll fix.
+   If welcome is visible, builder must never appear underneath it.
+   Desktop builder preview scrolls inside the right panel only. */
+#v40Builder.hidden{
+  display:none !important;
+}
+#v40Welcome:not(.hidden) ~ #v40Builder{
+  display:none !important;
+}
+@media (min-width:700px){
+  html body.v40-active:not(.v40-builder-open){
+    overflow:auto !important;
+    min-height:100dvh !important;
+  }
+  html body.v40-active:not(.v40-builder-open) #v40Welcome{
+    display:grid !important;
+    place-items:center !important;
+  }
+  html body.v40-active:not(.v40-builder-open) #v40Builder{
+    display:none !important;
+  }
+  html body.v40-active.v40-builder-open #v40Welcome:not(.hidden){
+    display:grid !important;
+  }
+  html body.v40-active.v40-builder-open #v40Welcome:not(.hidden) ~ #v40Builder{
+    display:none !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap{
+    overflow:auto !important;
+    overscroll-behavior:contain !important;
+    scrollbar-gutter:stable !important;
+  }
+  html body.v40-active.v40-builder-open .v40-preview-stage{
+    align-items:flex-start !important;
+    overflow:visible !important;
+    min-height:100% !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page{
+    width:794px !important;
+    max-width:none !important;
+    min-height:1123px !important;
+    transform-origin:top center !important;
+  }
+}
+@media (max-width:699px){
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap{
+    overflow:hidden !important;
+  }
+}

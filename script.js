@@ -3013,12 +3013,23 @@ function v40FitPreview(){
   if(!wrap||!stage||!page) return;
   requestAnimationFrame(()=>{
     const baseW=794;
-    const availableW=Math.max(220, wrap.clientWidth-20);
-    const scale=Math.min(1, Math.max(.34, availableW/baseW));
-    stage.style.height = `${Math.max(180, wrap.clientHeight-20)}px`;
+    const isDesktopBuilder = window.innerWidth >= 700 && document.body.classList.contains("v40-builder-open");
+    const availableW=Math.max(220, wrap.clientWidth-(isDesktopBuilder ? 34 : 20));
+    const scale=Math.min(1, Math.max(isDesktopBuilder ? .42 : .34, availableW/baseW));
     page.style.setProperty("transform", `scale(${scale})`, "important");
     page.style.setProperty("transform-origin", "top center", "important");
     page.style.margin='0 auto';
+
+    if(isDesktopBuilder){
+      const rawH = Math.max(page.scrollHeight || 0, page.offsetHeight || 0, 1123);
+      stage.style.height = `${Math.max(wrap.clientHeight - 20, Math.ceil(rawH * scale) + 28)}px`;
+      stage.style.overflow = "visible";
+      wrap.style.overflow = "auto";
+    } else {
+      stage.style.height = `${Math.max(180, wrap.clientHeight-20)}px`;
+      stage.style.overflow = "hidden";
+      wrap.style.overflow = "hidden";
+    }
   });
 }
 function v40OpenFullPreview(){
@@ -3040,6 +3051,16 @@ function v40SetBuilderMode(isBuilder){
   document.documentElement?.classList.toggle("v40-builder-open", !!isBuilder);
 }
 
+function v40SyncVisibleScreen(){
+  const welcome = document.getElementById("v40Welcome");
+  const builder = document.getElementById("v40Builder");
+  if(!welcome || !builder) return;
+  const welcomeVisible = !welcome.classList.contains("hidden");
+  const builderVisible = !builder.classList.contains("hidden") && !welcomeVisible;
+  if(welcomeVisible && !builder.classList.contains("hidden")) builder.classList.add("hidden");
+  v40SetBuilderMode(builderVisible);
+}
+
 async function v40DownloadPdf(){ v40CommitToLegacy(); try{ await downloadPdf(); }catch(err){ console.error(err); showToast(ui[getLang()].pdfError); } }
 async function v40DownloadPng(){ v40CommitToLegacy(); try{ await downloadPng(); }catch(err){ console.error(err); showToast(ui[getLang()].pdfError); } }
 function v40PayUnlock(){ v40CommitToLegacy(); openSupportModal(); }
@@ -3051,6 +3072,7 @@ function v40GoHome(){
   document.getElementById("v40Builder")?.classList.add("hidden");
   document.getElementById("v40Welcome")?.classList.remove("hidden");
   v40SetBuilderMode(false);
+  v40SyncVisibleScreen();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -3242,7 +3264,10 @@ function v40Go(step){
 function initV40() {
   const stored = loadStored();
   v40State = legacyToV40State(stored);
-  v40SetBuilderMode(!document.getElementById("v40Builder")?.classList.contains("hidden"));
+  v40SyncVisibleScreen();
+  [document.getElementById("v40Welcome"), document.getElementById("v40Builder")].forEach(node => {
+    if(node) new MutationObserver(v40SyncVisibleScreen).observe(node, { attributes:true, attributeFilter:["class"] });
+  });
   document.getElementById("v40StartBtn")?.addEventListener("click", () => {
     trackEvent("start_cv_click");
     document.getElementById("v40Welcome")?.classList.add("hidden");
