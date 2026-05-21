@@ -5681,3 +5681,76 @@ html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.cv-content-l
     box-sizing:border-box !important;
   }
 }
+
+
+/* V40.33 / v472: mobile FULL preview scale fix.
+   Small live preview is already OK. This only fixes the opened/zoomed preview on phones.
+   Keep real A4 proportions, scale the full CV page down to the phone width, and do not
+   rewrite sidebar columns inside the modal. PDF/PNG/download logic untouched. */
+@media (max-width:699px){
+  html body.v40-active.v40-builder-open .v40-full-preview-panel{
+    width:100% !important;
+    height:100dvh !important;
+    max-width:100% !important;
+    overflow:hidden !important;
+  }
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    padding:12px !important;
+    background:#eaf0f9 !important;
+    box-sizing:border-box !important;
+  }
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-page{
+    width:794px !important;
+    min-width:794px !important;
+    max-width:794px !important;
+    min-height:1123px !important;
+    margin-left:50% !important;
+    margin-right:0 !important;
+    transform-origin:top center !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+  }
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-page.sidebar .cv-inner{
+    grid-template-columns:250px 1fr !important;
+  }
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-main,
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-side{
+    min-width:0 !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+  }
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-main *,
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-side *{
+    overflow-wrap:break-word !important;
+    word-break:normal !important;
+  }
+}
+@media (max-width:360px){
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-page{
+    transform:translateX(-50%) scale(.405) !important;
+    margin-bottom:-665px !important;
+  }
+}
+@media (min-width:361px) and (max-width:390px){
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-page{
+    transform:translateX(-50%) scale(.435) !important;
+    margin-bottom:-635px !important;
+  }
+}
+@media (min-width:391px) and (max-width:430px){
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-page{
+    transform:translateX(-50%) scale(.485) !important;
+    margin-bottom:-580px !important;
+  }
+}
+@media (min-width:431px) and (max-width:699px){
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-page{
+    transform:translateX(-50%) scale(.56) !important;
+    margin-bottom:-495px !important;
+  }
+}
