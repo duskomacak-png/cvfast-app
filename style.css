@@ -4536,3 +4536,99 @@ body.v40-active.v40-builder-open.v40-final-step .v40-one-unlock-btn{
     font-size:17px !important;
   }
 }
+
+
+/* V40.19 / v456: laptop-wide safe mode.
+   Only desktop/laptop screens are widened. Mobile <=520px stays unchanged. */
+@media (min-width: 900px) {
+  body.v40-active .v40-stage {
+    align-items: start !important;
+    padding: 18px 24px 24px !important;
+  }
+
+  body.v40-active .v40-device-stack {
+    width: min(620px, calc(100vw - 80px)) !important;
+    max-width: 620px !important;
+  }
+
+  body.v40-active .v40-phone-frame {
+    width: 100% !important;
+    max-width: 620px !important;
+    height: min(820px, calc(100dvh - 116px)) !important;
+    min-height: 650px !important;
+    border-radius: 38px !important;
+  }
+
+  body.v40-active .v40-phone-screen {
+    padding: 18px 20px 14px !important;
+    gap: 10px !important;
+  }
+
+  body.v40-active .v40-topbar {
+    height: 44px !important;
+  }
+
+  body.v40-active .v40-cv-preview-wrap {
+    flex: 0 0 clamp(210px, 30dvh, 290px) !important;
+    min-height: 210px !important;
+    padding: 14px !important;
+    border-radius: 24px !important;
+  }
+
+  body.v40-active .v40-input-sheet {
+    padding: 16px !important;
+    border-radius: 26px !important;
+  }
+
+  body.v40-active .v40-template-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  body.v40-active .v40-form-grid.v40-two-col {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  body.v40-active .v40-final-compact {
+    max-width: 100% !important;
+  }
+
+  body.v40-active .v40-final-action {
+    max-width: 460px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  body.v40-active .v40-paypal-btn,
+  body.v40-active .v40-download-btn,
+  body.v40-active .v40-primary-btn,
+  body.v40-active .v40-ghost-btn {
+    min-height: 48px !important;
+  }
+
+  body.v40-active .v40-app-actions,
+  body.v40-active .v40-legal-under-app {
+    max-width: 620px !important;
+  }
+}
+
+@media (min-width: 1100px) and (min-height: 780px) {
+  body.v40-active .v40-device-stack {
+    width: min(680px, calc(100vw - 120px)) !important;
+    max-width: 680px !important;
+  }
+
+  body.v40-active .v40-phone-frame {
+    max-width: 680px !important;
+    height: min(860px, calc(100dvh - 126px)) !important;
+    min-height: 690px !important;
+  }
+
+  body.v40-active .v40-cv-preview-wrap {
+    flex-basis: clamp(230px, 32dvh, 320px) !important;
+  }
+
+  body.v40-active .v40-app-actions,
+  body.v40-active .v40-legal-under-app {
+    max-width: 680px !important;
+  }
+}

@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v455-single-final-button";
+const CACHE_NAME = "cvfast-v456-laptop-wide-safe";
 
 const APP_SHELL = [
   "/",
