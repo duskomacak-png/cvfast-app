@@ -4632,3 +4632,108 @@ body.v40-active.v40-builder-open.v40-final-step .v40-one-unlock-btn{
     max-width: 680px !important;
   }
 }
+
+
+/* V40.20 / v457: FORCE laptop/desktop wide layout.
+   This is intentionally placed at the very end so older phone-width rules cannot override it.
+   Mobile <=699px is not touched. */
+@media (min-width: 700px) {
+  html body .v40-stage {
+    justify-content: center !important;
+    align-items: start !important;
+    padding: 16px 24px 24px !important;
+  }
+
+  html body .v40-stage .v40-device-stack {
+    width: min(760px, calc(100vw - 90px)) !important;
+    max-width: 760px !important;
+    min-width: 560px !important;
+    gap: 12px !important;
+  }
+
+  html body .v40-stage .v40-phone-frame {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 560px !important;
+    height: min(820px, calc(100dvh - 118px)) !important;
+    min-height: 620px !important;
+    border-width: 8px !important;
+    border-radius: 42px !important;
+  }
+
+  html body .v40-stage .v40-phone-screen {
+    padding: 18px 22px 14px !important;
+    gap: 10px !important;
+  }
+
+  html body .v40-stage .v40-topbar {
+    height: 44px !important;
+  }
+
+  html body .v40-stage .v40-cv-preview-wrap {
+    flex: 0 0 clamp(210px, 30dvh, 300px) !important;
+    min-height: 210px !important;
+    padding: 14px !important;
+    border-radius: 24px !important;
+  }
+
+  html body .v40-stage .v40-input-sheet {
+    padding: 16px !important;
+    border-radius: 28px !important;
+  }
+
+  html body .v40-stage .v40-template-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  html body .v40-stage .v40-form-grid.v40-two-col {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  html body .v40-stage .v40-add-row {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+  }
+
+  html body .v40-stage .v40-app-actions,
+  html body .v40-stage .v40-legal-under-app {
+    width: min(760px, calc(100vw - 90px)) !important;
+    max-width: 760px !important;
+  }
+}
+
+@media (min-width: 1100px) {
+  html body .v40-stage .v40-device-stack {
+    width: min(860px, calc(100vw - 140px)) !important;
+    max-width: 860px !important;
+  }
+  html body .v40-stage .v40-phone-frame {
+    min-width: 680px !important;
+    height: min(850px, calc(100dvh - 126px)) !important;
+  }
+  html body .v40-stage .v40-app-actions,
+  html body .v40-stage .v40-legal-under-app {
+    width: min(860px, calc(100vw - 140px)) !important;
+    max-width: 860px !important;
+  }
+}
+
+@media (min-width: 700px) and (max-height: 720px) {
+  html body .v40-stage .v40-device-stack {
+    min-width: 600px !important;
+    width: min(720px, calc(100vw - 80px)) !important;
+  }
+  html body .v40-stage .v40-phone-frame {
+    min-width: 600px !important;
+    min-height: 540px !important;
+    height: calc(100dvh - 104px) !important;
+  }
+  html body .v40-stage .v40-cv-preview-wrap {
+    flex-basis: clamp(145px, 22dvh, 190px) !important;
+    min-height: 145px !important;
+  }
+  html body .v40-stage .v40-input-sheet {
+    padding: 12px !important;
+  }
+}
