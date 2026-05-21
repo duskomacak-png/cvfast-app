@@ -5635,3 +5635,49 @@ html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.cv-content-n
 html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.cv-content-long{
   overflow-x:hidden !important;
 }
+
+
+/* V40.31 / v471: mobile live preview fit fix.
+   On phones the top live preview must show a scaled A4 page, not a compressed CV.
+   Keep mobile preview clipped to the card, no horizontal scroll, and preserve desktop layout. */
+@media (max-width: 699px){
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap{
+    overflow:hidden !important;
+    overflow-x:hidden !important;
+    overflow-y:hidden !important;
+  }
+  html body.v40-active.v40-builder-open .v40-preview-stage{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    display:flex !important;
+    justify-content:center !important;
+    align-items:flex-start !important;
+    overflow:hidden !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page{
+    width:794px !important;
+    min-width:794px !important;
+    max-width:794px !important;
+    min-height:1123px !important;
+    flex:0 0 794px !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+    margin:0 auto !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-inner{
+    width:100% !important;
+    max-width:none !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.sidebar .cv-inner{
+    grid-template-columns:260px minmax(0, 1fr) !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-main,
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-side{
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+}
