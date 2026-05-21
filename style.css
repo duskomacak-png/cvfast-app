@@ -4516,3 +4516,23 @@ body.v40-active .v40-legal-under-app{
     display:none !important;
   }
 }
+
+
+/* V40.19: final screen uses one central unlock/download area only. Bottom next/pay button is hidden on final step to avoid duplicate payment actions. */
+body.v40-active.v40-builder-open.v40-final-step #v40NextBtn{
+  display:none !important;
+}
+body.v40-active.v40-builder-open.v40-final-step .v40-step-nav-bottom{
+  grid-template-columns:1fr !important;
+}
+body.v40-active.v40-builder-open.v40-final-step .v40-one-unlock-btn{
+  min-height:76px !important;
+  font-size:20px !important;
+  line-height:1.18 !important;
+}
+@media(max-width:420px){
+  body.v40-active.v40-builder-open.v40-final-step .v40-one-unlock-btn{
+    min-height:70px !important;
+    font-size:17px !important;
+  }
+}

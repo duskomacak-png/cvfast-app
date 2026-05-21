@@ -1931,8 +1931,8 @@ const V40_I18N = {
 const V40_TEXTS = {
   en: {
     continueBtn: "Continue →", nextBtn: "Next →", downloadPdf: "Download PDF",
-    downloadPng: "Download PNG", unlockPdf: "Support CVfast.app — unlock PDF + PNG 5€", part: "Part", stepLabel: "Step", backBtn: "‹ Back", edit: "Edit", delete: "Delete", entry: "Entry",
-    templateIntroTitle: "Choose your CV design", templateIntroText: "Select one example below. You can change it later.", classic: "Classic", modern: "Modern", classicDesc: "Clean and simple CV for most jobs.", modernDesc: "Modern side column layout.", softgray: "Soft Gray", softgrayDesc: "Light gray elegant layout, ideal for print and email.", mono: "Mono Icons", monoDesc: "Best for black and white printers: clean, light and icon-based.", softgreen: "Excel Green", softgreenDesc: "Modern green sidebar, made for email and color printing.", softpink: "Soft Pink", softpinkDesc: "Modern pink sidebar, made for email and color printing.", softblue: "Soft Blue", softblueDesc: "Calm blue business CV.", beige: "Warm Beige", beigeDesc: "Warm elegant CV for email and print.", downloadPng: "Download PNG", unlockDownloads: "Support CVfast.app — unlock PDF + PNG 5€",
+    downloadPng: "Download PNG", unlockPdf: "Support CVfast.app — PDF + PNG 5€", part: "Part", stepLabel: "Step", backBtn: "‹ Back", edit: "Edit", delete: "Delete", entry: "Entry",
+    templateIntroTitle: "Choose your CV design", templateIntroText: "Select one example below. You can change it later.", classic: "Classic", modern: "Modern", classicDesc: "Clean and simple CV for most jobs.", modernDesc: "Modern side column layout.", softgray: "Soft Gray", softgrayDesc: "Light gray elegant layout, ideal for print and email.", mono: "Mono Icons", monoDesc: "Best for black and white printers: clean, light and icon-based.", softgreen: "Excel Green", softgreenDesc: "Modern green sidebar, made for email and color printing.", softpink: "Soft Pink", softpinkDesc: "Modern pink sidebar, made for email and color printing.", softblue: "Soft Blue", softblueDesc: "Calm blue business CV.", beige: "Warm Beige", beigeDesc: "Warm elegant CV for email and print.", downloadPng: "Download PNG", unlockDownloads: "Support CVfast.app — PDF + PNG 5€",
     firstNameNote: "First add your name. The app will guide you field by field.", firstName: "First name *", lastName: "Last name *", firstNamePh: "John", lastNamePh: "Smith",
     headlineNote: "Add the CV headline shown under your name.", headline: "Target position / CV headline", headlinePh: "Senior Software Engineer",
     photoNote: "Add a clear CV photo if you want. This is optional.", photo: "Photo", addPhoto: "Add CV photo", photoHelp: "Optional. Saved only in this browser.", choosePhoto: "Choose photo", removePhoto: "Remove photo",
@@ -1969,8 +1969,8 @@ const V40_TEXTS = {
   },
   sr: {
     continueBtn: "Nastavi →", nextBtn: "Dalje →", downloadPdf: "Preuzmi PDF",
-    downloadPng: "Preuzmi PNG", unlockPdf: "Podrži CVfast.app — otključaj PDF + PNG 5€", part: "Deo", stepLabel: "Korak", backBtn: "‹ Nazad", edit: "Uredi", delete: "Obriši", entry: "Unos",
-    templateIntroTitle: "Izaberi izgled CV-a", templateIntroText: "Izaberi jedan primer dole. Možeš ga promeniti kasnije.", classic: "Klasičan", modern: "Moderan", classicDesc: "Čist i jednostavan CV za većinu poslova.", modernDesc: "Moderan raspored sa bočnom kolonom.", softgray: "Soft Gray", softgrayDesc: "Blago sivi elegantni šablon, idealan za štampu i email.", mono: "Mono ikonice", monoDesc: "Najbolji za crno-beli štampač: čist, lagan i sa ikonicama.", softgreen: "Excel Green", softgreenDesc: "Moderni zeleni sidebar za email i štampu u boji.", softpink: "Soft Pink", softpinkDesc: "Moderni roze sidebar za email i štampu u boji.", softblue: "Soft Blue", softblueDesc: "Mirni plavi poslovni CV.", beige: "Warm Beige", beigeDesc: "Topao elegantan CV za email i štampu.", downloadPng: "Preuzmi PNG", unlockDownloads: "Podrži CVfast.app — otključaj PDF + PNG 5€",
+    downloadPng: "Preuzmi PNG", unlockPdf: "Podrži CVfast.app — PDF + PNG 5€", part: "Deo", stepLabel: "Korak", backBtn: "‹ Nazad", edit: "Uredi", delete: "Obriši", entry: "Unos",
+    templateIntroTitle: "Izaberi izgled CV-a", templateIntroText: "Izaberi jedan primer dole. Možeš ga promeniti kasnije.", classic: "Klasičan", modern: "Moderan", classicDesc: "Čist i jednostavan CV za većinu poslova.", modernDesc: "Moderan raspored sa bočnom kolonom.", softgray: "Soft Gray", softgrayDesc: "Blago sivi elegantni šablon, idealan za štampu i email.", mono: "Mono ikonice", monoDesc: "Najbolji za crno-beli štampač: čist, lagan i sa ikonicama.", softgreen: "Excel Green", softgreenDesc: "Moderni zeleni sidebar za email i štampu u boji.", softpink: "Soft Pink", softpinkDesc: "Moderni roze sidebar za email i štampu u boji.", softblue: "Soft Blue", softblueDesc: "Mirni plavi poslovni CV.", beige: "Warm Beige", beigeDesc: "Topao elegantan CV za email i štampu.", downloadPng: "Preuzmi PNG", unlockDownloads: "Podrži CVfast.app — PDF + PNG 5€",
     firstNameNote: "Prvo dodaj ime. Aplikacija te vodi polje po polje.", firstName: "Ime *", lastName: "Prezime *", firstNamePh: "Aleksandar", lastNamePh: "Petrović",
     headlineNote: "Dodaj naslov CV-a koji se prikazuje ispod imena.", headline: "Ciljana pozicija / naslov CV-a", headlinePh: "Rukovalac građevinskih mašina",
     photoNote: "Dodaj jasnu CV fotografiju ako želiš. Nije obavezno.", photo: "Fotografija", addPhoto: "Dodaj CV fotografiju", photoHelp: "Nije obavezno. Čuva se samo u ovom browseru.", choosePhoto: "Izaberi fotografiju", removePhoto: "Ukloni fotografiju",
@@ -2323,8 +2323,9 @@ function v40Render() {
   if (backBtn) { backBtn.textContent = v40Text().backBtn || "‹ Back"; backBtn.classList.toggle("hidden", v40Step === 1); }
   if (nextBtn) {
     const vt = v40Text();
-    nextBtn.textContent = v40Step === 1 ? vt.continueBtn : v40Step === 9 ? (isUnlocked() ? vt.downloadPdf : vt.unlockPdf) : vt.nextBtn;
-    nextBtn.classList.toggle("v40-download-final-btn", v40Step === 9);
+    nextBtn.textContent = v40Step === 1 ? vt.continueBtn : vt.nextBtn;
+    nextBtn.classList.toggle("v40-download-final-btn", false);
+    nextBtn.classList.toggle("hidden", v40Step === 9);
   }
   if (pricePill) {
     pricePill.textContent = "";
