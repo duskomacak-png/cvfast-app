@@ -1010,6 +1010,41 @@ function cvContactIcon(key) {
   return `<span class="cv-contact-icon">${cvIcon(key)}</span>`;
 }
 
+function cvContentDensityClass(d, expItems = [], machineItems = [], skillItems = [], languageItems = []) {
+  const rawText = [
+    d.fullName,
+    d.jobTitle,
+    d.phone,
+    d.email,
+    d.location,
+    d.linkedin,
+    d.profile,
+    d.experience,
+    d.machines,
+    d.skills,
+    d.education,
+    d.traits
+  ].map(v => String(v || "").trim()).filter(Boolean).join(" ");
+
+  const sectionCount = [
+    String(d.profile || "").trim(),
+    expItems.length,
+    machineItems.length,
+    skillItems.length,
+    languageItems.length,
+    String(d.education || "").trim(),
+    String(d.traits || "").trim()
+  ].filter(Boolean).length;
+
+  const lineCount = expItems.length + machineItems.length + skillItems.length + languageItems.length;
+  const textLen = rawText.length;
+  const score = textLen + (lineCount * 34) + (sectionCount * 70);
+
+  if (score < 780) return "cv-content-short";
+  if (score > 2100) return "cv-content-long";
+  return "cv-content-normal";
+}
+
 function renderCv(target, data, options = {}) {
   const usePlaceholders = Boolean(options.placeholders);
   const d = usePlaceholders ? withPlaceholders(data) : data;
@@ -1073,7 +1108,8 @@ function renderCv(target, data, options = {}) {
   const useSidebarLayout = sidebarTemplates.includes(selectedTemplate);
 
   const templateClassName = selectedTemplate === "sidebar" ? "sidebar" : selectedTemplate;
-  target.className = `cv-page ${templateClassName}${useSidebarLayout && selectedTemplate !== "sidebar" ? " sidebar" : ""}`;
+  const densityClass = cvContentDensityClass(d, expItems, machineItems, skillItems, languageItems);
+  target.className = `cv-page ${templateClassName}${useSidebarLayout && selectedTemplate !== "sidebar" ? " sidebar" : ""} ${densityClass}`;
 
   if (!filledSections) {
     target.innerHTML = `<div class="cv-empty-note">Start by entering your name, contact details and CV content.</div>`;

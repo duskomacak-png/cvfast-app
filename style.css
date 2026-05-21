@@ -5510,3 +5510,128 @@ html body.v40-active.v40-builder-open .v40-full-preview-scroll{
     grid-template-columns:minmax(118px, 34%) minmax(0, 1fr) !important;
   }
 }
+
+
+/* V40.30 / v469: live preview label fix.
+   The "Klikni za uvećanje" helper must not behave like part of the CV paper while scrolling.
+   Hide the helper pill; the preview remains clickable and full preview still opens normally. */
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap::after{
+  content:none !important;
+  display:none !important;
+}
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap{
+  cursor:zoom-in !important;
+}
+
+
+/* V40.30 / v470: Smart CV spacing.
+   If the user writes little content, the CV breathes more and fills the A4 page better.
+   If the user writes a lot, spacing becomes compact. No PayPal/PDF/PNG logic touched. */
+.cv-page.cv-content-short .cv-inner{
+  padding-top:68px !important;
+  padding-bottom:58px !important;
+}
+.cv-page.cv-content-short .cv-section{
+  margin-top:34px !important;
+}
+.cv-page.cv-content-short .cv-section-title{
+  margin-bottom:14px !important;
+}
+.cv-page.cv-content-short .cv-text{
+  line-height:1.78 !important;
+  font-size:15.2px !important;
+}
+.cv-page.cv-content-short .cv-list{
+  line-height:1.86 !important;
+  font-size:15.2px !important;
+}
+.cv-page.cv-content-short .cv-tags{
+  gap:10px !important;
+}
+.cv-page.cv-content-short .cv-tags span{
+  padding:9px 13px !important;
+}
+.cv-page.cv-content-short .cv-name{
+  font-size:41px !important;
+}
+.cv-page.cv-content-short .cv-title{
+  font-size:19px !important;
+}
+.cv-page.cv-content-short:not(.sidebar) .cv-header{
+  margin-bottom:22px !important;
+}
+.cv-page.cv-content-short:not(.sidebar) .cv-columns{
+  margin-top:30px !important;
+  gap:34px !important;
+}
+.cv-page.sidebar.cv-content-short .cv-inner{
+  padding:0 !important;
+}
+.cv-page.sidebar.cv-content-short .cv-side{
+  padding-top:58px !important;
+  padding-bottom:58px !important;
+}
+.cv-page.sidebar.cv-content-short .cv-main{
+  padding-top:76px !important;
+  padding-bottom:64px !important;
+}
+.cv-page.sidebar.cv-content-short .cv-side .cv-section{
+  margin-top:32px !important;
+}
+.cv-page.sidebar.cv-content-short .cv-main .cv-section{
+  margin-top:40px !important;
+}
+.cv-page.sidebar.cv-content-short .cv-main .cv-section:first-child{
+  margin-top:0 !important;
+}
+
+.cv-page.cv-content-long .cv-inner{
+  padding-top:42px !important;
+  padding-bottom:34px !important;
+}
+.cv-page.cv-content-long .cv-section{
+  margin-top:18px !important;
+}
+.cv-page.cv-content-long .cv-section-title{
+  margin-bottom:7px !important;
+}
+.cv-page.cv-content-long .cv-text{
+  line-height:1.42 !important;
+  font-size:13.6px !important;
+}
+.cv-page.cv-content-long .cv-list{
+  line-height:1.45 !important;
+  font-size:13.6px !important;
+}
+.cv-page.cv-content-long .cv-tags{
+  gap:6px !important;
+}
+.cv-page.cv-content-long .cv-tags span{
+  padding:6px 9px !important;
+}
+.cv-page.cv-content-long .cv-name{
+  font-size:33px !important;
+}
+.cv-page.cv-content-long .cv-title{
+  font-size:16px !important;
+}
+.cv-page.sidebar.cv-content-long .cv-inner{
+  padding:0 !important;
+}
+.cv-page.sidebar.cv-content-long .cv-side{
+  padding:34px 22px !important;
+}
+.cv-page.sidebar.cv-content-long .cv-main{
+  padding:38px 32px !important;
+}
+.cv-page.sidebar.cv-content-long .cv-side .cv-section,
+.cv-page.sidebar.cv-content-long .cv-main .cv-section{
+  margin-top:18px !important;
+}
+
+/* Keep smart spacing safe inside the live preview: no horizontal expansion. */
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.cv-content-short,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.cv-content-normal,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.cv-content-long{
+  overflow-x:hidden !important;
+}

@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v468-live-preview-fit-final";
+const CACHE_NAME = "cvfast-v470-smart-spacing";
 
 const APP_SHELL = [
   "/",
