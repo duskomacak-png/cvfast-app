@@ -4105,3 +4105,151 @@ body.v40-active.v40-builder-open .v40-stage{
     font-size:13px !important;
   }
 }
+
+/* CVFAST v4.50 — icon templates + print-friendly color variants */
+.cv-page {
+  --cv-accent: #6b91d1;
+  --cv-title: #0b4aba;
+  --cv-icon-bg: #eef4ff;
+  --cv-icon-border: #dbe8ff;
+  --cv-tag-bg: #eef4ff;
+  --cv-tag-border: #dbe8ff;
+  --cv-tag-text: #17315f;
+}
+
+.cv-page.mono {
+  --cv-accent: #111827;
+  --cv-title: #111827;
+  --cv-icon-bg: #f3f4f6;
+  --cv-icon-border: #d1d5db;
+  --cv-tag-bg: #f9fafb;
+  --cv-tag-border: #d1d5db;
+  --cv-tag-text: #111827;
+}
+
+.cv-page.softgreen {
+  --cv-accent: #4f8f74;
+  --cv-title: #2f6f5b;
+  --cv-icon-bg: #edf7f2;
+  --cv-icon-border: #cfe9dc;
+  --cv-tag-bg: #edf7f2;
+  --cv-tag-border: #cfe9dc;
+  --cv-tag-text: #275c4a;
+}
+
+.cv-page.softpink {
+  --cv-accent: #b96b83;
+  --cv-title: #9b4f66;
+  --cv-icon-bg: #fff1f5;
+  --cv-icon-border: #f7cdd8;
+  --cv-tag-bg: #fff1f5;
+  --cv-tag-border: #f7cdd8;
+  --cv-tag-text: #85465a;
+}
+
+.cv-page.softblue {
+  --cv-accent: #5f86bf;
+  --cv-title: #315f9e;
+  --cv-icon-bg: #eef5ff;
+  --cv-icon-border: #d8e8ff;
+  --cv-tag-bg: #eef5ff;
+  --cv-tag-border: #d8e8ff;
+  --cv-tag-text: #274d82;
+}
+
+.cv-page.beige {
+  --cv-accent: #a57a45;
+  --cv-title: #805e35;
+  --cv-icon-bg: #fbf4e8;
+  --cv-icon-border: #ead8bd;
+  --cv-tag-bg: #fbf4e8;
+  --cv-tag-border: #ead8bd;
+  --cv-tag-text: #6e512f;
+}
+
+.cv-page .cv-title { color: var(--cv-title) !important; }
+.cv-page .cv-divider,
+.cv-page .cv-section-title::after { background: var(--cv-accent) !important; }
+.cv-page .cv-tags span {
+  background: var(--cv-tag-bg) !important;
+  border-color: var(--cv-tag-border) !important;
+  color: var(--cv-tag-text) !important;
+}
+.cv-page .cv-photo,
+.cv-page .cv-photo-placeholder { border-color: var(--cv-accent) !important; }
+
+.cv-section-icon,
+.cv-contact-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--cv-accent);
+}
+
+.cv-section-icon {
+  width: 25px;
+  height: 25px;
+  border: 1px solid var(--cv-icon-border);
+  background: var(--cv-icon-bg);
+  border-radius: 8px;
+}
+
+.cv-section-icon svg,
+.cv-contact-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cv-contact li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.cv-contact-icon {
+  width: 17px;
+  height: 17px;
+}
+
+.cv-page.sidebar {
+  --cv-accent: #60a5fa;
+  --cv-title: #bfdbfe;
+  --cv-icon-bg: rgba(255,255,255,.10);
+  --cv-icon-border: rgba(255,255,255,.25);
+  --cv-tag-bg: rgba(255,255,255,.10);
+  --cv-tag-border: rgba(255,255,255,.20);
+  --cv-tag-text: #e5eefb;
+}
+.cv-page.sidebar .cv-section-icon { color:#fff; }
+.cv-page.sidebar .cv-tags span { color:#e5eefb !important; }
+
+.v40-download-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 10px 0;
+}
+.v40-download-options .v40-primary-btn,
+.v40-download-options .v40-ghost-btn { width: 100%; }
+
+.v40-template-preview-mono .blue,
+.v40-template-preview-mono .v40-template-line.blue { background:#111827 !important; }
+.v40-template-preview-softgreen .blue,
+.v40-template-preview-softgreen .v40-template-line.blue { background:#4f8f74 !important; }
+.v40-template-preview-softpink .blue,
+.v40-template-preview-softpink .v40-template-line.blue { background:#b96b83 !important; }
+.v40-template-preview-softblue .blue,
+.v40-template-preview-softblue .v40-template-line.blue { background:#5f86bf !important; }
+.v40-template-preview-beige .blue,
+.v40-template-preview-beige .v40-template-line.blue { background:#a57a45 !important; }
+.v40-template-preview-mono { background:#fff !important; }
+.v40-template-preview-softgreen { background:linear-gradient(180deg,#fbfffd,#edf7f2) !important; }
+.v40-template-preview-softpink { background:linear-gradient(180deg,#fffafd,#fff1f5) !important; }
+.v40-template-preview-softblue { background:linear-gradient(180deg,#fbfdff,#eef5ff) !important; }
+.v40-template-preview-beige { background:linear-gradient(180deg,#fffdf8,#fbf4e8) !important; }

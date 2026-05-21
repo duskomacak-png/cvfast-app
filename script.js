@@ -48,7 +48,7 @@ const ui = {
     navStart: "Start CV",
     privacyBadge: "🛡️ Bez naloga • Bez slanja na server",
     heroTitle: "Napravi CV brzo",
-    heroSubtitle: "Napravi i pregledaj CV besplatno. PDF preuzimanje se otključava jednokratnom podrškom.",
+    heroSubtitle: "Napravi i pregledaj CV besplatno. PDF i PNG preuzimanje se otključava jednokratnom podrškom.",
     startCv: "📄 Start CV",
     installApp: "⬇️ Preuzmi app",
     shareApp: "🔗 Podeli app",
@@ -71,7 +71,7 @@ const ui = {
     step1: "Unesi podatke",
     step2: "Pregledaj uživo",
     step3: "Preuzmi PDF",
-    supportTitle: "Pregled je besplatan • PDF unlock €5",
+    supportTitle: "Pregled je besplatan • PDF + PNG unlock €5",
     supportText: "Jednokratna podrška pomaže da cvfast.app ostane online.",
     browserNote: "🔒 Podaci ostaju u tvom browseru",
     feature1Title: "📱 Mobile first",
@@ -115,14 +115,15 @@ const ui = {
     sidebarTemplateHint: "Moderan CV sa bočnom kolonom",
     fillDemo: "Popuni demo",
     downloadPdf: "Preuzmi PDF",
+    downloadPng: "Preuzmi PNG",
     clearData: "Obriši",
     livePreview: "Live CV Preview",
     autoSave: "Auto-save aktivan",
     translateBtn: "🌍 Prevedi preko Google Translate",
     supportModalTitle: "CV je spreman ✅",
-    supportModalText: "Izrada i pregled CV-a su besplatni. Jednokratnom podrškom od 5€ otključavaš PDF preuzimanje u ovom browseru.",
-    supportModalMuted: "Posle otključavanja možeš menjati CV i preuzimati više PDF verzija u ovom browseru, dok ne obrišeš podatke pregledača.",
-    supportPayBtn: "☕ Podrži projekat 5€ i otključaj PDF preuzimanje",
+    supportModalText: "Izrada i pregled CV-a su besplatni. Jednokratnom podrškom od 5€ otključavaš PDF i PNG preuzimanje u ovom browseru.",
+    supportModalMuted: "Posle otključavanja možeš menjati CV i preuzimati više PDF/PNG verzija u ovom browseru, dok ne obrišeš podatke pregledača.",
+    supportPayBtn: "☕ Podrži projekat 5€ i otključaj PDF + PNG",
     alreadyPaid: "",
     mvpNote: "PayPal će te vratiti u app. Otključavanje ostaje u ovom browseru dok ne obrišeš podatke pregledača.",
     privacyLink: "Privatnost",
@@ -144,8 +145,8 @@ const ui = {
     photoAdded: "Slika je dodata ✅",
     chooseTarget: "Izaberi EN ili DE kao jezik CV-a",
     enterTextFirst: "Prvo unesi tekst koji želiš da prevedeš",
-    unlocked: "PDF otključan ✅",
-    pdfUnlockedBrowser: "PDF je otključan u ovom browseru ✅",
+    unlocked: "PDF + PNG otključani ✅",
+    pdfUnlockedBrowser: "PDF + PNG su otključani u ovom browseru ✅",
     installIos: "Za iPhone: otvori cvfast.app u Safari browseru → tapni Share → Add to Home Screen.",
     installOther: "Ako se install prozor ne pojavi: u Chrome/Edge meniju izaberi Install app ili Add to Home Screen.",
     alreadyInstalled: "App je već instalirana ✅",
@@ -154,7 +155,7 @@ const ui = {
     installDismissed: "Instalacija je otkazana",
     linkCopied: "Link je kopiran ✅",
     confirmClear: "Da li sigurno želiš da obrišeš sve podatke iz browsera?",
-    pdfError: "PDF greška. Proveri internet/CDN biblioteke."
+    pdfError: "Greška pri preuzimanju. Proveri internet/CDN biblioteke."
   },
   en: {
     navHow: "How it works",
@@ -162,7 +163,7 @@ const ui = {
     navStart: "Start CV",
     privacyBadge: "🛡️ No account • No server upload",
     heroTitle: "Create your resume fast",
-    heroSubtitle: "Build and preview your CV for free. PDF download unlocks with a one-time €5 support payment. No subscription.",
+    heroSubtitle: "Build and preview your CV for free. PDF and PNG downloads unlock with a one-time €5 support payment. No subscription.",
     startCv: "📄 Start CV",
     installApp: "⬇️ Install app",
     shareApp: "🔗 Share app",
@@ -185,8 +186,8 @@ const ui = {
     step1: "Fill in your data",
     step2: "Preview live",
     step3: "Download PDF",
-    supportTitle: "Free preview • one-time €5 PDF unlock",
-    supportText: "Build first. Pay only when your PDF is ready. No subscription.",
+    supportTitle: "Free preview • one-time €5 PDF + PNG unlock",
+    supportText: "Build first. Pay only when your CV is ready. No subscription.",
     browserNote: "🔒 Your data stays in your browser",
     feature1Title: "📱 Mobile first",
     feature1Text: "Works on phone, laptop and desktop. You can create your CV immediately.",
@@ -229,14 +230,15 @@ const ui = {
     sidebarTemplateHint: "Modern CV with side column",
     fillDemo: "Fill demo",
     downloadPdf: "Download PDF",
+    downloadPng: "Download PNG",
     clearData: "Clear",
     livePreview: "Live CV Preview",
     autoSave: "Auto-save active",
     translateBtn: "🌍 Translate with Google Translate",
     supportModalTitle: "Your CV is ready ✅",
-    supportModalText: "Creating and previewing your CV is free. A one-time €5 support payment unlocks PDF downloads in this browser.",
-    supportModalMuted: "After unlocking, you can edit your CV and download more PDF versions in this browser until you clear browser data. No subscription.",
-    supportPayBtn: "☕ Support 5€ & unlock PDF downloads",
+    supportModalText: "Creating and previewing your CV is free. A one-time €5 support payment unlocks PDF and PNG downloads in this browser.",
+    supportModalMuted: "After unlocking, you can edit your CV and download more PDF/PNG versions in this browser until you clear browser data. No subscription.",
+    supportPayBtn: "☕ Support 5€ & unlock PDF + PNG",
     alreadyPaid: "",
     mvpNote: "After payment, PayPal returns you to cvfast.app. PDF downloads stay unlocked in this browser until you clear browser data.",
     privacyLink: "Privacy Policy",
@@ -258,8 +260,8 @@ const ui = {
     photoAdded: "Photo added ✅",
     chooseTarget: "Choose English or German as CV language",
     enterTextFirst: "First enter the text you want to translate",
-    unlocked: "PDF unlocked ✅",
-    pdfUnlockedBrowser: "PDF is unlocked in this browser ✅",
+    unlocked: "PDF + PNG unlocked ✅",
+    pdfUnlockedBrowser: "PDF + PNG are unlocked in this browser ✅",
     installIos: "For iPhone: open cvfast.app in Safari → tap Share → Add to Home Screen.",
     installOther: "If the install prompt does not appear: use Chrome/Edge menu → Install app or Add to Home Screen.",
     alreadyInstalled: "App is already installed ✅",
@@ -268,7 +270,7 @@ const ui = {
     installDismissed: "Installation cancelled",
     linkCopied: "Link copied ✅",
     confirmClear: "Are you sure you want to delete all data from this browser?",
-    pdfError: "PDF error. Check internet/CDN libraries."
+    pdfError: "Download error. Check internet/CDN libraries."
   },
   de: {
     navHow: "So funktioniert es",
@@ -276,7 +278,7 @@ const ui = {
     navStart: "CV starten",
     privacyBadge: "🛡️ Kein Konto • Kein Server-Upload",
     heroTitle: "Lebenslauf schnell erstellen",
-    heroSubtitle: "Lebenslauf kostenlos erstellen und ansehen. PDF-Download nach einmaliger Unterstützung.",
+    heroSubtitle: "Lebenslauf kostenlos erstellen und ansehen. PDF- und PNG-Download nach einmaliger Unterstützung.",
     startCv: "📄 CV starten",
     installApp: "⬇️ App installieren",
     shareApp: "🔗 App teilen",
@@ -299,8 +301,8 @@ const ui = {
     step1: "Daten eingeben",
     step2: "Live ansehen",
     step3: "PDF herunterladen",
-    supportTitle: "Kostenlose Vorschau • einmalige PDF-Freischaltung 5€",
-    supportText: "Erst erstellen. Erst zahlen, wenn dein PDF bereit ist. Kein Abo.",
+    supportTitle: "Kostenlose Vorschau • PDF + PNG für 5€ freischalten",
+    supportText: "Erst erstellen. Erst zahlen, wenn dein CV bereit ist. Kein Abo.",
     browserNote: "🔒 Deine Daten bleiben in deinem Browser",
     feature1Title: "📱 Mobile first",
     feature1Text: "Funktioniert auf Handy, Laptop und Desktop. Du kannst deinen Lebenslauf sofort erstellen.",
@@ -343,14 +345,15 @@ const ui = {
     sidebarTemplateHint: "Moderner CV mit Seitenleiste",
     fillDemo: "Demo ausfüllen",
     downloadPdf: "PDF herunterladen",
+    downloadPng: "PNG herunterladen",
     clearData: "Löschen",
     livePreview: "Live CV Vorschau",
     autoSave: "Auto-save aktiv",
     translateBtn: "🌍 Mit Google Translate übersetzen",
     supportModalTitle: "Dein CV ist bereit ✅",
-    supportModalText: "Erstellen und Vorschau sind kostenlos. Eine einmalige Unterstützung von 5€ schaltet PDF-Downloads in diesem Browser frei.",
-    supportModalMuted: "Nach der Freischaltung kannst du deinen CV bearbeiten und weitere PDF-Versionen in diesem Browser herunterladen, bis du die Browserdaten löschst. Kein Abo.",
-    supportPayBtn: "☕ 5€ unterstützen & PDF-Downloads freischalten",
+    supportModalText: "Erstellen und Vorschau sind kostenlos. Eine einmalige Unterstützung von 5€ schaltet PDF- und PNG-Downloads in diesem Browser frei.",
+    supportModalMuted: "Nach der Freischaltung kannst du deinen CV bearbeiten und weitere PDF/PNG-Versionen herunterladen, bis du die Browserdaten löschst. Kein Abo.",
+    supportPayBtn: "☕ 5€ unterstützen & PDF + PNG freischalten",
     alreadyPaid: "",
     mvpNote: "Nach der Zahlung bringt PayPal dich zurück zu cvfast.app. PDF-Downloads bleiben in diesem Browser freigeschaltet, bis du die Browserdaten löschst.",
     privacyLink: "Datenschutz",
@@ -372,8 +375,8 @@ const ui = {
     photoAdded: "Foto hinzugefügt ✅",
     chooseTarget: "Wähle EN oder DE als CV-Sprache",
     enterTextFirst: "Gib zuerst den Text ein, den du übersetzen möchtest",
-    unlocked: "PDF freigeschaltet ✅",
-    pdfUnlockedBrowser: "PDF ist in diesem Browser freigeschaltet ✅",
+    unlocked: "PDF + PNG freigeschaltet ✅",
+    pdfUnlockedBrowser: "PDF + PNG sind in diesem Browser freigeschaltet ✅",
     installIos: "Für iPhone: cvfast.app in Safari öffnen → Teilen → Zum Home-Bildschirm hinzufügen.",
     installOther: "Wenn kein Installationsfenster erscheint: Chrome/Edge-Menü → App installieren oder Zum Startbildschirm hinzufügen.",
     alreadyInstalled: "App ist bereits installiert ✅",
@@ -382,7 +385,7 @@ const ui = {
     installDismissed: "Installation abgebrochen",
     linkCopied: "Link kopiert ✅",
     confirmClear: "Möchtest du wirklich alle Daten aus diesem Browser löschen?",
-    pdfError: "PDF-Fehler. Prüfe Internet/CDN-Bibliotheken."
+    pdfError: "Download-Fehler. Prüfe Internet/CDN-Bibliotheken."
   }
 };
 
@@ -980,6 +983,33 @@ function updateTemplateChoice(template) {
   });
 }
 
+
+function cvIcon(name) {
+  const icons = {
+    profile: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M4.5 20c1.4-4.1 4.1-6.2 7.5-6.2s6.1 2.1 7.5 6.2"></path></svg>',
+    contact: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.6 3.1 3.5 5 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.2 1.3.4 2.6.6 4 .6.5 0 .9.4.9.9v3.5c0 .5-.4.9-.9.9C10.8 21 3 13.2 3 3.9 3 3.4 3.4 3 3.9 3h3.5c.5 0 .9.4.9.9 0 1.4.2 2.7.6 4 .1.4 0 .8-.2 1.1l-2.1 1.8z"></path></svg>',
+    phone: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.6 3.1 3.5 5 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.2 1.3.4 2.6.6 4 .6.5 0 .9.4.9.9v3.5c0 .5-.4.9-.9.9C10.8 21 3 13.2 3 3.9 3 3.4 3.4 3 3.9 3h3.5c.5 0 .9.4.9.9 0 1.4.2 2.7.6 4 .1.4 0 .8-.2 1.1l-2.1 1.8z"></path></svg>',
+    email: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M4 7l8 6 8-6"></path></svg>',
+    location: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5.1 7-11a7 7 0 0 0-14 0c0 5.9 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>',
+    link: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path><path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1"></path></svg>',
+    experience: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5.5A2.5 2.5 0 0 1 11.5 3h1A2.5 2.5 0 0 1 15 5.5V7"></path><path d="M3 12h18"></path></svg>',
+    tools: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5 5L3.8 17.2a2.1 2.1 0 0 0 3 3l5.9-5.9a4 4 0 0 0 5-5l-2.6 2.6-3-3 2.6-2.6z"></path></svg>',
+    skills: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M8.5 14.5c-1.7-1.2-2.8-3.1-2.8-5.2A6.3 6.3 0 0 1 12 3a6.3 6.3 0 0 1 6.3 6.3c0 2.1-1.1 4-2.8 5.2-.8.6-.9 1.4-.9 2.5H9.4c0-1.1-.1-1.9-.9-2.5z"></path></svg>',
+    education: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l9-4 9 4-9 4-9-4z"></path><path d="M7 10.2v5.1c0 1.5 2.2 2.7 5 2.7s5-1.2 5-2.7v-5.1"></path><path d="M21 8v6"></path></svg>',
+    languages: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.2 2.4 3.2 5.4 3.2 9s-1 6.6-3.2 9c-2.2-2.4-3.2-5.4-3.2-9S9.8 5.4 12 3z"></path></svg>',
+    traits: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.3-7-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7 3.8C19 16.7 12 21 12 21z"></path></svg>'
+  };
+  return icons[name] || icons.profile;
+}
+
+function cvSectionIcon(key) {
+  return `<span class="cv-section-icon">${cvIcon(key)}</span>`;
+}
+
+function cvContactIcon(key) {
+  return `<span class="cv-contact-icon">${cvIcon(key)}</span>`;
+}
+
 function renderCv(target, data, options = {}) {
   const usePlaceholders = Boolean(options.placeholders);
   const d = usePlaceholders ? withPlaceholders(data) : data;
@@ -1003,10 +1033,10 @@ function renderCv(target, data, options = {}) {
 
   const contactHtml = hasContact ? `
     <ul class="cv-contact">
-      ${d.phone ? `<li>📞 ${esc(d.phone)}</li>` : ""}
-      ${d.email ? `<li>✉️ ${esc(d.email)}</li>` : ""}
-      ${d.location ? `<li>📍 ${esc(d.location)}</li>` : ""}
-      ${d.linkedin ? `<li>🔗 ${esc(d.linkedin)}</li>` : ""}
+      ${d.phone ? `<li>${cvContactIcon("phone")}<span>${esc(d.phone)}</span></li>` : ""}
+      ${d.email ? `<li>${cvContactIcon("email")}<span>${esc(d.email)}</span></li>` : ""}
+      ${d.location ? `<li>${cvContactIcon("location")}<span>${esc(d.location)}</span></li>` : ""}
+      ${d.linkedin ? `<li>${cvContactIcon("link")}<span>${esc(d.linkedin)}</span></li>` : ""}
     </ul>
   ` : "";
 
@@ -1016,9 +1046,9 @@ function renderCv(target, data, options = {}) {
     ${(hasName || hasTitle) ? `<div class="cv-divider"></div>` : ""}
   `;
 
-  const section = (title, html) => html ? `
-    <section class="cv-section">
-      <div class="cv-section-title"><h2>${esc(title)}</h2></div>
+  const section = (title, html, icon = "profile") => html ? `
+    <section class="cv-section cv-section-${icon}">
+      <div class="cv-section-title">${cvSectionIcon(icon)}<h2>${esc(title)}</h2></div>
       ${html}
     </section>
   ` : "";
@@ -1050,19 +1080,19 @@ function renderCv(target, data, options = {}) {
       ${photoHtml}
       ${nameTitleHtml}
       ${contactHtml}
-      ${section(L.skills, tagsHtml(skillItems))}
-      ${section(L.languages, listHtml(languageItems))}
-      ${section(L.machines, listHtml(machineItems))}
-      ${section(L.education, paragraphHtml(d.education))}
+      ${section(L.skills, tagsHtml(skillItems), "skills")}
+      ${section(L.languages, listHtml(languageItems), "languages")}
+      ${section(L.machines, listHtml(machineItems), "tools")}
+      ${section(L.education, paragraphHtml(d.education), "education")}
     `.trim();
 
     target.innerHTML = `
       <div class="cv-inner">
         ${sideContent ? `<aside class="cv-side">${sideContent}</aside>` : ""}
         <main class="cv-main">
-          ${section(L.profile, paragraphHtml(d.profile))}
-          ${section(L.experience, listHtml(expItems))}
-          ${section(L.traits, paragraphHtml(d.traits))}
+          ${section(L.profile, paragraphHtml(d.profile), "profile")}
+          ${section(L.experience, listHtml(expItems), "experience")}
+          ${section(L.traits, paragraphHtml(d.traits), "traits")}
         </main>
       </div>
       <footer class="cv-footer">cvfast.app</footer>
@@ -1084,24 +1114,24 @@ function renderCv(target, data, options = {}) {
     <div class="cv-inner">
       ${headerHtml}
 
-      ${section(L.profile, paragraphHtml(d.profile))}
-      ${section(L.experience, listHtml(expItems))}
+      ${section(L.profile, paragraphHtml(d.profile), "profile")}
+      ${section(L.experience, listHtml(expItems), "experience")}
 
       ${(machineItems.length || skillItems.length) ? `
         <div class="cv-columns">
-          ${section(L.machines, listHtml(machineItems))}
-          ${section(L.skills, tagsHtml(skillItems))}
+          ${section(L.machines, listHtml(machineItems), "tools")}
+          ${section(L.skills, tagsHtml(skillItems), "skills")}
         </div>
       ` : ""}
 
       ${(languageItems.length || d.education) ? `
         <div class="cv-columns">
-          ${section(L.languages, listHtml(languageItems))}
-          ${section(L.education, paragraphHtml(d.education))}
+          ${section(L.languages, listHtml(languageItems), "languages")}
+          ${section(L.education, paragraphHtml(d.education), "education")}
         </div>
       ` : ""}
 
-      ${section(L.traits, paragraphHtml(d.traits))}
+      ${section(L.traits, paragraphHtml(d.traits), "traits")}
     </div>
     <footer class="cv-footer">cvfast.app</footer>
   `;
@@ -1288,12 +1318,25 @@ async function ensurePdfLibraries() {
 async function downloadPdf() {
   showToast(getLang() === "de" ? "PDF wird vorbereitet..." : getLang() === "en" ? "Preparing PDF..." : "Pripremam PDF...");
   await ensurePdfLibraries();
+  const { canvas, data } = await renderCvToCanvas(2);
+  const imgData = canvas.toDataURL("image/jpeg", 0.96);
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+  pdf.addImage(imgData, "JPEG", 0, 0, 210, 297);
+  pdf.save(cvDownloadFileName(data, "pdf"));
+}
 
-  // V40-safe PDF generation: render into a temporary visible/off-screen CV page.
-  // This keeps the old PDF engine intact even when the old builder UI is hidden.
-  const dataForPdf = getData({ includeLanguageDraft: true });
+
+function cvDownloadFileName(data, extension) {
+  const name = (data.fullName || "cvfast-cv").trim().replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "") || "cvfast-cv";
+  return `${name}_CV.${extension}`;
+}
+
+async function renderCvToCanvas(scale = 2) {
+  await ensurePdfLibraries();
+  const dataForImage = getData({ includeLanguageDraft: true });
   const preview = document.createElement("article");
-  preview.className = `cv-page ${dataForPdf.template || "classic"}`;
+  preview.className = `cv-page ${dataForImage.template || "classic"}`;
   preview.style.position = "fixed";
   preview.style.left = "-10000px";
   preview.style.top = "0";
@@ -1302,31 +1345,29 @@ async function downloadPdf() {
   preview.style.background = "#ffffff";
   preview.style.zIndex = "-1";
   document.body.appendChild(preview);
-
-  renderCv(preview, dataForPdf, { placeholders: false });
-
+  renderCv(preview, dataForImage, { placeholders: false });
   const footer = preview.querySelector(".cv-footer");
   const oldFooterText = footer?.textContent;
   if (footer && !SHOW_CVFAST_FOOTER_IN_PDF) footer.textContent = "";
-
   await new Promise((r) => setTimeout(r, 80));
-
-  const canvas = await html2canvas(preview, {
-    scale: 2,
-    backgroundColor: "#ffffff",
-    useCORS: true
-  });
-
+  const canvas = await html2canvas(preview, { scale, backgroundColor: "#ffffff", useCORS: true });
   if (footer && oldFooterText !== undefined) footer.textContent = oldFooterText;
   preview.remove();
+  return { canvas, data: dataForImage };
+}
 
-  const imgData = canvas.toDataURL("image/jpeg", 0.96);
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF("p", "mm", "a4");
-
-  pdf.addImage(imgData, "JPEG", 0, 0, 210, 297);
-  const name = (dataForPdf.fullName || "cvfast-cv").trim().replace(/[^\p{L}\p{N}]+/gu, "_");
-  pdf.save(`${name}_CV.pdf`);
+async function downloadPng() {
+  showToast(getLang() === "de" ? "PNG wird vorbereitet..." : getLang() === "en" ? "Preparing PNG..." : "Pripremam PNG...");
+  if (!window.html2canvas) {
+    await loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
+  }
+  const { canvas, data } = await renderCvToCanvas(3);
+  const link = document.createElement("a");
+  link.download = cvDownloadFileName(data, "png");
+  link.href = canvas.toDataURL("image/png");
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
 }
 
 function openSupportModal() {
@@ -1652,6 +1693,22 @@ function init() {
     }
   });
 
+  $("#downloadPngBtn")?.addEventListener("click", async () => {
+    trackEvent("download_png_click", { unlocked: isUnlocked() });
+    const lang = getLang();
+    if (!isUnlocked()) {
+      openSupportModal();
+      return;
+    }
+
+    try {
+      await downloadPng();
+    } catch (err) {
+      console.error(err);
+      showToast(ui[lang].pdfError);
+    }
+  });
+
   $("#paymentLink")?.addEventListener("click", () => {
     trackEvent("paypal_click", { value: 5, currency: "EUR" });
   });
@@ -1868,8 +1925,9 @@ const V40_I18N = {
 
 const V40_TEXTS = {
   en: {
-    continueBtn: "Continue →", nextBtn: "Next →", downloadPdf: "Download PDF", unlockPdf: "Unlock PDF 5€", part: "Part", stepLabel: "Step", backBtn: "‹ Back", edit: "Edit", delete: "Delete", entry: "Entry",
-    templateIntroTitle: "Choose your CV design", templateIntroText: "Select one example below. You can change it later.", classic: "Classic", modern: "Modern", classicDesc: "Clean and simple CV for most jobs.", modernDesc: "Modern side column layout.",
+    continueBtn: "Continue →", nextBtn: "Next →", downloadPdf: "Download PDF",
+    downloadPng: "Download PNG", unlockPdf: "Unlock PDF 5€", part: "Part", stepLabel: "Step", backBtn: "‹ Back", edit: "Edit", delete: "Delete", entry: "Entry",
+    templateIntroTitle: "Choose your CV design", templateIntroText: "Select one example below. You can change it later.", classic: "Classic", modern: "Modern", classicDesc: "Clean and simple CV for most jobs.", modernDesc: "Modern side column layout.", mono: "Mono Icons", monoDesc: "Black and white print-safe CV with icons.", softgreen: "Soft Green", softgreenDesc: "Clean green accent, friendly for printing.", softpink: "Soft Pink", softpinkDesc: "Gentle modern CV with soft pink accent.", softblue: "Soft Blue", softblueDesc: "Calm blue business CV.", beige: "Warm Beige", beigeDesc: "Warm elegant CV for email and print.", downloadPng: "Download PNG", unlockDownloads: "Unlock downloads 5€",
     firstNameNote: "First add your name. The app will guide you field by field.", firstName: "First name *", lastName: "Last name *", firstNamePh: "John", lastNamePh: "Smith",
     headlineNote: "Add the CV headline shown under your name.", headline: "Target position / CV headline", headlinePh: "Senior Software Engineer",
     photoNote: "Add a clear CV photo if you want. This is optional.", photo: "Photo", addPhoto: "Add CV photo", photoHelp: "Optional. Saved only in this browser.", choosePhoto: "Choose photo", removePhoto: "Remove photo",
@@ -1883,11 +1941,12 @@ const V40_TEXTS = {
     eduNote2: "Add location and dates.", dates: "Dates", eduNote3: "Optional: add a short note, then save education.", descriptionOptional: "Description optional", optionalDetails: "Optional details.", saveEducation: "+ Save education",
     skill: "Skill", skillPh: "Communication", add: "+ Add", suggestSkills: "✨ Suggest skills",
     language: "Language", languagePh: "English", level: "Level", native: "Native", addLanguage: "+ Add language",
-    atsScore: "ATS Readiness Score", ready: "Your CV is ready for PDF.", template: "Template", pdfUnlocked: "PDF download is unlocked.", why5: "What do you get for 5€?", unlockedHelp: "PDF downloads are unlocked in this browser. Edit your CV and download new versions whenever you need them.", unlockHelp: "You pay once to unlock PDF download on this device/browser. The CV builder and preview are free. After payment, PayPal returns you here and you can edit this CV and download more PDF versions until browser data is cleared. No subscription.", editPersonal: "Edit personal", editContact: "Edit contact", editWork: "Edit work", tipFullName: "Add full name", tipJobTitle: "Add job title", tipEmail: "Add email", tipPhone: "Add phone", tipSummary: "Add stronger summary", tipExperience: "Add work experience", tipSkills: "Add more skills", tipResults: "Consider adding measurable results", goodStructure: "Good structure", strongKeywords: "Strong keywords", readyPdf: "Ready for PDF"
+    atsScore: "ATS Readiness Score", ready: "Your CV is ready for PDF and PNG.", template: "Template", pdfUnlocked: "PDF + PNG downloads are unlocked.", why5: "What do you get for 5€?", unlockedHelp: "PDF and PNG downloads are unlocked in this browser. Edit your CV and download new versions whenever you need them.", unlockHelp: "You pay once to unlock PDF and PNG downloads on this device/browser. The CV builder and preview are free. After payment, PayPal returns you here and you can download more versions until browser data is cleared. No subscription.", editPersonal: "Edit personal", editContact: "Edit contact", editWork: "Edit work", tipFullName: "Add full name", tipJobTitle: "Add job title", tipEmail: "Add email", tipPhone: "Add phone", tipSummary: "Add stronger summary", tipExperience: "Add work experience", tipSkills: "Add more skills", tipResults: "Consider adding measurable results", goodStructure: "Good structure", strongKeywords: "Strong keywords", readyPdf: "Ready for PDF"
   },
   de: {
-    continueBtn: "Weiter →", nextBtn: "Weiter →", downloadPdf: "PDF herunterladen", unlockPdf: "PDF für 5€ freischalten", part: "Teil", stepLabel: "Schritt", backBtn: "‹ Zurück", edit: "Bearbeiten", delete: "Löschen", entry: "Eintrag",
-    templateIntroTitle: "Wähle dein CV-Design", templateIntroText: "Wähle unten ein Beispiel. Du kannst es später ändern.", classic: "Klassisch", modern: "Modern", classicDesc: "Sauberer und einfacher CV für die meisten Jobs.", modernDesc: "Modernes Layout mit Seitenleiste.",
+    continueBtn: "Weiter →", nextBtn: "Weiter →", downloadPdf: "PDF herunterladen",
+    downloadPng: "PNG herunterladen", unlockPdf: "PDF für 5€ freischalten", part: "Teil", stepLabel: "Schritt", backBtn: "‹ Zurück", edit: "Bearbeiten", delete: "Löschen", entry: "Eintrag",
+    templateIntroTitle: "Wähle dein CV-Design", templateIntroText: "Wähle unten ein Beispiel. Du kannst es später ändern.", classic: "Klassisch", modern: "Modern", classicDesc: "Sauberer und einfacher CV für die meisten Jobs.", modernDesc: "Modernes Layout mit Seitenleiste.", mono: "Mono Icons", monoDesc: "Schwarz-weiß und druckfreundlich mit Icons.", softgreen: "Soft Green", softgreenDesc: "Sauberer grüner Akzent, gut zum Drucken.", softpink: "Soft Pink", softpinkDesc: "Sanfter moderner CV mit rosa Akzent.", softblue: "Soft Blue", softblueDesc: "Ruhiger blauer Business-CV.", beige: "Warm Beige", beigeDesc: "Warmer eleganter CV für E-Mail und Druck.", downloadPng: "PNG herunterladen", unlockDownloads: "Downloads 5€ freischalten",
     firstNameNote: "Gib zuerst deinen Namen ein. Die App führt dich Feld für Feld.", firstName: "Vorname *", lastName: "Nachname *", firstNamePh: "Max", lastNamePh: "Müller",
     headlineNote: "Füge die Überschrift hinzu, die unter deinem Namen erscheint.", headline: "Zielposition / CV-Überschrift", headlinePh: "Softwareentwickler",
     photoNote: "Füge optional ein klares CV-Foto hinzu.", photo: "Foto", addPhoto: "CV-Foto hinzufügen", photoHelp: "Optional. Nur in diesem Browser gespeichert.", choosePhoto: "Foto auswählen", removePhoto: "Foto entfernen",
@@ -1901,11 +1960,12 @@ const V40_TEXTS = {
     eduNote2: "Füge Ort und Zeitraum hinzu.", dates: "Zeitraum", eduNote3: "Optional: Füge eine kurze Notiz hinzu und speichere die Ausbildung.", descriptionOptional: "Beschreibung optional", optionalDetails: "Optionale Details.", saveEducation: "+ Ausbildung speichern",
     skill: "Fähigkeit", skillPh: "Kommunikation", add: "+ Hinzufügen", suggestSkills: "✨ Fähigkeiten vorschlagen",
     language: "Sprache", languagePh: "Deutsch", level: "Niveau", native: "Muttersprache", addLanguage: "+ Sprache hinzufügen",
-    atsScore: "ATS-Bereitschaft", ready: "Dein CV ist bereit für PDF.", template: "Vorlage", pdfUnlocked: "PDF-Download ist freigeschaltet.", why5: "Was bekommst du für 5€?", unlockedHelp: "PDF-Downloads sind in diesem Browser freigeschaltet. Du kannst den CV bearbeiten und neue Versionen herunterladen.", unlockHelp: "Du zahlst einmalig, um den PDF-Download auf diesem Gerät/Browser freizuschalten. Erstellung und Vorschau bleiben kostenlos. Nach PayPal kommst du zurück und kannst diesen CV weiter bearbeiten und mehrere PDF-Versionen herunterladen, bis Browserdaten gelöscht werden. Kein Abo.", editPersonal: "Persönliches bearbeiten", editContact: "Kontakt bearbeiten", editWork: "Beruf bearbeiten", tipFullName: "Vollständigen Namen hinzufügen", tipJobTitle: "Jobtitel hinzufügen", tipEmail: "E-Mail hinzufügen", tipPhone: "Telefon hinzufügen", tipSummary: "Profil stärken", tipExperience: "Berufserfahrung hinzufügen", tipSkills: "Mehr Fähigkeiten hinzufügen", tipResults: "Messbare Ergebnisse ergänzen", goodStructure: "Gute Struktur", strongKeywords: "Starke Schlüsselwörter", readyPdf: "Bereit für PDF"
+    atsScore: "ATS-Bereitschaft", ready: "Dein CV ist bereit für PDF und PNG.", template: "Vorlage", pdfUnlocked: "PDF + PNG sind freigeschaltet.", why5: "Was bekommst du für 5€?", unlockedHelp: "PDF- und PNG-Downloads sind in diesem Browser freigeschaltet. Du kannst den CV bearbeiten und neue Versionen herunterladen.", unlockHelp: "Du zahlst einmalig, um PDF- und PNG-Downloads auf diesem Gerät/Browser freizuschalten. Erstellung und Vorschau bleiben kostenlos. Nach PayPal kommst du zurück und kannst weitere Versionen herunterladen, bis Browserdaten gelöscht werden. Kein Abo.", editPersonal: "Persönliches bearbeiten", editContact: "Kontakt bearbeiten", editWork: "Beruf bearbeiten", tipFullName: "Vollständigen Namen hinzufügen", tipJobTitle: "Jobtitel hinzufügen", tipEmail: "E-Mail hinzufügen", tipPhone: "Telefon hinzufügen", tipSummary: "Profil stärken", tipExperience: "Berufserfahrung hinzufügen", tipSkills: "Mehr Fähigkeiten hinzufügen", tipResults: "Messbare Ergebnisse ergänzen", goodStructure: "Gute Struktur", strongKeywords: "Starke Schlüsselwörter", readyPdf: "Bereit für PDF"
   },
   sr: {
-    continueBtn: "Nastavi →", nextBtn: "Dalje →", downloadPdf: "Preuzmi PDF", unlockPdf: "Otključaj PDF 5€", part: "Deo", stepLabel: "Korak", backBtn: "‹ Nazad", edit: "Uredi", delete: "Obriši", entry: "Unos",
-    templateIntroTitle: "Izaberi izgled CV-a", templateIntroText: "Izaberi jedan primer dole. Možeš ga promeniti kasnije.", classic: "Klasičan", modern: "Moderan", classicDesc: "Čist i jednostavan CV za većinu poslova.", modernDesc: "Moderan raspored sa bočnom kolonom.",
+    continueBtn: "Nastavi →", nextBtn: "Dalje →", downloadPdf: "Preuzmi PDF",
+    downloadPng: "Preuzmi PNG", unlockPdf: "Otključaj PDF 5€", part: "Deo", stepLabel: "Korak", backBtn: "‹ Nazad", edit: "Uredi", delete: "Obriši", entry: "Unos",
+    templateIntroTitle: "Izaberi izgled CV-a", templateIntroText: "Izaberi jedan primer dole. Možeš ga promeniti kasnije.", classic: "Klasičan", modern: "Moderan", classicDesc: "Čist i jednostavan CV za većinu poslova.", modernDesc: "Moderan raspored sa bočnom kolonom.", mono: "Mono ikonice", monoDesc: "Crno-beli CV za štampu sa ikonicama.", softgreen: "Soft Green", softgreenDesc: "Čist zeleni akcenat, dobar za štampu.", softpink: "Soft Pink", softpinkDesc: "Blag moderan CV sa roze akcentom.", softblue: "Soft Blue", softblueDesc: "Mirni plavi poslovni CV.", beige: "Warm Beige", beigeDesc: "Topao elegantan CV za email i štampu.", downloadPng: "Preuzmi PNG", unlockDownloads: "Otključaj preuzimanja 5€",
     firstNameNote: "Prvo dodaj ime. Aplikacija te vodi polje po polje.", firstName: "Ime *", lastName: "Prezime *", firstNamePh: "Aleksandar", lastNamePh: "Petrović",
     headlineNote: "Dodaj naslov CV-a koji se prikazuje ispod imena.", headline: "Ciljana pozicija / naslov CV-a", headlinePh: "Rukovalac građevinskih mašina",
     photoNote: "Dodaj jasnu CV fotografiju ako želiš. Nije obavezno.", photo: "Fotografija", addPhoto: "Dodaj CV fotografiju", photoHelp: "Nije obavezno. Čuva se samo u ovom browseru.", choosePhoto: "Izaberi fotografiju", removePhoto: "Ukloni fotografiju",
@@ -1919,7 +1979,7 @@ const V40_TEXTS = {
     eduNote2: "Dodaj mesto i datume.", dates: "Datumi", eduNote3: "Opcionalno: dodaj kratku napomenu, zatim sačuvaj obrazovanje.", descriptionOptional: "Opis opcionalno", optionalDetails: "Opcioni detalji.", saveEducation: "+ Sačuvaj obrazovanje",
     skill: "Veština", skillPh: "Komunikacija", add: "+ Dodaj", suggestSkills: "✨ Predloži veštine",
     language: "Jezik", languagePh: "Srpski", level: "Nivo", native: "Maternji", addLanguage: "+ Dodaj jezik",
-    atsScore: "ATS spremnost", ready: "Tvoj CV je spreman za PDF.", template: "Šablon", pdfUnlocked: "PDF preuzimanje je otključano.", why5: "Šta dobijaš za 5€?", unlockedHelp: "PDF preuzimanje je otključano u ovom browseru. Možeš uređivati CV i preuzimati nove verzije kad god ti treba.", unlockHelp: "Plaćaš jednom da otključaš PDF preuzimanje na ovom uređaju/browseru. Izrada i pregled CV-a su besplatni. Posle PayPal uplate vraćaš se ovde, uređuješ isti CV i možeš preuzeti više PDF verzija dok ne obrišeš podatke browsera. Nema pretplate.", editPersonal: "Uredi lične podatke", editContact: "Uredi kontakt", editWork: "Uredi posao", tipFullName: "Dodaj ime i prezime", tipJobTitle: "Dodaj naziv pozicije", tipEmail: "Dodaj email", tipPhone: "Dodaj telefon", tipSummary: "Dodaj jači profil", tipExperience: "Dodaj radno iskustvo", tipSkills: "Dodaj više veština", tipResults: "Dodaj merljive rezultate", goodStructure: "Dobra struktura", strongKeywords: "Dobre ključne reči", readyPdf: "Spremno za PDF"
+    atsScore: "ATS spremnost", ready: "Tvoj CV je spreman za PDF i PNG.", template: "Šablon", pdfUnlocked: "PDF + PNG preuzimanje je otključano.", why5: "Šta dobijaš za 5€?", unlockedHelp: "PDF i PNG preuzimanje je otključano u ovom browseru. Možeš uređivati CV i preuzimati nove verzije kad god ti treba.", unlockHelp: "Plaćaš jednom da otključaš PDF i PNG preuzimanje na ovom uređaju/browseru. Izrada i pregled CV-a su besplatni. Posle PayPal uplate vraćaš se ovde i možeš preuzeti više verzija dok ne obrišeš podatke browsera. Nema pretplate.", editPersonal: "Uredi lične podatke", editContact: "Uredi kontakt", editWork: "Uredi posao", tipFullName: "Dodaj ime i prezime", tipJobTitle: "Dodaj naziv pozicije", tipEmail: "Dodaj email", tipPhone: "Dodaj telefon", tipSummary: "Dodaj jači profil", tipExperience: "Dodaj radno iskustvo", tipSkills: "Dodaj više veština", tipResults: "Dodaj merljive rezultate", goodStructure: "Dobra struktura", strongKeywords: "Dobre ključne reči", readyPdf: "Spremno za PDF"
   }
 };
 function v40Text(){ return V40_TEXTS[getLang()] || V40_TEXTS.en; }
@@ -1949,11 +2009,13 @@ function v40DefaultState() {
 
 function v40TemplateToLegacy(t) {
   if (t === "modern") return "sidebar";
+  if (["mono", "softgreen", "softpink", "softblue", "beige"].includes(t)) return t;
   return "classic";
 }
 
 function legacyTemplateToV40(t) {
   if (t === "sidebar") return "modern";
+  if (["mono", "softgreen", "softpink", "softblue", "beige"].includes(t)) return t;
   return "classic";
 }
 
@@ -2438,7 +2500,8 @@ function v40RenderPreview() {
   if (!target) return;
   const payload = v40PreviewPayload();
   const tplTxt = v40Text();
-  document.getElementById("v40TemplateLabel").textContent = v40State.selectedTemplate === "modern" ? tplTxt.modern : tplTxt.classic;
+  const selectedTpl = v40TemplateOptions().find(t => t.id === v40State.selectedTemplate) || v40TemplateOptions()[0];
+  document.getElementById("v40TemplateLabel").textContent = tplTxt[selectedTpl.nameKey] || tplTxt.classic;
   renderCv(target, payload.data, { placeholders: false });
   target.classList.toggle("v40-preview-sample", !payload.hasData);
   v40FitPreview();
@@ -2455,8 +2518,7 @@ function v40RenderStepContent() {
       <span>${escHtml(txt.templateIntroText)}</span>
     </div>
     <div class="v40-template-grid">
-      ${v40TemplateCard("classic", txt.classic, txt.classicDesc)}
-      ${v40TemplateCard("modern", txt.modern, txt.modernDesc)}
+      ${v40TemplateOptions().map(tpl => v40TemplateCard(tpl.id, txt[tpl.nameKey], txt[tpl.descKey])).join("")}
     </div>`;
     return;
   }
@@ -2590,18 +2652,35 @@ function v40RenderStepContent() {
         </div>
         <div class="v40-helper-text">${escHtml(tips)}</div>
       </div>
-      <label>${escHtml(txt.template)}<select onchange="v40SelectTemplate(this.value)"><option value="classic" ${v40State.selectedTemplate==="classic"?"selected":""}>${escHtml(txt.classic)}</option><option value="modern" ${v40State.selectedTemplate==="modern"?"selected":""}>${escHtml(txt.modern)}</option></select></label>
+      <label>${escHtml(txt.template)}<select onchange="v40SelectTemplate(this.value)">${v40TemplateOptions().map(tpl => `<option value="${tpl.id}" ${v40State.selectedTemplate===tpl.id?"selected":""}>${escHtml(txt[tpl.nameKey])}</option>`).join("")}</select></label>
       <div class="v40-unlock-info v40-unlock-info-compact">
         <strong>${escHtml(unlocked ? txt.pdfUnlocked : txt.why5)}</strong>
         <span>${escHtml(unlocked ? txt.unlockedHelp : txt.unlockHelp)}</span>
+      </div>
+      <div class="v40-download-options">
+        <button type="button" class="v40-primary-btn" onclick="${unlocked ? "v40DownloadPdf()" : "v40PayUnlock()"}">${escHtml(unlocked ? txt.downloadPdf : txt.unlockDownloads)}</button>
+        <button type="button" class="v40-ghost-btn" onclick="${unlocked ? "v40DownloadPng()" : "v40PayUnlock()"}">${escHtml(unlocked ? txt.downloadPng : txt.downloadPng)}</button>
       </div>
       <div class="v40-jump-grid v40-jump-grid-compact"><button type="button" onclick="v40Go(2)">${escHtml(txt.editPersonal)}</button><button type="button" onclick="v40Go(3)">${escHtml(txt.editContact)}</button><button type="button" onclick="v40Go(5)">${escHtml(txt.editWork)}</button></div>
     </div>`;
   }
 }
 
+function v40TemplateOptions() {
+  return [
+    { id: "classic", nameKey: "classic", descKey: "classicDesc" },
+    { id: "modern", nameKey: "modern", descKey: "modernDesc" },
+    { id: "mono", nameKey: "mono", descKey: "monoDesc" },
+    { id: "softgreen", nameKey: "softgreen", descKey: "softgreenDesc" },
+    { id: "softpink", nameKey: "softpink", descKey: "softpinkDesc" },
+    { id: "softblue", nameKey: "softblue", descKey: "softblueDesc" },
+    { id: "beige", nameKey: "beige", descKey: "beigeDesc" }
+  ];
+}
+
 function v40TemplateCard(id, name, desc) {
   const isModern = id === "modern";
+  const swatchClass = `v40-template-preview-${id}`;
   const lang = getLang();
   const sample = {
     en: { initials: "AM", name: "Alex Miller", title: "Operations Specialist" },
@@ -2609,8 +2688,8 @@ function v40TemplateCard(id, name, desc) {
     sr: { initials: "AP", name: "Aleksandar Petrović", title: "Operativni radnik" }
   }[lang] || { initials: "AM", name: "Alex Miller", title: "Operations Specialist" };
   const preview = isModern
-    ? `<div class="v40-template-preview v40-template-preview-modern"><div class="v40-template-side"><div class="v40-template-avatar">${escHtml(sample.initials)}</div><span></span><span></span><span class="short"></span><div class="v40-template-side-title"></div><span></span><span class="short"></span></div><div class="v40-template-main"><div class="v40-template-head"><b>${escHtml(sample.name)}</b><small>${escHtml(sample.title)}</small></div><div class="v40-template-line blue long"></div><div class="v40-template-line"></div><div class="v40-template-line"></div><div class="v40-template-line short"></div><div class="v40-template-line"></div></div></div>`
-    : `<div class="v40-template-preview v40-template-preview-classic"><div class="v40-template-head"><b>${escHtml(sample.name)}</b><small>${escHtml(sample.title)}</small></div><div class="v40-template-line blue long"></div><div class="v40-template-line"></div><div class="v40-template-line"></div><div class="v40-template-line short"></div><div class="v40-template-line"></div><div class="v40-template-chip-row"><i></i><i></i><i></i></div></div>`;
+    ? `<div class="v40-template-preview v40-template-preview-modern ${swatchClass}"><div class="v40-template-side"><div class="v40-template-avatar">${escHtml(sample.initials)}</div><span></span><span></span><span class="short"></span><div class="v40-template-side-title"></div><span></span><span class="short"></span></div><div class="v40-template-main"><div class="v40-template-head"><b>${escHtml(sample.name)}</b><small>${escHtml(sample.title)}</small></div><div class="v40-template-line blue long"></div><div class="v40-template-line"></div><div class="v40-template-line"></div><div class="v40-template-line short"></div><div class="v40-template-line"></div></div></div>`
+    : `<div class="v40-template-preview v40-template-preview-classic ${swatchClass}"><div class="v40-template-head"><b>${escHtml(sample.name)}</b><small>${escHtml(sample.title)}</small></div><div class="v40-template-line blue long"></div><div class="v40-template-line"></div><div class="v40-template-line"></div><div class="v40-template-line short"></div><div class="v40-template-line"></div><div class="v40-template-chip-row"><i></i><i></i><i></i></div></div>`;
   return `<div class="v40-template-card ${v40State.selectedTemplate===id?"active":""}" onclick="v40SelectTemplate('${id}')">${preview}<div><div class="v40-template-name">${name}</div><div class="v40-template-desc">${desc}</div></div></div>`;
 }
 
@@ -2954,6 +3033,7 @@ function v40SetBuilderMode(isBuilder){
 }
 
 async function v40DownloadPdf(){ v40CommitToLegacy(); try{ await downloadPdf(); }catch(err){ console.error(err); showToast(ui[getLang()].pdfError); } }
+async function v40DownloadPng(){ v40CommitToLegacy(); try{ await downloadPng(); }catch(err){ console.error(err); showToast(ui[getLang()].pdfError); } }
 function v40PayUnlock(){ v40CommitToLegacy(); openSupportModal(); }
 function v40GoHome(){
   // V40.36: menu Home returns to the welcome screen without deleting CV data or PDF unlock.

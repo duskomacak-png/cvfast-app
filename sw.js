@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v441-mobile-final-paypal-visible-safe";
+const CACHE_NAME = "cvfast-v450-templates-png-icons";
 
 const APP_SHELL = [
   "/",
