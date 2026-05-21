@@ -5356,3 +5356,50 @@ body.v40-active.v40-builder-open.v40-final-step .v40-one-unlock-btn{
     overflow:hidden !important;
   }
 }
+
+
+/* V40.27 / v466: live preview must never scroll left-right.
+   The CV page fits the preview panel width; only vertical scrolling remains.
+   Export/PDF/PNG logic is untouched. */
+@media (min-width:700px){
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap{
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    overscroll-behavior:contain !important;
+    scrollbar-gutter:stable !important;
+  }
+  html body.v40-active.v40-builder-open .v40-preview-stage{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    overflow:visible !important;
+    display:block !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    min-height:1123px !important;
+    margin:0 auto !important;
+    transform:none !important;
+    transform-origin:top center !important;
+    box-sizing:border-box !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-inner{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-main,
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-side{
+    min-width:0 !important;
+    box-sizing:border-box !important;
+  }
+}
+@media (max-width:699px){
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap{
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+  }
+}
