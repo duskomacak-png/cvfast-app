@@ -4430,3 +4430,89 @@ body.v40-active.v40-builder-open .v40-stage{
 .v40-template-preview-softpink .v40-template-side { background:linear-gradient(180deg,#b96b83,#87475b) !important; }
 .v40-template-preview-mono .v40-template-head b,
 .v40-template-preview-mono .v40-template-head small { color:#111827 !important; }
+
+/* CVFAST v4.53 — one clear unlock button before payment */
+.v40-download-options.v40-download-options-locked {
+  grid-template-columns: 1fr !important;
+}
+.v40-one-unlock-btn {
+  min-height: 78px !important;
+  font-size: 18px !important;
+  line-height: 1.25 !important;
+  padding: 16px 18px !important;
+}
+@media (max-width: 520px) {
+  .v40-one-unlock-btn {
+    min-height: 74px !important;
+    font-size: 16px !important;
+  }
+}
+
+
+/* V40.18: stronger soft red fog glow around desktop phone mockup. */
+body.v40-active .v40-device-stack{
+  position:relative;
+  isolation:isolate;
+}
+body.v40-active .v40-phone-frame,
+body.v40-active .v40-app-actions,
+body.v40-active .v40-legal-under-app{
+  position:relative;
+  z-index:1;
+}
+@media(min-width:521px){
+  body.v40-active .v40-device-stack::before{
+    content:"";
+    position:absolute;
+    left:-10%;
+    right:-10%;
+    top:18px;
+    bottom:92px;
+    border-radius:72px;
+    background:
+      radial-gradient(circle at 50% 38%, rgba(255,72,72,.30) 0%, rgba(255,72,72,.22) 16%, rgba(255,72,72,.14) 32%, rgba(255,72,72,.08) 46%, rgba(255,72,72,0) 72%),
+      radial-gradient(circle at 22% 26%, rgba(255,82,82,.20) 0%, rgba(255,82,82,.08) 24%, rgba(255,82,82,0) 46%),
+      radial-gradient(circle at 80% 76%, rgba(255,64,64,.18) 0%, rgba(255,64,64,.07) 24%, rgba(255,64,64,0) 44%);
+    filter:blur(34px);
+    opacity:.95;
+    z-index:0;
+    pointer-events:none;
+    transform:scale(1.03);
+  }
+  body.v40-active .v40-device-stack::after{
+    content:"";
+    position:absolute;
+    left:4%;
+    right:4%;
+    top:52px;
+    bottom:126px;
+    border-radius:58px;
+    border:1px solid rgba(248,113,113,.16);
+    box-shadow:0 0 55px rgba(239,68,68,.14), 0 0 110px rgba(239,68,68,.10);
+    filter:blur(8px);
+    z-index:0;
+    pointer-events:none;
+  }
+  body.v40-active .v40-phone-frame{
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 42px 110px rgba(0,0,0,.72),0 0 34px rgba(239,68,68,.28),0 0 88px rgba(239,68,68,.20),0 0 155px rgba(239,68,68,.14),0 34px 86px rgba(239,68,68,.16) !important;
+  }
+  body.v40-active .v40-phone-frame::before{
+    left:6% !important;
+    right:6% !important;
+    bottom:-26px !important;
+    height:104px !important;
+    background:radial-gradient(ellipse at center, rgba(239,68,68,.54) 0%, rgba(239,68,68,.26) 38%, rgba(239,68,68,.10) 56%, rgba(239,68,68,0) 78%) !important;
+    filter:blur(22px) !important;
+  }
+  body.v40-active .v40-phone-frame::after{
+    inset:-10px !important;
+    border:1px solid rgba(248,113,113,.26) !important;
+    box-shadow:0 0 28px rgba(239,68,68,.18), 0 0 60px rgba(239,68,68,.10) !important;
+  }
+}
+@media(max-width:520px){
+  body.v40-active .v40-device-stack::before,
+  body.v40-active .v40-device-stack::after{
+    display:none !important;
+  }
+}
