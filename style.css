@@ -5435,3 +5435,78 @@ html body.v40-active.v40-builder-open .v40-input-sheet input{
   overflow-wrap:anywhere !important;
   word-break:break-word !important;
 }
+
+
+/* V40.29 / v468: FINAL live preview fit fix.
+   Goal: preview scrolls only vertically. The CV page must fit the panel width;
+   full preview modal must not create left-right scrolling. Download/PDF/PNG logic untouched. */
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap,
+html body.v40-active.v40-builder-open .v40-full-preview-scroll{
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  overscroll-behavior:contain !important;
+}
+html body.v40-active.v40-builder-open .v40-preview-stage{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  display:block !important;
+  overflow:visible !important;
+}
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page,
+html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-page{
+  width:min(794px, 100%) !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  margin:0 auto !important;
+  transform:none !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+}
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-inner,
+html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-inner{
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+}
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.sidebar .cv-inner,
+html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-page.sidebar .cv-inner{
+  grid-template-columns:minmax(150px, 32%) minmax(0, 1fr) !important;
+}
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-main,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-side,
+html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-main,
+html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-side{
+  min-width:0 !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-main *,
+html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-side *,
+html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-main *,
+html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-side *{
+  max-width:100% !important;
+  overflow-wrap:anywhere !important;
+  word-break:break-word !important;
+}
+html body.v40-active.v40-builder-open .v40-full-preview-scroll{
+  display:block !important;
+  padding:14px !important;
+}
+@media (max-width:699px){
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-page{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    transform:none !important;
+    margin:0 auto !important;
+  }
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll .cv-page.sidebar .cv-inner,
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.sidebar .cv-inner{
+    grid-template-columns:minmax(118px, 34%) minmax(0, 1fr) !important;
+  }
+}
