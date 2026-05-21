@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v458-desktop-split-safe";
+const CACHE_NAME = "cvfast-v459-pink-bg-glow";
 
 const APP_SHELL = [
   "/",

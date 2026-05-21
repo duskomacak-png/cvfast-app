@@ -4827,3 +4827,72 @@ body.v40-active.v40-builder-open.v40-final-step .v40-one-unlock-btn{
     width:100% !important;
   }
 }
+
+
+/* V40.21: stable pink fog background glow for laptop/desktop split view.
+   This glow is attached to the whole desktop app area, not only the phone frame,
+   so it stays visible after layout fixes. Mobile remains unchanged. */
+@media (min-width: 700px){
+  body.v40-active .v40-stage{
+    position:relative !important;
+    isolation:isolate !important;
+    overflow:hidden !important;
+  }
+  body.v40-active .v40-stage::before{
+    content:"";
+    position:fixed;
+    width:min(980px, 78vw);
+    height:min(760px, 78vh);
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 50% 45%, rgba(244,114,182,.30) 0%, rgba(244,114,182,.22) 18%, rgba(244,114,182,.12) 38%, rgba(244,114,182,.055) 55%, rgba(244,114,182,0) 74%),
+      radial-gradient(circle at 24% 30%, rgba(251,113,133,.22) 0%, rgba(251,113,133,.11) 28%, rgba(251,113,133,0) 55%),
+      radial-gradient(circle at 82% 70%, rgba(236,72,153,.18) 0%, rgba(236,72,153,.08) 30%, rgba(236,72,153,0) 58%);
+    filter:blur(30px);
+    opacity:.95;
+    pointer-events:none;
+    z-index:-2;
+  }
+  body.v40-active .v40-stage::after{
+    content:"";
+    position:fixed;
+    width:min(780px, 66vw);
+    height:min(620px, 66vh);
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
+    border-radius:54px;
+    border:1px solid rgba(244,114,182,.16);
+    box-shadow:
+      0 0 46px rgba(244,114,182,.18),
+      0 0 120px rgba(244,114,182,.12),
+      0 0 190px rgba(236,72,153,.08);
+    filter:blur(8px);
+    pointer-events:none;
+    z-index:-1;
+  }
+  body.v40-active .v40-device-stack,
+  body.v40-active .v40-phone-frame,
+  body.v40-active .v40-app-actions,
+  body.v40-active .v40-legal-under-app{
+    position:relative !important;
+    z-index:1 !important;
+  }
+  body.v40-active .v40-phone-frame{
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.16),
+      0 42px 110px rgba(0,0,0,.70),
+      0 0 26px rgba(244,114,182,.24),
+      0 0 70px rgba(244,114,182,.16),
+      0 0 135px rgba(236,72,153,.10) !important;
+  }
+}
+@media (max-width: 699px){
+  body.v40-active .v40-stage::before,
+  body.v40-active .v40-stage::after{
+    display:none !important;
+  }
+}
