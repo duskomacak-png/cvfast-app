@@ -5873,3 +5873,25 @@ html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.cv-content-l
     transform-origin:top left !important;
   }
 }
+
+
+/* V476: mobile full-preview natural fit.
+   Phone preview shows the full A4 width and scrolls vertically only. */
+@media (max-width: 520px){
+  .v40-full-preview-scroll{
+    display:block !important;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+    padding:12px !important;
+    scroll-behavior:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .v40-full-preview-scroll .cv-page{
+    width:794px !important;
+    min-width:794px !important;
+    max-width:none !important;
+    transform-origin:top left !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+  }
+}
