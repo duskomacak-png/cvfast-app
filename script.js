@@ -1859,7 +1859,7 @@ $("#closeSupportModal")?.addEventListener("click", closeSupportModal);
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js?v=474").catch(() => {});
+      navigator.serviceWorker.register("/sw.js?v=475").catch(() => {});
     });
   }
 
@@ -3075,15 +3075,35 @@ function v40FitFullPreview(){
   requestAnimationFrame(() => {
     const baseW=794;
     const baseH=Math.max(page.scrollHeight || 0, page.offsetHeight || 0, 1123);
-    const availableW=Math.max(220, scroll.clientWidth - 24);
     const mobile=window.innerWidth <= 520;
-    const scale=mobile ? Math.min(1, availableW / baseW) : 1;
-    const scaledW=baseW * scale;
-    const offset=Math.max(0, Math.floor((availableW - scaledW) / 2));
-    page.style.transform = mobile ? `translateX(${offset}px) scale(${scale})` : "none";
-    page.style.transformOrigin = mobile ? "top left" : "top center";
+    const availableW=Math.max(220, scroll.clientWidth - 24);
+
+    // V475: keep the CV looking like the original A4 preview.
+    // We use only uniform scaling, never stretch/compress width separately.
+    // On phones we allow horizontal scrolling instead of squeezing the CV too much.
+    const fitScale = availableW / baseW;
+    const scale = mobile ? Math.min(0.58, Math.max(0.46, fitScale)) : 1;
+
+    page.style.transform = mobile ? `scale(${scale})` : "none";
+    page.style.transformOrigin = "top left";
     page.style.margin = mobile ? `0 0 ${Math.round(baseH * (scale - 1))}px 0` : "0 auto";
-    scroll.style.overflowX = mobile ? "hidden" : "auto";
+    page.style.width = `${baseW}px`;
+    page.style.minWidth = `${baseW}px`;
+
+    scroll.style.overflowX = mobile ? "auto" : "auto";
+    scroll.style.overflowY = "auto";
+    scroll.style.webkitOverflowScrolling = "touch";
+
+    if(mobile){
+      const scaledW = Math.ceil(baseW * scale);
+      const leftPad = Math.max(12, Math.floor((scroll.clientWidth - scaledW) / 2));
+      scroll.style.paddingLeft = `${leftPad}px`;
+      scroll.style.paddingRight = "12px";
+      scroll.scrollLeft = 0;
+    } else {
+      scroll.style.paddingLeft = "";
+      scroll.style.paddingRight = "";
+    }
   });
 }
 function v40OpenFullPreview(){

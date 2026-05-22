@@ -5852,3 +5852,24 @@ html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.cv-content-l
     margin:0 !important;
   }
 }
+
+
+/* V475: full preview keeps original A4 feeling on mobile.
+   The modal may scroll sideways a little, instead of forcing the page to look squeezed. */
+@media (max-width: 520px){
+  .v40-full-preview-scroll{
+    display:block !important;
+    overflow-x:auto !important;
+    overflow-y:auto !important;
+    padding-top:12px !important;
+    padding-bottom:12px !important;
+    scroll-behavior:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  .v40-full-preview-scroll .cv-page{
+    width:794px !important;
+    min-width:794px !important;
+    max-width:none !important;
+    transform-origin:top left !important;
+  }
+}
