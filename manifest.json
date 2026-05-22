@@ -1,7 +1,7 @@
 {
   "name": "cvfast.app - Resume & CV Builder",
   "short_name": "cvfast",
-  "description": "Create a professional resume or CV without sign-up. Free preview, one-time PDF + PNG unlock, no subscription.",
+  "description": "Create a professional resume or CV without sign-up. Free preview, one-time PDF unlock, no subscription.",
   "start_url": "/",
   "scope": "/",
   "id": "/",
