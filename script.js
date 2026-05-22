@@ -240,7 +240,7 @@ const ui = {
     supportModalMuted: "After unlocking, you can edit your CV and download more PDF/PNG versions in this browser until you clear browser data. No subscription.",
     supportPayBtn: "☕ Support 5€ & unlock PDF + PNG",
     alreadyPaid: "",
-    mvpNote: "After payment, PayPal returns you to cvfast.app. PDF downloads stay unlocked in this browser until you clear browser data.",
+    mvpNote: "After payment, PayPal returns you to cvfast.app. PDF and PNG downloads stay unlocked in this browser until you clear browser data.",
     privacyLink: "Privacy Policy",
     termsLink: "Terms of Use",
     supportLink: "Support",
@@ -478,7 +478,7 @@ const legalTexts = {
         <h3>What data is used?</h3>
         <p>The information you enter, including your name, contact details, work experience, skills and photo, is stored locally in your browser using LocalStorage.</p>
         <h3>LocalStorage</h3>
-        <p>If you clear your browser data, use another device or another browser, your saved CV data and PDF unlock may be lost.</p>
+        <p>If you clear your browser data, use another device or another browser, your saved CV data and PDF/PNG unlock may be lost.</p>
         <h3>PDF and payment/support</h3>
         <p>PDF generation happens in your browser. Payment/support processing is handled by PayPal. We do not store your payment card details.</p>
         <h3>Google Translate</h3>
@@ -492,8 +492,8 @@ const legalTexts = {
         <ul>
           <li>We do not guarantee employment, interviews, job offers or acceptance by any employer.</li>
           <li>You are responsible for the accuracy of the information you enter into your CV.</li>
-          <li>Creating and previewing a CV is free. PDF download may require a one-time support payment.</li>
-          <li>Because the app works without accounts and without a database, PDF unlock is stored only in the browser/device used at the time of unlock.</li>
+          <li>Creating and previewing a CV is free. PDF and PNG downloads may require a one-time support payment.</li>
+          <li>Because the app works without accounts and without a database, PDF/PNG unlock is stored only in the browser/device used at the time of unlock.</li>
           <li>The app is provided “as is”. Features may be changed, updated or removed.</li>
         </ul>
       `
@@ -501,7 +501,7 @@ const legalTexts = {
     support: {
       title: "Support",
       body: `
-        <p>If you have a problem with PDF download, CV display or unlock after support, contact support.</p>
+        <p>If you have a problem with PDF/PNG download, CV display or unlock after support, contact support.</p>
         <p><strong>Email:</strong> <a href="mailto:support.cvfast@gmail.com">support.cvfast@gmail.com</a></p>
         <p>If this email is not active yet, use the contact provided on the official project page.</p>
       `
@@ -3076,9 +3076,32 @@ function v40OpenFullPreview(){
   const payload=v40PreviewPayload();
   renderCv(target, payload.data, {placeholders:false});
   modal.classList.remove("hidden");
+  v40FitFullPreview();
 }
 function v40CloseFullPreview(){
   document.getElementById("v40FullPreviewModal")?.classList.add("hidden");
+}
+
+// V40.41: adaptive full preview fit. Keeps the A4 CV proportional on phones, zoomed pages and rotated screens.
+function v40FitFullPreview(){
+  const modal=document.getElementById("v40FullPreviewModal");
+  const scroll=document.querySelector(".v40-full-preview-scroll");
+  const page=document.getElementById("v40FullPreviewCv");
+  if(!modal||!scroll||!page||modal.classList.contains("hidden")) return;
+  requestAnimationFrame(()=>{
+    const baseW=794;
+    const isSmall=window.innerWidth<=760;
+    const available=Math.max(240, scroll.clientWidth - (isSmall ? 28 : 40));
+    const scale=isSmall ? Math.min(1, Math.max(.34, available/baseW)) : 1;
+    page.style.setProperty("transform", `scale(${scale})`, "important");
+    page.style.setProperty("transform-origin", "top center", "important");
+    page.style.marginLeft="auto";
+    page.style.marginRight="auto";
+    const rawH=Math.max(page.scrollHeight||0, page.offsetHeight||0, 1123);
+    page.style.marginBottom = scale < 1 ? `${Math.round((rawH * scale) - rawH)}px` : "0px";
+    scroll.style.overflow="auto";
+    scroll.style.overflowX=isSmall ? "hidden" : "auto";
+  });
 }
 
 function v40SetBuilderMode(isBuilder){
