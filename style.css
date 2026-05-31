@@ -6077,3 +6077,93 @@ html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.cv-content-l
     max-height:138px !important;
   }
 }
+
+/* V40.10 mobile A4 pan fix: compact live preview + real finger movement.
+   Only preview behavior is touched; PayPal/unlock/download logic is untouched. */
+@media (max-width: 520px){
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap{
+    flex:0 0 clamp(132px, 20dvh, 168px) !important;
+    min-height:132px !important;
+    max-height:168px !important;
+    overflow:auto !important;
+    overflow-x:auto !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    touch-action:pan-x pan-y !important;
+    overscroll-behavior:contain !important;
+    padding:10px !important;
+    cursor:grab !important;
+    scrollbar-width:none !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap::-webkit-scrollbar{display:none !important;}
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap.v40-preview-dragging{cursor:grabbing !important;}
+  html body.v40-active.v40-builder-open .v40-preview-stage{
+    display:block !important;
+    flex:0 0 auto !important;
+    overflow:visible !important;
+    margin:0 !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page{
+    width:794px !important;
+    min-width:794px !important;
+    max-width:none !important;
+    min-height:1123px !important;
+    position:absolute !important;
+    top:0 !important;
+    left:0 !important;
+    transform-origin:top left !important;
+    border-radius:10px !important;
+    background:#fff !important;
+    box-shadow:0 14px 38px rgba(15,23,42,.24) !important;
+  }
+  html body.v40-active.v40-builder-open .v40-cv-preview-wrap::after{
+    content:"Pomeri prstom • tap za veći prikaz" !important;
+    position:sticky !important;
+    left:10px !important;
+    bottom:6px !important;
+    transform:none !important;
+    width:max-content !important;
+    max-width:calc(100% - 20px) !important;
+    font-size:10px !important;
+    line-height:1 !important;
+    padding:5px 8px !important;
+    border-radius:999px !important;
+    background:rgba(15,23,42,.58) !important;
+    color:#fff !important;
+    z-index:20 !important;
+    white-space:nowrap !important;
+    pointer-events:none !important;
+  }
+
+  .v40-full-preview-panel{
+    width:100% !important;
+    height:100dvh !important;
+    border-radius:0 !important;
+    border:0 !important;
+  }
+  .v40-full-preview-scroll{
+    display:block !important;
+    overflow:auto !important;
+    overflow-x:auto !important;
+    overflow-y:auto !important;
+    touch-action:pan-x pan-y !important;
+    overscroll-behavior:contain !important;
+    -webkit-overflow-scrolling:touch !important;
+    padding:12px !important;
+    background:#eef3fb !important;
+    scrollbar-width:thin !important;
+  }
+  .v40-full-preview-scroll .cv-page{
+    width:794px !important;
+    min-width:794px !important;
+    max-width:none !important;
+    min-height:1123px !important;
+    transform-origin:top left !important;
+    margin:0 !important;
+    position:relative !important;
+    left:auto !important;
+    top:auto !important;
+    background:#fff !important;
+    box-shadow:0 16px 42px rgba(15,23,42,.18) !important;
+  }
+}

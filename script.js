@@ -3051,35 +3051,23 @@ function v40FitPreview(){
     const baseW=794;
     const rawH=Math.max(page.scrollHeight || 0, page.offsetHeight || 0, 1123);
     const isDesktopBuilder = window.innerWidth >= 700 && document.body.classList.contains("v40-builder-open");
+    const availableW=Math.max(220, wrap.clientWidth - 22);
 
-    // V40.8: compact mobile live preview.
-    // The previous A4 preview used too much vertical space on phones and pushed
-    // the input form below the fold. Keep the A4 look, but fit it inside the
-    // small preview card so the user can actually fill the CV without fighting
-    // the layout. Full/tap preview still opens the larger scrollable paper.
-    const availableW=Math.max(220, wrap.clientWidth-(isDesktopBuilder ? 34 : 22));
-    const availableH=Math.max(120, wrap.clientHeight-(isDesktopBuilder ? 34 : 22));
-    const widthScale=availableW/baseW;
-    const heightScale=availableH/rawH;
-    const minScale=isDesktopBuilder ? .42 : .18;
-    const maxScale=isDesktopBuilder ? 1 : .62;
-
-    // V40.9: On phones the small live preview must show the WHOLE A4 width.
-    // Earlier versions also fitted the A4 height, which made the page tiny and
-    // left a large empty area on the right. We now fit by width only in the
-    // compact preview, while the card itself stays short so the form remains
-    // immediately usable.
-    const scale=isDesktopBuilder
-      ? Math.min(maxScale, Math.max(minScale, widthScale))
-      : Math.min(maxScale, Math.max(minScale, widthScale));
+    // V40.10: mobile preview should feel like a real A4 sheet under the finger.
+    // Keep the preview card compact so the form remains usable, but scale the
+    // paper a bit larger than the card and allow native two-axis finger panning.
+    const fitScale = availableW / baseW;
+    const scale = isDesktopBuilder
+      ? Math.min(1, Math.max(.42, fitScale))
+      : Math.min(.58, Math.max(.42, fitScale * 1.30));
     const scaledW=Math.ceil(baseW * scale);
     const scaledH=Math.ceil(rawH * scale);
 
     stage.style.width = `${scaledW}px`;
     stage.style.height = `${scaledH}px`;
+    stage.style.minWidth = `${scaledW}px`;
     stage.style.minHeight = `${scaledH}px`;
-    stage.style.marginLeft = "auto";
-    stage.style.marginRight = "auto";
+    stage.style.margin = "0";
     stage.style.position = "relative";
     stage.style.overflow = "visible";
 
@@ -3093,10 +3081,19 @@ function v40FitPreview(){
     page.style.setProperty("transform-origin", "top left", "important");
     page.style.margin = "0";
 
-    wrap.style.overflow = isDesktopBuilder ? "auto" : "hidden";
-    wrap.style.overflowX = isDesktopBuilder ? "auto" : "hidden";
-    wrap.style.overflowY = isDesktopBuilder ? "auto" : "hidden";
+    wrap.style.overflow = "auto";
+    wrap.style.overflowX = "auto";
+    wrap.style.overflowY = "auto";
     wrap.style.webkitOverflowScrolling = "touch";
+    wrap.style.touchAction = "pan-x pan-y";
+    wrap.style.cursor = "grab";
+
+    if(!wrap.dataset.v40PanPositioned){
+      const maxLeft=Math.max(0, scaledW - wrap.clientWidth);
+      wrap.scrollLeft = Math.round(maxLeft * .35);
+      wrap.scrollTop = 0;
+      wrap.dataset.v40PanPositioned = "1";
+    }
   });
 }
 
@@ -3127,31 +3124,37 @@ function v40FitFullPreview(){
     const mobile=window.innerWidth <= 520;
     const availableW=Math.max(240, scroll.clientWidth - 24);
 
-    // V476: phone full preview is a natural "fit to screen width" preview.
-    // The CV keeps A4 proportions, the whole page width is visible, and the
-    // user scrolls vertically only. Export/PDF/PNG stay original quality.
-    const scale = mobile ? Math.min(1, availableW / baseW) : 1;
+    // V40.10: expanded preview is still a real A4 paper feeling, not a flat image.
+    // On mobile it is intentionally a little wider than the viewport, so the user
+    // can pan left/right and up/down with a finger while keeping A4 proportions.
+    const fitScale = availableW / baseW;
+    const scale = mobile ? Math.min(.78, Math.max(.56, fitScale * 1.28)) : 1;
     const scaledW = Math.ceil(baseW * scale);
-    const sideGap = mobile ? Math.max(0, Math.floor((scroll.clientWidth - scaledW) / 2)) : 0;
+    const scaledH = Math.ceil(baseH * scale);
 
     page.style.setProperty("width", `${baseW}px`, "important");
     page.style.setProperty("min-width", `${baseW}px`, "important");
     page.style.setProperty("max-width", "none", "important");
-    page.style.setProperty("transform", mobile ? `translateX(${sideGap}px) scale(${scale})` : "none", "important");
-    page.style.setProperty("transform-origin", mobile ? "top left" : "top center", "important");
-    page.style.setProperty("margin", mobile ? `0 0 ${Math.round(baseH * (scale - 1))}px 0` : "0 auto", "important");
+    page.style.setProperty("transform", mobile ? `scale(${scale})` : "none", "important");
+    page.style.setProperty("transform-origin", "top left", "important");
+    page.style.setProperty("margin", mobile ? `0 0 ${Math.max(0, baseH - scaledH + 18)}px 0` : "0 auto", "important");
     page.style.setProperty("position", "relative", "important");
     page.style.setProperty("left", "auto", "important");
     page.style.setProperty("top", "auto", "important");
 
-    scroll.style.setProperty("overflow-x", mobile ? "hidden" : "auto", "important");
+    scroll.style.setProperty("overflow-x", mobile ? "auto" : "auto", "important");
     scroll.style.setProperty("overflow-y", "auto", "important");
+    scroll.style.setProperty("touch-action", "pan-x pan-y", "important");
     scroll.style.webkitOverflowScrolling = "touch";
-    if(mobile){
-      scroll.scrollLeft = 0;
+    if(mobile && !scroll.dataset.v40PanPositioned){
+      const maxLeft=Math.max(0, scaledW - scroll.clientWidth);
+      scroll.scrollLeft = Math.round(maxLeft / 2);
+      scroll.scrollTop = 0;
+      scroll.dataset.v40PanPositioned = "1";
     }
   });
 }
+
 function v40OpenFullPreview(){
   v40CommitToLegacy();
   const modal=document.getElementById("v40FullPreviewModal");
