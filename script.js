@@ -3052,13 +3052,20 @@ function v40FitPreview(){
     const rawH=Math.max(page.scrollHeight || 0, page.offsetHeight || 0, 1123);
     const isDesktopBuilder = window.innerWidth >= 700 && document.body.classList.contains("v40-builder-open");
 
-    // V40.7: the live preview now behaves like a real A4 sheet in the phone.
-    // The page keeps A4 proportions, is scaled to the phone width, and the user
-    // can move/scroll the preview with a finger without changing PDF/PNG export.
-    const availableW=Math.max(240, wrap.clientWidth-(isDesktopBuilder ? 34 : 26));
-    const minScale=isDesktopBuilder ? .42 : .32;
-    const maxScale=isDesktopBuilder ? 1 : .58;
-    const scale=Math.min(maxScale, Math.max(minScale, availableW/baseW));
+    // V40.8: compact mobile live preview.
+    // The previous A4 preview used too much vertical space on phones and pushed
+    // the input form below the fold. Keep the A4 look, but fit it inside the
+    // small preview card so the user can actually fill the CV without fighting
+    // the layout. Full/tap preview still opens the larger scrollable paper.
+    const availableW=Math.max(220, wrap.clientWidth-(isDesktopBuilder ? 34 : 22));
+    const availableH=Math.max(120, wrap.clientHeight-(isDesktopBuilder ? 34 : 22));
+    const widthScale=availableW/baseW;
+    const heightScale=availableH/rawH;
+    const minScale=isDesktopBuilder ? .42 : .16;
+    const maxScale=isDesktopBuilder ? 1 : .44;
+    const scale=isDesktopBuilder
+      ? Math.min(maxScale, Math.max(minScale, widthScale))
+      : Math.min(maxScale, Math.max(minScale, Math.min(widthScale, heightScale)));
     const scaledW=Math.ceil(baseW * scale);
     const scaledH=Math.ceil(rawH * scale);
 
@@ -3080,9 +3087,9 @@ function v40FitPreview(){
     page.style.setProperty("transform-origin", "top left", "important");
     page.style.margin = "0";
 
-    wrap.style.overflow = "auto";
-    wrap.style.overflowX = "auto";
-    wrap.style.overflowY = "auto";
+    wrap.style.overflow = isDesktopBuilder ? "auto" : "hidden";
+    wrap.style.overflowX = isDesktopBuilder ? "auto" : "hidden";
+    wrap.style.overflowY = isDesktopBuilder ? "auto" : "hidden";
     wrap.style.webkitOverflowScrolling = "touch";
   });
 }
