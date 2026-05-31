@@ -3061,11 +3061,17 @@ function v40FitPreview(){
     const availableH=Math.max(120, wrap.clientHeight-(isDesktopBuilder ? 34 : 22));
     const widthScale=availableW/baseW;
     const heightScale=availableH/rawH;
-    const minScale=isDesktopBuilder ? .42 : .16;
-    const maxScale=isDesktopBuilder ? 1 : .44;
+    const minScale=isDesktopBuilder ? .42 : .18;
+    const maxScale=isDesktopBuilder ? 1 : .62;
+
+    // V40.9: On phones the small live preview must show the WHOLE A4 width.
+    // Earlier versions also fitted the A4 height, which made the page tiny and
+    // left a large empty area on the right. We now fit by width only in the
+    // compact preview, while the card itself stays short so the form remains
+    // immediately usable.
     const scale=isDesktopBuilder
       ? Math.min(maxScale, Math.max(minScale, widthScale))
-      : Math.min(maxScale, Math.max(minScale, Math.min(widthScale, heightScale)));
+      : Math.min(maxScale, Math.max(minScale, widthScale));
     const scaledW=Math.ceil(baseW * scale);
     const scaledH=Math.ceil(rawH * scale);
 
@@ -3128,15 +3134,18 @@ function v40FitFullPreview(){
     const scaledW = Math.ceil(baseW * scale);
     const sideGap = mobile ? Math.max(0, Math.floor((scroll.clientWidth - scaledW) / 2)) : 0;
 
-    page.style.width = `${baseW}px`;
-    page.style.minWidth = `${baseW}px`;
-    page.style.maxWidth = "none";
-    page.style.transform = mobile ? `translateX(${sideGap}px) scale(${scale})` : "none";
-    page.style.transformOrigin = mobile ? "top left" : "top center";
-    page.style.margin = mobile ? `0 0 ${Math.round(baseH * (scale - 1))}px 0` : "0 auto";
+    page.style.setProperty("width", `${baseW}px`, "important");
+    page.style.setProperty("min-width", `${baseW}px`, "important");
+    page.style.setProperty("max-width", "none", "important");
+    page.style.setProperty("transform", mobile ? `translateX(${sideGap}px) scale(${scale})` : "none", "important");
+    page.style.setProperty("transform-origin", mobile ? "top left" : "top center", "important");
+    page.style.setProperty("margin", mobile ? `0 0 ${Math.round(baseH * (scale - 1))}px 0` : "0 auto", "important");
+    page.style.setProperty("position", "relative", "important");
+    page.style.setProperty("left", "auto", "important");
+    page.style.setProperty("top", "auto", "important");
 
-    scroll.style.overflowX = mobile ? "hidden" : "auto";
-    scroll.style.overflowY = "auto";
+    scroll.style.setProperty("overflow-x", mobile ? "hidden" : "auto", "important");
+    scroll.style.setProperty("overflow-y", "auto", "important");
     scroll.style.webkitOverflowScrolling = "touch";
     if(mobile){
       scroll.scrollLeft = 0;
