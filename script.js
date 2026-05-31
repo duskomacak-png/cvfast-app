@@ -3118,39 +3118,56 @@ function v40FitFullPreview(){
   const scroll=document.querySelector(".v40-full-preview-scroll");
   const page=document.getElementById("v40FullPreviewCv");
   if(!scroll||!page) return;
+  let stage=document.getElementById("v40FullPreviewStage");
+  if(!stage){
+    stage=document.createElement("div");
+    stage.id="v40FullPreviewStage";
+    stage.className="v40-full-preview-stage";
+    page.parentNode?.insertBefore(stage, page);
+    stage.appendChild(page);
+  }
   requestAnimationFrame(() => {
     const baseW=794;
     const baseH=Math.max(page.scrollHeight || 0, page.offsetHeight || 0, 1123);
     const mobile=window.innerWidth <= 520;
     const availableW=Math.max(240, scroll.clientWidth - 24);
 
-    // V40.10: expanded preview is still a real A4 paper feeling, not a flat image.
-    // On mobile it is intentionally a little wider than the viewport, so the user
-    // can pan left/right and up/down with a finger while keeping A4 proportions.
+    // V40.11: full mobile preview uses a real scrollable A4 stage.
+    // The visual scroll area is the scaled paper size, so it never opens clipped
+    // in the middle, but the user can still move the A4 left/right/up/down.
     const fitScale = availableW / baseW;
-    const scale = mobile ? Math.min(.78, Math.max(.56, fitScale * 1.28)) : 1;
+    const scale = mobile ? Math.min(.62, Math.max(.44, fitScale * 1.14)) : 1;
     const scaledW = Math.ceil(baseW * scale);
     const scaledH = Math.ceil(baseH * scale);
+
+    stage.style.setProperty("position", "relative", "important");
+    stage.style.setProperty("width", mobile ? `${scaledW}px` : `${baseW}px`, "important");
+    stage.style.setProperty("height", mobile ? `${scaledH}px` : "auto", "important");
+    stage.style.setProperty("min-width", mobile ? `${scaledW}px` : `${baseW}px`, "important");
+    stage.style.setProperty("min-height", mobile ? `${scaledH}px` : `${baseH}px`, "important");
+    stage.style.setProperty("margin", mobile ? "0" : "0 auto", "important");
+    stage.style.setProperty("overflow", "visible", "important");
 
     page.style.setProperty("width", `${baseW}px`, "important");
     page.style.setProperty("min-width", `${baseW}px`, "important");
     page.style.setProperty("max-width", "none", "important");
+    page.style.setProperty("min-height", `${baseH}px`, "important");
     page.style.setProperty("transform", mobile ? `scale(${scale})` : "none", "important");
     page.style.setProperty("transform-origin", "top left", "important");
-    page.style.setProperty("margin", mobile ? `0 0 ${Math.max(0, baseH - scaledH + 18)}px 0` : "0 auto", "important");
-    page.style.setProperty("position", "relative", "important");
-    page.style.setProperty("left", "auto", "important");
-    page.style.setProperty("top", "auto", "important");
+    page.style.setProperty("margin", "0", "important");
+    page.style.setProperty("position", mobile ? "absolute" : "relative", "important");
+    page.style.setProperty("left", "0", "important");
+    page.style.setProperty("top", "0", "important");
 
-    scroll.style.setProperty("overflow-x", mobile ? "auto" : "auto", "important");
+    scroll.style.setProperty("display", "block", "important");
+    scroll.style.setProperty("overflow-x", "auto", "important");
     scroll.style.setProperty("overflow-y", "auto", "important");
     scroll.style.setProperty("touch-action", "pan-x pan-y", "important");
     scroll.style.webkitOverflowScrolling = "touch";
-    if(mobile && !scroll.dataset.v40PanPositioned){
-      const maxLeft=Math.max(0, scaledW - scroll.clientWidth);
-      scroll.scrollLeft = Math.round(maxLeft / 2);
+    if(mobile && scroll.dataset.v40JustOpened === "1"){
+      scroll.scrollLeft = 0;
       scroll.scrollTop = 0;
-      scroll.dataset.v40PanPositioned = "1";
+      delete scroll.dataset.v40JustOpened;
     }
   });
 }
@@ -3162,6 +3179,11 @@ function v40OpenFullPreview(){
   if(!modal||!target) return;
   const payload=v40PreviewPayload();
   renderCv(target, payload.data, {placeholders:false});
+  const scroll=document.querySelector(".v40-full-preview-scroll");
+  if(scroll){
+    scroll.dataset.v40JustOpened = "1";
+    delete scroll.dataset.v40PanPositioned;
+  }
   modal.classList.remove("hidden");
   v40FitFullPreview();
 }

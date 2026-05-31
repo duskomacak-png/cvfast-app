@@ -6167,3 +6167,41 @@ html body.v40-active.v40-builder-open .v40-cv-preview-wrap .cv-page.cv-content-l
     box-shadow:0 16px 42px rgba(15,23,42,.18) !important;
   }
 }
+
+
+/* V40.11 full mobile A4 stage fix: opened preview starts from the left edge,
+   uses the scaled A4 stage as the real scroll area, and remains finger-pan friendly. */
+.v40-full-preview-stage{
+  position:relative !important;
+  overflow:visible !important;
+  flex:0 0 auto !important;
+}
+@media (max-width:520px){
+  html body.v40-active.v40-builder-open .v40-full-preview-scroll{
+    display:block !important;
+    overflow:auto !important;
+    overflow-x:auto !important;
+    overflow-y:auto !important;
+    padding:12px !important;
+    background:#eef3fb !important;
+    touch-action:pan-x pan-y !important;
+    overscroll-behavior:contain !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  html body.v40-active.v40-builder-open .v40-full-preview-stage{
+    margin:0 !important;
+    overflow:visible !important;
+  }
+  html body.v40-active.v40-builder-open .v40-full-preview-stage .cv-page{
+    position:absolute !important;
+    left:0 !important;
+    top:0 !important;
+    margin:0 !important;
+    width:794px !important;
+    min-width:794px !important;
+    max-width:none !important;
+    transform-origin:top left !important;
+    background:#fff !important;
+    box-shadow:0 16px 42px rgba(15,23,42,.18) !important;
+  }
+}
