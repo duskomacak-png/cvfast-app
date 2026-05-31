@@ -3049,23 +3049,59 @@ function v40FitPreview(){
   if(!wrap||!stage||!page) return;
   requestAnimationFrame(()=>{
     const baseW=794;
+    const rawH=Math.max(page.scrollHeight || 0, page.offsetHeight || 0, 1123);
     const isDesktopBuilder = window.innerWidth >= 700 && document.body.classList.contains("v40-builder-open");
-    const availableW=Math.max(220, wrap.clientWidth-(isDesktopBuilder ? 34 : 20));
-    const scale=Math.min(1, Math.max(isDesktopBuilder ? .42 : .34, availableW/baseW));
-    page.style.setProperty("transform", `scale(${scale})`, "important");
-    page.style.setProperty("transform-origin", "top center", "important");
-    page.style.margin='0 auto';
 
-    if(isDesktopBuilder){
-      const rawH = Math.max(page.scrollHeight || 0, page.offsetHeight || 0, 1123);
-      stage.style.height = `${Math.max(wrap.clientHeight - 20, Math.ceil(rawH * scale) + 28)}px`;
-      stage.style.overflow = "visible";
-      wrap.style.overflow = "auto";
-    } else {
-      stage.style.height = `${Math.max(180, wrap.clientHeight-20)}px`;
-      stage.style.overflow = "hidden";
-      wrap.style.overflow = "hidden";
-    }
+    // V40.7: the live preview now behaves like a real A4 sheet in the phone.
+    // The page keeps A4 proportions, is scaled to the phone width, and the user
+    // can move/scroll the preview with a finger without changing PDF/PNG export.
+    const availableW=Math.max(240, wrap.clientWidth-(isDesktopBuilder ? 34 : 26));
+    const minScale=isDesktopBuilder ? .42 : .32;
+    const maxScale=isDesktopBuilder ? 1 : .58;
+    const scale=Math.min(maxScale, Math.max(minScale, availableW/baseW));
+    const scaledW=Math.ceil(baseW * scale);
+    const scaledH=Math.ceil(rawH * scale);
+
+    stage.style.width = `${scaledW}px`;
+    stage.style.height = `${scaledH}px`;
+    stage.style.minHeight = `${scaledH}px`;
+    stage.style.marginLeft = "auto";
+    stage.style.marginRight = "auto";
+    stage.style.position = "relative";
+    stage.style.overflow = "visible";
+
+    page.style.setProperty("width", `${baseW}px`, "important");
+    page.style.setProperty("minWidth", `${baseW}px`, "important");
+    page.style.setProperty("maxWidth", "none", "important");
+    page.style.setProperty("position", "absolute", "important");
+    page.style.setProperty("top", "0", "important");
+    page.style.setProperty("left", "0", "important");
+    page.style.setProperty("transform", `scale(${scale})`, "important");
+    page.style.setProperty("transform-origin", "top left", "important");
+    page.style.margin = "0";
+
+    wrap.style.overflow = "auto";
+    wrap.style.overflowX = "auto";
+    wrap.style.overflowY = "auto";
+    wrap.style.webkitOverflowScrolling = "touch";
+  });
+}
+
+function v40BindLivePreviewGesture(){
+  const wrap=document.querySelector(".v40-cv-preview-wrap");
+  if(!wrap || wrap.dataset.v40GestureBound === "1") return;
+  wrap.dataset.v40GestureBound = "1";
+  let sx=0, sy=0, moved=false;
+  const start=(x,y)=>{ sx=x; sy=y; moved=false; wrap.classList.add("v40-preview-dragging"); };
+  const move=(x,y)=>{ if(Math.abs(x-sx)>8 || Math.abs(y-sy)>8) moved=true; };
+  const end=()=>{ setTimeout(()=>wrap.classList.remove("v40-preview-dragging"),80); };
+  wrap.addEventListener("pointerdown", (e)=>start(e.clientX,e.clientY), {passive:true});
+  wrap.addEventListener("pointermove", (e)=>move(e.clientX,e.clientY), {passive:true});
+  wrap.addEventListener("pointerup", end, {passive:true});
+  wrap.addEventListener("pointercancel", end, {passive:true});
+  wrap.addEventListener("click", (e)=>{
+    if(moved){ e.preventDefault(); e.stopPropagation(); return; }
+    v40OpenFullPreview();
   });
 }
 function v40FitFullPreview(){
@@ -3353,7 +3389,7 @@ function initV40() {
   document.getElementById("v40KeepOriginalBtn")?.addEventListener("click", v40CloseRewrite);
   document.getElementById("v40UseImprovedBtn")?.addEventListener("click", v40UseImproved);
   document.getElementById("v40RewriteModal")?.addEventListener("click", (e) => { if(e.target.id === "v40RewriteModal") v40CloseRewrite(); });
-  document.querySelector(".v40-cv-preview-wrap")?.addEventListener("click", v40OpenFullPreview);
+  v40BindLivePreviewGesture();
   document.getElementById("v40FullPreviewClose")?.addEventListener("click", v40CloseFullPreview);
   document.getElementById("v40FullPreviewModal")?.addEventListener("click", (e) => { if(e.target.id === "v40FullPreviewModal") v40CloseFullPreview(); });
   window.addEventListener("resize", () => {
