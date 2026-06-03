@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://cvfast.app/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://cvfast.app/privacy.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://cvfast.app/terms.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cvfast.app/privacy.html</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://cvfast.app/terms.html</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://cvfast.app/how-it-works.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://cvfast.app/resume-templates.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://cvfast.app/no-subscription.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://cvfast.app/ats-friendly-resume.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cvfast.app/sr/napravi-cv-online.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cvfast.app/sr/cv-obrazac-pdf.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cvfast.app/sr/cv-za-posao-u-nemackoj.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cvfast.app/sr/cv-na-srpskom.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cvfast.app/de/lebenslauf-erstellen.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cvfast.app/de/lebenslauf-pdf.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cvfast.app/de/lebenslauf-ohne-abo.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cvfast.app/en/resume-builder-no-sign-up.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cvfast.app/en/cv-builder-pdf-png.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>

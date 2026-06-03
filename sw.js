@@ -1,4 +1,4 @@
-const CACHE_NAME = "cvfast-v476-mobile-full-preview-natural-fit";
+const CACHE_NAME = "cvfast-v477-seo-landing-pages";
 
 const APP_SHELL = [
   "/",
@@ -17,6 +17,15 @@ const APP_SHELL = [
   "/resume-templates.html",
   "/no-subscription.html",
   "/ats-friendly-resume.html",
+  "/sr/napravi-cv-online.html",
+  "/sr/cv-obrazac-pdf.html",
+  "/sr/cv-za-posao-u-nemackoj.html",
+  "/sr/cv-na-srpskom.html",
+  "/de/lebenslauf-erstellen.html",
+  "/de/lebenslauf-pdf.html",
+  "/de/lebenslauf-ohne-abo.html",
+  "/en/resume-builder-no-sign-up.html",
+  "/en/cv-builder-pdf-png.html",
   "/sitemap.xml",
   "/robots.txt"
 ];
